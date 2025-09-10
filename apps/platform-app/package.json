@@ -1,0 +1,32 @@
+{
+  "name": "@cow/platform-app",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Main business operations platform for Cycles of Wealth",
+  "scripts": {
+    "build": "nx build platform-app",
+    "serve": "nx serve platform-app", 
+    "dev": "nx serve platform-app",
+    "test": "nx test platform-app",
+    "lint": "nx lint platform-app",
+    "typecheck": "nx typecheck platform-app"
+  },
+  "dependencies": {
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-router-dom": "6.29.0",
+    "lucide-react": "^0.543.0",
+    "@tanstack/react-query": "^5.0.0",
+    "@tanstack/react-table": "^8.10.0",
+    "recharts": "^2.8.0",
+    "date-fns": "^3.0.0",
+    "react-hook-form": "^7.47.0",
+    "@hookform/resolvers": "^3.3.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.0.0",
+    "@types/react-dom": "19.0.0",
+    "typescript": "~5.9.2"
+  }
+}

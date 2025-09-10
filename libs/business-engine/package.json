@@ -1,0 +1,33 @@
+{
+  "name": "@cow/business-engine",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Core business logic for tokenization, compliance, investor management, and trading",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tokenization": "./src/tokenization/index.ts",
+    "./investor-management": "./src/investor-management/index.ts",
+    "./compliance": "./src/compliance/index.ts",
+    "./company-management": "./src/company-management/index.ts",
+    "./trading": "./src/trading/index.ts",
+    "./analytics": "./src/analytics/index.ts"
+  },
+  "scripts": {
+    "build": "nx build business-engine",
+    "test": "nx test business-engine",
+    "lint": "nx lint business-engine"
+  },
+  "dependencies": {
+    "decimal.js": "^10.4.0",
+    "date-fns": "^3.0.0",
+    "validator": "^13.11.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.2",
+    "@types/uuid": "^9.0.0",
+    "@types/validator": "^13.11.0"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx nx reset:*)",
+      "Bash(npm install:*)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(npx nx run:*)",
+      "Bash(npx nx serve:*)",
+      "Bash(tree:*)",
+      "Bash(chmod:*)",
+      "Bash(find:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(command -v:*)",
+      "Bash(npm run build:public-site:*)",
+      "Bash(npm run serve:public-site:*)",
+      "Bash(pkill:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run typecheck:*)",
+      "Bash(npx nx lint:*)",
+      "Bash(npx nx typecheck:*)",
+      "Bash(npx tsc:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

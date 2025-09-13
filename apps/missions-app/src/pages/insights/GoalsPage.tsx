@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Routes, Route, NavLink, Navigate } from 'react-router-dom';
+import { Routes, Route, NavLink, Navigate, useNavigate } from 'react-router-dom';
 import { 
   Target, 
   Award, 
@@ -13,76 +13,38 @@ import {
   CheckCircle,
   AlertTriangle,
   Clock,
-  Zap
+  Zap,
+  ChevronDown
 } from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { StrategyMap } from '../../components/goals/StrategyMap';
 import { useGoalsStore } from '../../store/goals.store';
 import { GoalCheckInModal } from '../../components/goals/GoalCheckInModal';
+import { TimePeriodSelector } from '../../components/goals/TimePeriodSelector';
+import { TeamGoals } from '../../components/goals/TeamGoals';
+import { GoalCreationModal } from '../../components/goals/GoalCreationModal';
+import { GoalDetailsPage } from './GoalDetailsPage';
 
 // My Goals Component
 function MyGoals() {
+  const { goals: allGoals } = useGoalsStore();
+  const navigate = useNavigate();
   const [timeframe, setTimeframe] = useState('current');
+  const [showCreateModal, setShowCreateModal] = useState(false);
   
-  const goals = [
-    {
-      id: 'increase-user-engagement',
-      title: 'Increase User Engagement',
-      type: 'objective',
-      progress: 78,
-      status: 'on_track',
-      timeframe: 'Q2 2024',
-      owner: 'You',
-      keyResults: [
-        { id: 'kr1', title: 'Increase daily active users by 25%', progress: 85, target: '10,000 DAU' },
-        { id: 'kr2', title: 'Reduce churn rate to under 5%', progress: 60, target: '<5%' },
-        { id: 'kr3', title: 'Improve user satisfaction score', progress: 90, target: '4.5/5' }
-      ],
-      lastUpdated: '2 days ago',
-      category: 'Product'
-    },
-    {
-      id: 'revenue-growth',
-      title: 'Achieve Revenue Growth',
-      type: 'objective',
-      progress: 45,
-      status: 'at_risk',
-      timeframe: 'Q2 2024',
-      owner: 'You',
-      keyResults: [
-        { id: 'kr4', title: 'Reach $500K MRR', progress: 40, target: '$500K' },
-        { id: 'kr5', title: 'Close 50 enterprise deals', progress: 55, target: '50 deals' },
-        { id: 'kr6', title: 'Expand to 3 new markets', progress: 33, target: '3 markets' }
-      ],
-      lastUpdated: '1 day ago',
-      category: 'Business'
-    },
-    {
-      id: 'team-development',
-      title: 'Build High-Performance Team',
-      type: 'objective',
-      progress: 92,
-      status: 'on_track',
-      timeframe: 'Q2 2024',
-      owner: 'You',
-      keyResults: [
-        { id: 'kr7', title: 'Hire 5 senior engineers', progress: 100, target: '5 hires' },
-        { id: 'kr8', title: 'Complete team training program', progress: 85, target: '100%' },
-        { id: 'kr9', title: 'Achieve 90% employee satisfaction', progress: 90, target: '90%' }
-      ],
-      lastUpdated: '3 hours ago',
-      category: 'People'
-    }
-  ];
+  // Filter goals for current user (mock filter for Likhitha)
+  const goals = allGoals.filter(goal => goal.owner === 'Likhitha');
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'on_track':
+      case 'on-track':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
-      case 'at_risk':
+      case 'at-risk':
         return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
-      case 'behind':
+      case 'off-track':
         return <Clock className="h-4 w-4 text-red-500" />;
+      case 'completed':
+        return <CheckCircle className="h-4 w-4 text-green-600" />;
       default:
         return <Clock className="h-4 w-4 text-gray-400" />;
     }
@@ -90,12 +52,14 @@ function MyGoals() {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'on_track':
+      case 'on-track':
         return 'On Track';
-      case 'at_risk':
+      case 'at-risk':
         return 'At Risk';
-      case 'behind':
-        return 'Behind';
+      case 'off-track':
+        return 'Off Track';
+      case 'completed':
+        return 'Completed';
       default:
         return 'Unknown';
     }
@@ -123,22 +87,15 @@ function MyGoals() {
           <p className="text-gray-600 dark:text-gray-400">Track your personal objectives and key results</p>
         </div>
         <div className="flex items-center gap-3">
-          <select 
-            value={timeframe}
-            onChange={(e) => setTimeframe(e.target.value)}
-            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm"
-          >
-            <option value="current">Current Quarter</option>
-            <option value="q1">Q1 2024</option>
-            <option value="q2">Q2 2024</option>
-            <option value="q3">Q3 2024</option>
-            <option value="q4">Q4 2024</option>
-          </select>
+          <TimePeriodSelector
+            selectedPeriod={timeframe}
+            onPeriodChange={setTimeframe}
+          />
           <Button variant="outline" size="sm">
             <Filter className="h-4 w-4 mr-2" />
             Filter
           </Button>
-          <Button size="sm">
+          <Button size="sm" onClick={() => setShowCreateModal(true)}>
             <Plus className="h-4 w-4 mr-2" />
             New Goal
           </Button>
@@ -163,7 +120,7 @@ function MyGoals() {
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">On Track</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {goals.filter(g => g.status === 'on_track').length}
+                {goals.filter(g => g.status === 'on-track').length}
               </p>
             </div>
           </div>
@@ -175,7 +132,7 @@ function MyGoals() {
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">Avg. Progress</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {Math.round(goals.reduce((sum, g) => sum + g.progress, 0) / goals.length)}%
+                {goals.length > 0 ? Math.round(goals.reduce((sum, g) => sum + g.progress, 0) / goals.length) : 0}%
               </p>
             </div>
           </div>
@@ -187,7 +144,7 @@ function MyGoals() {
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">Key Results</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {goals.reduce((sum, g) => sum + g.keyResults.length, 0)}
+                {goals.reduce((sum, g) => sum + (g.subGoals?.length || 0), 0)}
               </p>
             </div>
           </div>
@@ -207,7 +164,12 @@ function MyGoals() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{goal.title}</h3>
+                      <h3 
+                        className="text-lg font-semibold text-gray-900 dark:text-white hover:text-indigo-600 cursor-pointer transition-colors"
+                        onClick={() => navigate(`/insights/goals/goal/${goal.id}`)}
+                      >
+                        {goal.title}
+                      </h3>
                       <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getStatusColor(goal.status)}`}>
                         {getStatusLabel(goal.status)}
                       </span>
@@ -215,10 +177,10 @@ function MyGoals() {
                     <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
                       <span className="flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
-                        {goal.timeframe}
+                        {goal.timeline}
                       </span>
                       <span>Category: {goal.category}</span>
-                      <span>Updated {goal.lastUpdated}</span>
+                      <span>Updated {goal.updatedAt ? new Date(goal.updatedAt).toLocaleDateString() : 'Recently'}</span>
                     </div>
                   </div>
                 </div>
@@ -249,15 +211,15 @@ function MyGoals() {
               {/* Key Results */}
               <div>
                 <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                  Key Results ({goal.keyResults.length})
+                  Sub-goals ({(goal.subGoals || []).length})
                 </h4>
                 <div className="space-y-3">
-                  {goal.keyResults.map((kr) => (
+                  {(goal.subGoals || []).map((kr) => (
                     <div key={kr.id} className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex-1">
                           <h5 className="font-medium text-gray-900 dark:text-white">{kr.title}</h5>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">Target: {kr.target}</p>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{kr.description}</p>
                         </div>
                         <div className="text-right">
                           <div className="text-lg font-semibold text-gray-900 dark:text-white">{kr.progress}%</div>
@@ -307,25 +269,23 @@ function MyGoals() {
           <p className="text-gray-600 dark:text-gray-400 mb-6">
             Create your first goal to start tracking your objectives and key results
           </p>
-          <Button>
+          <Button onClick={() => setShowCreateModal(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Create Goal
           </Button>
         </div>
       )}
+
+      {/* Goal Creation Modal */}
+      <GoalCreationModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        initialContext="personal"
+      />
     </div>
   );
 }
 
-// Team Goals Component
-function TeamGoals() {
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Team Goals</h1>
-      <p className="text-gray-600 dark:text-gray-400">Collaborate on team objectives and key results</p>
-    </div>
-  );
-}
 
 // Strategy Map Component (Dedicated Page)
 function StrategyMapPage() {
@@ -345,10 +305,12 @@ function CompanyGoals() {
     toggleGoalExpansion, 
     calculateGoalProgress 
   } = useGoalsStore();
+  const navigate = useNavigate();
   
   const [timeframe, setTimeframe] = useState('current');
   const [selectedGoalForCheckIn, setSelectedGoalForCheckIn] = useState(null);
   const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   
   // Filter goals to show only top-level goals (no parentId)
   const companyGoals = goals.filter(goal => !goal.parentId);
@@ -398,22 +360,15 @@ function CompanyGoals() {
           <p className="text-gray-600 dark:text-gray-400">Strategic objectives driving organizational success</p>
         </div>
         <div className="flex items-center gap-3">
-          <select 
-            value={timeframe}
-            onChange={(e) => setTimeframe(e.target.value)}
-            className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-sm"
-          >
-            <option value="current">Current Quarter</option>
-            <option value="q1">Q1 2024</option>
-            <option value="q2">Q2 2024</option>
-            <option value="q3">Q3 2024</option>
-            <option value="q4">Q4 2024</option>
-          </select>
+          <TimePeriodSelector
+            selectedPeriod={timeframe}
+            onPeriodChange={setTimeframe}
+          />
           <Button variant="outline" size="sm">
             <Filter className="h-4 w-4 mr-2" />
             Filter
           </Button>
-          <Button size="sm">
+          <Button size="sm" onClick={() => setShowCreateModal(true)}>
             <Plus className="h-4 w-4 mr-2" />
             New Goal
           </Button>
@@ -438,7 +393,7 @@ function CompanyGoals() {
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">On Track</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {companyGoals.filter(g => g.status === 'on_track').length}
+                {companyGoals.filter(g => g.status === 'on-track').length}
               </p>
             </div>
           </div>
@@ -462,7 +417,7 @@ function CompanyGoals() {
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400">Key Results</p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {companyGoals.reduce((sum, g) => sum + g.keyResults.length, 0)}
+                {companyGoals.reduce((sum, g) => sum + (g.subGoals?.length || 0), 0)}
               </p>
             </div>
           </div>
@@ -525,7 +480,10 @@ function CompanyGoals() {
 
               {/* Goal Title */}
               <div className="mb-3 ml-6">
-                <h3 className="text-base font-medium text-gray-900 dark:text-white mb-1">
+                <h3 
+                  className="text-base font-medium text-gray-900 dark:text-white hover:text-indigo-600 cursor-pointer transition-colors mb-1"
+                  onClick={() => navigate(`/insights/goals/goal/${goal.id}`)}
+                >
                   {goal.title}
                 </h3>
                 {goal.subGoals.length > 0 && (
@@ -588,6 +546,13 @@ function CompanyGoals() {
         goal={selectedGoalForCheckIn}
         isOpen={isCheckInModalOpen}
         onClose={handleCloseCheckIn}
+      />
+
+      {/* Goal Creation Modal */}
+      <GoalCreationModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        initialContext="company"
       />
     </div>
   );
@@ -659,6 +624,7 @@ export function GoalsPage() {
         <Route path="/company" element={<CompanyGoals />} />
         <Route path="/team" element={<TeamGoals />} />
         <Route path="/my" element={<MyGoals />} />
+        <Route path="/goal/:goalId" element={<GoalDetailsPage />} />
       </Routes>
     </div>
   );

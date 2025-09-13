@@ -57,6 +57,14 @@ interface GoalsStore {
   toggleGoalExpansion: (goalId: string) => void;
   updateGoalPosition: (goalId: string, position: { x: number; y: number }) => void;
   calculateGoalProgress: (goalId: string) => void;
+  
+  // Hierarchy and Dependency Management
+  createChildGoal: (parentId: string, childGoal: Omit<Goal, 'id' | 'parentId'>) => void;
+  addDependency: (goalId: string, dependsOnId: string) => void;
+  removeDependency: (goalId: string, dependsOnId: string) => void;
+  getGoalHierarchy: (goalId: string) => Goal[];
+  getGoalDependencies: (goalId: string) => { dependsOn: Goal[]; dependents: Goal[] };
+  canStartGoal: (goalId: string) => boolean;
 }
 
 const mockGoalsData: Goal[] = [
@@ -322,5 +330,102 @@ export const useGoalsStore = create<GoalsStore>((set, get) => ({
         g.id === goalId ? { ...g, progress: averageProgress, updatedAt: new Date().toISOString() } : g
       )
     };
-  })
+  }),
+
+  // Hierarchy and Dependency Management Functions
+  createChildGoal: (parentId, childGoal) => set((state) => {
+    const newGoal: Goal = {
+      ...childGoal,
+      id: `goal-${Date.now()}`,
+      parentId: parentId,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    return {
+      goals: [...state.goals, newGoal]
+    };
+  }),
+
+  addDependency: (goalId, dependsOnId) => set((state) => {
+    // Prevent circular dependencies
+    const { dependsOn } = get().getGoalDependencies(dependsOnId);
+    if (dependsOn.some(dep => dep.id === goalId)) {
+      console.warn('Cannot create circular dependency');
+      return {};
+    }
+
+    return {
+      goals: state.goals.map(goal =>
+        goal.id === goalId
+          ? {
+              ...goal,
+              connections: [...new Set([...goal.connections, dependsOnId])],
+              updatedAt: new Date().toISOString()
+            }
+          : goal
+      )
+    };
+  }),
+
+  removeDependency: (goalId, dependsOnId) => set((state) => ({
+    goals: state.goals.map(goal =>
+      goal.id === goalId
+        ? {
+            ...goal,
+            connections: goal.connections.filter(id => id !== dependsOnId),
+            updatedAt: new Date().toISOString()
+          }
+        : goal
+    )
+  })),
+
+  getGoalHierarchy: (goalId) => {
+    const state = get();
+    const result: Goal[] = [];
+    
+    const findGoal = (id: string): Goal | undefined => state.goals.find(g => g.id === id);
+    const findChildren = (parentId: string): Goal[] => state.goals.filter(g => g.parentId === parentId);
+    
+    const addGoalAndDescendants = (goal: Goal) => {
+      result.push(goal);
+      const children = findChildren(goal.id);
+      children.forEach(child => addGoalAndDescendants(child));
+    };
+
+    const goal = findGoal(goalId);
+    if (goal) {
+      addGoalAndDescendants(goal);
+    }
+
+    return result;
+  },
+
+  getGoalDependencies: (goalId) => {
+    const state = get();
+    const goal = state.goals.find(g => g.id === goalId);
+    
+    if (!goal) {
+      return { dependsOn: [], dependents: [] };
+    }
+
+    // Goals this goal depends on
+    const dependsOn = goal.connections
+      .map(id => state.goals.find(g => g.id === id))
+      .filter(Boolean) as Goal[];
+
+    // Goals that depend on this goal
+    const dependents = state.goals.filter(g => 
+      g.connections.includes(goalId)
+    );
+
+    return { dependsOn, dependents };
+  },
+
+  canStartGoal: (goalId) => {
+    const { dependsOn } = get().getGoalDependencies(goalId);
+    
+    // A goal can start if all its dependencies are completed
+    return dependsOn.every(dep => dep.status === 'completed');
+  }
 }));

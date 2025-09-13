@@ -8,6 +8,21 @@
     },
     {
       "path": "./apps/public-site"
+    },
+    {
+      "path": "./libs/platform-core"
+    },
+    {
+      "path": "./apps/admin-portal/support-center-e2e"
+    },
+    {
+      "path": "./apps/support-center"
+    },
+    {
+      "path": "./apps-e2e"
+    },
+    {
+      "path": "./apps/missions-app"
     }
   ]
 }

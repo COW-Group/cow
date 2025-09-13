@@ -1,0 +1,13 @@
+{
+  "name": "@cow/support-center",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "@headlessui/react": "^2.2.7",
+    "@heroicons/react": "^2.2.0",
+    "lucide-react": "^0.543.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-router-dom": "6.29.0"
+  }
+}

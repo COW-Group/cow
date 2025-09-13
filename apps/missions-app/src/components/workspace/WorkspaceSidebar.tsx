@@ -35,6 +35,7 @@ import { AddItemDropdown, CreateItemType } from './AddItemDropdown';
 import { CreateItemModal } from './CreateItemModal';
 import { ItemContextMenu } from './ItemContextMenu';
 import { useNavigate } from 'react-router-dom';
+import { useTeamStore } from '../../store/team.store';
 
 interface WorkspaceSidebarProps {
   currentWorkspaceId?: string;
@@ -48,6 +49,7 @@ export function WorkspaceSidebar({
   onBoardSelect 
 }: WorkspaceSidebarProps) {
   const navigate = useNavigate();
+  const { teams, currentTeam, setCurrentTeam } = useTeamStore();
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [currentWorkspace, setCurrentWorkspace] = useState<Workspace | null>(null);
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
@@ -61,6 +63,7 @@ export function WorkspaceSidebar({
   const [insightsExpanded, setInsightsExpanded] = useState(true);
   const [workspaceItemsExpanded, setWorkspaceItemsExpanded] = useState(true);
   const [recentExpanded, setRecentExpanded] = useState(true);
+  const [teamsExpanded, setTeamsExpanded] = useState(true);
   
   // Insights section items - Asana-style
   const insightsItems = [
@@ -556,6 +559,76 @@ export function WorkspaceSidebar({
                     </div>
                   );
                 })}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Teams Section - Asana-style */}
+        <div className="p-3 border-b border-gray-200">
+          <div className="flex items-center justify-between mb-2">
+            <button
+              onClick={() => setTeamsExpanded(!teamsExpanded)}
+              className="flex items-center gap-1 hover:bg-gray-100 rounded p-1 -m-1 group"
+            >
+              <motion.div
+                animate={{ rotate: teamsExpanded ? 0 : -90 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ChevronDown className="h-3 w-3 text-gray-400 group-hover:text-gray-600" />
+              </motion.div>
+              <Users className="w-4 h-4 mr-1 text-indigo-600" />
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider group-hover:text-gray-600">
+                Teams
+              </span>
+            </button>
+            <span className="text-xs text-gray-400">{teams.length}</span>
+          </div>
+          <AnimatePresence>
+            {teamsExpanded && (
+              <motion.div 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-1 overflow-hidden ml-6"
+              >
+                {teams.map((team) => (
+                  <div
+                    key={team.id}
+                    className="group cursor-pointer"
+                    onClick={() => setCurrentTeam(team)}
+                  >
+                    <div className={`flex items-center py-2 px-2 hover:bg-gray-100 rounded transition-colors ${
+                      currentTeam?.id === team.id ? 'bg-blue-50 border-l-2 border-blue-500' : ''
+                    }`}>
+                      <div className="flex items-center gap-2 flex-1">
+                        <div className="w-2 h-2 rounded-full bg-indigo-500 flex-shrink-0" />
+                        <div className="flex-1">
+                          <div className="text-sm font-medium text-gray-700">{team.name}</div>
+                          <div className="text-xs text-gray-500">
+                            {team.memberCount} member{team.memberCount !== 1 ? 's' : ''} • {team.type}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {team.visibility === 'private' && (
+                          <div className="w-1.5 h-1.5 rounded-full bg-gray-400" title="Private team" />
+                        )}
+                        <ChevronRight className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <div className="pt-2 border-t border-gray-100 mt-2">
+                  <button
+                    className="flex items-center gap-2 py-2 px-2 text-sm text-blue-600 hover:bg-blue-50 rounded transition-colors w-full"
+                    onClick={() => {/* TODO: Open create team modal */}}
+                  >
+                    <Plus className="h-3 w-3" />
+                    Create team
+                  </button>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>

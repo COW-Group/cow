@@ -1,0 +1,505 @@
+/* Apple San Francisco Font System - Engineering Grade Typography */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 14.3% 95.9%;
+    --foreground: 222.2 47.4% 11.2%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --primary: 0 0% 4%;
+    --primary-foreground: 0 0% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --radius: 0.75rem;
+    --font-inter: 'Inter', sans-serif;
+    --font-playfair: 'Playfair Display', serif;
+  }
+  
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 9%;
+    --card-foreground: 0 0% 100%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 9%;
+    --border: 0 0% 20%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+.page-heading {
+  font-family: var(--font-playfair), var(--font-inter), sans-serif;
+  font-weight: 700;
+}
+
+.page-footer-heading {
+  font-family: var(--font-playfair), var(--font-inter), sans-serif;
+  font-weight: 700;
+}
+
+.legal-heading {
+  font-family: var(--font-playfair), var(--font-inter), sans-serif;
+  font-weight: 700;
+}
+
+.legal-subheading {
+  font-family: var(--font-playfair), var(--font-inter), sans-serif;
+  font-weight: 600;
+}
+
+.legal-body {
+  font-family: var(--font-inter), sans-serif;
+  line-height: 1.5;
+  font-size: 0.875rem;
+  @media (min-width: 640px) {
+    font-size: 1rem;
+  }
+}
+
+.legal-caption {
+  font-family: var(--font-inter), sans-serif;
+  font-size: 0.75rem;
+  @media (min-width: 640px) {
+    font-size: 0.75rem;
+  }
+  color: var(--foreground);
+}
+
+.document-container {
+  margin: 20px auto;
+  box-sizing: border-box;
+  z-index: 20;
+}
+
+.footer {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.footer.visible {
+  opacity: 1 !important;
+}
+
+/* Apple Liquid Glass Adaptive Modal Styling */
+.adaptive-modal-input {
+  transition: all 0.2s ease-in-out;
+}
+
+.adaptive-modal-input::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+  filter: contrast(1.1) !important;
+  font-weight: 300 !important;
+}
+
+.adaptive-modal-input:focus::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4) !important;
+}
+
+/* Enhanced Adaptive Typography for Dynamic Backgrounds */
+.adaptive-text-primary {
+  color: rgb(255, 255, 255);
+  text-shadow: 
+    0 1px 4px rgba(0,0,0,0.6),
+    0 2px 8px rgba(0,0,0,0.4),
+    0 0 12px rgba(255,255,255,0.15),
+    0 0 24px rgba(255,255,255,0.1);
+  filter: contrast(1.1) brightness(1.05);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.adaptive-text-secondary {
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 
+    0 1px 3px rgba(0,0,0,0.5),
+    0 2px 6px rgba(0,0,0,0.3),
+    0 0 8px rgba(255,255,255,0.1);
+  filter: contrast(1.05);
+  font-weight: 300;
+}
+
+.adaptive-label {
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 
+    0 1px 3px rgba(0,0,0,0.5),
+    0 2px 6px rgba(0,0,0,0.3),
+    0 0 8px rgba(255,255,255,0.12);
+  filter: contrast(1.08) brightness(1.02);
+  font-weight: 400;
+}
+
+/* Adaptive Button Styling */
+.adaptive-button-primary {
+  background: linear-gradient(135deg, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.82) 100%) !important;
+  backdrop-filter: blur(8px) saturate(150%) !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+  color: #1f2937 !important;
+  font-weight: 500 !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
+  filter: contrast(1.05) brightness(1.02) !important;
+  transition: all 0.3s ease !important;
+}
+
+.adaptive-button-primary:hover {
+  background: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.88) 100%) !important;
+  border-color: rgba(255,255,255,0.35) !important;
+  transform: scale(1.02) !important;
+  filter: contrast(1.08) brightness(1.05) !important;
+}
+
+/* Adaptive Message Styling */
+.adaptive-message-error {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.12) 0%, rgba(220, 38, 38, 0.08) 100%) !important;
+  border: 1px solid rgba(239, 68, 68, 0.25) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4) !important;
+  filter: contrast(1.1) brightness(1.02) !important;
+  backdrop-filter: blur(8px) saturate(120%) !important;
+}
+
+.adaptive-message-success {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(22, 163, 74, 0.08) 100%) !important;
+  border: 1px solid rgba(34, 197, 94, 0.25) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4) !important;
+  filter: contrast(1.1) brightness(1.02) !important;
+  backdrop-filter: blur(8px) saturate(120%) !important;
+}
+
+/* Adaptive Link Styling */
+.adaptive-link {
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+  filter: contrast(1.05) !important;
+  transition: all 0.2s ease !important;
+}
+
+.adaptive-link:hover {
+  color: rgba(255, 255, 255, 0.95) !important;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 0 8px rgba(255,255,255,0.1) !important;
+  filter: contrast(1.1) brightness(1.05) !important;
+}
+
+/* Apple Liquid Glass Adaptive Navigation System */
+:root {
+  --nav-glass-light: rgba(255, 255, 255, 0.1);
+  --nav-glass-medium: rgba(255, 255, 255, 0.08);
+  --nav-glass-dark: rgba(0, 0, 0, 0.3);
+  --nav-border-light: rgba(255, 255, 255, 0.2);
+  --nav-border-medium: rgba(255, 255, 255, 0.15);
+  --nav-border-dark: rgba(0, 0, 0, 0.4);
+  --nav-text-light: rgba(255, 255, 255, 0.95);
+  --nav-text-medium: rgba(255, 255, 255, 0.9);
+  --nav-text-dark: rgba(0, 0, 0, 0.85);
+}
+
+/* Adaptive Navigation Button - Light Background Aware */
+.adaptive-nav-button {
+  position: relative;
+  background: linear-gradient(135deg, var(--nav-glass-medium) 0%, var(--nav-glass-light) 100%);
+  backdrop-filter: blur(12px) saturate(180%);
+  border: 1px solid var(--nav-border-medium);
+  color: var(--nav-text-medium);
+  border-radius: 0.75rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 2px 6px rgba(0,0,0,0.2);
+  filter: contrast(1.05) brightness(1.02);
+  will-change: transform, background-color, border-color;
+}
+
+/* Enhanced contrast for light backgrounds */
+.adaptive-nav-button.light-bg {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.1) 100%);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  color: rgba(0, 0, 0, 0.85);
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8), 0 0 4px rgba(255,255,255,0.6);
+  filter: contrast(1.15) brightness(0.95);
+  backdrop-filter: blur(12px) saturate(150%);
+}
+
+/* Enhanced contrast for dark backgrounds */
+.adaptive-nav-button.dark-bg {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.08) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4);
+  filter: contrast(1.1) brightness(1.05);
+  backdrop-filter: blur(12px) saturate(180%);
+}
+
+/* Hover States */
+.adaptive-nav-button:hover {
+  transform: scale(1.05);
+  filter: contrast(1.1) brightness(1.08);
+}
+
+.adaptive-nav-button.light-bg:hover {
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.15) 100%);
+  border-color: rgba(0, 0, 0, 0.35);
+  transform: scale(1.05);
+  filter: contrast(1.2) brightness(0.9);
+}
+
+.adaptive-nav-button.dark-bg:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.12) 100%);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+  filter: contrast(1.15) brightness(1.1);
+}
+
+/* Adaptive Icon Color System */
+.adaptive-nav-button svg {
+  color: var(--nav-text-medium);
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4)) contrast(1.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.adaptive-nav-button.light-bg svg {
+  color: rgba(0, 0, 0, 0.85);
+  filter: drop-shadow(0 1px 2px rgba(255,255,255,0.8)) contrast(1.15) brightness(0.95);
+}
+
+.adaptive-nav-button.dark-bg svg {
+  color: rgba(255, 255, 255, 0.95);
+  filter: drop-shadow(0 1px 4px rgba(0,0,0,0.6)) contrast(1.1) brightness(1.05);
+}
+
+/* Icon hover states for enhanced visibility */
+.adaptive-nav-button:hover svg {
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5)) contrast(1.1) brightness(1.08);
+}
+
+.adaptive-nav-button.light-bg:hover svg {
+  color: rgba(0, 0, 0, 0.95);
+  filter: drop-shadow(0 1px 3px rgba(255,255,255,0.9)) contrast(1.2) brightness(0.9);
+}
+
+.adaptive-nav-button.dark-bg:hover svg {
+  color: rgba(255, 255, 255, 1);
+  filter: drop-shadow(0 1px 5px rgba(0,0,0,0.7)) contrast(1.15) brightness(1.1);
+}
+
+/* Badge/Count indicator adaptive colors */
+.adaptive-nav-button .badge-indicator {
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.adaptive-nav-button.light-bg .badge-indicator {
+  color: white;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+}
+
+.adaptive-nav-button.dark-bg .badge-indicator {
+  color: white;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+/* Sophisticated Micro-Animations */
+.nav-button-pulse {
+  animation: sophisticatedPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes sophisticatedPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+  }
+}
+
+.nav-button-pulse.light-bg {
+  animation: sophisticatedPulseDark 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes sophisticatedPulseDark {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(0, 0, 0, 0);
+  }
+}
+
+/* Sophisticated Color Palette - Sky Atmospheric Theme */
+:root {
+  --sky-navy: #1a365d;          /* Deep atmospheric navy */
+  --sky-blue-gray: #4a6b7d;     /* Muted sky blue-gray */
+  --sky-soft-blue: #7ba7bc;     /* Soft atmospheric blue */
+  --sky-warm-neutral: #e8e1d4;  /* Warm sky neutral */
+  --sky-mist: #b8d4e3;          /* Light sky mist */
+  --sky-storm: #2d4a5e;         /* Storm cloud gray */
+}
+
+/* Elegant Authentication Button */
+.auth-button-elegant {
+  background: linear-gradient(135deg, rgba(26, 54, 93, 0.12) 0%, rgba(45, 74, 94, 0.08) 100%);
+  border: 1px solid rgba(26, 54, 93, 0.25);
+  color: rgba(184, 212, 227, 0.95);
+  backdrop-filter: blur(12px) saturate(150%);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-button-elegant.light-bg {
+  background: linear-gradient(135deg, rgba(26, 54, 93, 0.08) 0%, rgba(45, 74, 94, 0.06) 100%);
+  border: 1px solid rgba(26, 54, 93, 0.2);
+  color: rgba(26, 54, 93, 0.9);
+  text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+}
+
+.auth-button-elegant:hover {
+  background: linear-gradient(135deg, rgba(26, 54, 93, 0.18) 0%, rgba(45, 74, 94, 0.12) 100%);
+  border-color: rgba(26, 54, 93, 0.35);
+  color: rgba(184, 212, 227, 1);
+  transform: scale(1.02);
+}
+
+.auth-button-elegant.light-bg:hover {
+  background: linear-gradient(135deg, rgba(26, 54, 93, 0.12) 0%, rgba(45, 74, 94, 0.08) 100%);
+  border-color: rgba(26, 54, 93, 0.3);
+  color: rgba(26, 54, 93, 1);
+  transform: scale(1.02);
+}
+
+/* Sophisticated Wallet Connection States */
+.wallet-connected {
+  background: linear-gradient(135deg, rgba(123, 167, 188, 0.15) 0%, rgba(74, 107, 125, 0.12) 100%);
+  border: 1px solid rgba(123, 167, 188, 0.3);
+  color: rgba(184, 212, 227, 0.95);
+  backdrop-filter: blur(8px) saturate(140%);
+}
+
+.wallet-connected.light-bg {
+  background: linear-gradient(135deg, rgba(74, 107, 125, 0.12) 0%, rgba(45, 74, 94, 0.08) 100%);
+  border: 1px solid rgba(74, 107, 125, 0.25);
+  color: rgba(26, 54, 93, 0.9);
+  text-shadow: 0 1px 2px rgba(255,255,255,0.6);
+}
+
+.wallet-disconnected {
+  background: linear-gradient(135deg, rgba(74, 107, 125, 0.1) 0%, rgba(45, 74, 94, 0.08) 100%);
+  border: 1px solid rgba(74, 107, 125, 0.2);
+  color: rgba(123, 167, 188, 0.9);
+  backdrop-filter: blur(8px) saturate(120%);
+  position: relative;
+}
+
+.wallet-disconnected.light-bg {
+  background: linear-gradient(135deg, rgba(45, 74, 94, 0.08) 0%, rgba(26, 54, 93, 0.06) 100%);
+  border: 1px solid rgba(45, 74, 94, 0.2);
+  color: rgba(26, 54, 93, 0.8);
+  text-shadow: 0 1px 2px rgba(255,255,255,0.5);
+}
+
+/* Elegant Status Indicators */
+.status-indicator-connected {
+  background: linear-gradient(135deg, rgba(123, 167, 188, 0.8) 0%, rgba(74, 107, 125, 0.9) 100%);
+  box-shadow: 0 0 8px rgba(123, 167, 188, 0.4);
+}
+
+.status-indicator-connected.light-bg {
+  background: linear-gradient(135deg, rgba(74, 107, 125, 0.9) 0%, rgba(45, 74, 94, 1) 100%);
+  box-shadow: 0 0 6px rgba(74, 107, 125, 0.5);
+}
+
+.status-indicator-disconnected {
+  background: linear-gradient(135deg, rgba(123, 167, 188, 0.6) 0%, rgba(74, 107, 125, 0.7) 100%);
+  box-shadow: 0 0 6px rgba(123, 167, 188, 0.3);
+}
+
+.status-indicator-disconnected.light-bg {
+  background: linear-gradient(135deg, rgba(74, 107, 125, 0.7) 0%, rgba(45, 74, 94, 0.8) 100%);
+  box-shadow: 0 0 4px rgba(74, 107, 125, 0.4);
+}
+
+/* Refined Pulse Animation for Disconnected State */
+.wallet-pulse-elegant {
+  animation: elegantPulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes elegantPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(123, 167, 188, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(123, 167, 188, 0);
+  }
+}
+
+.wallet-pulse-elegant.light-bg {
+  animation: elegantPulseDark 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes elegantPulseDark {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(45, 74, 94, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(45, 74, 94, 0);
+  }
+}
+
+/* Dark Glass Navigation Container - Force White Text/Icons */
+.dark-glass-nav .adaptive-nav-button,
+.dark-glass-nav .adaptive-nav-button.light-bg,
+.dark-glass-nav .adaptive-nav-button.dark-bg {
+  color: white !important;
+}
+
+.dark-glass-nav .adaptive-nav-button svg,
+.dark-glass-nav .adaptive-nav-button.light-bg svg,
+.dark-glass-nav .adaptive-nav-button.dark-bg svg {
+  color: white !important;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.4)) contrast(1.05) !important;
+}
+
+.dark-glass-nav .adaptive-nav-button:hover svg,
+.dark-glass-nav .adaptive-nav-button.light-bg:hover svg,
+.dark-glass-nav .adaptive-nav-button.dark-bg:hover svg {
+  color: white !important;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5)) contrast(1.1) brightness(1.05) !important;
+}
+
+.dark-glass-nav .auth-button-elegant,
+.dark-glass-nav .auth-button-elegant.light-bg {
+  color: white !important;
+}
+
+.dark-glass-nav .wallet-connected,
+.dark-glass-nav .wallet-connected.light-bg {
+  color: white !important;
+}
+
+.dark-glass-nav .wallet-connected span,
+.dark-glass-nav .wallet-connected.light-bg span {
+  color: white !important;
+}
+
+.dark-glass-nav .wallet-disconnected,
+.dark-glass-nav .wallet-disconnected.light-bg {
+  color: white !important;
+}
+
+.dark-glass-nav button,
+.dark-glass-nav a {
+  color: white !important;
+}

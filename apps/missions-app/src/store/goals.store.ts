@@ -205,6 +205,86 @@ const mockGoalsData: Goal[] = [
         updatedAt: '2024-01-08'
       }
     ]
+  },
+  {
+    id: 'personal-learning',
+    title: 'Master Advanced React Patterns',
+    description: 'Deepen expertise in React architecture, performance optimization, and advanced patterns',
+    status: 'on-track',
+    progress: 35,
+    timeline: 'Q1 2025',
+    owner: 'Likhitha',
+    assignees: ['Likhitha'],
+    category: 'Personal Development',
+    connections: [],
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-20',
+    subGoals: [
+      {
+        id: 'react-patterns-study',
+        title: 'Complete React Patterns Course',
+        description: 'Finish advanced React patterns online course',
+        progress: 60,
+        status: 'on-track',
+        timeline: 'Q1 2025',
+        owner: 'Likhitha',
+        assignees: ['Likhitha'],
+        createdAt: '2024-01-01',
+        updatedAt: '2024-01-20'
+      },
+      {
+        id: 'build-demo-app',
+        title: 'Build Demo Application',
+        description: 'Create a complex demo app showcasing advanced patterns',
+        progress: 10,
+        status: 'no-recent-updates',
+        timeline: 'Q1 2025',
+        owner: 'Likhitha',
+        assignees: ['Likhitha'],
+        createdAt: '2024-01-01',
+        updatedAt: '2024-01-05'
+      }
+    ]
+  },
+  {
+    id: 'fitness-goals',
+    title: 'Maintain Healthy Work-Life Balance',
+    description: 'Focus on physical and mental wellbeing while building the platform',
+    status: 'at-risk',
+    progress: 25,
+    timeline: '2024',
+    owner: 'Likhitha',
+    assignees: ['Likhitha'],
+    category: 'Personal Wellness',
+    connections: [],
+    createdAt: '2024-01-01',
+    updatedAt: '2024-01-15',
+    subGoals: [
+      {
+        id: 'exercise-routine',
+        title: 'Regular Exercise Schedule',
+        description: 'Maintain 3x weekly exercise routine',
+        progress: 40,
+        status: 'on-track',
+        timeline: '2024',
+        owner: 'Likhitha',
+        assignees: ['Likhitha'],
+        createdAt: '2024-01-01',
+        updatedAt: '2024-01-15'
+      },
+      {
+        id: 'meditation-practice',
+        title: 'Daily Meditation Practice',
+        description: 'Establish consistent 15-minute daily meditation',
+        progress: 10,
+        status: 'at-risk',
+        timeline: '2024',
+        owner: 'Likhitha',
+        assignees: ['Likhitha'],
+        createdAt: '2024-01-01',
+        updatedAt: '2024-01-10'
+      }
+    ]
   }
 ];
 

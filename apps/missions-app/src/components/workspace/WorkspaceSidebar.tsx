@@ -24,7 +24,12 @@ import {
   Award,
   PieChart,
   Briefcase,
-  Building
+  Building,
+  Bot,
+  Activity,
+  Play,
+  Pause,
+  RotateCcw
 } from 'lucide-react';
 import { Workspace, Folder as WorkspaceFolder, WorkspaceBoard } from '../../types/workspace.types';
 import { workspaceService } from '../../services/workspace.service';
@@ -36,6 +41,7 @@ import { CreateItemModal } from './CreateItemModal';
 import { ItemContextMenu } from './ItemContextMenu';
 import { useNavigate } from 'react-router-dom';
 import { useTeamStore } from '../../store/team.store';
+import { useAgentStore } from '../../store/agent.store';
 
 interface WorkspaceSidebarProps {
   currentWorkspaceId?: string;
@@ -50,6 +56,7 @@ export function WorkspaceSidebar({
 }: WorkspaceSidebarProps) {
   const navigate = useNavigate();
   const { teams, currentTeam, setCurrentTeam } = useTeamStore();
+  const { getAgents, getAgentsByStatus, startAgent, stopAgent } = useAgentStore();
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [currentWorkspace, setCurrentWorkspace] = useState<Workspace | null>(null);
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
@@ -64,6 +71,7 @@ export function WorkspaceSidebar({
   const [workspaceItemsExpanded, setWorkspaceItemsExpanded] = useState(true);
   const [recentExpanded, setRecentExpanded] = useState(true);
   const [teamsExpanded, setTeamsExpanded] = useState(true);
+  const [agentsExpanded, setAgentsExpanded] = useState(true);
   
   // Insights section items - Asana-style
   const insightsItems = [
@@ -629,6 +637,159 @@ export function WorkspaceSidebar({
                     Create team
                   </button>
                 </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {/* Agents Section - Salesforce Agentforce-style */}
+        <div className="p-3 border-b border-gray-200">
+          <div className="flex items-center justify-between mb-2">
+            <button
+              onClick={() => setAgentsExpanded(!agentsExpanded)}
+              className="flex items-center gap-1 hover:bg-gray-100 rounded p-1 -m-1 group"
+            >
+              <motion.div
+                animate={{ rotate: agentsExpanded ? 0 : -90 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ChevronDown className="h-3 w-3 text-gray-400 group-hover:text-gray-600" />
+              </motion.div>
+              <Bot className="w-4 h-4 mr-1 text-emerald-600" />
+              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider group-hover:text-gray-600">
+                Agents
+              </span>
+            </button>
+            <span className="text-xs text-gray-400">{getAgents().length}</span>
+          </div>
+          <AnimatePresence>
+            {agentsExpanded && (
+              <motion.div 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="space-y-1 overflow-hidden ml-6"
+              >
+                {/* Agent Overview */}
+                <div
+                  className="group cursor-pointer"
+                  onClick={() => navigate('/agents')}
+                >
+                  <div className="flex items-center py-2 px-2 hover:bg-gray-100 rounded transition-colors">
+                    <Activity className="h-4 w-4 mr-2 flex-shrink-0 text-emerald-600" />
+                    <div className="flex-1">
+                      <div className="text-sm font-medium text-gray-700">Agent Dashboard</div>
+                      <div className="text-xs text-gray-500">Manage your AI workforce</div>
+                    </div>
+                    <ChevronRight className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                </div>
+
+                {/* Active Agents */}
+                {getAgentsByStatus('active').slice(0, 3).map((agent) => {
+                  const getAgentIcon = (type: string) => {
+                    switch (type) {
+                      case 'sales': return '💼';
+                      case 'service': return '🎧';
+                      case 'marketing': return '📢';
+                      case 'analytics': return '📊';
+                      case 'operations': return '⚙️';
+                      default: return '🤖';
+                    }
+                  };
+
+                  const getStatusColor = (status: string) => {
+                    switch (status) {
+                      case 'active': return 'bg-green-100 text-green-700';
+                      case 'training': return 'bg-yellow-100 text-yellow-700';
+                      case 'inactive': return 'bg-gray-100 text-gray-700';
+                      case 'error': return 'bg-red-100 text-red-700';
+                      default: return 'bg-gray-100 text-gray-700';
+                    }
+                  };
+
+                  return (
+                    <div
+                      key={agent.id}
+                      className="group cursor-pointer"
+                      onClick={() => navigate(`/agents/${agent.id}`)}
+                    >
+                      <div className="flex items-center py-2 px-2 hover:bg-gray-100 rounded transition-colors">
+                        <div className="flex items-center gap-2 flex-1">
+                          <span className="text-sm flex-shrink-0">{getAgentIcon(agent.type)}</span>
+                          <div className="flex-1 min-w-0">
+                            <div className="text-sm font-medium text-gray-700 truncate">{agent.name}</div>
+                            <div className="flex items-center gap-2 text-xs">
+                              <span className={`px-1.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(agent.status)}`}>
+                                {agent.status}
+                              </span>
+                              <span className="text-gray-500">
+                                {agent.metrics.currentTasks} active
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          {/* Quick control buttons */}
+                          {agent.status === 'active' ? (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                stopAgent(agent.id);
+                              }}
+                              className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded transition-opacity"
+                              title="Pause agent"
+                            >
+                              <Pause className="h-3 w-3 text-gray-500" />
+                            </button>
+                          ) : (
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                startAgent(agent.id);
+                              }}
+                              className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded transition-opacity"
+                              title="Start agent"
+                            >
+                              <Play className="h-3 w-3 text-gray-500" />
+                            </button>
+                          )}
+                          <ChevronRight className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {/* Agent Templates Quick Access */}
+                <div className="pt-2 border-t border-gray-100 mt-2">
+                  <button
+                    className="flex items-center gap-2 py-2 px-2 text-sm text-emerald-600 hover:bg-emerald-50 rounded transition-colors w-full"
+                    onClick={() => navigate('/agents/create')}
+                  >
+                    <Plus className="h-3 w-3" />
+                    Create agent
+                  </button>
+                </div>
+
+                {/* Quick stats */}
+                {getAgents().length > 0 && (
+                  <div className="pt-2 border-t border-gray-100 mt-2">
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="bg-emerald-50 rounded p-2">
+                        <div className="font-medium text-emerald-700">{getAgentsByStatus('active').length}</div>
+                        <div className="text-emerald-600">Active</div>
+                      </div>
+                      <div className="bg-blue-50 rounded p-2">
+                        <div className="font-medium text-blue-700">
+                          {getAgents().reduce((sum, agent) => sum + agent.metrics.tasksCompleted, 0)}
+                        </div>
+                        <div className="text-blue-600">Tasks Done</div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>

@@ -245,8 +245,8 @@ export function GanttView({
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="relative"
-                      style={{ 
+                      {...({ className: "relative" } as any)}
+                      style={{
                         height: '60px',
                         borderBottom: '1px solid',
                         borderColor: 'rgb(229 231 235)'
@@ -267,10 +267,10 @@ export function GanttView({
                         </span>
                         
                         {/* Progress indicator */}
-                        {task.progress > 0 && (
+                        {(task as any).progress > 0 && (
                           <div
                             className="absolute left-0 top-0 bottom-0 bg-white/30 rounded-md"
-                            style={{ width: `${task.progress}%` }}
+                            style={{ width: `${(task as any).progress || 0}%` }}
                           />
                         )}
                       </div>

@@ -20,6 +20,7 @@ import { TimePeriodSelector } from './TimePeriodSelector';
 import { useGoalsStore } from '../../store/goals.store';
 import { useTeamStore } from '../../store/team.store';
 import { GoalCheckInModal } from './GoalCheckInModal';
+import { GoalCreationModal } from './GoalCreationModal';
 import { Goal } from '../../store/goals.store';
 
 export function TeamGoals() {
@@ -30,6 +31,7 @@ export function TeamGoals() {
   const [timeframe, setTimeframe] = useState('Q2 2024');
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
   const [showCheckInModal, setShowCheckInModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   // Filter goals by selected team - for now using owner as team indicator
   const teamGoals = allGoals.filter(goal => 
@@ -90,9 +92,9 @@ export function TeamGoals() {
             <Filter className="h-4 w-4 mr-2" />
             Filter
           </Button>
-          <Button size="sm">
+          <Button size="sm" onClick={() => setShowCreateModal(true)}>
             <Plus className="h-4 w-4 mr-2" />
-            Create goal
+            Create Goal
           </Button>
         </div>
       </div>
@@ -289,9 +291,9 @@ export function TeamGoals() {
             <p className="text-gray-600 dark:text-gray-400 mb-4">
               {team ? `Create the first goal for ${team.name}` : 'Select a team to view goals'}
             </p>
-            <Button>
+            <Button onClick={() => setShowCreateModal(true)}>
               <Plus className="h-4 w-4 mr-2" />
-              Create team goal
+              Create Team Goal
             </Button>
           </div>
         )}
@@ -305,6 +307,14 @@ export function TeamGoals() {
           setShowCheckInModal(false);
           setSelectedGoal(null);
         }}
+      />
+
+      {/* Goal Creation Modal */}
+      <GoalCreationModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        initialContext="team"
+        teamId={selectedTeam}
       />
     </div>
   );

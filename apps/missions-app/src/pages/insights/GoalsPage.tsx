@@ -31,9 +31,36 @@ function MyGoals() {
   const navigate = useNavigate();
   const [timeframe, setTimeframe] = useState('current');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [expandedGoals, setExpandedGoals] = useState<Set<string>>(new Set());
+  const [expandedSubGoals, setExpandedSubGoals] = useState<Set<string>>(new Set());
   
   // Filter goals for current user (mock filter for Likhitha)
-  const goals = allGoals.filter(goal => goal.owner === 'Likhitha');
+  const goals = allGoals.filter(goal => goal.owner === 'Likhitha' && !goal.parentId);
+  const getChildGoals = (parentId: string) => allGoals.filter(goal => goal.parentId === parentId && goal.owner === 'Likhitha');
+  
+  const toggleGoalExpansion = (goalId: string) => {
+    setExpandedGoals(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(goalId)) {
+        newSet.delete(goalId);
+      } else {
+        newSet.add(goalId);
+      }
+      return newSet;
+    });
+  };
+  
+  const toggleSubGoalExpansion = (subGoalId: string) => {
+    setExpandedSubGoals(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(subGoalId)) {
+        newSet.delete(subGoalId);
+      } else {
+        newSet.add(subGoalId);
+      }
+      return newSet;
+    });
+  };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -97,7 +124,7 @@ function MyGoals() {
           </Button>
           <Button size="sm" onClick={() => setShowCreateModal(true)}>
             <Plus className="h-4 w-4 mr-2" />
-            New Goal
+            Create Goal
           </Button>
         </div>
       </div>
@@ -208,35 +235,139 @@ function MyGoals() {
                 </div>
               </div>
 
-              {/* Key Results */}
+              {/* Child Goals and Sub-goals */}
               <div>
-                <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-                  Sub-goals ({(goal.subGoals || []).length})
-                </h4>
-                <div className="space-y-3">
-                  {(goal.subGoals || []).map((kr) => (
-                    <div key={kr.id} className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
-                      <div className="flex items-start justify-between mb-2">
-                        <div className="flex-1">
-                          <h5 className="font-medium text-gray-900 dark:text-white">{kr.title}</h5>
-                          <p className="text-sm text-gray-600 dark:text-gray-400">{kr.description}</p>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-lg font-semibold text-gray-900 dark:text-white">{kr.progress}%</div>
-                        </div>
+                {/* Direct child goals */}
+                {getChildGoals(goal.id).length > 0 && (
+                  <div className="mb-4">
+                    <button
+                      onClick={() => toggleGoalExpansion(goal.id)}
+                      className="flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 hover:text-indigo-600 transition-colors"
+                    >
+                      {expandedGoals.has(goal.id) ? (
+                        <ChevronDown className="h-4 w-4" />
+                      ) : (
+                        <ChevronDown className="h-4 w-4 transform -rotate-90" />
+                      )}
+                      Child Goals ({getChildGoals(goal.id).length})
+                    </button>
+                    
+                    {expandedGoals.has(goal.id) && (
+                      <div className="space-y-3 ml-6 border-l-2 border-gray-200 dark:border-gray-600 pl-4">
+                        {getChildGoals(goal.id).map((childGoal) => (
+                          <div key={childGoal.id} className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+                            <div className="flex items-start justify-between mb-2">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                  {getStatusIcon(childGoal.status)}
+                                  <h5 
+                                    className="font-medium text-gray-900 dark:text-white hover:text-indigo-600 cursor-pointer transition-colors"
+                                    onClick={() => navigate(`/insights/goals/goal/${childGoal.id}`)}
+                                  >
+                                    {childGoal.title}
+                                  </h5>
+                                  <span className={`px-2 py-1 text-xs font-medium rounded-full border ${getStatusColor(childGoal.status)}`}>
+                                    {getStatusLabel(childGoal.status)}
+                                  </span>
+                                </div>
+                                <p className="text-sm text-gray-600 dark:text-gray-400">{childGoal.description}</p>
+                              </div>
+                              <div className="text-right">
+                                <div className="text-lg font-semibold text-gray-900 dark:text-white">{childGoal.progress}%</div>
+                              </div>
+                            </div>
+                            <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2 mb-2">
+                              <div 
+                                className={`h-2 rounded-full transition-all duration-300 ${
+                                  childGoal.progress >= 70 ? 'bg-green-500' : 
+                                  childGoal.progress >= 40 ? 'bg-yellow-500' : 'bg-red-500'
+                                }`}
+                                style={{ width: `${childGoal.progress}%` }}
+                              />
+                            </div>
+                            
+                            {/* Child goal's sub-goals */}
+                            {(childGoal.subGoals || []).length > 0 && (
+                              <div className="mt-3">
+                                <button
+                                  onClick={() => toggleSubGoalExpansion(childGoal.id)}
+                                  className="flex items-center gap-2 text-xs font-medium text-gray-600 dark:text-gray-400 mb-2 hover:text-indigo-600 transition-colors"
+                                >
+                                  {expandedSubGoals.has(childGoal.id) ? (
+                                    <ChevronDown className="h-3 w-3" />
+                                  ) : (
+                                    <ChevronDown className="h-3 w-3 transform -rotate-90" />
+                                  )}
+                                  Key Results ({(childGoal.subGoals || []).length})
+                                </button>
+                                
+                                {expandedSubGoals.has(childGoal.id) && (
+                                  <div className="space-y-2 ml-4">
+                                    {(childGoal.subGoals || []).map((subGoal) => (
+                                      <div key={subGoal.id} className="bg-white dark:bg-gray-700 rounded p-3">
+                                        <div className="flex items-start justify-between mb-1">
+                                          <div className="flex-1">
+                                            <h6 className="text-sm font-medium text-gray-900 dark:text-white">{subGoal.title}</h6>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">{subGoal.description}</p>
+                                          </div>
+                                          <div className="text-right">
+                                            <div className="text-sm font-semibold text-gray-900 dark:text-white">{subGoal.progress}%</div>
+                                          </div>
+                                        </div>
+                                        <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-1.5">
+                                          <div 
+                                            className={`h-1.5 rounded-full transition-all duration-300 ${
+                                              subGoal.progress >= 70 ? 'bg-green-500' : 
+                                              subGoal.progress >= 40 ? 'bg-yellow-500' : 'bg-red-500'
+                                            }`}
+                                            style={{ width: `${subGoal.progress}%` }}
+                                          />
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        ))}
                       </div>
-                      <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                        <div 
-                          className={`h-2 rounded-full transition-all duration-300 ${
-                            kr.progress >= 70 ? 'bg-green-500' : 
-                            kr.progress >= 40 ? 'bg-yellow-500' : 'bg-red-500'
-                          }`}
-                          style={{ width: `${kr.progress}%` }}
-                        />
-                      </div>
+                    )}
+                  </div>
+                )}
+                
+                {/* Original sub-goals (Key Results) */}
+                {(goal.subGoals || []).length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                      Key Results ({(goal.subGoals || []).length})
+                    </h4>
+                    <div className="space-y-3">
+                      {(goal.subGoals || []).map((kr) => (
+                        <div key={kr.id} className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4">
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="flex-1">
+                              <h5 className="font-medium text-gray-900 dark:text-white">{kr.title}</h5>
+                              <p className="text-sm text-gray-600 dark:text-gray-400">{kr.description}</p>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-lg font-semibold text-gray-900 dark:text-white">{kr.progress}%</div>
+                            </div>
+                          </div>
+                          <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                            <div 
+                              className={`h-2 rounded-full transition-all duration-300 ${
+                                kr.progress >= 70 ? 'bg-green-500' : 
+                                kr.progress >= 40 ? 'bg-yellow-500' : 'bg-red-500'
+                              }`}
+                              style={{ width: `${kr.progress}%` }}
+                            />
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -302,7 +433,6 @@ function CompanyGoals() {
     goals, 
     filters, 
     setFilters, 
-    toggleGoalExpansion, 
     calculateGoalProgress 
   } = useGoalsStore();
   const navigate = useNavigate();
@@ -311,9 +441,36 @@ function CompanyGoals() {
   const [selectedGoalForCheckIn, setSelectedGoalForCheckIn] = useState(null);
   const [isCheckInModalOpen, setIsCheckInModalOpen] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [expandedGoals, setExpandedGoals] = useState<Set<string>>(new Set());
+  const [expandedSubGoals, setExpandedSubGoals] = useState<Set<string>>(new Set());
   
-  // Filter goals to show only top-level goals (no parentId)
+  // Filter goals to show only top-level goals (no parentId) and get child goals
   const companyGoals = goals.filter(goal => !goal.parentId);
+  const getChildGoals = (parentId: string) => goals.filter(goal => goal.parentId === parentId);
+  
+  const toggleLocalGoalExpansion = (goalId: string) => {
+    setExpandedGoals(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(goalId)) {
+        newSet.delete(goalId);
+      } else {
+        newSet.add(goalId);
+      }
+      return newSet;
+    });
+  };
+  
+  const toggleSubGoalExpansion = (subGoalId: string) => {
+    setExpandedSubGoals(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(subGoalId)) {
+        newSet.delete(subGoalId);
+      } else {
+        newSet.add(subGoalId);
+      }
+      return newSet;
+    });
+  };
 
   const handleCheckInClick = (goal) => {
     setSelectedGoalForCheckIn(goal);
@@ -370,7 +527,7 @@ function CompanyGoals() {
           </Button>
           <Button size="sm" onClick={() => setShowCreateModal(true)}>
             <Plus className="h-4 w-4 mr-2" />
-            New Goal
+            Create Goal
           </Button>
         </div>
       </div>
@@ -433,12 +590,12 @@ function CompanyGoals() {
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-3 flex-1">
                   <button
-                    onClick={() => toggleGoalExpansion(goal.id)}
+                    onClick={() => toggleLocalGoalExpansion(goal.id)}
                     className="flex items-center gap-2 text-left flex-1"
                   >
                     <ChevronDown 
                       className={`h-4 w-4 text-gray-400 transform transition-transform ${
-                        goal.isExpanded ? 'rotate-0' : '-rotate-90'
+                        expandedGoals.has(goal.id) ? 'rotate-0' : '-rotate-90'
                       }`} 
                     />
                     <div className="w-6 h-6 bg-blue-100 dark:bg-blue-900 rounded flex items-center justify-center flex-shrink-0">
@@ -494,7 +651,7 @@ function CompanyGoals() {
               </div>
 
               {/* Expandable Sub-Goals */}
-              {goal.isExpanded && goal.subGoals.length > 0 && (
+              {expandedGoals.has(goal.id) && goal.subGoals.length > 0 && (
                 <div className="ml-6 space-y-2">
                   {goal.subGoals.map((subGoal) => (
                     <div key={subGoal.id} className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">

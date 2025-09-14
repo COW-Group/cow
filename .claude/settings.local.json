@@ -54,7 +54,13 @@
       "WebFetch(domain:www.missiondrivenfinance.com)",
       "WebFetch(domain:help.asana.com)",
       "WebFetch(domain:forum.asana.com)",
-      "Bash(kill:*)"
+      "Bash(kill:*)",
+      "WebFetch(domain:hbr.org)",
+      "WebFetch(domain:www.mckinsey.com)",
+      "WebFetch(domain:www.ey.com)",
+      "WebFetch(domain:www.salesforce.com)",
+      "WebFetch(domain:www.goldmansachs.com)",
+      "WebFetch(domain:mvpdesign.com)"
     ],
     "deny": [],
     "ask": []

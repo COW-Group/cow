@@ -16,6 +16,7 @@ import { BoardPage } from '../../pages/BoardPage';
 import { SimpleMondayBoard } from '../board/SimpleMondayBoard';
 import { FlexibleBoard } from '../board/FlexibleBoard';
 import { InsightsPage } from '../../pages/insights/InsightsPage';
+import { AgentsPage } from '../../pages/AgentsPage';
 
 
 export function RouterSetup() {
@@ -43,6 +44,9 @@ export function RouterSetup() {
         
         {/* Insights routes */}
         <Route path="insights/*" element={<InsightsPage />} />
+        
+        {/* Agents routes */}
+        <Route path="agents/*" element={<AgentsPage />} />
         
         
         {/* Monday.com Style Board Demo */}

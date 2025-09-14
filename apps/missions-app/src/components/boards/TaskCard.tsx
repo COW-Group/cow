@@ -113,7 +113,7 @@ export function TaskCard({ task, isDragging = false, onDelete, onUpdate }: TaskC
       <motion.div
         initial={{ scale: 1, rotate: 0 }}
         animate={{ scale: 1.05, rotate: 2 }}
-        className="task-card dragging opacity-90 shadow-xl"
+        {...({ className: "task-card dragging opacity-90 shadow-xl" } as any)}
       >
         <TaskCardContent />
       </motion.div>
@@ -250,7 +250,7 @@ export function TaskCard({ task, isDragging = false, onDelete, onUpdate }: TaskC
       {...attributes}
       {...listeners}
       layout
-      className="task-card cursor-pointer"
+      {...({ className: "task-card cursor-pointer" } as any)}
       onClick={() => setShowDetails(!showDetails)}
       whileHover={{ y: -2, boxShadow: '0 8px 25px rgba(0,0,0,0.1)' }}
     >

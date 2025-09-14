@@ -143,12 +143,12 @@ export function CalendarView({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: index * 0.01 }}
-                className={`
+                {...({ className: `
                   bg-white dark:bg-gray-800 min-h-[120px] p-2 relative
                   hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer transition-colors
                   ${!isCurrentMonth ? 'opacity-40' : ''}
                   ${isCurrentDay ? 'ring-2 ring-primary-500' : ''}
-                `}
+                ` } as any)}
                 onClick={() => handleDateClick(date)}
               >
                 {/* Date Number */}
@@ -181,11 +181,11 @@ export function CalendarView({
                       key={task.id}
                       initial={{ scale: 0.8, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
-                      className={`
+                      {...({ className: `
                         px-2 py-1 rounded text-xs border truncate
                         ${getTaskStatusColor(task.status)}
                         hover:shadow-sm transition-shadow cursor-pointer
-                      `}
+                      ` } as any)}
                       onClick={(e) => {
                         e.stopPropagation();
                         // Open task detail modal
@@ -207,7 +207,7 @@ export function CalendarView({
                     <motion.div
                       initial={{ opacity: 0 }}
                       whileHover={{ opacity: 1 }}
-                      className="absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg opacity-0 transition-opacity"
+                      {...({ className: "absolute inset-0 flex items-center justify-center bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-lg opacity-0 transition-opacity" } as any)}
                     >
                       <Button
                         variant="ghost"

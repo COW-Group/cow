@@ -30,13 +30,14 @@ import {
   Eye,
   EyeOff
 } from 'lucide-react';
-import { 
-  FlexiBoard, 
+import {
+  FlexiBoard,
   EnhancedFlexiBoardEngine,
   FlexiBoardItem,
   FlexiBoardColumn,
   FlexiBoardGroup
 } from '../../../../../libs/missions-engine-lib/src/index';
+import { AppView } from '../boards/views/AppView';
 
 interface FlexiBoardViewProps {
   board: FlexiBoard;
@@ -492,7 +493,7 @@ export function FlexiBoardView({ board, engine, onUpdate }: FlexiBoardViewProps)
           <div className="flex items-center space-x-3">
             {/* View Type Selector */}
             <div className="flex bg-gray-100 rounded-lg p-1">
-              {(['table', 'kanban', 'timeline', 'dashboard'] as const).map((view) => (
+              {(['table', 'kanban', 'timeline', 'dashboard', 'apps'] as const).map((view) => (
                 <button
                   key={view}
                   onClick={() => setCurrentView(view)}
@@ -567,8 +568,107 @@ export function FlexiBoardView({ board, engine, onUpdate }: FlexiBoardViewProps)
         </div>
       </div>
 
-      {/* FlexiBoard Table View - Frozen + Scrollable Layout */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+      {/* View Content */}
+      {currentView === 'apps' ? (
+        <AppView boardId={board.id} workspaceId={board.workspace} />
+      ) : currentView === 'kanban' ? (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="text-center py-12">
+            <Columns className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Kanban View</h3>
+            <p className="text-gray-600">Organize your items in columns with drag-and-drop functionality.</p>
+            <div className="mt-6 flex gap-4 justify-center">
+              <div className="bg-gray-100 p-4 rounded-lg w-48">
+                <h4 className="font-medium text-gray-900 mb-2">To Do</h4>
+                <div className="space-y-2">
+                  {currentBoard.items?.slice(0, 2).map((item, index) => (
+                    <div key={item.id || index} className="bg-white p-3 rounded border shadow-sm">
+                      <p className="text-sm font-medium">{item.data?.name || `Item ${index + 1}`}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="bg-gray-100 p-4 rounded-lg w-48">
+                <h4 className="font-medium text-gray-900 mb-2">In Progress</h4>
+                <div className="space-y-2">
+                  {currentBoard.items?.slice(2, 3).map((item, index) => (
+                    <div key={item.id || index} className="bg-white p-3 rounded border shadow-sm">
+                      <p className="text-sm font-medium">{item.data?.name || `Item ${index + 3}`}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="bg-gray-100 p-4 rounded-lg w-48">
+                <h4 className="font-medium text-gray-900 mb-2">Done</h4>
+                <div className="space-y-2">
+                  {currentBoard.items?.slice(3, 4).map((item, index) => (
+                    <div key={item.id || index} className="bg-white p-3 rounded border shadow-sm">
+                      <p className="text-sm font-medium">{item.data?.name || `Item ${index + 4}`}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : currentView === 'timeline' ? (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="text-center py-12">
+            <GanttChart className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Timeline View</h3>
+            <p className="text-gray-600">View your items on a timeline with start and due dates.</p>
+            <div className="mt-6">
+              <div className="bg-gray-50 p-4 rounded-lg max-w-4xl mx-auto">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex gap-4 text-sm text-gray-600">
+                    <span>Jan 2024</span>
+                    <span>Feb 2024</span>
+                    <span>Mar 2024</span>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  {currentBoard.items?.slice(0, 3).map((item, index) => (
+                    <div key={item.id || index} className="flex items-center gap-4">
+                      <div className="w-32 text-sm font-medium text-gray-700">
+                        {item.data?.name || `Task ${index + 1}`}
+                      </div>
+                      <div className="flex-1 relative h-6 bg-gray-200 rounded">
+                        <div
+                          className="absolute h-full bg-blue-500 rounded"
+                          style={{ width: '40%', left: `${20 + index * 15}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : currentView === 'dashboard' ? (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="text-center py-12">
+            <BarChart3 className="w-12 h-12 mx-auto text-gray-400 mb-4" />
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Dashboard View</h3>
+            <p className="text-gray-600">Visualize your data with charts and analytics.</p>
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <h4 className="font-semibold text-blue-900 mb-2">Total Items</h4>
+                <p className="text-2xl font-bold text-blue-700">{currentBoard.items?.length || 0}</p>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg">
+                <h4 className="font-semibold text-green-900 mb-2">Completed</h4>
+                <p className="text-2xl font-bold text-green-700">{Math.floor((currentBoard.items?.length || 0) * 0.3)}</p>
+              </div>
+              <div className="bg-yellow-50 p-4 rounded-lg">
+                <h4 className="font-semibold text-yellow-900 mb-2">In Progress</h4>
+                <p className="text-2xl font-bold text-yellow-700">{Math.floor((currentBoard.items?.length || 0) * 0.7)}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200">{/* Table view content */}
         {/* Bulk Actions */}
         {selectedItems.length > 0 && (
           <div className="px-6 py-3 bg-blue-50 border-b border-blue-200">
@@ -757,6 +857,7 @@ export function FlexiBoardView({ board, engine, onUpdate }: FlexiBoardViewProps)
           </div>
         </div>
       </div>
+      )}
 
       {/* Column Manager Modal */}
       {showColumnManager && (

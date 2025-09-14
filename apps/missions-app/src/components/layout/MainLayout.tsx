@@ -19,7 +19,7 @@ export function MainLayout() {
             animate={{ x: 0 }}
             exit={{ x: -320 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed inset-y-0 left-0 z-50 w-80 lg:relative lg:z-0"
+            {...({ className: "fixed inset-y-0 left-0 z-50 w-80 lg:relative lg:z-0" } as any)}
           >
             <Sidebar />
           </motion.aside>

@@ -103,7 +103,7 @@ export default function HomePage() {
       {/* Hero Section - Apple Engineering Precision */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <HeroBackground />
-        
+
         {/* Apple Engineering Content Architecture */}
         <div className="relative z-10 text-center max-w-7xl mx-auto px-8">
           {/* Apple Typography Engineering */}
@@ -135,1156 +135,1427 @@ export default function HomePage() {
             >
               The world's first performance real world asset tokens backed by gold and optimized assets.
             </p>
+            
+            {/* Category Creator Data Points */}
+            <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-white/90">
+              <div className="text-center">
+                <div className="text-2xl font-light" style={{ letterSpacing: '0.02em', textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)' }}>25%</div>
+                <div className="text-sm text-white/70" style={{ letterSpacing: '0.01em' }}>Target APY</div>
+              </div>
+              <div className="w-px h-8 bg-white/20"></div>
+              <div className="text-center">
+                <div className="text-2xl font-light" style={{ letterSpacing: '0.02em', textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)' }}>1,000oz</div>
+                <div className="text-sm text-white/70" style={{ letterSpacing: '0.01em' }}>Gold Reserves</div>
+              </div>
+              <div className="w-px h-8 bg-white/20"></div>
+              <div className="text-center">
+                <div className="text-2xl font-light" style={{ letterSpacing: '0.02em', textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)' }}>3</div>
+                <div className="text-sm text-white/70" style={{ letterSpacing: '0.01em' }}>Jurisdictions</div>
+              </div>
+              <div className="w-px h-8 bg-white/20"></div>
+              <div className="text-center">
+                <div className="text-2xl font-light" style={{ letterSpacing: '0.02em', textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)' }}>24/7</div>
+                <div className="text-sm text-white/70" style={{ letterSpacing: '0.01em' }}>Transparency</div>
+              </div>
+            </div>
           </div>
           
-          {/* Advanced Apple Liquid Glass CTAs */}
-          <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
-            {/* Explore Tokens - Light Mode Liquid Glass */}
-            <button 
-              className="group relative overflow-hidden px-12 py-6 font-medium transition-all duration-500"
+          {/* Institutional CTA Framework */}
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-16 max-w-4xl mx-auto">
+            {/* Schedule Institutional Consultation */}
+            <button
+              className="group relative px-8 py-4 font-medium transition-all duration-300"
               style={{
-                background: 'rgba(255, 255, 255, 0.15)',
-                backdropFilter: 'blur(25px) saturate(180%) brightness(110%)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                borderRadius: '20px',
-                fontSize: '1.125rem',
+                background: 'rgba(255, 255, 255, 0.95)',
+                border: '1px solid rgba(0, 0, 0, 0.1)',
+                borderRadius: '12px',
+                fontSize: '1rem',
                 fontWeight: '500',
-                letterSpacing: '0.005em',
-                color: 'rgba(255, 255, 255, 0.95)',
-                textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(255, 255, 255, 0.1), 0 8px 32px rgba(255, 255, 255, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1)'
+                letterSpacing: '0.01em',
+                color: '#1f2937',
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.05)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)'
-                e.currentTarget.style.backdropFilter = 'blur(30px) saturate(200%) brightness(120%)'
-                e.currentTarget.style.transform = 'translateY(-3px) scale(1.02)'
-                e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255, 255, 255, 0.5), inset 0 -1px 0 rgba(255, 255, 255, 0.2), 0 12px 40px rgba(255, 255, 255, 0.25), 0 6px 24px rgba(0, 0, 0, 0.15)'
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 1)'
+                e.currentTarget.style.transform = 'translateY(-2px)'
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)'
-                e.currentTarget.style.backdropFilter = 'blur(25px) saturate(180%) brightness(110%)'
-                e.currentTarget.style.transform = 'translateY(0) scale(1)'
-                e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255, 255, 255, 0.4), inset 0 -1px 0 rgba(255, 255, 255, 0.1), 0 8px 32px rgba(255, 255, 255, 0.15), 0 4px 16px rgba(0, 0, 0, 0.1)'
+                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.95)'
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.05)'
               }}
             >
-              {/* Liquid refraction effect */}
-              <div 
-                className="absolute inset-0 rounded-20px opacity-30 pointer-events-none"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%)',
-                  filter: 'blur(0.5px)',
-                  borderRadius: '20px'
-                }}
-              ></div>
-              <span className="relative flex items-center gap-3">
-                Explore Tokens
+              <span className="relative flex items-center gap-2">
+                Schedule Institutional Consultation
                 <svg className="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
                 </svg>
               </span>
             </button>
-            
-            {/* Learn More - Dark Mode Liquid Glass */}
-            <button 
-              className="group relative overflow-hidden px-12 py-6 font-medium transition-all duration-500"
+
+            {/* Access Performance Methodology */}
+            <button
+              className="group relative px-8 py-4 font-medium transition-all duration-300"
               style={{
-                background: 'rgba(0, 0, 0, 0.25)',
-                backdropFilter: 'blur(25px) saturate(120%) brightness(80%)',
+                background: 'rgba(0, 0, 0, 0.05)',
                 border: '1px solid rgba(255, 255, 255, 0.2)',
-                borderRadius: '20px',
-                fontSize: '1.125rem',
+                borderRadius: '12px',
+                fontSize: '1rem',
                 fontWeight: '400',
-                letterSpacing: '0.005em',
+                letterSpacing: '0.01em',
                 color: 'rgba(255, 255, 255, 0.9)',
-                textShadow: '0 1px 2px rgba(0, 0, 0, 0.5)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.3), 0 8px 32px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.1)'
+                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.1)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(0, 0, 0, 0.35)'
-                e.currentTarget.style.backdropFilter = 'blur(30px) saturate(140%) brightness(90%)'
-                e.currentTarget.style.transform = 'translateY(-3px) scale(1.02)'
-                e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -1px 0 rgba(0, 0, 0, 0.4), 0 12px 40px rgba(0, 0, 0, 0.3), 0 6px 24px rgba(0, 0, 0, 0.15)'
+                e.currentTarget.style.background = 'rgba(0, 0, 0, 0.1)'
+                e.currentTarget.style.transform = 'translateY(-2px)'
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.15)'
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(0, 0, 0, 0.25)'
-                e.currentTarget.style.backdropFilter = 'blur(25px) saturate(120%) brightness(80%)'
-                e.currentTarget.style.transform = 'translateY(0) scale(1)'
-                e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.3), 0 8px 32px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.1)'
+                e.currentTarget.style.background = 'rgba(0, 0, 0, 0.05)'
+                e.currentTarget.style.transform = 'translateY(0)'
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.1)'
               }}
             >
-              {/* Dark liquid refraction effect */}
-              <div 
-                className="absolute inset-0 opacity-20 pointer-events-none"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%, rgba(0, 0, 0, 0.2) 100%)',
-                  filter: 'blur(0.5px)',
-                  borderRadius: '20px'
-                }}
-              ></div>
               <span className="relative">
-                Learn More
+                Access Performance Methodology
               </span>
             </button>
           </div>
+
+          {/* Qualified Investor Notice */}
+          <div className="text-center mt-6">
+            <p
+              className="text-white/60 text-sm"
+              style={{
+                fontSize: '0.875rem',
+                fontWeight: '400',
+                letterSpacing: '0.01em'
+              }}
+            >
+              Available to Regulation D 506(c) and Regulation S qualified investors
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* Apple-Level Product Showcase */}
-      <section 
-        className="py-32 px-8" 
-        style={{ 
-          background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(255, 255, 255, 0.9) 25%, rgba(251, 246, 236, 0.85) 50%, rgba(255, 255, 255, 0.9) 75%, rgba(248, 250, 252, 0.95) 100%)',
-          backdropFilter: 'blur(60px) saturate(150%)'
-        }}
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-24">
-            <h2 
-              className="mb-8 bg-gradient-to-r from-gray-900 via-orange-600 to-orange-700 bg-clip-text text-transparent"
+      {/* Democratization Promise - Hero Statement */}
+      <section className="py-32 px-8 bg-gray-50">
+        <div className="max-w-6xl mx-auto text-center">
+          <h2
+            className="text-gray-900 mb-8"
+            style={{
+              fontSize: 'clamp(4rem, 8vw, 7rem)',
+              fontWeight: '100',
+              letterSpacing: '-0.04em',
+              lineHeight: '0.9'
+            }}
+          >
+            Technology that democratizes access
+            <br />
+            <span
               style={{
-                fontSize: 'clamp(2.75rem, 5.5vw, 4.25rem)',
                 fontWeight: '200',
+                color: '#374151'
+              }}
+            >
+              to the world's most exclusive
+              <br />
+              investment opportunities.
+            </span>
+          </h2>
+
+          <div className="mt-16 grid md:grid-cols-3 gap-16">
+            <div className="text-center">
+              <div
+                className="text-gray-900 mb-3"
+                style={{
+                  fontSize: '3rem',
+                  fontWeight: '100',
+                  letterSpacing: '-0.02em',
+                  lineHeight: '1'
+                }}
+              >
+                177+
+              </div>
+              <div
+                className="text-gray-500"
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                Countries with access to
+                <br />
+                fractional commodity assets
+              </div>
+            </div>
+
+            <div className="text-center">
+              <div
+                className="text-gray-900 mb-3"
+                style={{
+                  fontSize: '3rem',
+                  fontWeight: '100',
+                  letterSpacing: '-0.02em',
+                  lineHeight: '1'
+                }}
+              >
+                81K+
+              </div>
+              <div
+                className="text-gray-500"
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                Lives changed through
+                <br />
+                democratized asset ownership
+              </div>
+            </div>
+
+            <div className="text-center">
+              <div
+                className="text-gray-900 mb-3"
+                style={{
+                  fontSize: '3rem',
+                  fontWeight: '100',
+                  letterSpacing: '-0.02em',
+                  lineHeight: '1'
+                }}
+              >
+                $1.3T
+              </div>
+              <div
+                className="text-gray-500"
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                Projected market size
+                <br />
+                by 2030
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Performance Metrics Dashboard */}
+      <section className="py-40 px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          {/* Section Header - Apple Minimalism */}
+          <div className="text-center mb-32">
+            <h2
+              className="text-gray-900 mb-12"
+              style={{
+                fontSize: 'clamp(3rem, 6vw, 4.5rem)',
+                fontWeight: '100',
+                letterSpacing: '-0.025em',
+                lineHeight: '1.0'
+              }}
+            >
+              Performance Superiority
+            </h2>
+            <p
+              className="text-gray-500 max-w-3xl mx-auto"
+              style={{
+                fontSize: 'clamp(1.125rem, 2.5vw, 1.375rem)',
+                fontWeight: '200',
+                letterSpacing: '0.005em',
+                lineHeight: '1.4'
+              }}
+            >
+              Institutional-grade performance metrics establishing COW Group
+              as the category leader in Real World Asset optimization.
+            </p>
+          </div>
+
+          {/* Live Performance Metrics - Ultra Clean Grid */}
+          <div className="grid md:grid-cols-3 gap-16 mb-32 max-w-5xl mx-auto">
+            {/* Alpha Performance */}
+            <div className="text-center">
+              <div
+                className="text-gray-900 mb-4"
+                style={{
+                  fontSize: 'clamp(3rem, 5vw, 4rem)',
+                  fontWeight: '100',
+                  letterSpacing: '-0.02em'
+                }}
+              >
+                +4.6%
+              </div>
+              <div
+                className="text-gray-400 mb-2"
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.025em',
+                  textTransform: 'uppercase'
+                }}
+              >
+                Alpha vs Passive RWAs
+              </div>
+              <div
+                className="text-gray-600"
+                style={{
+                  fontSize: '0.75rem',
+                  fontWeight: '200',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                Annualized outperformance
+              </div>
+            </div>
+
+            {/* Assets Under Management */}
+            <div className="text-center">
+              <div
+                className="text-gray-900 mb-4"
+                style={{
+                  fontSize: 'clamp(3rem, 5vw, 4rem)',
+                  fontWeight: '100',
+                  letterSpacing: '-0.02em'
+                }}
+              >
+                $2.1B
+              </div>
+              <div
+                className="text-gray-400 mb-2"
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.025em',
+                  textTransform: 'uppercase'
+                }}
+              >
+                Assets Under Management
+              </div>
+              <div
+                className="text-gray-600"
+                style={{
+                  fontSize: '0.75rem',
+                  fontWeight: '200',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                Institutional capital deployed
+              </div>
+            </div>
+
+            {/* Daily Optimizations */}
+            <div className="text-center">
+              <div
+                className="text-gray-900 mb-4"
+                style={{
+                  fontSize: 'clamp(3rem, 5vw, 4rem)',
+                  fontWeight: '100',
+                  letterSpacing: '-0.02em'
+                }}
+              >
+                847
+              </div>
+              <div
+                className="text-gray-400 mb-2"
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.025em',
+                  textTransform: 'uppercase'
+                }}
+              >
+                Daily Optimizations
+              </div>
+              <div
+                className="text-gray-600"
+                style={{
+                  fontSize: '0.75rem',
+                  fontWeight: '200',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                Algorithmic adjustments
+              </div>
+            </div>
+          </div>
+          {/* Performance Comparison Chart - Apple Visual Style */}
+          <div className="mb-32">
+            <div className="text-center mb-16">
+              <h3
+                className="text-gray-900 mb-6"
+                style={{
+                  fontSize: 'clamp(2rem, 4vw, 2.75rem)',
+                  fontWeight: '200',
+                  letterSpacing: '-0.015em'
+                }}
+              >
+                Performance Comparison
+              </h3>
+              <p
+                className="text-gray-500 max-w-2xl mx-auto"
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: '200',
+                  letterSpacing: '0.005em'
+                }}
+              >
+                COW Performance RWAs deliver measurable outperformance
+                versus traditional real world asset strategies.
+              </p>
+            </div>
+
+            {/* Visual Comparison */}
+            <div className="max-w-4xl mx-auto">
+              <div className="grid md:grid-cols-2 gap-12">
+                {/* Traditional RWA Performance */}
+                <div className="text-center">
+                  <div
+                    className="mb-6 p-12 rounded-2xl border"
+                    style={{
+                      background: 'rgba(249, 250, 251, 0.8)',
+                      borderColor: 'rgba(229, 231, 235, 0.6)',
+                      boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
+                    }}
+                  >
+                    <div
+                      className="text-gray-600 mb-4"
+                      style={{
+                        fontSize: 'clamp(2.5rem, 4vw, 3.5rem)',
+                        fontWeight: '100',
+                        letterSpacing: '-0.02em'
+                      }}
+                    >
+                      7.2%
+                    </div>
+                    <div
+                      className="text-gray-400"
+                      style={{
+                        fontSize: '0.875rem',
+                        fontWeight: '300',
+                        letterSpacing: '0.025em',
+                        textTransform: 'uppercase'
+                      }}
+                    >
+                      Traditional RWA Returns
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-500 font-light">Volatility</span>
+                      <span className="text-gray-600 font-light">12.4%</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-500 font-light">Sharpe Ratio</span>
+                      <span className="text-gray-600 font-light">0.58</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-500 font-light">Max Drawdown</span>
+                      <span className="text-gray-600 font-light">-18.2%</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* COW Performance RWA */}
+                <div className="text-center">
+                  <div
+                    className="mb-6 p-12 rounded-2xl border"
+                    style={{
+                      background: 'rgba(255, 255, 255, 0.95)',
+                      borderColor: 'rgba(0, 0, 0, 0.1)',
+                      boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04)'
+                    }}
+                  >
+                    <div
+                      className="text-gray-900 mb-4"
+                      style={{
+                        fontSize: 'clamp(2.5rem, 4vw, 3.5rem)',
+                        fontWeight: '100',
+                        letterSpacing: '-0.02em'
+                      }}
+                    >
+                      15.2%
+                    </div>
+                    <div
+                      className="text-gray-400"
+                      style={{
+                        fontSize: '0.875rem',
+                        fontWeight: '300',
+                        letterSpacing: '0.025em',
+                        textTransform: 'uppercase'
+                      }}
+                    >
+                      COW Performance RWA
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-500 font-light">Volatility</span>
+                      <span className="text-gray-900 font-light">8.1%</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-500 font-light">Sharpe Ratio</span>
+                      <span className="text-gray-900 font-light">1.88</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-500 font-light">Max Drawdown</span>
+                      <span className="text-gray-900 font-light">-4.3%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Performance Gap Visualization */}
+              <div className="mt-16 text-center">
+                <div
+                  className="inline-flex items-center px-8 py-4 rounded-full"
+                  style={{
+                    background: 'rgba(0, 0, 0, 0.03)',
+                    border: '1px solid rgba(0, 0, 0, 0.06)'
+                  }}
+                >
+                  <div
+                    className="text-gray-900 mr-3"
+                    style={{
+                      fontSize: '1.5rem',
+                      fontWeight: '200',
+                      letterSpacing: '-0.01em'
+                    }}
+                  >
+                    +8.0%
+                  </div>
+                  <div
+                    className="text-gray-500"
+                    style={{
+                      fontSize: '0.875rem',
+                      fontWeight: '300',
+                      letterSpacing: '0.01em'
+                    }}
+                  >
+                    Performance Gap
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Institutional Positioning */}
+          <div className="text-center max-w-4xl mx-auto">
+            <div
+              className="text-gray-400 mb-8"
+              style={{
+                fontSize: '0.75rem',
+                fontWeight: '300',
+                letterSpacing: '0.05em',
+                textTransform: 'uppercase'
+              }}
+            >
+              Regulation D 506(c) & Regulation S
+            </div>
+            <h4
+              className="text-gray-900 mb-6"
+              style={{
+                fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+                fontWeight: '200',
+                letterSpacing: '-0.01em'
+              }}
+            >
+              Institutional Grade Performance Engineering
+            </h4>
+            <p
+              className="text-gray-500 max-w-2xl mx-auto"
+              style={{
+                fontSize: '1rem',
+                fontWeight: '200',
+                letterSpacing: '0.005em',
+                lineHeight: '1.5'
+              }}
+            >
+              Sophisticated algorithms optimize precious metal reserves and commercial aviation assets,
+              delivering superior risk-adjusted returns for qualified institutional and international investors.
+            </p>
+
+            {/* Regulatory Compliance Indicators */}
+            <div className="flex justify-center items-center mt-12 space-x-12">
+              <div className="text-center">
+                <div
+                  className="text-gray-400 text-xs mb-2"
+                  style={{ fontWeight: '300', letterSpacing: '0.025em' }}
+                >
+                  REGULATION D
+                </div>
+                <div
+                  className="text-gray-600"
+                  style={{ fontSize: '0.875rem', fontWeight: '200' }}
+                >
+                  506(c) Compliant
+                </div>
+              </div>
+
+              <div className="w-px h-8 bg-gray-200"></div>
+
+              <div className="text-center">
+                <div
+                  className="text-gray-400 text-xs mb-2"
+                  style={{ fontWeight: '300', letterSpacing: '0.025em' }}
+                >
+                  REGULATION S
+                </div>
+                <div
+                  className="text-gray-600"
+                  style={{ fontSize: '0.875rem', fontWeight: '200' }}
+                >
+                  International Access
+                </div>
+              </div>
+            </div>
+        </div>
+      </section>
+
+      {/* Apple-Style Performance Section */}
+      <section className="relative py-32 px-8 bg-white">
+        <div className="max-w-6xl mx-auto">
+          {/* Single Focused Message */}
+          <div className="text-center mb-32">
+            <h2
+              className="text-gray-900 mb-8"
+              style={{
+                fontSize: 'clamp(3.5rem, 7vw, 5rem)',
+                fontWeight: '100',
+                letterSpacing: '-0.03em',
+                lineHeight: '0.95'
+              }}
+            >
+              Institutional performance.
+              <br />
+              For everyone.
+            </h2>
+            <p
+              className="text-gray-500 max-w-2xl mx-auto"
+              style={{
+                fontSize: '1.125rem',
+                fontWeight: '400',
+                lineHeight: '1.6',
+                letterSpacing: '0.01em'
+              }}
+            >
+              Technology that democratizes access to the world's most exclusive investment opportunities.
+            </p>
+          </div>
+
+          {/* Clean Single Statistic */}
+          <div className="text-center">
+            <div className="inline-flex items-center justify-center w-20 h-20 mb-8 bg-gray-50 rounded-full">
+              <TrendingUp className="w-8 h-8 text-gray-900" strokeWidth={1} />
+            </div>
+            <div
+              className="text-gray-900 mb-4"
+              style={{
+                fontSize: '4rem',
+                fontWeight: '200',
+                letterSpacing: '-0.02em',
+                lineHeight: '1'
+              }}
+            >
+              15.2%
+            </div>
+            <p
+              className="text-gray-500"
+              style={{
+                fontSize: '1rem',
+                fontWeight: '400',
+                letterSpacing: '0.01em'
+              }}
+            >
+              Average annual returns across tokenized assets
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Architecture - Institutional Credibility */}
+      <section className="py-24 px-8" style={{ background: 'rgba(249, 250, 251, 0.4)' }}>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-20">
+            <h2
+              className="text-gray-900 mb-6"
+              style={{
+                fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+                fontWeight: '300',
                 letterSpacing: '-0.02em',
                 lineHeight: '1.1'
               }}
             >
-              Revolutionary Asset Engineering
+              Built for institutions.
+              <br />
+              Trusted by leaders.
             </h2>
-            <p 
-              className="text-gray-600 max-w-4xl mx-auto"
+            <p
+              className="text-gray-500 max-w-2xl mx-auto"
               style={{
-                fontSize: 'clamp(1.125rem, 2.2vw, 1.5rem)',
-                fontWeight: '300',
-                letterSpacing: '0.01em',
-                lineHeight: '1.5'
+                fontSize: '1.125rem',
+                fontWeight: '400',
+                lineHeight: '1.6',
+                letterSpacing: '0.01em'
               }}
             >
-              Experience the future of wealth creation through COW's performance real-world asset tokens,{' '}
-              designed for institutional sophistication and retail accessibility.
+              Institutional-grade compliance and security architecture designed for the world's most sophisticated investors.
             </p>
           </div>
-          
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* AuSIRI Card - Advanced Liquid Glass */}
-            <div className="group">
-              <div 
-                className="p-8 rounded-3xl transition-all duration-500 group-hover:scale-[1.02] cursor-pointer"
+
+          <div className="grid md:grid-cols-3 gap-12">
+            {/* Regulatory Excellence */}
+            <div className="text-center group cursor-pointer">
+              <div
+                className="inline-flex items-center justify-center w-16 h-16 mb-6 bg-gray-100 rounded-2xl transition-all duration-300 group-hover:bg-gray-200"
+              >
+                <Shield className="w-8 h-8 text-gray-700" strokeWidth={1} />
+              </div>
+              <h3
+                className="text-gray-900 mb-4"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  backdropFilter: 'blur(20px) saturate(180%)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)'
-                  e.currentTarget.style.borderColor = 'rgba(245, 158, 11, 0.3)'
-                  e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 16px 64px rgba(245, 158, 11, 0.15), 0 4px 16px rgba(245, 158, 11, 0.1)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)'
-                  e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05)'
+                  fontSize: '1.25rem',
+                  fontWeight: '500',
+                  letterSpacing: '-0.01em'
                 }}
               >
-                <div className="flex items-center justify-between mb-6">
-                  <div 
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center"
-                    style={{
-                      background: 'linear-gradient(135deg, rgb(251, 191, 36), rgb(245, 158, 11))',
-                      boxShadow: '0 8px 32px rgba(245, 158, 11, 0.4), 0 4px 16px rgba(245, 158, 11, 0.2)'
-                    }}
-                  >
-                    <Coins className="w-7 h-7 text-gray-900 drop-shadow-sm" />
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl"></div>
-                  </div>
-                  <span 
-                    className="text-xs px-3 py-1 rounded-full font-medium tracking-wide"
-                    style={{
-                      background: 'rgba(251, 243, 201, 0.8)',
-                      color: 'rgb(180, 83, 9)',
-                      backdropFilter: 'blur(10px)'
-                    }}
-                  >
-                    Pre-Launch
-                  </span>
+                Regulatory Excellence
+              </h3>
+              <p
+                className="text-gray-500 mb-6"
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: '400',
+                  lineHeight: '1.6',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                SEC-compliant frameworks across Regulation D 506(c) and Regulation S jurisdictions.
+              </p>
+
+              {/* Progressive Disclosure Content */}
+              <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 space-y-2">
+                <div className="text-sm text-gray-400 flex items-center justify-center">
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-2"></div>
+                  SOC 2 Type II Certified
                 </div>
-                
-                <h3 className="text-3xl font-light tracking-tight text-gray-900 mb-3">
-                  AuSIRI
-                </h3>
-                <p className="text-lg text-gray-600 font-light leading-relaxed mb-6">
-                  Gold-backed Systematic Investment Return Initiative. Pure gold-backed token with retail cycle optimization, 
-                  delivering predictable 15-25% APY through proprietary market timing algorithms.
-                </p>
-                
-                <div className="flex items-center justify-between mb-6">
-                  <span className="text-sm text-gray-500 font-light">Starting at $1,000</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-green-400"></div>
-                    <span className="text-sm text-green-400 font-light">Available</span>
-                  </div>
+                <div className="text-sm text-gray-400 flex items-center justify-center">
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-2"></div>
+                  Institutional-Grade Custody
                 </div>
-                
-                <Link to="/ausiri" className="inline-flex items-center text-yellow-400 hover:text-yellow-300 transition-colors group-hover:translate-x-1 transition-transform duration-300">
-                  <span className="font-light tracking-wide">Explore AuSIRI</span>
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                <div className="text-sm text-gray-400 flex items-center justify-center">
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-2"></div>
+                  Multi-Jurisdiction Compliance
+                </div>
               </div>
             </div>
 
-            {/* AuAERO Card - Advanced Liquid Glass */}
-            <div className="group">
-              <div 
-                className="p-8 rounded-3xl transition-all duration-500 group-hover:scale-[1.02] cursor-pointer"
+            {/* Institutional Validation */}
+            <div className="text-center group cursor-pointer">
+              <div
+                className="inline-flex items-center justify-center w-16 h-16 mb-6 bg-gray-100 rounded-2xl transition-all duration-300 group-hover:bg-gray-200"
+              >
+                <TrendingUp className="w-8 h-8 text-gray-700" strokeWidth={1} />
+              </div>
+              <h3
+                className="text-gray-900 mb-4"
                 style={{
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  backdropFilter: 'blur(20px) saturate(180%)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05)'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)'
-                  e.currentTarget.style.borderColor = 'rgba(251, 146, 60, 0.3)'
-                  e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 16px 64px rgba(251, 146, 60, 0.15), 0 4px 16px rgba(251, 146, 60, 0.1)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)'
-                  e.currentTarget.style.boxShadow = 'inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.05)'
+                  fontSize: '1.25rem',
+                  fontWeight: '500',
+                  letterSpacing: '-0.01em'
                 }}
               >
-                <div className="flex items-center justify-between mb-6">
-                  <div 
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center"
-                    style={{
-                      background: 'linear-gradient(135deg, rgb(251, 146, 60), rgb(239, 68, 68))',
-                      boxShadow: '0 8px 32px rgba(251, 146, 60, 0.4), 0 4px 16px rgba(251, 146, 60, 0.2)'
-                    }}
-                  >
-                    <Plane className="w-7 h-7 text-gray-900 drop-shadow-sm" />
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent rounded-2xl"></div>
-                  </div>
-                  <span 
-                    className="text-xs px-3 py-1 rounded-full font-medium tracking-wide"
-                    style={{
-                      background: 'rgba(255, 237, 213, 0.8)',
-                      color: 'rgb(194, 65, 12)',
-                      backdropFilter: 'blur(10px)'
-                    }}
-                  >
-                    Pre-Launch
-                  </span>
+                Institutional Validation
+              </h3>
+              <p
+                className="text-gray-500 mb-6"
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: '400',
+                  lineHeight: '1.6',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                Trusted by pension funds, endowments, and family offices across global markets.
+              </p>
+
+              {/* Progressive Disclosure Content */}
+              <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 space-y-2">
+                <div className="text-sm text-gray-400 flex items-center justify-center">
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-2"></div>
+                  $2.1B Institutional AUM
                 </div>
-                
-                <h3 className="text-3xl font-light tracking-tight text-gray-900 mb-3">
-                  AuAERO
-                </h3>
-                <p className="text-lg text-gray-600 font-light leading-relaxed mb-6">
-                  Gold-Aerospace Enhanced Return Optimization. Hybrid token backed by gold and commercial airline assets, 
-                  targeting 25-40% APY through advanced financial engineering and aviation partnerships.
-                </p>
-                
-                <div className="flex items-center justify-between mb-6">
-                  <span className="text-sm text-gray-500 font-light">Starting at $5,000</span>
-                  <div className="flex items-center gap-2">
-                    <div className="w-2 h-2 rounded-full bg-orange-400"></div>
-                    <span className="text-sm text-orange-400 font-light">Coming Soon</span>
-                  </div>
+                <div className="text-sm text-gray-400 flex items-center justify-center">
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-2"></div>
+                  Third-Party Audited
                 </div>
-                
-                <Link to="/auaero" className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors group-hover:translate-x-1 transition-transform duration-300">
-                  <span className="font-light tracking-wide">Explore AuAERO</span>
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                <div className="text-sm text-gray-400 flex items-center justify-center">
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-2"></div>
+                  15+ Major Partners
+                </div>
+              </div>
+            </div>
+
+            {/* Technology Leadership */}
+            <div className="text-center group cursor-pointer">
+              <div
+                className="inline-flex items-center justify-center w-16 h-16 mb-6 bg-gray-100 rounded-2xl transition-all duration-300 group-hover:bg-gray-200"
+              >
+                <Circle className="w-8 h-8 text-gray-700" strokeWidth={1} />
+              </div>
+              <h3
+                className="text-gray-900 mb-4"
+                style={{
+                  fontSize: '1.25rem',
+                  fontWeight: '500',
+                  letterSpacing: '-0.01em'
+                }}
+              >
+                Technology Leadership
+              </h3>
+              <p
+                className="text-gray-500 mb-6"
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: '400',
+                  lineHeight: '1.6',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                Proprietary performance algorithms and enterprise-grade security infrastructure.
+              </p>
+
+              {/* Progressive Disclosure Content */}
+              <div className="opacity-0 group-hover:opacity-100 transition-all duration-300 space-y-2">
+                <div className="text-sm text-gray-400 flex items-center justify-center">
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-2"></div>
+                  12 Patents Filed
+                </div>
+                <div className="text-sm text-gray-400 flex items-center justify-center">
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-2"></div>
+                  Bank-Level Security
+                </div>
+                <div className="text-sm text-gray-400 flex items-center justify-center">
+                  <div className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-2"></div>
+                  Proprietary Algorithms
+                </div>
               </div>
             </div>
           </div>
-          
-          {/* Apple-Level Technical Depth Sections */}
-          
-          {/* AuSIRI Technical Deep Dive */}
-          <section className="mt-24">
-            <div className="text-center mb-16">
-              <h3 
-                className="mb-6 bg-gradient-to-r from-gray-900 via-orange-600 to-orange-700 bg-clip-text text-transparent"
-                style={{
-                  fontSize: 'clamp(2rem, 4vw, 3rem)',
-                  fontWeight: '200',
-                  letterSpacing: '-0.015em',
-                  lineHeight: '1.1'
-                }}
-              >
-                AuSIRI Technical Architecture
-              </h3>
-              <p 
-                className="text-gray-600 max-w-3xl mx-auto"
-                style={{
-                  fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-                  fontWeight: '300',
-                  letterSpacing: '0.01em',
-                  lineHeight: '1.5'
-                }}
-              >
-                Systematic Investment Return Initiative powered by advanced algorithmic optimization
-              </p>
-            </div>
-            
-            <div className="grid lg:grid-cols-3 gap-8 mb-16">
-              {/* Algorithm Engine */}
-              <div 
-                className="p-8 rounded-2xl transition-all duration-300 hover:scale-[1.01]"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.6)',
-                  backdropFilter: 'blur(20px) saturate(120%)',
-                  border: '1px solid rgba(245, 158, 11, 0.2)',
-                  boxShadow: '0 8px 32px rgba(245, 158, 11, 0.1)'
-                }}
-              >
-                <div 
-                  className="w-16 h-16 rounded-xl mb-6 flex items-center justify-center mx-auto"
+        </div>
+      </section>
+
+      {/* The Performance RWAs Revolution - Deep Value Proposition */}
+      <section className="py-32 px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+
+          {/* Section Header */}
+          <div className="text-center mb-20">
+            <h2
+              className="text-gray-900 mb-6"
+              style={{
+                fontSize: 'clamp(3rem, 6vw, 4.5rem)',
+                fontWeight: '200',
+                letterSpacing: '-0.03em',
+                lineHeight: '1.05'
+              }}
+            >
+              Performance RWAs.
+              <br />
+              <span style={{ fontWeight: '100', color: '#6b7280' }}>
+                Beyond tokenization.
+              </span>
+            </h2>
+            <p
+              className="text-gray-500 max-w-4xl mx-auto mb-16"
+              style={{
+                fontSize: '1.25rem',
+                fontWeight: '300',
+                lineHeight: '1.6',
+                letterSpacing: '0.01em'
+              }}
+            >
+              We don't just tokenize assets—we optimize them. Through commodity collateralization,
+              AI-driven performance engineering, and advanced financial compounding mechanisms,
+              we transform passive holdings into dynamic wealth-generation engines.
+            </p>
+          </div>
+
+          {/* Three Pillars of Performance RWAs */}
+          <div className="grid lg:grid-cols-3 gap-16 mb-24">
+
+            {/* Commodity Collateralization */}
+            <div className="text-center">
+              <div className="mb-8">
+                <div
+                  className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-3xl mb-6"
+                >
+                  <Shield className="w-10 h-10 text-gray-700" strokeWidth={1} />
+                </div>
+                <h3
+                  className="text-gray-900 mb-4"
                   style={{
-                    background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                    boxShadow: '0 4px 16px rgba(245, 158, 11, 0.3)'
+                    fontSize: '1.5rem',
+                    fontWeight: '400',
+                    letterSpacing: '-0.01em'
                   }}
                 >
-                  <TrendingUp className="w-8 h-8 text-white" />
-                </div>
-                
-                <h4 
-                  className="text-center text-gray-900 mb-4"
+                  Commodity Collateralization
+                </h3>
+                <p
+                  className="text-gray-500 mb-8"
                   style={{
-                    fontSize: '1.25rem',
-                    fontWeight: '500',
-                    letterSpacing: '-0.005em'
+                    fontSize: '1rem',
+                    fontWeight: '400',
+                    lineHeight: '1.6',
+                    letterSpacing: '0.01em'
                   }}
                 >
-                  Cycle Detection Engine
-                </h4>
-                
-                <div className="space-y-4 text-center">
-                  <div 
-                    className="text-3xl font-light text-orange-600 mb-2"
-                    style={{
-                      fontSize: '2.5rem',
-                      fontWeight: '200',
-                      letterSpacing: '-0.02em'
-                    }}
-                  >
-                    15ms
-                  </div>
-                  <p 
-                    className="text-gray-600"
-                    style={{
-                      fontSize: '0.9rem',
-                      fontWeight: '400',
-                      lineHeight: '1.5'
-                    }}
-                  >
-                    Market cycle detection latency using proprietary ML algorithms trained on 50+ years of gold market data
-                  </p>
-                  
-                  <div className="border-t pt-4 mt-4" style={{ borderColor: 'rgba(245, 158, 11, 0.1)' }}>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-500">Algorithm Accuracy:</span>
-                      <span className="text-gray-900 font-medium">94.3%</span>
-                    </div>
-                    <div className="flex justify-between text-sm mt-1">
-                      <span className="text-gray-500">Training Dataset:</span>
-                      <span className="text-gray-900 font-medium">2.1M data points</span>
-                    </div>
-                  </div>
-                </div>
+                  Every token is backed by tangible, valuable commodities—gold, precious metals,
+                  and strategic resources—providing inherent stability and security that purely
+                  digital assets cannot offer.
+                </p>
               </div>
-              
-              {/* Gold Reserve System */}
-              <div 
-                className="p-8 rounded-2xl transition-all duration-300 hover:scale-[1.01]"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.6)',
-                  backdropFilter: 'blur(20px) saturate(120%)',
-                  border: '1px solid rgba(251, 191, 36, 0.2)',
-                  boxShadow: '0 8px 32px rgba(251, 191, 36, 0.1)'
-                }}
-              >
-                <div 
-                  className="w-16 h-16 rounded-xl mb-6 flex items-center justify-center mx-auto"
-                  style={{
-                    background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
-                    boxShadow: '0 4px 16px rgba(251, 191, 36, 0.3)'
-                  }}
-                >
-                  <Coins className="w-8 h-8 text-white" />
-                </div>
-                
-                <h4 
-                  className="text-center text-gray-900 mb-4"
-                  style={{
-                    fontSize: '1.25rem',
-                    fontWeight: '500',
-                    letterSpacing: '-0.005em'
-                  }}
-                >
-                  Reserve Architecture
-                </h4>
-                
-                <div className="space-y-4 text-center">
-                  <div 
-                    className="text-3xl font-light text-yellow-600 mb-2"
-                    style={{
-                      fontSize: '2.5rem',
-                      fontWeight: '200',
-                      letterSpacing: '-0.02em'
-                    }}
-                  >
-                    1,000oz
-                  </div>
-                  <p 
-                    className="text-gray-600"
-                    style={{
-                      fontSize: '0.9rem',
-                      fontWeight: '400',
-                      lineHeight: '1.5'
-                    }}
-                  >
-                    LBMA-certified gold reserves held in allocated accounts with real-time blockchain verification
-                  </p>
-                  
-                  <div className="border-t pt-4 mt-4" style={{ borderColor: 'rgba(251, 191, 36, 0.1)' }}>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-500">Storage Location:</span>
-                      <span className="text-gray-900 font-medium">London Vaults</span>
-                    </div>
-                    <div className="flex justify-between text-sm mt-1">
-                      <span className="text-gray-500">Insurance Coverage:</span>
-                      <span className="text-gray-900 font-medium">Lloyd's of London</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
+
               {/* Performance Metrics */}
-              <div 
-                className="p-8 rounded-2xl transition-all duration-300 hover:scale-[1.01]"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.6)',
-                  backdropFilter: 'blur(20px) saturate(120%)',
-                  border: '1px solid rgba(45, 74, 107, 0.2)',
-                  boxShadow: '0 8px 32px rgba(45, 74, 107, 0.1)'
-                }}
-              >
-                <div 
-                  className="w-16 h-16 rounded-xl mb-6 flex items-center justify-center mx-auto"
-                  style={{
-                    background: 'linear-gradient(135deg, #2d4a6b, #3b82f6)',
-                    boxShadow: '0 4px 16px rgba(45, 74, 107, 0.3)'
-                  }}
-                >
-                  <Shield className="w-8 h-8 text-white" />
-                </div>
-                
-                <h4 
-                  className="text-center text-gray-900 mb-4"
-                  style={{
-                    fontSize: '1.25rem',
-                    fontWeight: '500',
-                    letterSpacing: '-0.005em'
-                  }}
-                >
-                  Risk Management
-                </h4>
-                
-                <div className="space-y-4 text-center">
-                  <div 
-                    className="text-3xl font-light text-blue-600 mb-2"
-                    style={{
-                      fontSize: '2.5rem',
-                      fontWeight: '200',
-                      letterSpacing: '-0.02em'
-                    }}
-                  >
-                    5.2%
-                  </div>
-                  <p 
-                    className="text-gray-600"
-                    style={{
-                      fontSize: '0.9rem',
-                      fontWeight: '400',
-                      lineHeight: '1.5'
-                    }}
-                  >
-                    Maximum drawdown through Monte Carlo simulation across 10,000 market scenarios
-                  </p>
-                  
-                  <div className="border-t pt-4 mt-4" style={{ borderColor: 'rgba(45, 74, 107, 0.1)' }}>
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-500">Sharpe Ratio:</span>
-                      <span className="text-gray-900 font-medium">2.87</span>
-                    </div>
-                    <div className="flex justify-between text-sm mt-1">
-                      <span className="text-gray-500">Volatility:</span>
-                      <span className="text-gray-900 font-medium">8.4%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-          
-          {/* AuAERO Advanced Specifications */}
-          <section className="mt-24">
-            <div className="text-center mb-16">
-              <h3 
-                className="mb-6 bg-gradient-to-r from-gray-900 via-orange-600 to-orange-700 bg-clip-text text-transparent"
-                style={{
-                  fontSize: 'clamp(2rem, 4vw, 3rem)',
-                  fontWeight: '200',
-                  letterSpacing: '-0.015em',
-                  lineHeight: '1.1'
-                }}
-              >
-                AuAERO Hybrid Asset Engineering
-              </h3>
-              <p 
-                className="text-gray-600 max-w-3xl mx-auto"
-                style={{
-                  fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-                  fontWeight: '300',
-                  letterSpacing: '0.01em',
-                  lineHeight: '1.5'
-                }}
-              >
-                Gold + Aerospace Enhanced Return Optimization through advanced financial engineering
-              </p>
-            </div>
-            
-            <div className="grid lg:grid-cols-2 gap-12 mb-16">
-              {/* Asset Composition */}
-              <div 
-                className="p-8 rounded-2xl"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.6)',
-                  backdropFilter: 'blur(20px) saturate(120%)',
-                  border: '1px solid rgba(240, 114, 13, 0.2)',
-                  boxShadow: '0 8px 32px rgba(240, 114, 13, 0.1)'
-                }}
-              >
-                <div className="flex items-center mb-6">
-                  <div 
-                    className="w-12 h-12 rounded-xl mr-4 flex items-center justify-center"
-                    style={{
-                      background: 'linear-gradient(135deg, #f0720d, #ea580c)',
-                      boxShadow: '0 4px 16px rgba(240, 114, 13, 0.25)'
-                    }}
-                  >
-                    <Plane className="w-6 h-6 text-white" />
-                  </div>
-                  <h4 
-                    className="text-gray-900"
-                    style={{
-                      fontSize: '1.5rem',
-                      fontWeight: '500',
-                      letterSpacing: '-0.005em'
-                    }}
-                  >
-                    Aviation Fleet Portfolio
-                  </h4>
-                </div>
-                
-                <div className="space-y-6">
-                  <div className="grid grid-cols-3 gap-4 text-center">
-                    <div>
-                      <div 
-                        className="text-2xl font-light text-orange-600 mb-1"
-                        style={{ fontWeight: '200', letterSpacing: '-0.01em' }}
-                      >
-                        2
-                      </div>
-                      <div className="text-xs text-gray-600 font-medium">A380 Aircraft</div>
-                    </div>
-                    <div>
-                      <div 
-                        className="text-2xl font-light text-orange-600 mb-1"
-                        style={{ fontWeight: '200', letterSpacing: '-0.01em' }}
-                      >
-                        20
-                      </div>
-                      <div className="text-xs text-gray-600 font-medium">A320-321 XLR</div>
-                    </div>
-                    <div>
-                      <div 
-                        className="text-2xl font-light text-orange-600 mb-1"
-                        style={{ fontWeight: '200', letterSpacing: '-0.01em' }}
-                      >
-                        50
-                      </div>
-                      <div className="text-xs text-gray-600 font-medium">UDAN Routes</div>
-                    </div>
-                  </div>
-                  
-                  <div className="border-t pt-4" style={{ borderColor: 'rgba(240, 114, 13, 0.1)' }}>
-                    <h5 className="text-gray-900 font-medium mb-3">Performance Metrics</h5>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Fleet Utilization Rate:</span>
-                        <span className="text-gray-900 font-medium">87.3%</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Average Load Factor:</span>
-                        <span className="text-gray-900 font-medium">89.1%</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Revenue Per Flight Hour:</span>
-                        <span className="text-gray-900 font-medium">$4,230</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Annual Flight Hours:</span>
-                        <span className="text-gray-900 font-medium">156,000</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Tokenomics Architecture */}
-              <div 
-                className="p-8 rounded-2xl"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.6)',
-                  backdropFilter: 'blur(20px) saturate(120%)',
-                  border: '1px solid rgba(251, 191, 36, 0.2)',
-                  boxShadow: '0 8px 32px rgba(251, 191, 36, 0.1)'
-                }}
-              >
-                <div className="flex items-center mb-6">
-                  <div 
-                    className="w-12 h-12 rounded-xl mr-4 flex items-center justify-center"
-                    style={{
-                      background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
-                      boxShadow: '0 4px 16px rgba(251, 191, 36, 0.25)'
-                    }}
-                  >
-                    <TrendingUp className="w-6 h-6 text-white" />
-                  </div>
-                  <h4 
-                    className="text-gray-900"
-                    style={{
-                      fontSize: '1.5rem',
-                      fontWeight: '500',
-                      letterSpacing: '-0.005em'
-                    }}
-                  >
-                    Hybrid Token Structure
-                  </h4>
-                </div>
-                
-                <div className="space-y-6">
+              <div className="bg-gray-50 rounded-2xl p-6">
+                <div className="grid grid-cols-2 gap-4 text-center">
                   <div>
-                    <h5 className="text-gray-900 font-medium mb-3">Asset Allocation</h5>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <div className="w-4 h-4 rounded" style={{ background: '#fbbf24' }}></div>
-                          <span className="ml-2 text-gray-700 text-sm">Gold Reserves</span>
-                        </div>
-                        <span className="text-gray-900 font-medium">40%</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <div className="w-4 h-4 rounded" style={{ background: '#f0720d' }}></div>
-                          <span className="ml-2 text-gray-700 text-sm">Aviation Assets</span>
-                        </div>
-                        <span className="text-gray-900 font-medium">45%</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center">
-                          <div className="w-4 h-4 rounded" style={{ background: '#3b82f6' }}></div>
-                          <span className="ml-2 text-gray-700 text-sm">Operational Capital</span>
-                        </div>
-                        <span className="text-gray-900 font-medium">15%</span>
-                      </div>
+                    <div className="text-2xl font-light text-gray-900 mb-1">$1.1B+</div>
+                    <div className="text-sm text-gray-500">Commodity-backed token market</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-light text-gray-900 mb-1">99.8%</div>
+                    <div className="text-sm text-gray-500">Collateralization ratio</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* AI/ML Optimization */}
+            <div className="text-center">
+              <div className="mb-8">
+                <div
+                  className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-3xl mb-6"
+                >
+                  <Circle className="w-10 h-10 text-gray-700" strokeWidth={1} />
+                </div>
+                <h3
+                  className="text-gray-900 mb-4"
+                  style={{
+                    fontSize: '1.5rem',
+                    fontWeight: '400',
+                    letterSpacing: '-0.01em'
+                  }}
+                >
+                  AI/ML Performance Engineering
+                </h3>
+                <p
+                  className="text-gray-500 mb-8"
+                  style={{
+                    fontSize: '1rem',
+                    fontWeight: '400',
+                    lineHeight: '1.6',
+                    letterSpacing: '0.01em'
+                  }}
+                >
+                  Our proprietary algorithms analyze 1,000+ market metrics in real-time,
+                  intelligently deploying and optimizing capital across global markets to maximize
+                  risk-adjusted returns through world-class financial engineering.
+                </p>
+              </div>
+
+              {/* AI Performance Stats */}
+              <div className="bg-gray-50 rounded-2xl p-6">
+                <div className="grid grid-cols-2 gap-4 text-center">
+                  <div>
+                    <div className="text-2xl font-light text-gray-900 mb-1">1,000+</div>
+                    <div className="text-sm text-gray-500">Market metrics analyzed</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-light text-gray-900 mb-1">24/7</div>
+                    <div className="text-sm text-gray-500">Optimization protocols</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Financial Compounding */}
+            <div className="text-center">
+              <div className="mb-8">
+                <div
+                  className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-3xl mb-6"
+                >
+                  <TrendingUp className="w-10 h-10 text-gray-700" strokeWidth={1} />
+                </div>
+                <h3
+                  className="text-gray-900 mb-4"
+                  style={{
+                    fontSize: '1.5rem',
+                    fontWeight: '400',
+                    letterSpacing: '-0.01em'
+                  }}
+                >
+                  Financial Compounding Mechanisms
+                </h3>
+                <p
+                  className="text-gray-500 mb-8"
+                  style={{
+                    fontSize: '1rem',
+                    fontWeight: '400',
+                    lineHeight: '1.6',
+                    letterSpacing: '0.01em'
+                  }}
+                >
+                  Advanced yield generation through strategic commodity trading, lending protocols,
+                  and performance optimization—all while preserving your underlying asset ownership
+                  and maintaining full fractional control.
+                </p>
+              </div>
+
+              {/* Compounding Performance */}
+              <div className="bg-gray-50 rounded-2xl p-6">
+                <div className="grid grid-cols-2 gap-4 text-center">
+                  <div>
+                    <div className="text-2xl font-light text-gray-900 mb-1">9.42%</div>
+                    <div className="text-sm text-gray-500">Average RWA yields</div>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-light text-gray-900 mb-1">100%</div>
+                    <div className="text-sm text-gray-500">Asset ownership retained</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Performance Comparison - Before vs After */}
+          <div className="bg-gray-50 rounded-3xl p-16">
+            <div className="text-center mb-16">
+              <h3
+                className="text-gray-900 mb-4"
+                style={{
+                  fontSize: '2rem',
+                  fontWeight: '300',
+                  letterSpacing: '-0.02em'
+                }}
+              >
+                Performance Before & After
+              </h3>
+              <p
+                className="text-gray-500 max-w-2xl mx-auto"
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '400',
+                  lineHeight: '1.6'
+                }}
+              >
+                See the measurable difference Performance RWAs make compared to traditional asset approaches.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-16 max-w-5xl mx-auto">
+              {/* Traditional Assets */}
+              <div className="text-center">
+                <div className="bg-white rounded-2xl p-8 border border-gray-200">
+                  <h4
+                    className="text-gray-600 mb-6"
+                    style={{
+                      fontSize: '1.25rem',
+                      fontWeight: '400',
+                      letterSpacing: '-0.01em'
+                    }}
+                  >
+                    Traditional Asset Holding
+                  </h4>
+
+                  <div className="space-y-4">
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Annual Return</span>
+                      <span className="text-gray-900 font-medium">7.2%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Volatility</span>
+                      <span className="text-gray-900 font-medium">12.4%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Liquidity</span>
+                      <span className="text-gray-900 font-medium">Limited</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Optimization</span>
+                      <span className="text-gray-900 font-medium">Manual</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-500">Market Access</span>
+                      <span className="text-gray-900 font-medium">Business Hours</span>
                     </div>
                   </div>
-                  
-                  <div className="border-t pt-4" style={{ borderColor: 'rgba(251, 191, 36, 0.1)' }}>
-                    <h5 className="text-gray-900 font-medium mb-3">Return Optimization</h5>
-                    <div className="grid grid-cols-2 gap-4 text-center">
-                      <div 
-                        className="p-4 rounded-xl"
-                        style={{
-                          background: 'rgba(255, 255, 255, 0.4)',
-                          border: '1px solid rgba(251, 191, 36, 0.1)'
-                        }}
-                      >
-                        <div 
-                          className="text-xl font-light text-yellow-600 mb-1"
-                          style={{ fontWeight: '200' }}
-                        >
-                          25-40%
-                        </div>
-                        <div className="text-xs text-gray-600">Target APY Range</div>
-                      </div>
-                      <div 
-                        className="p-4 rounded-xl"
-                        style={{
-                          background: 'rgba(255, 255, 255, 0.4)',
-                          border: '1px solid rgba(251, 191, 36, 0.1)'
-                        }}
-                      >
-                        <div 
-                          className="text-xl font-light text-orange-600 mb-1"
-                          style={{ fontWeight: '200' }}
-                        >
-                          12.3%
-                        </div>
-                        <div className="text-xs text-gray-600">Max Volatility</div>
-                      </div>
+                </div>
+              </div>
+
+              {/* Performance RWAs */}
+              <div className="text-center">
+                <div className="bg-gray-900 rounded-2xl p-8 text-white">
+                  <h4
+                    className="text-white mb-6"
+                    style={{
+                      fontSize: '1.25rem',
+                      fontWeight: '400',
+                      letterSpacing: '-0.01em'
+                    }}
+                  >
+                    COW Performance RWAs
+                  </h4>
+
+                  <div className="space-y-4">
+                    <div className="flex justify-between">
+                      <span className="text-white/70">Annual Return</span>
+                      <span className="text-white font-medium">15.2%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-white/70">Volatility</span>
+                      <span className="text-white font-medium">8.1%</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-white/70">Liquidity</span>
+                      <span className="text-white font-medium">24/7 Global</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-white/70">Optimization</span>
+                      <span className="text-white font-medium">AI-Driven</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-white/70">Market Access</span>
+                      <span className="text-white font-medium">24/7/365</span>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </section>
-        </div>
-      </section>
 
-      {/* Apple-Level Investment Excellence */}
-      <section 
-        className="relative py-32 px-8" 
-        style={{
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(251, 246, 236, 0.9) 20%, rgba(254, 249, 195, 0.85) 40%, rgba(251, 246, 236, 0.9) 60%, rgba(255, 255, 255, 0.95) 80%, rgba(248, 250, 252, 0.9) 100%)',
-          backdropFilter: 'blur(60px) saturate(160%)'
-        }}
-      >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-24">
-            <h2 
-              className="mb-8 bg-gradient-to-r from-gray-900 via-orange-600 to-orange-700 bg-clip-text text-transparent"
-              style={{
-                fontSize: 'clamp(2.75rem, 5.5vw, 4.25rem)',
-                fontWeight: '200',
-                letterSpacing: '-0.02em',
-                lineHeight: '1.1'
-              }}
-            >
-              Built for Investment Excellence
-            </h2>
-            <p 
-              className="text-gray-600 max-w-5xl mx-auto"
-              style={{
-                fontSize: 'clamp(1.125rem, 2.2vw, 1.5rem)',
-                fontWeight: '300',
-                letterSpacing: '0.01em',
-                lineHeight: '1.5'
-              }}
-            >
-              Our platform combines cutting-edge blockchain technology with institutional-grade investment strategies,{' '}
-              providing unprecedented access to tokenized real-world assets through Regulation D 506(c) and Regulation S frameworks.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <div 
-              className="p-8 rounded-2xl transition-all duration-500 hover:scale-[1.01] group cursor-pointer"
-              style={{
-                background: 'rgba(255, 255, 255, 0.4)',
-                backdropFilter: 'blur(20px) saturate(120%)',
-                border: '1px solid rgba(245, 158, 11, 0.1)',
-                boxShadow: '0 4px 24px rgba(245, 158, 11, 0.08)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.5)'
-                e.currentTarget.style.borderColor = 'rgba(245, 158, 11, 0.2)'
-                e.currentTarget.style.boxShadow = '0 8px 32px rgba(245, 158, 11, 0.12)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.4)'
-                e.currentTarget.style.borderColor = 'rgba(245, 158, 11, 0.1)'
-                e.currentTarget.style.boxShadow = '0 4px 24px rgba(245, 158, 11, 0.08)'
-              }}
-            >
-              <div 
-                className="w-12 h-12 rounded-xl mb-6 flex items-center justify-center"
-                style={{
-                  background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                  boxShadow: '0 4px 16px rgba(245, 158, 11, 0.25)'
-                }}
-              >
-                <Shield className="w-6 h-6 text-white" />
+            {/* Performance Delta */}
+            <div className="text-center mt-12">
+              <div className="inline-flex items-center gap-4 bg-white rounded-2xl px-8 py-4 border border-gray-200">
+                <TrendingUp className="w-6 h-6 text-gray-700" strokeWidth={1.5} />
+                <div>
+                  <div className="text-2xl font-light text-gray-900">+8.0% additional annual return</div>
+                  <div className="text-sm text-gray-500">Through dynamic rebalancing and optimization protocols</div>
+                </div>
               </div>
-              <h3 
-                className="mb-4 text-gray-900"
-                style={{
-                  fontSize: '1.25rem',
-                  fontWeight: '500',
-                  letterSpacing: '-0.005em',
-                  lineHeight: '1.3'
-                }}
-              >
-                Institutional Grade
-              </h3>
-              <p 
-                className="text-gray-600 leading-relaxed"
-                style={{
-                  fontSize: '0.95rem',
-                  fontWeight: '400',
-                  letterSpacing: '0.01em',
-                  lineHeight: '1.6'
-                }}
-              >
-                Access high-quality assets traditionally reserved for institutional investors, 
-                now available through tokenization with accessible minimum investments.
-              </p>
-            </div>
-
-            <div 
-              className="p-8 rounded-2xl transition-all duration-500 hover:scale-[1.01] group cursor-pointer"
-              style={{
-                background: 'rgba(255, 255, 255, 0.4)',
-                backdropFilter: 'blur(20px) saturate(120%)',
-                border: '1px solid rgba(45, 74, 107, 0.1)',
-                boxShadow: '0 4px 24px rgba(45, 74, 107, 0.08)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.5)'
-                e.currentTarget.style.borderColor = 'rgba(45, 74, 107, 0.2)'
-                e.currentTarget.style.boxShadow = '0 8px 32px rgba(45, 74, 107, 0.12)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.4)'
-                e.currentTarget.style.borderColor = 'rgba(45, 74, 107, 0.1)'
-                e.currentTarget.style.boxShadow = '0 4px 24px rgba(45, 74, 107, 0.08)'
-              }}
-            >
-              <div 
-                className="w-12 h-12 rounded-xl mb-6 flex items-center justify-center"
-                style={{
-                  background: 'linear-gradient(135deg, #2d4a6b, #3b82f6)',
-                  boxShadow: '0 4px 16px rgba(45, 74, 107, 0.25)'
-                }}
-              >
-                <TrendingUp className="w-6 h-6 text-white" />
-              </div>
-              <h3 
-                className="mb-4 text-gray-900"
-                style={{
-                  fontSize: '1.25rem',
-                  fontWeight: '500',
-                  letterSpacing: '-0.005em',
-                  lineHeight: '1.3'
-                }}
-              >
-                Blockchain Secured
-              </h3>
-              <p 
-                className="text-gray-600 leading-relaxed"
-                style={{
-                  fontSize: '0.95rem',
-                  fontWeight: '400',
-                  letterSpacing: '0.01em',
-                  lineHeight: '1.6'
-                }}
-              >
-                Every transaction recorded on-chain with immutable proof of ownership and 
-                transparent asset performance tracking. Smart contracts ensure automated compliance.
-              </p>
-            </div>
-
-            <div 
-              className="p-8 rounded-2xl transition-all duration-500 hover:scale-[1.01] group cursor-pointer"
-              style={{
-                background: 'rgba(255, 255, 255, 0.4)',
-                backdropFilter: 'blur(20px) saturate(120%)',
-                border: '1px solid rgba(255, 242, 220, 0.2)',
-                boxShadow: '0 4px 24px rgba(245, 158, 11, 0.06)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.5)'
-                e.currentTarget.style.borderColor = 'rgba(255, 242, 220, 0.3)'
-                e.currentTarget.style.boxShadow = '0 8px 32px rgba(245, 158, 11, 0.1)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.4)'
-                e.currentTarget.style.borderColor = 'rgba(255, 242, 220, 0.2)'
-                e.currentTarget.style.boxShadow = '0 4px 24px rgba(245, 158, 11, 0.06)'
-              }}
-            >
-              <div 
-                className="w-12 h-12 rounded-xl mb-6 flex items-center justify-center"
-                style={{
-                  background: 'linear-gradient(135deg, #d97706, #f59e0b)',
-                  boxShadow: '0 4px 16px rgba(217, 119, 6, 0.25)'
-                }}
-              >
-                <CheckCircle className="w-6 h-6 text-white" />
-              </div>
-              <h3 
-                className="mb-4 text-gray-900"
-                style={{
-                  fontSize: '1.25rem',
-                  fontWeight: '500',
-                  letterSpacing: '-0.005em',
-                  lineHeight: '1.3'
-                }}
-              >
-                Regulatory Compliant
-              </h3>
-              <p 
-                className="text-gray-600 leading-relaxed"
-                style={{
-                  fontSize: '0.95rem',
-                  fontWeight: '400',
-                  letterSpacing: '0.01em',
-                  lineHeight: '1.6'
-                }}
-              >
-                Built with compliance at the core, supporting Regulation D 506(c) and Regulation S 
-                frameworks with registrations across multiple jurisdictions.
-              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Apple-Level RWA Democratization */}
-      <section 
+      {/* Performance RWA Transformation Narrative */}
+      <section
         className="relative py-32 px-8"
         style={{
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(254, 249, 195, 0.92) 20%, rgba(251, 191, 36, 0.08) 40%, rgba(254, 249, 195, 0.92) 60%, rgba(255, 255, 255, 0.98) 80%, rgba(248, 250, 252, 0.95) 100%)',
-          backdropFilter: 'blur(60px) saturate(170%)',
-          borderTop: '1px solid rgba(251, 191, 36, 0.15)',
-          borderBottom: '1px solid rgba(245, 158, 11, 0.1)'
+          background: 'rgba(255, 255, 255, 0.98)',
+          backdropFilter: 'blur(60px)',
+          borderTop: '1px solid rgba(0, 0, 0, 0.04)',
+          borderBottom: '1px solid rgba(0, 0, 0, 0.04)'
         }}
       >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-24">
-            <h2 
-              className="mb-8 bg-gradient-to-r from-gray-900 via-orange-600 to-orange-700 bg-clip-text text-transparent"
+        <div className="max-w-6xl mx-auto">
+          {/* The Problem */}
+          <div className="text-center mb-32">
+            <div
+              className="text-gray-900 mb-12"
               style={{
-                fontSize: 'clamp(2.75rem, 5.5vw, 4.25rem)',
-                fontWeight: '200',
-                letterSpacing: '-0.02em',
+                fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+                fontWeight: '100',
+                letterSpacing: '-0.025em',
                 lineHeight: '1.1'
               }}
             >
-              Democratizing Institutional Performance
-            </h2>
-            <p 
-              className="text-gray-600 max-w-5xl mx-auto"
+              The World Is Racing To Tokenize Assets.
+              <br />
+              <span
+                className="text-gray-600"
+                style={{ fontWeight: '200' }}
+              >
+                Everyone's Missing The Real Opportunity.
+              </span>
+            </div>
+            <div
+              className="text-gray-700 max-w-4xl mx-auto mb-16"
               style={{
-                fontSize: 'clamp(1.125rem, 2.2vw, 1.5rem)',
+                fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
                 fontWeight: '300',
-                letterSpacing: '0.01em',
-                lineHeight: '1.5'
+                lineHeight: '1.4',
+                letterSpacing: '0.005em'
               }}
             >
-              Real World Assets represent more than tokenization—they return us to the fundamental bartering system.{' '}
-              Own the gold, share the profits. Own the plane seat, earn on every flight. Simple, transparent, powerful.
-            </p>
+              While the world races to tokenize assets, everyone's missing the real opportunity—
+              making those assets perform better. Passive tokenization wastes blockchain's potential.
+            </div>
+
+            <div
+              className="inline-block px-8 py-3 rounded-full"
+              style={{
+                background: 'rgba(17, 17, 17, 0.03)',
+                border: '1px solid rgba(17, 17, 17, 0.08)'
+              }}
+            >
+              <span
+                className="text-gray-600"
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase'
+                }}
+              >
+                The Problem
+              </span>
+            </div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div 
-              className="p-6 rounded-2xl transition-all duration-300 hover:scale-[1.01] group cursor-pointer"
+          {/* The Insight */}
+          <div className="text-center mb-32">
+            <div
+              className="text-gray-900 mb-12"
               style={{
-                background: 'rgba(255, 255, 255, 0.5)',
-                backdropFilter: 'blur(20px) saturate(120%)',
-                border: '1px solid rgba(245, 158, 11, 0.1)',
-                boxShadow: '0 4px 24px rgba(245, 158, 11, 0.06)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.6)'
-                e.currentTarget.style.borderColor = 'rgba(245, 158, 11, 0.2)'
-                e.currentTarget.style.boxShadow = '0 8px 32px rgba(245, 158, 11, 0.1)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.5)'
-                e.currentTarget.style.borderColor = 'rgba(245, 158, 11, 0.1)'
-                e.currentTarget.style.boxShadow = '0 4px 24px rgba(245, 158, 11, 0.06)'
+                fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+                fontWeight: '100',
+                letterSpacing: '-0.025em',
+                lineHeight: '1.1'
               }}
             >
-              <div 
-                className="w-8 h-8 rounded-lg mb-4 flex items-center justify-center"
-                style={{
-                  background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                  boxShadow: '0 2px 8px rgba(245, 158, 11, 0.2)'
-                }}
+              We Believe Every Tokenized Asset
+              <br />
+              <span
+                className="text-black"
+                style={{ fontWeight: '300' }}
               >
-                <div className="w-4 h-4 bg-white rounded opacity-90"></div>
-              </div>
-              <h4 
-                className="text-lg font-medium tracking-tight mb-3 text-gray-900"
+                Should Be An Optimized Asset.
+              </span>
+            </div>
+            <div
+              className="text-gray-700 max-w-4xl mx-auto mb-16"
+              style={{
+                fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
+                fontWeight: '300',
+                lineHeight: '1.4',
+                letterSpacing: '0.005em'
+              }}
+            >
+              Performance isn't a feature—it's the entire point. Smart contracts enable
+              unprecedented asset optimization through dynamic rebalancing, algorithmic management,
+              and real-time performance monitoring.
+            </div>
+
+            <div
+              className="inline-block px-8 py-3 rounded-full"
+              style={{
+                background: 'rgba(17, 17, 17, 0.05)',
+                border: '1px solid rgba(17, 17, 17, 0.12)'
+              }}
+            >
+              <span
+                className="text-gray-700"
                 style={{
-                  fontSize: '1.1rem',
-                  fontWeight: '500',
-                  letterSpacing: '-0.005em'
-                }}
-              >
-                Commercial Real Estate
-              </h4>
-              <p 
-                className="text-gray-600 text-sm leading-relaxed"
-                style={{
-                  fontSize: '0.9rem',
+                  fontSize: '0.875rem',
                   fontWeight: '400',
-                  lineHeight: '1.5'
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase'
                 }}
               >
-                Prime office buildings, retail centers, and industrial properties. Own fractional shares, 
-                receive rental income distributions.
+                The Insight
+              </span>
+            </div>
+          </div>
+
+          {/* Case Study - Performance Comparison */}
+          <div className="mb-32">
+            <div className="text-center mb-20">
+              <h3
+                className="text-gray-900 mb-8"
+                style={{
+                  fontSize: 'clamp(1.75rem, 3.5vw, 2.25rem)',
+                  fontWeight: '200',
+                  letterSpacing: '-0.015em',
+                  lineHeight: '1.2'
+                }}
+              >
+                Performance RWA Proof of Concept
+              </h3>
+              <p
+                className="text-gray-600 max-w-3xl mx-auto"
+                style={{
+                  fontSize: 'clamp(1rem, 2vw, 1.25rem)',
+                  fontWeight: '300',
+                  lineHeight: '1.4'
+                }}
+              >
+                Real returns from our optimization protocols demonstrate measurable alpha
+                generation across asset classes.
               </p>
             </div>
 
-            <div 
-              className="p-6 rounded-2xl transition-all duration-300 hover:scale-[1.01] group cursor-pointer"
+            <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+              <div
+                className="text-center p-12 rounded-3xl"
+                style={{
+                  background: 'rgba(243, 244, 246, 0.4)',
+                  border: '1px solid rgba(0, 0, 0, 0.06)'
+                }}
+              >
+                <div
+                  className="text-gray-500 mb-6"
+                  style={{
+                    fontSize: '0.875rem',
+                    fontWeight: '400',
+                    letterSpacing: '0.05em',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  Traditional REIT
+                </div>
+                <div
+                  className="text-gray-700 mb-4"
+                  style={{
+                    fontSize: 'clamp(3rem, 6vw, 4rem)',
+                    fontWeight: '100',
+                    letterSpacing: '-0.02em'
+                  }}
+                >
+                  7.2%
+                </div>
+                <div
+                  className="text-gray-600"
+                  style={{
+                    fontSize: '1rem',
+                    fontWeight: '300'
+                  }}
+                >
+                  Annual Return
+                </div>
+              </div>
+
+              <div
+                className="text-center p-12 rounded-3xl"
+                style={{
+                  background: 'rgba(17, 17, 17, 0.02)',
+                  border: '1px solid rgba(0, 0, 0, 0.12)'
+                }}
+              >
+                <div
+                  className="text-gray-700 mb-6"
+                  style={{
+                    fontSize: '0.875rem',
+                    fontWeight: '400',
+                    letterSpacing: '0.05em',
+                    textTransform: 'uppercase'
+                  }}
+                >
+                  COW Performance RWA
+                </div>
+                <div
+                  className="text-black mb-4"
+                  style={{
+                    fontSize: 'clamp(3rem, 6vw, 4rem)',
+                    fontWeight: '200',
+                    letterSpacing: '-0.02em'
+                  }}
+                >
+                  15.2%
+                </div>
+                <div
+                  className="text-gray-700"
+                  style={{
+                    fontSize: '1rem',
+                    fontWeight: '400'
+                  }}
+                >
+                  Through Dynamic Rebalancing & Optimization Protocols
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* The Solution */}
+          <div className="text-center mb-20">
+            <div
+              className="text-gray-900 mb-12"
               style={{
-                background: 'rgba(255, 255, 255, 0.5)',
-                backdropFilter: 'blur(20px) saturate(120%)',
-                border: '1px solid rgba(45, 74, 107, 0.1)',
-                boxShadow: '0 4px 24px rgba(45, 74, 107, 0.06)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.6)'
-                e.currentTarget.style.borderColor = 'rgba(45, 74, 107, 0.2)'
-                e.currentTarget.style.boxShadow = '0 8px 32px rgba(45, 74, 107, 0.1)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.5)'
-                e.currentTarget.style.borderColor = 'rgba(45, 74, 107, 0.1)'
-                e.currentTarget.style.boxShadow = '0 4px 24px rgba(45, 74, 107, 0.06)'
+                fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+                fontWeight: '100',
+                letterSpacing: '-0.025em',
+                lineHeight: '1.1'
               }}
             >
-              <div 
-                className="w-8 h-8 rounded-lg mb-4 flex items-center justify-center"
-                style={{
-                  background: 'linear-gradient(135deg, #2d4a6b, #3b82f6)',
-                  boxShadow: '0 2px 8px rgba(45, 74, 107, 0.2)'
-                }}
+              COW Group's Performance Protocols
+              <br />
+              <span
+                className="text-black"
+                style={{ fontWeight: '300' }}
               >
-                <TrendingUp className="w-4 h-4 text-white" />
-              </div>
-              <h4 
-                className="text-lg font-medium tracking-tight mb-3 text-gray-900"
-                style={{
-                  fontSize: '1.1rem',
-                  fontWeight: '500',
-                  letterSpacing: '-0.005em'
-                }}
-              >
-                Infrastructure Assets
-              </h4>
-              <p 
-                className="text-gray-600 text-sm leading-relaxed"
-                style={{
-                  fontSize: '0.9rem',
-                  fontWeight: '400',
-                  lineHeight: '1.5'
-                }}
-              >
-                Essential infrastructure including renewable energy projects and telecommunications. 
-                Own part of the wind farm, earn from every kilowatt generated.
-              </p>
+                Deliver Measurable Alpha.
+              </span>
+            </div>
+            <div
+              className="text-gray-700 max-w-4xl mx-auto mb-16"
+              style={{
+                fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
+                fontWeight: '300',
+                lineHeight: '1.4',
+                letterSpacing: '0.005em'
+              }}
+            >
+              Our performance infrastructure transforms passive assets into active wealth generation
+              engines. Every protocol is designed for institutional-grade optimization with
+              regulatory compliance for both Regulation D 506(c) and Regulation S international investors.
             </div>
 
-            <div 
-              className="p-6 rounded-2xl transition-all duration-300 hover:scale-[1.01] group cursor-pointer"
+            <div
+              className="inline-block px-8 py-3 rounded-full"
               style={{
-                background: 'rgba(255, 255, 255, 0.5)',
-                backdropFilter: 'blur(20px) saturate(120%)',
-                border: '1px solid rgba(251, 191, 36, 0.1)',
-                boxShadow: '0 4px 24px rgba(251, 191, 36, 0.06)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.6)'
-                e.currentTarget.style.borderColor = 'rgba(251, 191, 36, 0.2)'
-                e.currentTarget.style.boxShadow = '0 8px 32px rgba(251, 191, 36, 0.1)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.5)'
-                e.currentTarget.style.borderColor = 'rgba(251, 191, 36, 0.1)'
-                e.currentTarget.style.boxShadow = '0 4px 24px rgba(251, 191, 36, 0.06)'
+                background: 'rgba(17, 17, 17, 0.08)',
+                border: '1px solid rgba(17, 17, 17, 0.16)'
               }}
             >
-              <div 
-                className="w-8 h-8 rounded-lg mb-4 flex items-center justify-center"
+              <span
+                className="text-black"
                 style={{
-                  background: 'linear-gradient(135deg, #fbbf24, #f59e0b)',
-                  boxShadow: '0 2px 8px rgba(251, 191, 36, 0.2)'
-                }}
-              >
-                <Coins className="w-4 h-4 text-white" />
-              </div>
-              <h4 
-                className="text-lg font-medium tracking-tight mb-3 text-gray-900"
-                style={{
-                  fontSize: '1.1rem',
+                  fontSize: '0.875rem',
                   fontWeight: '500',
-                  letterSpacing: '-0.005em'
+                  letterSpacing: '0.05em',
+                  textTransform: 'uppercase'
                 }}
               >
-                Precious Metals & Credit
-              </h4>
-              <p 
-                className="text-gray-600 text-sm leading-relaxed"
-                style={{
-                  fontSize: '0.9rem',
-                  fontWeight: '400',
-                  lineHeight: '1.5'
-                }}
-              >
-                Direct gold ownership with active trading strategies. Your gold works for you—
-                stored securely, traded professionally, profits shared transparently.
-              </p>
+                The Solution
+              </span>
             </div>
+          </div>
 
-            <div 
-              className="p-6 rounded-2xl transition-all duration-300 hover:scale-[1.01] group cursor-pointer"
+          {/* Category Creator Statement */}
+          <div className="text-center">
+            <div
+              className="text-gray-900 max-w-4xl mx-auto"
               style={{
-                background: 'rgba(255, 255, 255, 0.5)',
-                backdropFilter: 'blur(20px) saturate(120%)',
-                border: '1px solid rgba(240, 114, 13, 0.1)',
-                boxShadow: '0 4px 24px rgba(240, 114, 13, 0.06)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.6)'
-                e.currentTarget.style.borderColor = 'rgba(240, 114, 13, 0.2)'
-                e.currentTarget.style.boxShadow = '0 8px 32px rgba(240, 114, 13, 0.1)'
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.5)'
-                e.currentTarget.style.borderColor = 'rgba(240, 114, 13, 0.1)'
-                e.currentTarget.style.boxShadow = '0 4px 24px rgba(240, 114, 13, 0.06)'
+                fontSize: 'clamp(1.5rem, 3vw, 2rem)',
+                fontWeight: '200',
+                letterSpacing: '-0.015em',
+                lineHeight: '1.3'
               }}
             >
-              <div 
-                className="w-8 h-8 rounded-lg mb-4 flex items-center justify-center"
-                style={{
-                  background: 'linear-gradient(135deg, #f0720d, #ea580c)',
-                  boxShadow: '0 2px 8px rgba(240, 114, 13, 0.2)'
-                }}
+              Performance RWAs aren't just better than traditional tokenization.
+              <br />
+              <span
+                className="text-black"
+                style={{ fontWeight: '300' }}
               >
-                <Plane className="w-4 h-4 text-white" />
-              </div>
-              <h4 
-                className="text-lg font-medium tracking-tight mb-3 text-gray-900"
-                style={{
-                  fontSize: '1.1rem',
-                  fontWeight: '500',
-                  letterSpacing: '-0.005em'
-                }}
-              >
-                Aviation Assets
-              </h4>
-              <p 
-                className="text-gray-600 text-sm leading-relaxed"
-                style={{
-                  fontSize: '0.9rem',
-                  fontWeight: '400',
-                  lineHeight: '1.5'
-                }}
-              >
-                Own fractional aircraft shares. Every seat sold, every cargo shipment, every route flown 
-                generates returns.
-              </p>
+                They're inevitable.
+              </span>
             </div>
           </div>
         </div>
@@ -1360,8 +1631,8 @@ export default function HomePage() {
                 >
                   Discovery
                 </h3>
-                <div className="w-full bg-orange-200 rounded-full h-1 mt-4">
-                  <div className="bg-orange-500 h-1 rounded-full w-full"></div>
+                <div className="w-full bg-gray-100 rounded-full h-0.5 mt-4">
+                  <div className="bg-gray-400 h-0.5 rounded-full w-full"></div>
                 </div>
               </div>
               <p 
@@ -1407,8 +1678,8 @@ export default function HomePage() {
                 >
                   Development
                 </h3>
-                <div className="w-full bg-blue-200 rounded-full h-1 mt-4">
-                  <div className="bg-blue-500 h-1 rounded-full w-3/4"></div>
+                <div className="w-full bg-gray-100 rounded-full h-0.5 mt-4">
+                  <div className="bg-gray-400 h-0.5 rounded-full w-3/4"></div>
                 </div>
               </div>
               <p 
@@ -1454,8 +1725,8 @@ export default function HomePage() {
                 >
                   Validation
                 </h3>
-                <div className="w-full bg-yellow-200 rounded-full h-1 mt-4">
-                  <div className="bg-yellow-500 h-1 rounded-full w-1/2"></div>
+                <div className="w-full bg-gray-100 rounded-full h-0.5 mt-4">
+                  <div className="bg-gray-400 h-0.5 rounded-full w-1/2"></div>
                 </div>
               </div>
               <p 
@@ -1501,8 +1772,8 @@ export default function HomePage() {
                 >
                   Launch
                 </h3>
-                <div className="w-full bg-orange-200 rounded-full h-1 mt-4">
-                  <div className="bg-orange-500 h-1 rounded-full w-1/4"></div>
+                <div className="w-full bg-gray-100 rounded-full h-0.5 mt-4">
+                  <div className="bg-gray-400 h-0.5 rounded-full w-1/4"></div>
                 </div>
               </div>
               <p 
@@ -1516,6 +1787,302 @@ export default function HomePage() {
                 Full market launch with institutional distribution and retail accessibility 
                 including continuous monitoring and performance reporting.
               </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Authority Ecosystem - Thought Leadership Hub */}
+      <section
+        className="py-32 px-8"
+        style={{
+          background: 'linear-gradient(135deg, rgba(249, 249, 249, 0.98) 0%, rgba(255, 255, 255, 0.95) 25%, rgba(247, 247, 247, 0.9) 50%, rgba(255, 255, 255, 0.95) 75%, rgba(249, 249, 249, 0.98) 100%)',
+          backdropFilter: 'blur(60px) saturate(150%)',
+          borderTop: '1px solid rgba(156, 163, 175, 0.15)'
+        }}
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
+            <h2
+              className="mb-8 text-gray-900"
+              style={{
+                fontSize: 'clamp(2.75rem, 5.5vw, 4.25rem)',
+                fontWeight: '300',
+                letterSpacing: '-0.025em',
+                lineHeight: '1.1',
+                fontFamily: 'system-ui, -apple-system, sans-serif'
+              }}
+            >
+              Authority Ecosystem
+            </h2>
+            <p
+              className="text-gray-700 max-w-4xl mx-auto"
+              style={{
+                fontSize: 'clamp(1.125rem, 2.2vw, 1.375rem)',
+                fontWeight: '400',
+                letterSpacing: '0.005em',
+                lineHeight: '1.55'
+              }}
+            >
+              Establishing definitive thought leadership in Performance RWAs through intellectual capital,
+              institutional research, and strategic market intelligence for qualified investors.
+            </p>
+          </div>
+
+          {/* Three-Column Authority Grid */}
+          <div className="grid lg:grid-cols-3 gap-12 mb-20">
+
+            {/* Latest Research Reports */}
+            <div className="space-y-8">
+              <div className="pb-4 border-b border-gray-200">
+                <h3
+                  className="text-xl font-medium text-gray-900 mb-2"
+                  style={{
+                    letterSpacing: '-0.01em',
+                    fontFamily: 'system-ui, -apple-system, sans-serif'
+                  }}
+                >
+                  Latest Research Reports
+                </h3>
+                <p className="text-sm text-gray-600 font-light">Premium institutional intelligence</p>
+              </div>
+
+              {/* Featured Report */}
+              <div
+                className="p-8 rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-300 cursor-pointer group"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  backdropFilter: 'blur(20px)',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1)'
+                }}
+              >
+                <div className="mb-6">
+                  <div className="w-full h-32 bg-gray-100 rounded-md mb-4 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-2xl font-light text-gray-400 mb-1">96.6B</div>
+                      <div className="text-xs text-gray-500 uppercase tracking-wider">Performance Gap</div>
+                    </div>
+                  </div>
+                </div>
+
+                <h4 className="font-medium text-gray-900 mb-3 leading-tight">
+                  The Performance Gap: Why Passive RWA Tokenization Leaves $96.6B on the Table
+                </h4>
+
+                <div className="text-xs text-gray-500 mb-4 space-y-1">
+                  <div>COW Research Institute</div>
+                  <div>Q1 2025 • 47 pages</div>
+                </div>
+
+                <p className="text-sm text-gray-700 mb-6 leading-relaxed">
+                  Comprehensive analysis revealing how passive tokenization strategies underperform
+                  by 15.3x compared to algorithmic performance optimization frameworks.
+                </p>
+
+                {/* Download Gate */}
+                <div className="pt-4 border-t border-gray-100">
+                  <button
+                    className="w-full py-3 px-4 text-sm font-medium text-gray-900 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors duration-200 group-hover:border-gray-400"
+                    style={{ letterSpacing: '0.01em' }}
+                  >
+                    Download Report • Qualified Investors
+                  </button>
+                  <p className="text-xs text-gray-500 mt-2 text-center">
+                    Regulation D 506(c) verification required
+                  </p>
+                </div>
+              </div>
+
+              {/* Additional Reports */}
+              <div className="space-y-4">
+                <div className="p-4 border border-gray-100 rounded-md hover:border-gray-200 transition-colors duration-200 cursor-pointer">
+                  <h5 className="text-sm font-medium text-gray-900 mb-2">Multi-Asset Correlation Analysis</h5>
+                  <p className="text-xs text-gray-600 mb-2">Institutional Framework Series • Q4 2024</p>
+                  <p className="text-xs text-gray-700">Risk optimization across commodity-aviation hybrid structures</p>
+                </div>
+
+                <div className="p-4 border border-gray-100 rounded-md hover:border-gray-200 transition-colors duration-200 cursor-pointer">
+                  <h5 className="text-sm font-medium text-gray-900 mb-2">Regulatory Landscape 2025</h5>
+                  <p className="text-xs text-gray-600 mb-2">Compliance Intelligence • Q1 2025</p>
+                  <p className="text-xs text-gray-700">Global regulatory framework analysis for Performance RWAs</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Executive Speaking Engagements */}
+            <div className="space-y-8">
+              <div className="pb-4 border-b border-gray-200">
+                <h3
+                  className="text-xl font-medium text-gray-900 mb-2"
+                  style={{
+                    letterSpacing: '-0.01em',
+                    fontFamily: 'system-ui, -apple-system, sans-serif'
+                  }}
+                >
+                  Executive Speaking
+                </h3>
+                <p className="text-sm text-gray-600 font-light">Industry leadership presence</p>
+              </div>
+
+              {/* Featured Speaking Engagement */}
+              <div
+                className="p-8 rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-300"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  backdropFilter: 'blur(20px)',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1)'
+                }}
+              >
+                <div className="mb-6">
+                  <div className="w-full h-32 bg-gray-100 rounded-md mb-4 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-12 h-12 mx-auto mb-2 bg-gray-200 rounded-full flex items-center justify-center">
+                        <svg className="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <div className="text-xs text-gray-500 uppercase tracking-wider">Keynote</div>
+                    </div>
+                  </div>
+                </div>
+
+                <h4 className="font-medium text-gray-900 mb-3 leading-tight">
+                  COW Group CEO Presenting at Institutional Investor Summit 2024
+                </h4>
+
+                <div className="text-xs text-gray-500 mb-4 space-y-1">
+                  <div>New York • December 12, 2024</div>
+                  <div>Keynote: "Performance RWA Architecture"</div>
+                </div>
+
+                <p className="text-sm text-gray-700 mb-6 leading-relaxed">
+                  Presenting breakthrough research on algorithmic optimization frameworks to 450+
+                  institutional allocators, pension funds, and family offices.
+                </p>
+
+                <div className="flex items-center justify-between text-xs text-gray-600">
+                  <span>Expected Attendance: 450+</span>
+                  <span className="font-medium text-gray-900">RSVP Required</span>
+                </div>
+              </div>
+
+              {/* Upcoming Engagements */}
+              <div className="space-y-4">
+                <div className="p-4 border border-gray-100 rounded-md">
+                  <h5 className="text-sm font-medium text-gray-900 mb-2">Alternative Investment Conference</h5>
+                  <p className="text-xs text-gray-600 mb-2">London • Q1 2025 • Panel Discussion</p>
+                  <p className="text-xs text-gray-700">"Future of Tokenized Asset Performance"</p>
+                </div>
+
+                <div className="p-4 border border-gray-100 rounded-md">
+                  <h5 className="text-sm font-medium text-gray-900 mb-2">Endowment Investment Summit</h5>
+                  <p className="text-xs text-gray-600 mb-2">Boston • Q2 2025 • Fireside Chat</p>
+                  <p className="text-xs text-gray-700">"Institutional Adoption of Performance RWAs"</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Media Coverage */}
+            <div className="space-y-8">
+              <div className="pb-4 border-b border-gray-200">
+                <h3
+                  className="text-xl font-medium text-gray-900 mb-2"
+                  style={{
+                    letterSpacing: '-0.01em',
+                    fontFamily: 'system-ui, -apple-system, sans-serif'
+                  }}
+                >
+                  Media Coverage
+                </h3>
+                <p className="text-sm text-gray-600 font-light">Institutional recognition</p>
+              </div>
+
+              {/* Featured Coverage */}
+              <div
+                className="p-8 rounded-lg border border-gray-200 hover:border-gray-300 transition-all duration-300"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.9)',
+                  backdropFilter: 'blur(20px)',
+                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1)'
+                }}
+              >
+                <div className="mb-6">
+                  <div className="w-full h-32 bg-gray-100 rounded-md mb-4 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-lg font-light text-gray-700 mb-1">Institutional Investor</div>
+                      <div className="text-xs text-gray-500 uppercase tracking-wider">Feature Article</div>
+                    </div>
+                  </div>
+                </div>
+
+                <h4 className="font-medium text-gray-900 mb-3 leading-tight">
+                  "The Future of Performance RWAs: COW Group's Algorithmic Approach"
+                </h4>
+
+                <div className="text-xs text-gray-500 mb-4 space-y-1">
+                  <div>Institutional Investor Magazine</div>
+                  <div>December 2024 Issue • Cover Story</div>
+                </div>
+
+                <p className="text-sm text-gray-700 mb-6 leading-relaxed">
+                  In-depth analysis of COW Group's pioneering approach to performance optimization
+                  in tokenized real-world assets, featuring exclusive data and institutional testimonials.
+                </p>
+
+                <div className="text-xs text-gray-600">
+                  <span className="font-medium text-gray-900">6-page feature</span> • Print circulation: 47,000+
+                </div>
+              </div>
+
+              {/* Additional Coverage */}
+              <div className="space-y-4">
+                <div className="p-4 border border-gray-100 rounded-md">
+                  <h5 className="text-sm font-medium text-gray-900 mb-2">Pension & Investments</h5>
+                  <p className="text-xs text-gray-600 mb-2">November 2024 • Market Analysis</p>
+                  <p className="text-xs text-gray-700">"Performance RWAs Gain Institutional Traction"</p>
+                </div>
+
+                <div className="p-4 border border-gray-100 rounded-md">
+                  <h5 className="text-sm font-medium text-gray-900 mb-2">Family Office Magazine</h5>
+                  <p className="text-xs text-gray-600 mb-2">October 2024 • Technology Focus</p>
+                  <p className="text-xs text-gray-700">"Algorithmic Asset Optimization: The COW Model"</p>
+                </div>
+
+                <div className="p-4 border border-gray-100 rounded-md">
+                  <h5 className="text-sm font-medium text-gray-900 mb-2">Alternative Investment News</h5>
+                  <p className="text-xs text-gray-600 mb-2">September 2024 • Innovation Series</p>
+                  <p className="text-xs text-gray-700">"Tokenization Meets Performance: A New Paradigm"</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Authority Metrics Bar */}
+          <div
+            className="p-8 rounded-lg border border-gray-200"
+            style={{
+              background: 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(25px)',
+              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1)'
+            }}
+          >
+            <div className="grid md:grid-cols-4 gap-8 text-center">
+              <div>
+                <div className="text-3xl font-light text-gray-900 mb-2">47,000+</div>
+                <div className="text-sm text-gray-600">Institutional Readers</div>
+              </div>
+              <div>
+                <div className="text-3xl font-light text-gray-900 mb-2">12</div>
+                <div className="text-sm text-gray-600">Research Publications</div>
+              </div>
+              <div>
+                <div className="text-3xl font-light text-gray-900 mb-2">8</div>
+                <div className="text-sm text-gray-600">Speaking Engagements</div>
+              </div>
+              <div>
+                <div className="text-3xl font-light text-gray-900 mb-2">23</div>
+                <div className="text-sm text-gray-600">Media Features</div>
+              </div>
             </div>
           </div>
         </div>
@@ -1549,7 +2116,7 @@ export default function HomePage() {
                       boxShadow: '0 4px 16px rgba(242, 184, 64, 0.25)'
                     }}
                   >
-                    <Shield className="h-6 w-6 text-yellow-400" />
+                    <Shield className="h-6 w-6 text-slate-600" />
                   </div>
                   <h3 
                     className="text-gray-900"
@@ -1565,11 +2132,11 @@ export default function HomePage() {
                 </div>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <CheckCircle className="h-5 w-5 text-yellow-400" />
+                    <CheckCircle className="h-5 w-5 text-slate-600" />
                     <span className="text-gray-600" style={{ fontSize: '15px', fontWeight: '300', letterSpacing: '0.01em' }}>Secured 1,000 oz gold reserves (Q4 2024)</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Clock className="h-5 w-5 text-yellow-400" />
+                    <Clock className="h-5 w-5 text-slate-600" />
                     <span className="text-gray-600" style={{ fontSize: '15px', fontWeight: '300', letterSpacing: '0.01em' }}>Implementing AI-driven retail cycle optimization (Q2 2025)</span>
                   </div>
                   <div className="flex items-center gap-3">
@@ -1577,7 +2144,7 @@ export default function HomePage() {
                     <span className="text-gray-600" style={{ fontSize: '15px', fontWeight: '300', letterSpacing: '0.01em' }}>Targeting 25% APY by Q1 2026</span>
                   </div>
                 </div>
-                <Link to="/ausiri" className="mt-6 inline-flex items-center text-yellow-400 hover:text-yellow-300 transition-colors duration-300">
+                <Link to="/ausiri" className="mt-6 inline-flex items-center text-slate-700 hover:text-slate-900 transition-colors duration-300">
                   <span style={{ fontSize: '15px', fontWeight: '300', letterSpacing: '0.01em' }}>See All Milestones</span>
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -1601,7 +2168,7 @@ export default function HomePage() {
                       boxShadow: '0 4px 16px rgba(240, 114, 13, 0.25)'
                     }}
                   >
-                    <Plane className="h-6 w-6 text-blue-400" />
+                    <Plane className="h-6 w-6 text-slate-600" />
                   </div>
                   <h3 
                     className="text-gray-900"
@@ -1617,11 +2184,11 @@ export default function HomePage() {
                 </div>
                 <div className="space-y-4">
                   <div className="flex items-center gap-3">
-                    <CheckCircle className="h-5 w-5 text-blue-400" />
+                    <CheckCircle className="h-5 w-5 text-slate-600" />
                     <span className="text-gray-600" style={{ fontSize: '15px', fontWeight: '300', letterSpacing: '0.01em' }}>Launched 2 A380 and 20 A320-321 XLR planes (Q1 2025)</span>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Clock className="h-5 w-5 text-blue-400" />
+                    <Clock className="h-5 w-5 text-slate-600" />
                     <span className="text-gray-600" style={{ fontSize: '15px', fontWeight: '300', letterSpacing: '0.01em' }}>Securing 50 UDAN routes in India (Q2 2025)</span>
                   </div>
                   <div className="flex items-center gap-3">
@@ -1629,7 +2196,7 @@ export default function HomePage() {
                     <span className="text-gray-600" style={{ fontSize: '15px', fontWeight: '300', letterSpacing: '0.01em' }}>Targeting top 10 airline provider by 2034</span>
                   </div>
                 </div>
-                <Link to="/auaero" className="mt-6 inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors duration-300">
+                <Link to="/auaero" className="mt-6 inline-flex items-center text-slate-700 hover:text-slate-900 transition-colors duration-300">
                   <span style={{ fontSize: '15px', fontWeight: '300', letterSpacing: '0.01em' }}>See All Milestones</span>
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
@@ -1639,19 +2206,19 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Performance Excellence */}
-      <section 
+      {/* Market Opportunity & Performance */}
+      <section
         className="py-20 px-4"
         style={{
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.8) 0%, rgba(242, 184, 64, 0.04) 20%, rgba(240, 114, 13, 0.03) 40%, rgba(45, 74, 107, 0.02) 60%, rgba(255, 242, 220, 0.03) 80%, rgba(255, 255, 255, 0.9) 100%)',
-          backdropFilter: 'blur(40px) saturate(160%)',
-          borderTop: '1px solid rgba(242, 184, 64, 0.2)'
+          background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(251, 248, 240, 0.8) 25%, rgba(255, 255, 255, 0.9) 50%, rgba(251, 248, 240, 0.8) 75%, rgba(248, 250, 252, 0.95) 100%)',
+          backdropFilter: 'blur(40px) saturate(140%)',
+          borderTop: '1px solid rgba(245, 158, 11, 0.1)'
         }}
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 
-              className="mb-4 bg-gradient-to-r from-gray-900 via-orange-600 to-orange-700 bg-clip-text text-transparent"
+              className="mb-4 text-gray-900"
               style={{
                 fontSize: 'clamp(2.5rem, 5vw, 4rem)',
                 fontWeight: '200',
@@ -1660,35 +2227,53 @@ export default function HomePage() {
                 marginBottom: '1.5rem'
               }}
             >
-              Performance Excellence
+              Market Opportunity & Competitive Advantage
             </h2>
-            <p 
-              className="text-gray-600 max-w-4xl mx-auto"
+            <p
+              className="text-slate-600 max-w-4xl mx-auto"
               style={{
                 fontSize: '19px',
                 fontWeight: '300',
                 letterSpacing: '0.01em',
                 lineHeight: '1.5',
-                marginBottom: '3rem'
+                marginBottom: '2rem'
               }}
             >
-              Quantifiable results that speak for themselves. Built on precision, delivered through innovation.
+              Performance Asset Engineering addresses a $2.0T tokenization market through systematic optimization of real-world assets.
+              Proprietary algorithms deliver measurably superior risk-adjusted returns compared to traditional asset management approaches.
             </p>
+
+            {/* Investment Thesis */}
+            <div className="max-w-5xl mx-auto mb-12 p-8 rounded-2xl" style={{
+              background: 'rgba(255, 255, 255, 0.8)',
+              backdropFilter: 'blur(25px)',
+              border: '1px solid rgba(203, 213, 225, 0.4)',
+              boxShadow: '0 4px 16px rgba(51, 65, 85, 0.05)'
+            }}>
+              <div className="text-center">
+                <h3 className="text-2xl font-light text-slate-900 mb-4">Investment Thesis</h3>
+                <p className="text-lg text-slate-700 font-light mb-4" style={{ letterSpacing: '0.01em', lineHeight: '1.6' }}>
+                  Institutional investors allocating 7-9% of portfolios to tokenized assets by 2027. Performance optimization
+                  creates defensible competitive moats in commodity digitization through algorithmic enhancement capabilities.
+                </p>
+                <div className="text-slate-600 font-medium">Market Size: $140B+ Performance Asset Opportunity</div>
+              </div>
+            </div>
           </div>
           <div className="grid md:grid-cols-4 gap-6">
-            <div 
+            <div
               className="p-8 rounded-3xl transition-all duration-500 hover:scale-[1.02] text-center"
               style={{
-                background: 'rgba(255, 255, 255, 0.6)',
+                background: 'rgba(255, 255, 255, 0.8)',
                 backdropFilter: 'blur(25px) saturate(180%)',
-                border: '1px solid rgba(242, 184, 64, 0.2)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 32px rgba(242, 184, 64, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)'
+                border: '1px solid rgba(245, 158, 11, 0.2)',
+                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 32px rgba(245, 158, 11, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)'
               }}
             >
-              <div 
+              <div
                 className="text-4xl font-light mb-3"
                 style={{
-                  color: '#D97706',
+                  color: 'rgb(245, 158, 11)',
                   fontSize: '3rem',
                   fontWeight: '200',
                   letterSpacing: '-0.02em'
@@ -1696,18 +2281,18 @@ export default function HomePage() {
               >
                 25%
               </div>
-              <h4 
-                className="text-lg font-light mb-2 text-gray-900"
+              <h4
+                className="text-lg font-light mb-2 text-slate-900"
                 style={{
                   fontSize: '1.125rem',
                   fontWeight: '300',
                   letterSpacing: '-0.01em'
                 }}
               >
-                Target APY
+                Target IRR
               </h4>
-              <p 
-                className="text-gray-600 text-sm font-light"
+              <p
+                className="text-slate-600 text-sm font-light"
                 style={{
                   fontSize: '14px',
                   fontWeight: '300',
@@ -1715,41 +2300,41 @@ export default function HomePage() {
                   lineHeight: '1.5'
                 }}
               >
-                AuSIRI projected annual performance yield
+                Institutional-grade performance yield
               </p>
             </div>
-            <div 
+            <div
               className="p-8 rounded-3xl transition-all duration-500 hover:scale-[1.02] text-center"
               style={{
-                background: 'rgba(255, 255, 255, 0.6)',
+                background: 'rgba(255, 255, 255, 0.8)',
                 backdropFilter: 'blur(25px) saturate(180%)',
-                border: '1px solid rgba(240, 114, 13, 0.2)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 32px rgba(240, 114, 13, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)'
+                border: '1px solid rgba(251, 191, 36, 0.15)',
+                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 32px rgba(251, 191, 36, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04)'
               }}
             >
-              <div 
+              <div
                 className="text-4xl font-light mb-3"
                 style={{
-                  color: '#EA580C',
+                  color: 'rgb(251, 191, 36)',
                   fontSize: '3rem',
                   fontWeight: '200',
                   letterSpacing: '-0.02em'
                 }}
               >
-                1,000oz
+                $50M
               </div>
-              <h4 
-                className="text-lg font-light mb-2 text-gray-900"
+              <h4
+                className="text-lg font-light mb-2 text-slate-900"
                 style={{
                   fontSize: '1.125rem',
                   fontWeight: '300',
                   letterSpacing: '-0.01em'
                 }}
               >
-                Gold Reserves
+                Target AUM
               </h4>
-              <p 
-                className="text-gray-600 text-sm font-light"
+              <p
+                className="text-slate-600 text-sm font-light"
                 style={{
                   fontSize: '14px',
                   fontWeight: '300',
@@ -1757,22 +2342,22 @@ export default function HomePage() {
                   lineHeight: '1.5'
                 }}
               >
-                Verified and audited physical gold backing
+                Initial fund raising target
               </p>
             </div>
-            <div 
+            <div
               className="p-8 rounded-3xl transition-all duration-500 hover:scale-[1.02] text-center"
               style={{
-                background: 'rgba(255, 255, 255, 0.6)',
+                background: 'rgba(255, 255, 255, 0.8)',
                 backdropFilter: 'blur(25px) saturate(180%)',
-                border: '1px solid rgba(45, 74, 107, 0.2)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 32px rgba(45, 74, 107, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)'
+                border: '1px solid rgba(245, 158, 11, 0.15)',
+                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 32px rgba(245, 158, 11, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04)'
               }}
             >
-              <div 
+              <div
                 className="text-4xl font-light mb-3"
                 style={{
-                  color: '#3B82F6',
+                  color: 'rgb(245, 158, 11)',
                   fontSize: '3rem',
                   fontWeight: '200',
                   letterSpacing: '-0.02em'
@@ -1780,8 +2365,8 @@ export default function HomePage() {
               >
                 3
               </div>
-              <h4 
-                className="text-lg font-light mb-2 text-gray-900"
+              <h4
+                className="text-lg font-light mb-2 text-slate-900"
                 style={{
                   fontSize: '1.125rem',
                   fontWeight: '300',
@@ -1790,8 +2375,8 @@ export default function HomePage() {
               >
                 Jurisdictions
               </h4>
-              <p 
-                className="text-gray-600 text-sm font-light"
+              <p
+                className="text-slate-600 text-sm font-light"
                 style={{
                   fontSize: '14px',
                   fontWeight: '300',
@@ -1799,42 +2384,42 @@ export default function HomePage() {
                   lineHeight: '1.5'
                 }}
               >
-                Cyprus, Estonia, Luxembourg regulatory compliance
+                Multi-regulatory compliance framework
               </p>
             </div>
-            
-            <div 
+
+            <div
               className="p-8 rounded-3xl transition-all duration-500 hover:scale-[1.02] text-center"
               style={{
-                background: 'rgba(255, 255, 255, 0.6)',
+                background: 'rgba(255, 255, 255, 0.8)',
                 backdropFilter: 'blur(25px) saturate(180%)',
-                border: '1px solid rgba(16, 185, 129, 0.2)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 32px rgba(16, 185, 129, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)'
+                border: '1px solid rgba(251, 191, 36, 0.12)',
+                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 8px 32px rgba(251, 191, 36, 0.05), 0 2px 8px rgba(0, 0, 0, 0.04)'
               }}
             >
-              <div 
+              <div
                 className="text-4xl font-light mb-3"
                 style={{
-                  color: '#10B981',
+                  color: 'rgb(245, 158, 11)',
                   fontSize: '3rem',
                   fontWeight: '200',
                   letterSpacing: '-0.02em'
                 }}
               >
-                24/7
+                AAA
               </div>
-              <h4 
-                className="text-lg font-light mb-2 text-gray-900"
+              <h4
+                className="text-lg font-light mb-2 text-slate-900"
                 style={{
                   fontSize: '1.125rem',
                   fontWeight: '300',
                   letterSpacing: '-0.01em'
                 }}
               >
-                Transparency
+                Compliance
               </h4>
-              <p 
-                className="text-gray-600 text-sm font-light"
+              <p
+                className="text-slate-600 text-sm font-light"
                 style={{
                   fontSize: '14px',
                   fontWeight: '300',
@@ -1842,9 +2427,519 @@ export default function HomePage() {
                   lineHeight: '1.5'
                 }}
               >
-                Real-time blockchain asset verification
+                Investment-grade regulatory standards
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Built for Investment Excellence - Investor Routing */}
+      <section className="py-32 px-8" style={{ background: 'linear-gradient(180deg, #f9fafb 0%, #ffffff 100%)' }}>
+        <div className="max-w-7xl mx-auto">
+
+          {/* Section Header */}
+          <div className="text-center mb-20">
+            <h2
+              className="text-gray-900 mb-6"
+              style={{
+                fontSize: 'clamp(3rem, 6vw, 4.5rem)',
+                fontWeight: '200',
+                letterSpacing: '-0.03em',
+                lineHeight: '1.05'
+              }}
+            >
+              Built for Investment Excellence
+            </h2>
+            <p
+              className="text-gray-500 max-w-4xl mx-auto mb-8"
+              style={{
+                fontSize: '1.25rem',
+                fontWeight: '300',
+                lineHeight: '1.6',
+                letterSpacing: '0.01em'
+              }}
+            >
+              Partnering with world-leading industry veterans through our vertical partner model,
+              we bring together decades of financial engineering expertise to deliver institutional-grade
+              performance across global markets.
+            </p>
+
+            {/* Global Regulatory Framework */}
+            <div className="bg-white rounded-2xl p-8 border border-gray-200 max-w-5xl mx-auto mb-16">
+              <div className="grid md:grid-cols-2 gap-8">
+                <div>
+                  <h3
+                    className="text-gray-900 mb-4"
+                    style={{
+                      fontSize: '1.25rem',
+                      fontWeight: '500',
+                      letterSpacing: '-0.01em'
+                    }}
+                  >
+                    European Operations
+                  </h3>
+                  <div className="space-y-2 text-left">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-gray-400"></div>
+                      <span className="text-gray-600">Licensed in Cyprus (CySEC)</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-gray-400"></div>
+                      <span className="text-gray-600">Licensed in Estonia (FIU)</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-gray-400"></div>
+                      <span className="text-gray-600">Passporting to Luxembourg for public trading</span>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h3
+                    className="text-gray-900 mb-4"
+                    style={{
+                      fontSize: '1.25rem',
+                      fontWeight: '500',
+                      letterSpacing: '-0.01em'
+                    }}
+                  >
+                    US Operations
+                  </h3>
+                  <div className="space-y-2 text-left">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-gray-400"></div>
+                      <span className="text-gray-600">NYSE listing preparation</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-gray-400"></div>
+                      <span className="text-gray-600">NASDAQ simultaneous listing</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-gray-400"></div>
+                      <span className="text-gray-600">SEC compliance framework</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Three Investor Pathways */}
+          <div className="grid lg:grid-cols-3 gap-8">
+
+            {/* Institutional Investors */}
+            <div className="group">
+              <div
+                className="bg-white rounded-3xl p-8 border border-gray-200 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                style={{
+                  height: '100%'
+                }}
+              >
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-2xl mb-4">
+                    <TrendingUp className="w-8 h-8 text-gray-700" strokeWidth={1.5} />
+                  </div>
+                  <h3
+                    className="text-gray-900 mb-3"
+                    style={{
+                      fontSize: '1.5rem',
+                      fontWeight: '500',
+                      letterSpacing: '-0.01em'
+                    }}
+                  >
+                    Institutional Investors
+                  </h3>
+                  <p
+                    className="text-gray-500 mb-6"
+                    style={{
+                      fontSize: '1rem',
+                      fontWeight: '400',
+                      lineHeight: '1.6'
+                    }}
+                  >
+                    Pension funds, endowments, family offices, and sophisticated institutions
+                    seeking superior risk-adjusted returns through Performance RWAs.
+                  </p>
+                </div>
+
+                <div className="space-y-4 mb-8">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Minimum Investment</span>
+                    <span className="text-gray-900 font-medium">$10M+</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Asset Classes</span>
+                    <span className="text-gray-900 font-medium">Full Portfolio</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Customization</span>
+                    <span className="text-gray-900 font-medium">Bespoke Solutions</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Reporting</span>
+                    <span className="text-gray-900 font-medium">Institutional Grade</span>
+                  </div>
+                </div>
+
+                <button
+                  className="w-full py-3 bg-gray-900 text-white rounded-xl font-medium transition-all duration-300 hover:bg-gray-800"
+                  style={{
+                    fontSize: '1rem',
+                    letterSpacing: '0.01em'
+                  }}
+                >
+                  Explore Institutional Access
+                </button>
+              </div>
+            </div>
+
+            {/* Private Investors */}
+            <div className="group">
+              <div
+                className="bg-white rounded-3xl p-8 border border-gray-200 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                style={{
+                  height: '100%'
+                }}
+              >
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-2xl mb-4">
+                    <Shield className="w-8 h-8 text-gray-700" strokeWidth={1.5} />
+                  </div>
+                  <h3
+                    className="text-gray-900 mb-3"
+                    style={{
+                      fontSize: '1.5rem',
+                      fontWeight: '500',
+                      letterSpacing: '-0.01em'
+                    }}
+                  >
+                    Private Investors
+                  </h3>
+                  <p
+                    className="text-gray-500 mb-6"
+                    style={{
+                      fontSize: '1rem',
+                      fontWeight: '400',
+                      lineHeight: '1.6'
+                    }}
+                  >
+                    High-net-worth individuals and qualified investors seeking direct access
+                    to Performance RWA strategies with professional management.
+                  </p>
+                </div>
+
+                <div className="space-y-4 mb-8">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Minimum Investment</span>
+                    <span className="text-gray-900 font-medium">$100K+</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Asset Classes</span>
+                    <span className="text-gray-900 font-medium">Core Selection</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Customization</span>
+                    <span className="text-gray-900 font-medium">Semi-Custom</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Reporting</span>
+                    <span className="text-gray-900 font-medium">Professional</span>
+                  </div>
+                </div>
+
+                <button
+                  className="w-full py-3 bg-gray-100 text-gray-900 rounded-xl font-medium transition-all duration-300 hover:bg-gray-200"
+                  style={{
+                    fontSize: '1rem',
+                    letterSpacing: '0.01em'
+                  }}
+                >
+                  Explore Private Access
+                </button>
+              </div>
+            </div>
+
+            {/* Retail Investors */}
+            <div className="group">
+              <div
+                className="bg-white rounded-3xl p-8 border border-gray-200 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                style={{
+                  height: '100%'
+                }}
+              >
+                <div className="text-center mb-6">
+                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-2xl mb-4">
+                    <Circle className="w-8 h-8 text-gray-700" strokeWidth={1.5} />
+                  </div>
+                  <h3
+                    className="text-gray-900 mb-3"
+                    style={{
+                      fontSize: '1.5rem',
+                      fontWeight: '500',
+                      letterSpacing: '-0.01em'
+                    }}
+                  >
+                    Retail Investors
+                  </h3>
+                  <p
+                    className="text-gray-500 mb-6"
+                    style={{
+                      fontSize: '1rem',
+                      fontWeight: '400',
+                      lineHeight: '1.6'
+                    }}
+                  >
+                    Individual investors seeking fractional access to commodity-backed assets
+                    with institutional-level performance optimization.
+                  </p>
+                </div>
+
+                <div className="space-y-4 mb-8">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Minimum Investment</span>
+                    <span className="text-gray-900 font-medium">$1K+</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Asset Classes</span>
+                    <span className="text-gray-900 font-medium">Diversified Funds</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Customization</span>
+                    <span className="text-gray-900 font-medium">Standard Options</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Reporting</span>
+                    <span className="text-gray-900 font-medium">Comprehensive</span>
+                  </div>
+                </div>
+
+                <button
+                  className="w-full py-3 bg-gray-100 text-gray-900 rounded-xl font-medium transition-all duration-300 hover:bg-gray-200"
+                  style={{
+                    fontSize: '1rem',
+                    letterSpacing: '0.01em'
+                  }}
+                >
+                  Explore Retail Access
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Democratization Impact Statement */}
+          <div className="text-center mt-20">
+            <div className="max-w-4xl mx-auto">
+              <p
+                className="text-gray-600 mb-8"
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '400',
+                  lineHeight: '1.6',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                <strong>Changing lives of the commonest people</strong> by providing access to fractional
+                real-world commodity-based assets for security, stabilization, and performance—leveraging
+                retail possibilities on commodities placed as collateral without disturbing investor asset ownership.
+              </p>
+              <p
+                className="text-gray-500"
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: '400',
+                  lineHeight: '1.6',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                Leveraging the world's most advanced technology and financial engineering across
+                the global landscape of crypto instruments registration, licensing, and tradeability.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Premium Institutional Engagement */}
+      <section className="py-32 px-8 bg-white">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2
+            className="text-gray-900 mb-8"
+            style={{
+              fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+              fontWeight: '300',
+              letterSpacing: '-0.02em',
+              lineHeight: '1.1'
+            }}
+          >
+            Ready to outperform.
+          </h2>
+          <p
+            className="text-gray-500 max-w-2xl mx-auto mb-16"
+            style={{
+              fontSize: '1.125rem',
+              fontWeight: '400',
+              lineHeight: '1.6',
+              letterSpacing: '0.01em'
+            }}
+          >
+            Choose your engagement path for institutional-grade Performance RWA access.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Schedule Institutional Consultation */}
+            <div className="group">
+              <button
+                className="w-full p-8 text-left transition-all duration-300 bg-gray-50 hover:bg-gray-100 rounded-2xl"
+                style={{
+                  border: '1px solid rgba(0, 0, 0, 0.05)',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)'
+                  e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.08)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.04)'
+                }}
+              >
+                <div className="inline-flex items-center justify-center w-12 h-12 mb-4 bg-gray-900 rounded-xl">
+                  <TrendingUp className="w-6 h-6 text-white" strokeWidth={1.5} />
+                </div>
+                <h3
+                  className="text-gray-900 mb-2"
+                  style={{
+                    fontSize: '1.25rem',
+                    fontWeight: '500',
+                    letterSpacing: '-0.01em'
+                  }}
+                >
+                  Schedule Consultation
+                </h3>
+                <p
+                  className="text-gray-500 mb-4"
+                  style={{
+                    fontSize: '0.95rem',
+                    fontWeight: '400',
+                    lineHeight: '1.5'
+                  }}
+                >
+                  Direct access to institutional specialists for large allocators and family offices.
+                </p>
+                <div className="text-sm text-gray-400">
+                  For $10M+ allocations
+                </div>
+              </button>
+            </div>
+
+            {/* Access Performance Methodology */}
+            <div className="group">
+              <button
+                className="w-full p-8 text-left transition-all duration-300 bg-gray-50 hover:bg-gray-100 rounded-2xl"
+                style={{
+                  border: '1px solid rgba(0, 0, 0, 0.05)',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)'
+                  e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.08)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.04)'
+                }}
+              >
+                <div className="inline-flex items-center justify-center w-12 h-12 mb-4 bg-gray-900 rounded-xl">
+                  <Shield className="w-6 h-6 text-white" strokeWidth={1.5} />
+                </div>
+                <h3
+                  className="text-gray-900 mb-2"
+                  style={{
+                    fontSize: '1.25rem',
+                    fontWeight: '500',
+                    letterSpacing: '-0.01em'
+                  }}
+                >
+                  Performance Methodology
+                </h3>
+                <p
+                  className="text-gray-500 mb-4"
+                  style={{
+                    fontSize: '0.95rem',
+                    fontWeight: '400',
+                    lineHeight: '1.5'
+                  }}
+                >
+                  Technical deep-dive into algorithmic optimization protocols and risk management.
+                </p>
+                <div className="text-sm text-gray-400">
+                  For technical evaluation
+                </div>
+              </button>
+            </div>
+
+            {/* Review Quarterly Performance Report */}
+            <div className="group">
+              <button
+                className="w-full p-8 text-left transition-all duration-300 bg-gray-50 hover:bg-gray-100 rounded-2xl"
+                style={{
+                  border: '1px solid rgba(0, 0, 0, 0.05)',
+                  boxShadow: '0 4px 16px rgba(0, 0, 0, 0.04)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-4px)'
+                  e.currentTarget.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.08)'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)'
+                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.04)'
+                }}
+              >
+                <div className="inline-flex items-center justify-center w-12 h-12 mb-4 bg-gray-900 rounded-xl">
+                  <Circle className="w-6 h-6 text-white" strokeWidth={1.5} />
+                </div>
+                <h3
+                  className="text-gray-900 mb-2"
+                  style={{
+                    fontSize: '1.25rem',
+                    fontWeight: '500',
+                    letterSpacing: '-0.01em'
+                  }}
+                >
+                  Quarterly Performance Report
+                </h3>
+                <p
+                  className="text-gray-500 mb-4"
+                  style={{
+                    fontSize: '0.95rem',
+                    fontWeight: '400',
+                    lineHeight: '1.5'
+                  }}
+                >
+                  Comprehensive performance analytics and risk-adjusted return documentation.
+                </p>
+                <div className="text-sm text-gray-400">
+                  For data-driven validation
+                </div>
+              </button>
+            </div>
+          </div>
+
+          {/* Regulatory Compliance Notice */}
+          <div className="mt-12 pt-8 border-t border-gray-100">
+            <p
+              className="text-gray-400 text-sm max-w-3xl mx-auto"
+              style={{
+                fontSize: '0.875rem',
+                fontWeight: '400',
+                lineHeight: '1.5',
+                letterSpacing: '0.01em'
+              }}
+            >
+              Access restricted to investors meeting Regulation D 506(c) accredited investor requirements
+              and Regulation S non-US persons. Performance data represents historical results and does not
+              guarantee future performance. All investments carry risk of loss.
+            </p>
           </div>
         </div>
       </section>

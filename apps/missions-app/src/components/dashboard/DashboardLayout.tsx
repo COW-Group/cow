@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { AppHeader } from './AppHeader';
 import { DashboardSidebar } from './DashboardSidebar';
 import { MainContent } from './MainContent';
 import { Workspace, Board, ViewType, DateViewType } from '../../types/dashboard';
@@ -94,14 +93,6 @@ export function DashboardLayout() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-black">
-      {/* App Header */}
-      <AppHeader
-        onSettingsClick={handleSettingsClick}
-        onSearchClick={handleSearchClick}
-        onHelpClick={handleHelpClick}
-        notifications={3}
-      />
-
       {/* Mobile Sidebar Overlay */}
       {isMobile && sidebarOpen && (
         <div 

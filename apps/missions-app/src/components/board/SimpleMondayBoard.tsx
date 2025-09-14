@@ -132,6 +132,8 @@ const BOARD_TEMPLATES: BoardTemplate[] = [
     id: 'leads',
     name: 'Sales Leads',
     description: 'Track sales leads and prospects',
+    businessApp: 'sales',
+    views: [],
     columns: [
       { title: 'Lead Name', type: 'text', width: 200, frozen: true },
       { title: 'Company', type: 'text', width: 180, frozen: true },
@@ -160,6 +162,8 @@ const BOARD_TEMPLATES: BoardTemplate[] = [
     id: 'projects',
     name: 'Project Management',
     description: 'Manage projects and tasks',
+    businessApp: 'project-management',
+    views: [],
     columns: [
       { title: 'Project Name', type: 'text', width: 200, frozen: true },
       { title: 'Status', type: 'status', width: 130, options: [
@@ -185,6 +189,8 @@ const BOARD_TEMPLATES: BoardTemplate[] = [
     id: 'tasks',
     name: 'Task Management',
     description: 'Track individual tasks and assignments',
+    businessApp: 'task-management',
+    views: [],
     columns: [
       { title: 'Task', type: 'text', width: 250, frozen: true },
       { title: 'Status', type: 'status', width: 130, options: [
@@ -335,6 +341,7 @@ export function SimpleMondayBoard() {
         acc[col.id] = col.type === 'text' ? 'New Item' : '';
         return acc;
       }, {} as Record<string, any>),
+      position: board.items.length,
       createdAt: new Date(),
       updatedAt: new Date()
     };

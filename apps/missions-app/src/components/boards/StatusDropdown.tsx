@@ -42,6 +42,7 @@ export function StatusDropdown({
         document.removeEventListener('keydown', handleEscape);
       };
     }
+    return undefined;
   }, [isOpen, onClose]);
 
   const handleStatusSelect = (status: StatusLabel) => {

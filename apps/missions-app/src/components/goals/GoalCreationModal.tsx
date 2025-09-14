@@ -79,14 +79,13 @@ export function GoalCreationModal({ isOpen, onClose, initialContext = 'personal'
         id: `goal-${Date.now()}`,
         title: goalData.title,
         description: goalData.description,
-        type: goalData.type as 'personal' | 'team' | 'company',
         status: 'on-track' as const,
         progress: 0,
         timeline: goalData.timeline,
-        priority: goalData.priority,
-        owner: goalData.type === 'team' ? goalData.teamId : 'current-user',
+        owner: goalData.type === 'team' ? goalData.teamId || 'Team' : goalData.type === 'company' ? 'Cow Group' : 'Likhitha',
         assignees: goalData.assignees,
-        tags: goalData.tags,
+        category: goalData.type === 'team' ? 'Team' : goalData.type === 'company' ? 'Platform' : 'Personal',
+        connections: [],
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         subGoals: goalData.keyResults.map(kr => ({
@@ -95,9 +94,11 @@ export function GoalCreationModal({ isOpen, onClose, initialContext = 'personal'
           description: kr.description,
           status: 'no-recent-updates' as const,
           progress: 0,
-          measurementType: kr.measurementType,
-          targetValue: kr.targetValue,
-          currentValue: kr.currentValue
+          timeline: goalData.timeline,
+          owner: goalData.type === 'team' ? goalData.teamId || 'Team' : goalData.type === 'company' ? 'Cow Group' : 'Likhitha',
+          assignees: goalData.assignees,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
         }))
       };
 

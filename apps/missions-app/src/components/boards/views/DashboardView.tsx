@@ -151,7 +151,7 @@ export function DashboardView({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700"
+      {...({ className: "bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700" } as any)}
     >
       <div className="flex items-center justify-between">
         <div>
@@ -227,7 +227,7 @@ export function DashboardView({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700"
+          {...({ className: "bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700" } as any)}
         >
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             Task Status Distribution
@@ -260,7 +260,7 @@ export function DashboardView({
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700"
+          {...({ className: "bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700" } as any)}
         >
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
             Priority Distribution
@@ -284,7 +284,7 @@ export function DashboardView({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700"
+        {...({ className: "bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700" } as any)}
       >
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           Task Completion Trend (Last 7 Days)
@@ -313,7 +313,7 @@ export function DashboardView({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700"
+        {...({ className: "bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700" } as any)}
       >
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
           Recent Activity
@@ -329,7 +329,7 @@ export function DashboardView({
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 + (index * 0.1) }}
-                className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                {...({ className: "flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg" } as any)}
               >
                 <div className={`w-2 h-2 rounded-full ${
                   task.status === 'completed' ? 'bg-green-500' :

@@ -90,7 +90,7 @@ export function KanbanColumn({
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="text-center py-8"
+              {...({ className: "text-center py-8" } as any)}
             >
               <div className="text-gray-400 dark:text-gray-500 mb-2">
                 No tasks in {column.title.toLowerCase()}

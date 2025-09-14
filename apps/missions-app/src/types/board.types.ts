@@ -231,12 +231,39 @@ export interface COWBoardTask {
   priority: string;
   dueDate?: number;
   assigneeIds: string[];
+  agentIds?: string[]; // AI agents assigned to this task
   number?: number;
   fileUrl?: string;
   progress?: number;
   updatedBy: TaskUpdateInfo;
   comments: TaskComment[];
   customFields: Record<string, any>;
+  automationConfig?: TaskAutomationConfig;
+}
+
+export interface TaskAutomationConfig {
+  autoAssignAgent?: boolean;
+  agentTriggers?: TaskAgentTrigger[];
+  escalationRules?: TaskEscalationRule[];
+  autonomousMode?: boolean;
+}
+
+export interface TaskAgentTrigger {
+  id: string;
+  condition: 'status_change' | 'due_date_approaching' | 'manual_trigger' | 'delay_threshold';
+  value?: any;
+  agentIds: string[];
+  action: 'assign' | 'notify' | 'escalate' | 'execute_workflow';
+  enabled: boolean;
+}
+
+export interface TaskEscalationRule {
+  id: string;
+  condition: 'agent_timeout' | 'failure_threshold' | 'manual_escalation';
+  threshold?: number; // minutes, attempts, etc.
+  escalateTo: 'human' | 'senior_agent' | 'manager';
+  escalationTargets: string[]; // user IDs or agent IDs
+  notificationMessage?: string;
 }
 
 export interface TaskUpdateInfo {
@@ -303,6 +330,7 @@ export type BoardActivityType =
 
 export type ComponentType = 
   | 'assignee-picker'
+  | 'agent-picker'
   | 'status-picker'
   | 'priority-picker'
   | 'date-picker'
@@ -361,9 +389,10 @@ export const createEmptyBoard = (createdBy: PersonAssignment): COWBoard => ({
   groups: [],
   activities: [],
   labels: getDefaultLabels(),
-  columnOrder: ['assignee-picker', 'status-picker', 'priority-picker'],
+  columnOrder: ['assignee-picker', 'agent-picker', 'status-picker', 'priority-picker'],
   availableColumns: [
     'assignee-picker',
+    'agent-picker',
     'status-picker', 
     'priority-picker',
     'date-picker',
@@ -392,13 +421,20 @@ export const createEmptyTask = (): COWBoardTask => ({
   status: 'Not Started',
   priority: 'Medium',
   assigneeIds: [],
+  agentIds: [],
   updatedBy: {
     date: Date.now(),
     userId: '',
     userAvatar: ''
   },
   comments: [],
-  customFields: {}
+  customFields: {},
+  automationConfig: {
+    autoAssignAgent: false,
+    agentTriggers: [],
+    escalationRules: [],
+    autonomousMode: false
+  }
 });
 
 export const createEmptyComment = (authorId: string, authorName: string): TaskComment => ({

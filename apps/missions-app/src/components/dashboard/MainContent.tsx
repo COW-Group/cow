@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { 
-  Circle, 
-  Search, 
+import {
+  Circle,
+  Search,
   Calendar,
   ChevronDown,
   HelpCircle,
@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { ViewType, DateViewType } from '../../types/dashboard';
+import { TableView } from './TableView';
+import { CalendarView } from './CalendarView';
 
 interface MainContentProps {
   onNewItem?: () => void;
@@ -132,52 +134,14 @@ export function MainContent({
         </div>
       </div>
 
-      {/* Empty State */}
-      <div className="flex flex-col items-center justify-center py-16 text-center max-w-md mx-auto">
-        {/* Illustration */}
-        <div className="mb-8">
-          <svg width="200" height="120" viewBox="0 0 200 120" className="mx-auto">
-            {/* Hand pointing */}
-            <g transform="translate(140, 40)">
-              <path
-                d="M20 30 L15 35 L10 40 L15 45 L25 40 L30 35 L25 30 Z"
-                fill="#FCD34D"
-                stroke="#F59E0B"
-                strokeWidth="1"
-              />
-              <circle cx="35" cy="35" r="3" fill="#F59E0B" />
-            </g>
-            
-            {/* Colorful tags being pointed at */}
-            <g transform="translate(60, 50)">
-              {/* Yellow tag */}
-              <rect x="0" y="0" width="60" height="20" rx="10" fill="#FEF3C7" stroke="#F59E0B" strokeWidth="1" />
-              <text x="30" y="13" textAnchor="middle" className="text-xs font-medium fill-yellow-800">Tasks</text>
-              
-              {/* Green tag */}
-              <rect x="10" y="25" width="60" height="20" rx="10" fill="#D1FAE5" stroke="#10B981" strokeWidth="1" />
-              <text x="40" y="38" textAnchor="middle" className="text-xs font-medium fill-green-800">Projects</text>
-              
-              {/* Red tag */}
-              <rect x="20" y="50" width="60" height="20" rx="10" fill="#FEE2E2" stroke="#EF4444" strokeWidth="1" />
-              <text x="50" y="63" textAnchor="middle" className="text-xs font-medium fill-red-800">Deadlines</text>
-            </g>
-          </svg>
-        </div>
+      {/* Content Views */}
+      {activeView === 'table' && (
+        <TableView searchQuery={searchQuery} dateView={dateView} />
+      )}
 
-        {/* Text Content */}
-        <div className="space-y-4">
-          <p className="text-gray-400 text-sm leading-relaxed">
-            This is your home base, where you can see all your work in one place. 
-            When you are assigned an item on any board, it will appear here. 
-            It looks like there are no items assigned to you at the moment.
-          </p>
-          
-          <button className="text-teal-500 underline text-sm hover:text-teal-600 transition-colors">
-            Learn more
-          </button>
-        </div>
-      </div>
+      {activeView === 'calendar' && (
+        <CalendarView searchQuery={searchQuery} dateView={dateView} />
+      )}
 
       {/* Floating Help Button */}
       <button

@@ -214,7 +214,7 @@ export function TimelineView({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: groupIndex * 0.1 }}
-              className="mb-8 last:mb-0"
+              {...({ className: "mb-8 last:mb-0" } as any)}
             >
               {/* Group Header */}
               <div className={`
@@ -239,7 +239,7 @@ export function TimelineView({
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: (groupIndex * 0.1) + (taskIndex * 0.05) }}
-                      className="relative flex items-start gap-4"
+                      {...({ className: "relative flex items-start gap-4" } as any)}
                     >
                       {/* Timeline Dot */}
                       <div className="relative z-10">

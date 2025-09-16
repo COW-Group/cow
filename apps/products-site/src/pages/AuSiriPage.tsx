@@ -133,13 +133,15 @@ export default function AuSiriPage() {
             >
               Pre-order AuSIRI
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-yellow-600 text-yellow-300 hover:bg-yellow-900 bg-transparent"
-            >
-              View Whitepaper
-            </Button>
+<Link to="/ausiri-animation">
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-yellow-600 text-yellow-300 hover:bg-yellow-900 bg-transparent"
+              >
+                🎬 Experience Animation
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -174,13 +176,15 @@ export default function AuSiriPage() {
                 >
                   Pre-order AuSIRI
                 </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-yellow-600 text-yellow-300 hover:bg-yellow-900 bg-transparent"
-                >
-                  View Whitepaper
-                </Button>
+<Link to="/ausiri-animation">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="border-yellow-600 text-yellow-300 hover:bg-yellow-900 bg-transparent"
+                  >
+                    🎬 Experience Animation
+                  </Button>
+                </Link>
               </div>
             </div>
             <div className="relative">

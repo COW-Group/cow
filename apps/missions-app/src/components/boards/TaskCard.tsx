@@ -44,11 +44,11 @@ export function TaskCard({ task, isDragging = false, onDelete, onUpdate }: TaskC
 
   const getPriorityColor = (priority: Priority) => {
     switch (priority) {
-      case 'urgent': return 'text-red-600 bg-red-50';
-      case 'high': return 'text-orange-600 bg-orange-50';
-      case 'medium': return 'text-yellow-600 bg-yellow-50';
-      case 'low': return 'text-green-600 bg-green-50';
-      default: return 'text-gray-600 bg-gray-50';
+      case 'urgent': return 'text-red-400 bg-red-500/20 border border-red-500/30';
+      case 'high': return 'text-orange-400 bg-orange-500/20 border border-orange-500/30';
+      case 'medium': return 'text-yellow-400 bg-yellow-500/20 border border-yellow-500/30';
+      case 'low': return 'text-green-400 bg-green-500/20 border border-green-500/30';
+      default: return 'text-gray-400 bg-gray-600/20 border border-gray-600/30';
     }
   };
 
@@ -81,9 +81,9 @@ export function TaskCard({ task, isDragging = false, onDelete, onUpdate }: TaskC
 
   const getDueDateColor = (date: Date) => {
     const today = new Date();
-    if (date < today && task.status !== 'completed') return 'text-red-600 bg-red-50';
-    if (date.toDateString() === today.toDateString()) return 'text-orange-600 bg-orange-50';
-    return 'text-gray-600 bg-gray-50';
+    if (date < today && task.status !== 'completed') return 'text-red-400 bg-red-500/20 border border-red-500/30';
+    if (date.toDateString() === today.toDateString()) return 'text-orange-400 bg-orange-500/20 border border-orange-500/30';
+    return 'text-gray-400 bg-gray-600/20 border border-gray-600/30';
   };
 
   const taskActions = [
@@ -140,9 +140,9 @@ export function TaskCard({ task, isDragging = false, onDelete, onUpdate }: TaskC
             </button>
             
             <h4 className={`text-sm font-medium flex-1 ${
-              task.status === 'completed' 
-                ? 'line-through text-gray-500' 
-                : 'text-gray-900 dark:text-white'
+              task.status === 'completed'
+                ? 'line-through text-gray-500'
+                : 'text-white'
             }`}>
               {task.name}
             </h4>
@@ -162,7 +162,7 @@ export function TaskCard({ task, isDragging = false, onDelete, onUpdate }: TaskC
 
         {/* Description */}
         {task.description && (
-          <p className="text-xs text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+          <p className="text-xs text-gray-400 mb-3 line-clamp-2">
             {task.description}
           </p>
         )}
@@ -173,13 +173,13 @@ export function TaskCard({ task, isDragging = false, onDelete, onUpdate }: TaskC
             {task.tags.slice(0, 3).map((tag) => (
               <span
                 key={tag}
-                className="px-2 py-1 text-xs bg-blue-50 text-blue-600 rounded-full"
+                className="px-2 py-1 text-xs bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30"
               >
                 {tag}
               </span>
             ))}
             {task.tags.length > 3 && (
-              <span className="px-2 py-1 text-xs bg-gray-50 text-gray-600 rounded-full">
+              <span className="px-2 py-1 text-xs bg-gray-600/20 text-gray-400 rounded-full border border-gray-600/30">
                 +{task.tags.length - 3}
               </span>
             )}
@@ -190,14 +190,14 @@ export function TaskCard({ task, isDragging = false, onDelete, onUpdate }: TaskC
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {/* Priority */}
-            <div className={`px-1.5 py-0.5 rounded-full flex items-center gap-1 ${getPriorityColor(task.priority)}`}>
+            <div className={`px-2 py-1 rounded-full flex items-center gap-1 ${getPriorityColor(task.priority)}`}>
               <PriorityIcon className="h-3 w-3" />
               <span className="text-xs capitalize">{task.priority}</span>
             </div>
 
             {/* Due date */}
             {task.dueDate && (
-              <div className={`px-1.5 py-0.5 rounded-full flex items-center gap-1 ${getDueDateColor(task.dueDate)}`}>
+              <div className={`px-2 py-1 rounded-full flex items-center gap-1 ${getDueDateColor(task.dueDate)}`}>
                 <Calendar className="h-3 w-3" />
                 <span className="text-xs">
                   {formatDueDate(task.dueDate)}
@@ -209,7 +209,7 @@ export function TaskCard({ task, isDragging = false, onDelete, onUpdate }: TaskC
           <div className="flex items-center gap-2">
             {/* Comments */}
             {task.comments.length > 0 && (
-              <div className="flex items-center gap-1 text-gray-500">
+              <div className="flex items-center gap-1 text-gray-400">
                 <MessageCircle className="h-3 w-3" />
                 <span className="text-xs">{task.comments.length}</span>
               </div>
@@ -217,7 +217,7 @@ export function TaskCard({ task, isDragging = false, onDelete, onUpdate }: TaskC
 
             {/* Attachments */}
             {task.attachments.length > 0 && (
-              <div className="flex items-center gap-1 text-gray-500">
+              <div className="flex items-center gap-1 text-gray-400">
                 <Paperclip className="h-3 w-3" />
                 <span className="text-xs">{task.attachments.length}</span>
               </div>
@@ -225,14 +225,14 @@ export function TaskCard({ task, isDragging = false, onDelete, onUpdate }: TaskC
 
             {/* Assignee */}
             {task.assigneeId && (
-              <div className="w-6 h-6 bg-primary-100 rounded-full flex items-center justify-center">
-                <User className="h-3 w-3 text-primary-600" />
+              <div className="w-6 h-6 bg-gray-700 rounded-full flex items-center justify-center border border-gray-600">
+                <User className="h-3 w-3 text-gray-300" />
               </div>
             )}
 
             {/* Time estimate */}
             {task.estimatedHours && (
-              <div className="flex items-center gap-1 text-gray-500">
+              <div className="flex items-center gap-1 text-gray-400">
                 <Clock className="h-3 w-3" />
                 <span className="text-xs">{task.estimatedHours}h</span>
               </div>
@@ -252,7 +252,7 @@ export function TaskCard({ task, isDragging = false, onDelete, onUpdate }: TaskC
       layout
       {...({ className: "task-card cursor-pointer" } as any)}
       onClick={() => setShowDetails(!showDetails)}
-      whileHover={{ y: -2, boxShadow: '0 8px 25px rgba(0,0,0,0.1)' }}
+      whileHover={{ y: -2, boxShadow: '0 8px 25px rgba(0,0,0,0.3)' }}
     >
       <TaskCardContent />
     </motion.div>

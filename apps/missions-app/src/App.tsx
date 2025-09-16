@@ -1,5 +1,7 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from '../../../libs/shared-ui/src/themes/theme-provider';
+import { ThemeStyler } from './components/theme/ThemeStyler';
 import { RouterSetup } from './components/routing/RouterSetup';
 import './styles.css';
 
@@ -16,9 +18,12 @@ const queryClient = new QueryClient({
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <RouterSetup />
-      </Router>
+      <ThemeProvider defaultTheme="dark">
+        <ThemeStyler />
+        <Router>
+          <RouterSetup />
+        </Router>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }

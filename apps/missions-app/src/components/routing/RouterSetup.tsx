@@ -1,10 +1,11 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { RootLayout } from '../layout/RootLayout';
-import { Home } from '../../pages/Home';
-import { Dashboard } from '../../pages/Dashboard';
+import { PublicLayout } from '../layout/PublicLayout';
+import { LandingPage } from '../../pages/LandingPage';
 import { MyWork } from '../../pages/MyWork';
 import { BoardDetailPage } from '../../pages/BoardDetailPage';
+import { LatestBoard } from '../../pages/LatestBoard';
 import { Goals } from '../../pages/Goals';
 import { Portfolios } from '../../pages/Portfolios';
 import { Reports } from '../../pages/Reports';
@@ -22,57 +23,64 @@ import { AgentsPage } from '../../pages/AgentsPage';
 export function RouterSetup() {
   return (
     <Routes>
-      {/* Root layout with nested routes */}
-      <Route path="/" element={<RootLayout />}>
-        {/* Home page */}
-        <Route index element={<Home />} />
-        
+      {/* Public routes without app layout */}
+      <Route path="/" element={<PublicLayout />}>
+        <Route index element={<LandingPage />} />
+      </Route>
+
+      {/* App routes with full layout */}
+      <Route path="/app" element={<RootLayout />}>
         {/* Main pages */}
-        <Route path="dashboard" element={<Dashboard />} />
+        <Route index element={<Navigate to="my-work" replace />} />
         <Route path="my-work" element={<MyWork />} />
-        
+
         {/* Mission routes */}
         <Route path="missions" element={<MissionsDashboard />} />
         <Route path="missions/create" element={<MissionPage editMode={false} />} />
         <Route path="missions/:id" element={<MissionPage editMode={true} />} />
-        
+
         {/* Board routes */}
         <Route path="boards" element={<BoardsPage />} />
+        <Route path="boards/latest" element={<LatestBoard />} />
         <Route path="boards/:boardId" element={<BoardPage />} />
-        <Route path="boards/:slug" element={<BoardDetailPage />} />
         <Route path="board-management" element={<BoardManagement />} />
-        
+
         {/* Insights routes */}
         <Route path="insights/*" element={<InsightsPage />} />
-        
+
         {/* Agents routes */}
         <Route path="agents/*" element={<AgentsPage />} />
-        
-        
+
+
         {/* Monday.com Style Board Demo */}
         <Route path="monday-board" element={<SimpleMondayBoard />} />
-        
+
         {/* Flexible Board with Monday.com-style flexibility */}
         <Route path="flexible-board" element={<FlexibleBoard />} />
-        
+
         {/* Other pages */}
         <Route path="goals" element={<Goals />} />
         <Route path="portfolios" element={<Portfolios />} />
         <Route path="reports" element={<Reports />} />
-        
+
         {/* Placeholder routes */}
         <Route path="inbox" element={<div className="p-6"><h1 className="text-2xl font-bold">Inbox - Coming Soon</h1></div>} />
         <Route path="calendar" element={<div className="p-6"><h1 className="text-2xl font-bold">Calendar - Coming Soon</h1></div>} />
-        <Route path="insights" element={<div className="p-6"><h1 className="text-2xl font-bold">Insights - Coming Soon</h1></div>} />
         <Route path="projects" element={<div className="p-6"><h1 className="text-2xl font-bold">Projects List - Coming Soon</h1></div>} />
         <Route path="teams" element={<div className="p-6"><h1 className="text-2xl font-bold">Teams - Coming Soon</h1></div>} />
         <Route path="templates" element={<div className="p-6"><h1 className="text-2xl font-bold">Templates - Coming Soon</h1></div>} />
         <Route path="upgrade" element={<div className="p-6"><h1 className="text-2xl font-bold">Upgrade - Coming Soon</h1></div>} />
         <Route path="help" element={<div className="p-6"><h1 className="text-2xl font-bold">Help Center - Coming Soon</h1></div>} />
       </Route>
-      
+
+      {/* Legacy routes - redirect to app */}
+      <Route path="/my-work" element={<Navigate to="/app/my-work" replace />} />
+      <Route path="/boards/*" element={<Navigate to="/app/boards" replace />} />
+      <Route path="/missions/*" element={<Navigate to="/app/missions" replace />} />
+      <Route path="/insights/*" element={<Navigate to="/app/insights" replace />} />
+
       {/* Catch-all redirect */}
-      <Route path="*" element={<Navigate to="/my-work" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }

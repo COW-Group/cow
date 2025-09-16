@@ -23,6 +23,12 @@
     },
     {
       "path": "./apps/missions-app"
+    },
+    {
+      "path": "./apps/maun-app"
+    },
+    {
+      "path": "./apps/maun-app-e2e"
     }
   ]
 }

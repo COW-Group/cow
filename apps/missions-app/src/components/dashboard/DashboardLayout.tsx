@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { DashboardSidebar } from './DashboardSidebar';
 import { MainContent } from './MainContent';
 import { Workspace, Board, ViewType, DateViewType } from '../../types/dashboard';
+import { useAppStore } from '../../store';
 
 // Mock data - replace with actual API calls
 const mockWorkspaces: Workspace[] = [
@@ -37,6 +38,7 @@ const mockWorkspaces: Workspace[] = [
 ];
 
 export function DashboardLayout() {
+  const { openModal } = useAppStore();
   const [workspaces] = useState<Workspace[]>(mockWorkspaces);
   const [currentWorkspace, setCurrentWorkspace] = useState<Workspace | null>(mockWorkspaces[0]);
   const [isMobile, setIsMobile] = useState(false);
@@ -67,8 +69,11 @@ export function DashboardLayout() {
   };
 
   const handleNewItem = () => {
-    // Open new item modal
-    console.log('New item modal');
+    openModal('create-task', {
+      title: 'Create New Item',
+      workspaceId: currentWorkspace?.id,
+      boardId: currentWorkspace?.boards?.[0]?.id // Default to first board
+    });
   };
 
   const handleViewChange = (view: ViewType) => {
@@ -92,11 +97,11 @@ export function DashboardLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-black">
+    <div className="min-h-screen bg-black">
       {/* Mobile Sidebar Overlay */}
       {isMobile && sidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-md z-30 md:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -108,7 +113,7 @@ export function DashboardLayout() {
         onWorkspaceChange={handleWorkspaceChange}
         onCreateWorkspace={handleCreateWorkspace}
         className={`${
-          isMobile 
+          isMobile
             ? `transform transition-transform z-40 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`
             : ''
         }`}
@@ -125,7 +130,7 @@ export function DashboardLayout() {
       {isMobile && (
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="fixed top-24 left-4 z-50 p-2 bg-teal-500 text-white rounded-lg shadow-lg md:hidden"
+          className="fixed top-24 left-4 z-50 p-3 bg-gray-900/50 backdrop-blur-md text-white rounded-full shadow-lg border border-gray-800 md:hidden hover:bg-gray-800 transition-all"
           aria-label="Toggle menu"
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

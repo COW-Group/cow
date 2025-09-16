@@ -60,9 +60,16 @@ export default function DashboardPage() {
   }, [])
 
   useEffect(() => {
-    if (mounted && !loading && !auth.isAuthenticated) {
-      navigate("/")
-    }
+    console.log("Dashboard auth check:", { mounted, loading, isAuthenticated: auth.isAuthenticated, user: auth.user })
+    // Add a small delay to ensure authentication state has fully loaded from localStorage
+    const timeoutId = setTimeout(() => {
+      if (mounted && !loading && !auth.isAuthenticated) {
+        console.log("Redirecting to home - user not authenticated")
+        navigate("/")
+      }
+    }, 100)
+
+    return () => clearTimeout(timeoutId)
   }, [auth.isAuthenticated, loading, mounted, navigate])
 
   useEffect(() => {

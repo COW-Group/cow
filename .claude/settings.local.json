@@ -60,7 +60,19 @@
       "WebFetch(domain:www.ey.com)",
       "WebFetch(domain:www.salesforce.com)",
       "WebFetch(domain:www.goldmansachs.com)",
-      "WebFetch(domain:mvpdesign.com)"
+      "WebFetch(domain:mvpdesign.com)",
+      "Bash(npx prettier:*)",
+      "WebFetch(domain:medium.com)",
+      "WebFetch(domain:www.tesla.com)",
+      "WebFetch(domain:www.rolex.com)",
+      "WebFetch(domain:tympanus.net)",
+      "WebFetch(domain:blog.pixelfreestudio.com)",
+      "Bash(rm:*)",
+      "Read(///**)",
+      "Bash(npx eslint:*)",
+      "Bash(grep:*)",
+      "WebFetch(domain:animagraffs.com)",
+      "Bash(git fetch:*)"
     ],
     "deny": [],
     "ask": []

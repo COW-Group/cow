@@ -13,6 +13,7 @@ import ProductsPage from './pages/ProductsPage';
 import AuAeroPage from './pages/AuAeroPage';
 import AuAeroWhitepaperPage from './pages/AuAeroWhitepaperPage';
 import AuSiriPage from './pages/AuSiriPage';
+import AuSiriAnimationPage from './pages/AuSiriAnimationPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
         <Route path="/auaero" element={<AuAeroPage />} />
         <Route path="/auaero-whitepaper" element={<AuAeroWhitepaperPage />} />
         <Route path="/ausiri" element={<AuSiriPage />} />
+        <Route path="/ausiri-animation" element={<AuSiriAnimationPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Toaster

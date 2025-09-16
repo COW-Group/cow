@@ -15,6 +15,7 @@ export interface Workspace {
   dashboards: WorkspaceDashboard[];
   docs: WorkspaceDoc[];
   forms: WorkspaceForm[];
+  apps: WorkspaceApp[];
 }
 
 export interface Folder {
@@ -28,6 +29,7 @@ export interface Folder {
   dashboards: WorkspaceDashboard[];
   docs: WorkspaceDoc[];
   forms: WorkspaceForm[];
+  apps: WorkspaceApp[];
   subFolders: Folder[];
   createdAt: Date;
   updatedAt: Date;
@@ -88,6 +90,20 @@ export interface WorkspaceForm {
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface WorkspaceApp {
+  id: string;
+  appId: string; // References MaunApp id
+  name: string;
+  workspaceId: string;
+  folderId?: string;
+  ownerId: string;
+  starred?: boolean;
+  lastUsed?: Date;
+  settings: Record<string, any>;
+  isEnabled: boolean;
+  addedAt: Date;
 }
 
 export interface WorkspacePermissions {

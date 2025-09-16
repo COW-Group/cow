@@ -1,4 +1,4 @@
-import { Workspace, Folder, WorkspaceBoard, WorkspaceMember, WorkspaceDashboard, WorkspaceDoc, WorkspaceForm } from '../types/workspace.types';
+import { Workspace, Folder, WorkspaceBoard, WorkspaceMember, WorkspaceDashboard, WorkspaceDoc, WorkspaceForm, WorkspaceApp } from '../types/workspace.types';
 import { boardService } from './board.service';
 import { COWBoard } from '../types/board.types';
 
@@ -66,7 +66,8 @@ export class WorkspaceService {
       boards: [],
       dashboards: [],
       docs: [],
-      forms: []
+      forms: [],
+      apps: []
     };
 
     this.workspaces.set(defaultWorkspace.id, defaultWorkspace);
@@ -90,6 +91,7 @@ export class WorkspaceService {
       dashboards: [],
       docs: [],
       forms: [],
+      apps: [],
       subFolders: [],
       createdAt: new Date(),
       updatedAt: new Date()
@@ -106,6 +108,7 @@ export class WorkspaceService {
       dashboards: [],
       docs: [],
       forms: [],
+      apps: [],
       subFolders: [],
       createdAt: new Date(),
       updatedAt: new Date()
@@ -216,6 +219,7 @@ export class WorkspaceService {
       dashboards: [],
       docs: [],
       forms: [],
+      apps: [],
       subFolders: [],
       createdAt: new Date(),
       updatedAt: new Date()
@@ -391,6 +395,37 @@ export class WorkspaceService {
 
     workspace.updatedAt = new Date();
     return form;
+  }
+
+  createApp(data: any): WorkspaceApp | null {
+    const workspace = this.workspaces.get(data.workspaceId);
+    if (!workspace) return null;
+
+    const app: WorkspaceApp = {
+      id: data.id || generateId(),
+      appId: data.appId,
+      name: data.name,
+      workspaceId: data.workspaceId,
+      folderId: data.folderId,
+      ownerId: data.ownerId || 'current-user',
+      starred: false,
+      settings: data.settings || {},
+      isEnabled: data.isEnabled !== false,
+      addedAt: new Date()
+    };
+
+    workspace.apps.push(app);
+
+    // Add to folder if specified
+    if (data.folderId) {
+      const folder = this.findFolderInWorkspace(workspace, data.folderId);
+      if (folder) {
+        folder.apps.push(app);
+      }
+    }
+
+    workspace.updatedAt = new Date();
+    return app;
   }
 
   /**

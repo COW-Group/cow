@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { MyWorkHeader } from '../components/mywork/MyWorkHeader';
 import { EmptyState } from '../components/mywork/EmptyState';
 import { AssignedItemsTable } from '../components/mywork/AssignedItemsTable';
-import { 
-  MyWorkData, 
-  MyWorkView, 
-  DateViewOption, 
-  Assignment 
+import { CustomizableHomePage } from '../components/home/CustomizableHomePage';
+import { Button } from '../components/ui/Button';
+import { LayoutDashboard, CheckSquare } from 'lucide-react';
+import {
+  MyWorkData,
+  MyWorkView,
+  DateViewOption,
+  Assignment
 } from '../types/mywork.types';
 
 // Mock API function - replace with actual API call
@@ -94,6 +97,7 @@ export function MyWork() {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [sortField, setSortField] = useState<string>('date');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [showDashboard, setShowDashboard] = useState(false);
 
   // Load data on component mount
   useEffect(() => {
@@ -235,11 +239,42 @@ export function MyWork() {
 
   const hasAssignments = !loading && data && data.totalCount > 0;
 
+  // Show dashboard view
+  if (showDashboard) {
+    return (
+      <div className="flex-1 min-h-screen relative">
+        {/* Toggle Button */}
+        <div className="absolute top-6 right-6 z-10">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowDashboard(false)}
+            className="bg-white/90 backdrop-blur-xl border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            <CheckSquare className="w-4 h-4 mr-2" />
+            My Tasks
+          </Button>
+        </div>
+        <CustomizableHomePage />
+      </div>
+    );
+  }
+
   return (
-    <div 
-      className="flex-1 bg-black dark:bg-black min-h-screen"
-      style={{ marginLeft: '250px', paddingTop: '80px' }}
-    >
+    <div className="flex-1 min-h-screen relative">
+      {/* Toggle Button */}
+      <div className="absolute top-6 right-6 z-10">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowDashboard(true)}
+          className="bg-white/90 backdrop-blur-xl border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300"
+        >
+          <LayoutDashboard className="w-4 h-4 mr-2" />
+          Dashboard
+        </Button>
+      </div>
+
       <div className="p-6">
         <MyWorkHeader
           view={view}
@@ -252,9 +287,11 @@ export function MyWork() {
         />
 
         {loading ? (
-          <div className="flex items-center justify-center py-16">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-            <span className="ml-3 text-gray-400">Loading your work...</span>
+          <div className="bg-white/90 backdrop-blur-xl rounded-2xl border border-gray-200/50 shadow-lg p-16">
+            <div className="flex items-center justify-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+              <span className="ml-3 text-gray-600">Loading your work...</span>
+            </div>
           </div>
         ) : hasAssignments ? (
           <div>
@@ -274,8 +311,8 @@ export function MyWork() {
               />
             )}
             {view === 'calendar' && (
-              <div className="bg-gray-900 dark:bg-gray-900 rounded-lg border border-gray-700 dark:border-gray-700 p-8 text-center">
-                <p className="text-gray-400 dark:text-gray-400">
+              <div className="bg-white/90 backdrop-blur-xl rounded-2xl border border-gray-200/50 shadow-lg p-12 text-center">
+                <p className="text-gray-600">
                   Calendar view coming soon...
                 </p>
               </div>

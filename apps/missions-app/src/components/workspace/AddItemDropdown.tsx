@@ -6,17 +6,19 @@ import {
   FileText,
   ClipboardList,
   Folder,
-  ChevronDown
+  ChevronDown,
+  Zap
 } from 'lucide-react';
 
-export type CreateItemType = 'board' | 'dashboard' | 'doc' | 'form' | 'folder';
+export type CreateItemType = 'board' | 'dashboard' | 'doc' | 'form' | 'folder' | 'app';
 
 interface AddItemDropdownProps {
   onCreateItem: (type: CreateItemType) => void;
   currentFolder?: string;
+  onAddApp?: () => void;
 }
 
-export function AddItemDropdown({ onCreateItem, currentFolder }: AddItemDropdownProps) {
+export function AddItemDropdown({ onCreateItem, currentFolder, onAddApp }: AddItemDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -116,6 +118,23 @@ export function AddItemDropdown({ onCreateItem, currentFolder }: AddItemDropdown
             </div>
 
             <div className="border-t border-gray-100 pt-2">
+              {onAddApp && (
+                <button
+                  onClick={() => {
+                    onAddApp();
+                    setIsOpen(false);
+                  }}
+                  className="w-full flex items-center px-3 py-3 hover:bg-gray-50 transition-colors group"
+                >
+                  <div className="p-2 rounded-lg text-purple-600 bg-gray-100 group-hover:bg-white mr-3">
+                    <Zap className="w-4 h-4" />
+                  </div>
+                  <div className="flex-1 text-left">
+                    <div className="text-sm font-medium text-gray-900">Add App</div>
+                    <div className="text-xs text-gray-500">Install an app to workspace</div>
+                  </div>
+                </button>
+              )}
               <div className="px-3 py-2">
                 <button className="w-full text-left text-xs text-gray-500 hover:text-gray-700">
                   Browse template center

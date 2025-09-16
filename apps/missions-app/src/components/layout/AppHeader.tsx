@@ -8,6 +8,8 @@ import {
   Settings,
   MoreVertical
 } from 'lucide-react';
+import { useAppTheme } from '../../hooks/useAppTheme';
+import { ThemeToggle } from '../theme/ThemeToggle';
 
 interface AppHeaderProps {
   onToggleTheme?: () => void;
@@ -17,6 +19,7 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const { classes } = useAppTheme();
 
   const handleNotificationsClick = () => {
     setShowNotifications(!showNotifications);
@@ -40,16 +43,14 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-40 h-12 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-      <div className="flex items-center justify-between h-full px-4">
+    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-40">
+      <div className="glass-header rounded-full px-6 py-3 flex items-center gap-6">
         {/* Left side - Logo and brand */}
-        <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-2 cursor-pointer" onClick={() => navigate('/')}>
-            <Circle className="h-6 w-6 fill-orange-500 text-orange-500" />
-            <span className="text-base font-bold text-black dark:text-white">
-              COW CRM
-            </span>
-          </div>
+        <div className="flex items-center space-x-3 cursor-pointer smooth-hover px-3 py-2 rounded-full" onClick={() => navigate('/')}>
+          <Circle className="h-6 w-6 fill-yellow-400 text-yellow-400" />
+          <span className={`text-xl font-bold ${classes.text.primary} tracking-tight`}>
+            COW
+          </span>
         </div>
 
         {/* Right side - Icons and avatar */}
@@ -58,7 +59,7 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
           <div className="relative">
             <button
               onClick={handleNotificationsClick}
-              className="p-1 text-gray-500 hover:text-teal-500 cursor-pointer transition-colors"
+              className={`p-2 ${classes.text.muted} ${classes.hover.accent} smooth-hover rounded-full ${classes.hover.bg}`}
               aria-label="Notifications"
             >
               <Bell className="h-5 w-5" />
@@ -69,22 +70,22 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
 
             {/* Notifications Dropdown */}
             {showNotifications && (
-              <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
-                <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Notifications</h3>
+              <div className={`absolute right-0 top-full mt-2 w-80 glass-modal rounded-2xl shadow-lg py-2 z-50`}>
+                <div className={`px-4 py-2 border-b ${classes.border.default}`}>
+                  <h3 className={`text-sm font-semibold ${classes.text.primary}`}>Notifications</h3>
                 </div>
                 <div className="max-h-64 overflow-y-auto">
-                  <div className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <p className="text-sm text-gray-900 dark:text-white">New lead added to CRM</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">2 minutes ago</p>
+                  <div className={`px-4 py-3 ${classes.hover.card} cursor-pointer`}>
+                    <p className={`text-sm ${classes.text.primary}`}>New lead added to CRM</p>
+                    <p className={`text-xs ${classes.text.muted}`}>2 minutes ago</p>
                   </div>
-                  <div className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <p className="text-sm text-gray-900 dark:text-white">Board updated: Sales Pipeline</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">1 hour ago</p>
+                  <div className={`px-4 py-3 ${classes.hover.card} cursor-pointer`}>
+                    <p className={`text-sm ${classes.text.primary}`}>Board updated: Sales Pipeline</p>
+                    <p className={`text-xs ${classes.text.muted}`}>1 hour ago</p>
                   </div>
-                  <div className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700">
-                    <p className="text-sm text-gray-900 dark:text-white">New comment on task</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">3 hours ago</p>
+                  <div className={`px-4 py-3 ${classes.hover.card} cursor-pointer`}>
+                    <p className={`text-sm ${classes.text.primary}`}>New comment on task</p>
+                    <p className={`text-xs ${classes.text.muted}`}>3 hours ago</p>
                   </div>
                 </div>
               </div>
@@ -94,16 +95,19 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
           {/* Search */}
           <button
             onClick={handleSearchClick}
-            className="p-1 text-gray-500 hover:text-teal-500 cursor-pointer transition-colors"
+            className={`p-2 ${classes.text.muted} ${classes.hover.accent} smooth-hover rounded-full ${classes.hover.bg}`}
             aria-label="Search"
           >
             <Search className="h-5 w-5" />
           </button>
 
+          {/* Theme Toggle */}
+          <ThemeToggle size="sm" />
+
           {/* Settings */}
           <button
             onClick={handleSettingsClick}
-            className="p-1 text-gray-500 hover:text-teal-500 cursor-pointer transition-colors"
+            className={`p-2 ${classes.text.muted} ${classes.hover.accent} smooth-hover rounded-full ${classes.hover.bg}`}
             aria-label="Settings"
           >
             <Settings className="h-5 w-5" />
@@ -112,45 +116,36 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
           {/* Help */}
           <button
             onClick={handleHelpClick}
-            className="p-1 text-gray-500 hover:text-teal-500 cursor-pointer transition-colors"
+            className={`p-2 ${classes.text.muted} ${classes.hover.accent} smooth-hover rounded-full ${classes.hover.bg}`}
             aria-label="Help"
           >
             <HelpCircle className="h-5 w-5" />
-          </button>
-
-          {/* More menu */}
-          <button
-            onClick={handleMoreClick}
-            className="p-1 text-gray-500 hover:text-teal-500 cursor-pointer transition-colors"
-            aria-label="More options"
-          >
-            <MoreVertical className="h-5 w-5" />
           </button>
 
           {/* Avatar with User Menu */}
           <div className="relative">
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className="h-8 w-8 rounded-full bg-purple-500 flex items-center justify-center cursor-pointer hover:bg-purple-600 transition-colors"
+              className={`h-8 w-8 rounded-full ${classes.bg.secondary} flex items-center justify-center cursor-pointer ${classes.hover.bg} smooth-hover ${classes.border.muted} border`}
               aria-label="User menu"
             >
-              <span className="text-sm text-white font-medium">LP</span>
+              <span className={`text-sm ${classes.text.primary} font-medium`}>LP</span>
             </button>
 
             {/* User Menu Dropdown */}
             {showUserMenu && (
-              <div className="absolute right-0 top-full mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
-                <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white">Likhitha Palaypu</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">likhitha@example.com</p>
+              <div className={`absolute right-0 top-full mt-2 w-48 glass-modal rounded-2xl shadow-lg py-2 z-50`}>
+                <div className={`px-4 py-2 border-b ${classes.border.default}`}>
+                  <p className={`text-sm font-medium ${classes.text.primary}`}>Likhitha Palaypu</p>
+                  <p className={`text-xs ${classes.text.muted}`}>likhitha@example.com</p>
                 </div>
-                <button className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <button className={`w-full px-4 py-2 text-left text-sm ${classes.text.muted} ${classes.hover.card} ${classes.hover.accent}`}>
                   Profile Settings
                 </button>
-                <button className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <button className={`w-full px-4 py-2 text-left text-sm ${classes.text.muted} ${classes.hover.card} ${classes.hover.accent}`}>
                   Account Settings
                 </button>
-                <button className="w-full px-4 py-2 text-left text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <button className={`w-full px-4 py-2 text-left text-sm ${classes.text.muted} ${classes.hover.card} ${classes.hover.accent}`}>
                   Sign Out
                 </button>
               </div>

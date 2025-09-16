@@ -112,10 +112,10 @@ export function BoardPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading board...</p>
+          <div className="w-8 h-8 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400">Loading board...</p>
         </div>
       </div>
     );
@@ -123,12 +123,12 @@ export function BoardPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 mb-4">{error}</p>
-          <button 
-            onClick={() => navigate('/boards')}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          <p className="text-red-400 mb-4">{error}</p>
+          <button
+            onClick={() => navigate('/app/boards')}
+            className="bg-yellow-400 text-black px-4 py-2 rounded-lg hover:bg-yellow-300"
           >
             Back to Boards
           </button>
@@ -140,12 +140,12 @@ export function BoardPage() {
   // Use IntegratedFlexiBoard by default for enhanced features
   if (useFlexiBoard && boardId) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-black">
         {/* Back navigation */}
-        <div className="bg-white border-b border-gray-200 px-6 py-2">
-          <button 
-            onClick={() => navigate('/boards')}
-            className="flex items-center text-gray-600 hover:text-gray-900"
+        <div className="bg-gray-900/50 border-b border-gray-800 px-6 py-2">
+          <button
+            onClick={() => navigate('/app/boards')}
+            className="flex items-center text-gray-400 hover:text-white"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Boards
@@ -160,12 +160,12 @@ export function BoardPage() {
 
   if (!currentBoard) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600 mb-4">Board not found</p>
-          <button 
-            onClick={() => navigate('/boards')}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          <p className="text-gray-400 mb-4">Board not found</p>
+          <button
+            onClick={() => navigate('/app/boards')}
+            className="bg-yellow-400 text-black px-4 py-2 rounded-lg hover:bg-yellow-300"
           >
             Back to Boards
           </button>

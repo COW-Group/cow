@@ -11,6 +11,7 @@ interface ModalProps {
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   showCloseButton?: boolean;
+  showHeader?: boolean;
 }
 
 export function Modal({
@@ -20,7 +21,8 @@ export function Modal({
   description,
   children,
   size = 'md',
-  showCloseButton = true
+  showCloseButton = true,
+  showHeader = true
 }: ModalProps) {
   const sizeClasses = {
     sm: 'max-w-sm',
@@ -40,7 +42,7 @@ export function Modal({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"
+              className="fixed inset-0 bg-black bg-opacity-80 backdrop-blur-md"
               onClick={onClose}
             />
 
@@ -52,33 +54,33 @@ export function Modal({
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
               className={`
                 relative w-full ${sizeClasses[size]} mx-auto
-                bg-white dark:bg-gray-800 rounded-xl shadow-2xl
-                border border-gray-200 dark:border-gray-700
+                bg-gray-900/50 backdrop-blur-md rounded-2xl shadow-2xl
+                border border-gray-800 text-white
                 overflow-hidden
               `}
             >
               {/* Header */}
-              {(title || showCloseButton) && (
+              {showHeader && (title || showCloseButton) && (
                 <div className="flex items-center justify-between p-6 pb-0">
                   <div>
                     {title && (
-                      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                      <h2 className="text-xl font-semibold text-white">
                         {title}
                       </h2>
                     )}
                     {description && (
-                      <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+                      <p className="mt-1 text-sm text-gray-400">
                         {description}
                       </p>
                     )}
                   </div>
-                  
+
                   {showCloseButton && (
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={onClose}
-                      className="text-gray-400 hover:text-gray-600"
+                      className="text-gray-400 hover:text-white"
                     >
                       <X className="h-5 w-5" />
                     </Button>

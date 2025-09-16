@@ -141,7 +141,7 @@ export function DashboardSidebar({
   );
 
   return (
-    <aside className={`fixed left-0 top-20 bottom-0 w-64 bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 p-4 overflow-y-auto ${className}`}>
+    <aside className={`fixed left-0 top-20 bottom-0 w-64 bg-gray-900/50 backdrop-blur-md border-r border-gray-800 p-4 overflow-y-auto ${className}`}>
       {/* Top Navigation */}
       <nav className="mb-6">
         <ul className="space-y-2">
@@ -150,13 +150,13 @@ export function DashboardSidebar({
             return (
               <li key={item.id}>
                 <button
-                  className={`w-full flex items-center gap-3 px-3 py-2 text-sm font-bold rounded transition-colors ${
-                    item.active 
-                      ? 'bg-blue-500 text-white' 
-                      : 'text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800'
+                  className={`w-full flex items-center gap-3 px-3 py-2 text-sm font-bold rounded-lg transition-all duration-200 ${
+                    item.active
+                      ? 'bg-yellow-400 text-black shadow-lg'
+                      : 'text-gray-400 hover:bg-gray-800/50 hover:text-white'
                   }`}
                 >
-                  <Icon className={`h-5 w-5 ${item.active ? 'text-white' : item.iconColor}`} />
+                  <Icon className={`h-5 w-5 ${item.active ? 'text-black' : item.iconColor}`} />
                   {item.label}
                 </button>
               </li>
@@ -169,7 +169,7 @@ export function DashboardSidebar({
       <div className="mb-6">
         <button
           onClick={() => setFavoritesExpanded(!favoritesExpanded)}
-          className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-300 transition-colors"
+          className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors rounded-lg p-2 hover:bg-gray-800/50"
         >
           <ChevronRight 
             className={`h-4 w-4 transition-transform ${favoritesExpanded ? 'rotate-90' : ''}`} 
@@ -177,7 +177,7 @@ export function DashboardSidebar({
           Favorites
         </button>
         {favoritesExpanded && (
-          <div className="mt-2 ml-6 text-sm text-gray-500">
+          <div className="mt-2 ml-6 text-sm text-gray-400">
             No favorites yet
           </div>
         )}
@@ -192,7 +192,7 @@ export function DashboardSidebar({
             placeholder="Search for a workspace"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 text-xs bg-transparent border border-gray-600 dark:border-gray-700 rounded focus:outline-none focus:border-teal-500"
+            className="w-full pl-10 pr-4 py-2 text-xs bg-gray-800/50 backdrop-blur-md border border-gray-700 rounded-lg text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all"
           />
         </div>
       </div>
@@ -202,12 +202,12 @@ export function DashboardSidebar({
         <div className="flex items-center gap-2">
           <button
             onClick={() => setWorkspaceDropdownOpen(!workspaceDropdownOpen)}
-            className="flex-1 flex items-center gap-3 px-3 py-2 bg-gray-200 dark:bg-gray-800 rounded hover:bg-gray-300 dark:hover:bg-gray-700 transition-colors"
+            className="flex-1 flex items-center gap-3 px-3 py-2 bg-gray-800/50 backdrop-blur-md rounded-lg hover:bg-gray-700/50 transition-all border border-gray-700"
           >
-            <div className="h-5 w-5 bg-teal-500 rounded-full flex items-center justify-center">
-              <span className="text-xs font-semibold text-white">C</span>
+            <div className="h-5 w-5 bg-yellow-400 rounded-full flex items-center justify-center">
+              <span className="text-xs font-semibold text-black">C</span>
             </div>
-            <span className="text-sm font-bold text-gray-900 dark:text-white flex-1 text-left">
+            <span className="text-sm font-bold text-white flex-1 text-left">
               {currentWorkspace?.name || 'COW CRM'}
             </span>
             <ChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${workspaceDropdownOpen ? 'rotate-180' : ''}`} />
@@ -216,14 +216,14 @@ export function DashboardSidebar({
           <div className="relative" ref={addMenuRef}>
             <button
               onClick={() => setAddNewMenuOpen(!addNewMenuOpen)}
-              className="p-2 text-gray-400 hover:text-teal-500 transition-colors"
+              className="p-2 text-gray-400 hover:text-yellow-400 transition-colors hover:bg-gray-800/50 rounded-lg"
             >
               <Plus className="h-4 w-4" />
             </button>
 
             {/* Add New Menu */}
             {addNewMenuOpen && (
-              <div className="absolute right-0 top-full mt-1 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-50">
+              <div className="absolute right-0 top-full mt-1 w-64 bg-gray-900/50 backdrop-blur-md rounded-2xl shadow-lg border border-gray-800 py-2 z-50">
                 {addNewItems.map((item) => {
                   const Icon = item.icon;
                   return (
@@ -231,7 +231,7 @@ export function DashboardSidebar({
                       <button
                         onMouseEnter={() => item.id === 'crm-boards' && setCrmBoardsSubmenuOpen(true)}
                         onMouseLeave={() => item.id === 'crm-boards' && setCrmBoardsSubmenuOpen(false)}
-                        className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800/50 hover:text-white transition-colors"
                       >
                         <div className={`h-6 w-6 ${item.iconColor} rounded flex items-center justify-center`}>
                           <Icon className="h-4 w-4 text-white" />
@@ -244,16 +244,16 @@ export function DashboardSidebar({
 
                       {/* CRM Boards Submenu */}
                       {item.id === 'crm-boards' && crmBoardsSubmenuOpen && (
-                        <div className="absolute left-full top-0 ml-1 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2">
-                          <div className="px-4 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
+                        <div className="absolute left-full top-0 ml-1 w-56 bg-gray-900/50 backdrop-blur-md rounded-2xl shadow-lg border border-gray-800 py-2">
+                          <div className="px-4 py-2 text-xs font-semibold text-gray-400 border-b border-gray-800">
                             Core CRM boards
                           </div>
                           {currentWorkspace?.boards.map((board) => (
-                            <div key={board.id} className="flex items-center justify-between px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                              <span className="text-sm text-gray-700 dark:text-gray-300">{board.name}</span>
+                            <div key={board.id} className="flex items-center justify-between px-4 py-2 hover:bg-gray-800/50">
+                              <span className="text-sm text-gray-300">{board.name}</span>
                               <button
                                 className={`relative inline-flex h-4 w-8 items-center rounded-full transition-colors ${
-                                  board.enabled ? 'bg-teal-500' : 'bg-gray-300 dark:bg-gray-600'
+                                  board.enabled ? 'bg-yellow-400' : 'bg-gray-600'
                                 }`}
                               >
                                 <span
@@ -269,16 +269,16 @@ export function DashboardSidebar({
                     </div>
                   );
                 })}
-                <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2">
-                  <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <div className="border-t border-gray-800 mt-2 pt-2">
+                  <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800/50 hover:text-white transition-colors">
                     <Download className="h-4 w-4" />
                     Installed apps
                   </button>
-                  <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                  <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800/50 hover:text-white transition-colors">
                     <Upload className="h-4 w-4" />
                     Import data
                   </button>
-                  <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                  <button className="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-300 hover:bg-gray-800/50 hover:text-white transition-colors">
                     <Star className="h-4 w-4" />
                     Template center
                   </button>
@@ -290,19 +290,19 @@ export function DashboardSidebar({
 
         {/* Workspace Dropdown Menu */}
         {workspaceDropdownOpen && (
-          <div className="absolute top-full left-0 right-0 mt-1 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2 z-40">
+          <div className="absolute top-full left-0 right-0 mt-1 bg-gray-900/50 backdrop-blur-md rounded-2xl shadow-lg border border-gray-800 py-2 z-40">
             <div className="px-3 py-2">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-500" />
                 <input
                   type="text"
                   placeholder="Search workspaces"
-                  className="w-full pl-10 pr-4 py-2 text-xs bg-gray-100 dark:bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full pl-10 pr-4 py-2 text-xs bg-gray-800/50 backdrop-blur-md text-white placeholder:text-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 border border-gray-700"
                 />
               </div>
             </div>
             <div className="px-3 py-1">
-              <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2">
+              <h4 className="text-xs font-semibold text-gray-400 mb-2">
                 My Workspaces
               </h4>
               {filteredWorkspaces.map((workspace) => (
@@ -313,9 +313,9 @@ export function DashboardSidebar({
                     setWorkspaceDropdownOpen(false);
                   }}
                   onContextMenu={() => setManageMenuOpen(true)}
-                  className="w-full flex items-center gap-3 px-2 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                  className="w-full flex items-center gap-3 px-2 py-2 text-sm text-gray-300 hover:bg-gray-800/50 hover:text-white rounded-lg transition-colors"
                 >
-                  <div className={`h-5 w-5 ${workspace.iconColor === 'teal' ? 'bg-teal-500' : 'bg-purple-500'} rounded-full flex items-center justify-center`}>
+                  <div className={`h-5 w-5 ${workspace.iconColor === 'teal' ? 'bg-yellow-400' : 'bg-purple-500'} rounded-full flex items-center justify-center`}>
                     <span className="text-xs font-semibold text-white">
                       {workspace.name === 'Likhitha Palaypu Vibes' ? 'L' : workspace.name.charAt(0)}
                     </span>
@@ -324,15 +324,15 @@ export function DashboardSidebar({
                 </button>
               ))}
             </div>
-            <div className="border-t border-gray-200 dark:border-gray-700 mt-2 pt-2 px-3">
+            <div className="border-t border-gray-800 mt-2 pt-2 px-3">
               <button
                 onClick={onCreateWorkspace}
-                className="w-full flex items-center gap-2 px-2 py-2 text-sm text-teal-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors"
+                className="w-full flex items-center gap-2 px-2 py-2 text-sm text-yellow-400 hover:bg-gray-800/50 rounded-lg transition-colors"
               >
                 <Plus className="h-4 w-4" />
                 Add workspace
               </button>
-              <button className="w-full flex items-center gap-2 px-2 py-2 text-sm text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition-colors">
+              <button className="w-full flex items-center gap-2 px-2 py-2 text-sm text-gray-400 hover:bg-gray-800/50 hover:text-white rounded-lg transition-colors">
                 Browse all
               </button>
             </div>
@@ -348,12 +348,12 @@ export function DashboardSidebar({
           return (
             <button
               key={board.id}
-              className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-800 rounded transition-colors"
+              className="w-full flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-800/50 hover:text-white rounded-lg transition-all"
             >
               <Icon className={`h-4 w-4 ${boardIcon?.color || 'text-gray-500'}`} />
               {board.name}
               {board.itemCount && (
-                <span className="ml-auto text-xs text-gray-400 bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded">
+                <span className="ml-auto text-xs text-gray-400 bg-gray-800/50 px-2 py-1 rounded-full"
                   {board.itemCount}
                 </span>
               )}
@@ -366,24 +366,24 @@ export function DashboardSidebar({
       {manageMenuOpen && (
         <div 
           ref={manageMenuRef}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 backdrop-blur-md"
           onClick={() => setManageMenuOpen(false)}
         >
           <div 
-            className="w-52 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 py-3"
+            className="w-52 bg-gray-900/50 backdrop-blur-md rounded-2xl shadow-xl border border-gray-800 py-3"
             onClick={(e) => e.stopPropagation()}
           >
             {manageItems.map((item, index) => {
               if (item.type === 'separator') {
-                return <div key={index} className="border-t border-gray-200 dark:border-gray-700 my-2" />;
+                return <div key={index} className="border-t border-gray-800 my-2" />;
               }
               
               const Icon = item.icon!;
               return (
                 <button
                   key={item.id}
-                  className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                    item.danger ? 'text-red-500' : 'text-gray-700 dark:text-gray-300'
+                  className={`w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-gray-800/50 transition-colors ${
+                    item.danger ? 'text-red-400 hover:text-red-300' : 'text-gray-300 hover:text-white'
                   }`}
                 >
                   <Icon className="h-4 w-4" />

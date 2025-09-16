@@ -42,6 +42,9 @@ import { ItemContextMenu } from './ItemContextMenu';
 import { useNavigate } from 'react-router-dom';
 import { useTeamStore } from '../../store/team.store';
 import { useAgentStore } from '../../store/agent.store';
+import { useMaunAppsStore } from '../../store/maun-apps.store';
+import { useAppStore } from '../../store';
+import { useAppTheme } from '../../hooks/useAppTheme';
 
 interface WorkspaceSidebarProps {
   currentWorkspaceId?: string;
@@ -49,14 +52,17 @@ interface WorkspaceSidebarProps {
   onBoardSelect?: (boardId: string) => void;
 }
 
-export function WorkspaceSidebar({ 
-  currentWorkspaceId, 
-  onWorkspaceChange, 
-  onBoardSelect 
+export function WorkspaceSidebar({
+  currentWorkspaceId,
+  onWorkspaceChange,
+  onBoardSelect
 }: WorkspaceSidebarProps) {
   const navigate = useNavigate();
+  const { classes } = useAppTheme();
   const { teams, currentTeam, setCurrentTeam } = useTeamStore();
   const { getAgents, getAgentsByStatus, startAgent, stopAgent } = useAgentStore();
+  const { initializeApps } = useMaunAppsStore();
+  const { openModal } = useAppStore();
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [currentWorkspace, setCurrentWorkspace] = useState<Workspace | null>(null);
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
@@ -129,7 +135,10 @@ export function WorkspaceSidebar({
     };
 
     loadWorkspaceData();
-  }, [currentWorkspaceId]);
+
+    // Initialize apps on first load
+    initializeApps();
+  }, [currentWorkspaceId, initializeApps]);
 
 
   const handleFolderToggle = (folderId: string) => {
@@ -168,6 +177,27 @@ export function WorkspaceSidebar({
     setCreateItemType(type);
   };
 
+  const handleAddApp = () => {
+    openModal('MaunAppMarketplace', {});
+  };
+
+  const handleAppClick = (app: any) => {
+    // Launch the app using the MaunAppStore
+    const { launchApp } = useMaunAppsStore.getState();
+    launchApp(app.appId, {
+      workspaceId: currentWorkspace?.id,
+      onClose: () => {}
+    });
+    openModal('MaunAppLauncher', {});
+  };
+
+  const handleAppStarToggle = async (e: React.MouseEvent, app: any) => {
+    e.stopPropagation();
+    // Toggle starred state for workspace app
+    // This would need to be implemented in workspace service
+    console.log('Toggle app star:', app.name);
+  };
+
   const handleCreateItemWithData = async (type: CreateItemType, data: any) => {
     if (!currentWorkspace) return;
     
@@ -193,6 +223,9 @@ export function WorkspaceSidebar({
           break;
         case 'folder':
           await workspaceService.createFolder(data);
+          break;
+        case 'app':
+          await workspaceService.createApp(data);
           break;
       }
       
@@ -303,22 +336,22 @@ export function WorkspaceSidebar({
       <div key={folder.id}>
         {/* Folder Header */}
         <div
-          className="flex items-center py-2 px-2 hover:bg-gray-100 rounded cursor-pointer group"
+          className={`flex items-center py-2 px-2 $${classes.hover.bg} rounded cursor-pointer group`}
           style={{ paddingLeft: `${paddingLeft}px` }}
           onClick={() => handleFolderToggle(folder.id)}
         >
           <div className="flex items-center flex-1 min-w-0">
             {isExpanded ? (
-              <ChevronDown className="w-4 h-4 text-gray-400 mr-1 flex-shrink-0" />
+              <ChevronDown className="w-4 h-4 ${classes.text.muted} mr-1 flex-shrink-0" />
             ) : (
-              <ChevronRight className="w-4 h-4 text-gray-400 mr-1 flex-shrink-0" />
+              <ChevronRight className="w-4 h-4 ${classes.text.muted} mr-1 flex-shrink-0" />
             )}
             {isExpanded ? (
               <FolderOpen className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: folder.color }} />
             ) : (
               <Folder className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: folder.color }} />
             )}
-            <span className="text-sm font-medium text-gray-700 truncate">{folder.name}</span>
+            <span className="text-sm font-medium ${classes.text.primary} truncate">{folder.name}</span>
           </div>
           <ItemContextMenu
             item={folder}
@@ -334,23 +367,42 @@ export function WorkspaceSidebar({
             {folder.boards.map(board => (
               <div
                 key={board.id}
-                className="flex items-center py-2 px-2 hover:bg-gray-100 rounded cursor-pointer group"
+                className={`flex items-center py-2 px-2 $${classes.hover.bg} rounded cursor-pointer group`}
                 style={{ paddingLeft: `${paddingLeft + 20}px` }}
                 onClick={() => handleBoardClick(board)}
               >
                 <Grid3x3 className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: board.color }} />
-                <span className="text-sm text-gray-600 flex-1 truncate">{board.name}</span>
+                <span className="text-sm ${classes.text.secondary} flex-1 truncate">{board.name}</span>
                 <button
                   onClick={(e) => handleStarToggle(e, board)}
                   className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded mr-1"
                 >
-                  <Star className={`w-3 h-3 ${board.starred ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`} />
+                  <Star className={`w-3 h-3 ${board.starred ? 'text-yellow-400 fill-yellow-400' : '${classes.text.muted}'}`} />
                 </button>
                 <ItemContextMenu
                   item={board}
                   itemType="board"
                   onAction={handleContextMenuAction}
                 />
+              </div>
+            ))}
+
+            {/* Apps in folder */}
+            {folder.apps && folder.apps.map(app => (
+              <div
+                key={app.id}
+                className={`flex items-center py-2 px-2 $${classes.hover.bg} rounded cursor-pointer group`}
+                style={{ paddingLeft: `${paddingLeft + 20}px` }}
+                onClick={() => handleAppClick(app)}
+              >
+                <Zap className="w-4 h-4 mr-2 flex-shrink-0 text-purple-600" />
+                <span className="text-sm ${classes.text.secondary} flex-1 truncate">{app.name}</span>
+                <button
+                  onClick={(e) => handleAppStarToggle(e, app)}
+                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded mr-1"
+                >
+                  <Star className={`w-3 h-3 ${app.starred ? 'text-yellow-400 fill-yellow-400' : '${classes.text.muted}'}`} />
+                </button>
               </div>
             ))}
 
@@ -365,16 +417,16 @@ export function WorkspaceSidebar({
   const renderBoard = (board: WorkspaceBoard) => (
     <div
       key={board.id}
-      className="flex items-center py-2 px-2 hover:bg-gray-100 rounded cursor-pointer group"
+      className="flex items-center py-2 px-2 ${classes.hover.bg} rounded cursor-pointer group"
       onClick={() => handleBoardClick(board)}
     >
       <Grid3x3 className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: board.color }} />
-      <span className="text-sm text-gray-600 flex-1 truncate">{board.name}</span>
+      <span className="text-sm ${classes.text.secondary} flex-1 truncate">{board.name}</span>
       <button
         onClick={(e) => handleStarToggle(e, board)}
         className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded mr-1"
       >
-        <Star className={`w-3 h-3 ${board.starred ? 'text-yellow-400 fill-yellow-400' : 'text-gray-400'}`} />
+        <Star className={`w-3 h-3 ${board.starred ? 'text-yellow-400 fill-yellow-400' : '${classes.text.muted}'}`} />
       </button>
       <ItemContextMenu
         item={board}
@@ -384,10 +436,27 @@ export function WorkspaceSidebar({
     </div>
   );
 
+  const renderApp = (app: any) => (
+    <div
+      key={app.id}
+      className="flex items-center py-2 px-2 ${classes.hover.bg} rounded cursor-pointer group"
+      onClick={() => handleAppClick(app)}
+    >
+      <Zap className="w-4 h-4 mr-2 flex-shrink-0 text-purple-600" />
+      <span className="text-sm ${classes.text.secondary} flex-1 truncate">{app.name}</span>
+      <button
+        onClick={(e) => handleAppStarToggle(e, app)}
+        className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded mr-1"
+      >
+        <Star className={`w-3 h-3 ${app.starred ? 'text-yellow-400 fill-yellow-400' : '${classes.text.muted}'}`} />
+      </button>
+    </div>
+  );
+
   return (
-    <div className="w-64 bg-white border-r border-gray-200 flex flex-col h-full">
+    <div className={`w-64 ${classes.bg.glass} border-r ${classes.border.glass} flex flex-col h-full shadow-lg`}>
       {/* Workspace Switcher Header */}
-      <div className="p-3 border-b border-gray-200">
+      <div className={`p-4 border-b ${classes.border.glass}`}>
         <WorkspaceSwitcher 
           currentWorkspace={currentWorkspace}
           onWorkspaceChange={(workspace) => {
@@ -401,44 +470,37 @@ export function WorkspaceSidebar({
       {/* Navigation */}
       <div className="flex-1 overflow-y-auto">
         {/* Quick Access */}
-        <div className="p-3 border-b border-gray-200">
+        <div className="p-4 border-b border-gray-200/50">
           <div className="space-y-1">
-            <div 
-              className="flex items-center py-2 px-2 hover:bg-gray-100 rounded cursor-pointer"
-              onClick={() => navigate('/dashboard')}
-            >
-              <Home className="w-4 h-4 mr-2 text-blue-600" />
-              <span className="text-sm font-medium text-gray-700">Home</span>
-            </div>
-            <div 
-              className="flex items-center py-2 px-2 hover:bg-gray-100 rounded cursor-pointer"
+            <div
+              className="flex items-center py-2 px-3 ${classes.hover.bg}/80 rounded-lg cursor-pointer transition-all duration-200"
               onClick={() => navigate('/my-work')}
             >
-              <Briefcase className="w-4 h-4 mr-2 text-green-600" />
-              <span className="text-sm font-medium text-gray-700">My Work</span>
+              <Home className="w-4 h-4 mr-3 text-blue-600" />
+              <span className="text-sm font-medium ${classes.text.primary}">Home</span>
             </div>
           </div>
         </div>
         
         {/* Recent - Enhanced Asana-style */}
-        <div className="p-3 border-b border-gray-200">
-          <div className="flex items-center justify-between mb-2">
+        <div className="p-4 border-b border-gray-200/50">
+          <div className="flex items-center justify-between mb-3">
             <button
               onClick={() => setRecentExpanded(!recentExpanded)}
-              className="flex items-center gap-1 hover:bg-gray-100 rounded p-1 -m-1 group"
+              className="flex items-center gap-1 ${classes.hover.bg}/80 rounded-lg p-2 -m-1 group transition-all duration-200"
             >
               <motion.div
                 animate={{ rotate: recentExpanded ? 0 : -90 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronDown className="h-3 w-3 text-gray-400 group-hover:text-gray-600" />
+                <ChevronDown className="h-3 w-3 ${classes.text.muted} group-hover:${classes.text.secondary}" />
               </motion.div>
               <Clock className="w-4 h-4 mr-1 text-orange-600" />
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider group-hover:text-gray-600">
+              <span className="text-xs font-semibold ${classes.text.muted} uppercase tracking-wider group-hover:${classes.text.secondary}">
                 Recent
               </span>
             </button>
-            <span className="text-xs text-gray-400">{recentItems.length}</span>
+            <span className="text-xs ${classes.text.muted}">{recentItems.length}</span>
           </div>
           <AnimatePresence>
             {recentExpanded && (
@@ -454,11 +516,11 @@ export function WorkspaceSidebar({
                   return (
                     <div
                       key={item.id}
-                      className="flex items-center py-1 px-2 hover:bg-gray-100 rounded cursor-pointer group"
+                      className="flex items-center py-1 px-2 ${classes.hover.bg} rounded cursor-pointer group"
                       onClick={() => navigate(item.path)}
                     >
                       <Icon className="w-3 h-3 mr-2 flex-shrink-0" style={{ color: item.color }} />
-                      <span className="text-sm text-gray-600 truncate">{item.name}</span>
+                      <span className="text-sm ${classes.text.secondary} truncate">{item.name}</span>
                     </div>
                   );
                 })}
@@ -468,24 +530,24 @@ export function WorkspaceSidebar({
         </div>
 
         {/* Favorites - Enhanced Asana-style */}
-        <div className="p-3 border-b border-gray-200">
-          <div className="flex items-center justify-between mb-2">
+        <div className="p-4 border-b border-gray-200/50">
+          <div className="flex items-center justify-between mb-3">
             <button
               onClick={() => setFavoritesExpanded(!favoritesExpanded)}
-              className="flex items-center gap-1 hover:bg-gray-100 rounded p-1 -m-1 group"
+              className="flex items-center gap-1 ${classes.hover.bg}/80 rounded-lg p-2 -m-1 group transition-all duration-200"
             >
               <motion.div
                 animate={{ rotate: favoritesExpanded ? 0 : -90 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronDown className="h-3 w-3 text-gray-400 group-hover:text-gray-600" />
+                <ChevronDown className="h-3 w-3 ${classes.text.muted} group-hover:${classes.text.secondary}" />
               </motion.div>
               <Star className="w-4 h-4 mr-1 text-yellow-400 fill-yellow-400" />
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider group-hover:text-gray-600">
+              <span className="text-xs font-semibold ${classes.text.muted} uppercase tracking-wider group-hover:${classes.text.secondary}">
                 Favorites
               </span>
             </button>
-            <span className="text-xs text-gray-400">{starredBoards.length}</span>
+            <span className="text-xs ${classes.text.muted}">{starredBoards.length}</span>
           </div>
           <AnimatePresence>
             {favoritesExpanded && (
@@ -500,16 +562,16 @@ export function WorkspaceSidebar({
                   starredBoards.slice(0, 5).map(board => (
                     <div
                       key={board.id}
-                      className="flex items-center py-1 px-2 hover:bg-gray-100 rounded cursor-pointer group"
+                      className="flex items-center py-1 px-2 ${classes.hover.bg} rounded cursor-pointer group"
                       onClick={() => handleBoardClick(board)}
                     >
                       <Grid3x3 className="w-3 h-3 mr-2 flex-shrink-0" style={{ color: board.color }} />
-                      <span className="text-sm text-gray-600 truncate flex-1">{board.name}</span>
+                      <span className="text-sm ${classes.text.secondary} truncate flex-1">{board.name}</span>
                       <Star className="h-3 w-3 text-yellow-500 flex-shrink-0" fill="currentColor" />
                     </div>
                   ))
                 ) : (
-                  <div className="text-xs text-gray-500 text-center py-4 px-2">
+                  <div className="text-xs ${classes.text.muted} text-center py-4 px-2">
                     <Star className="h-6 w-6 mx-auto mb-2 text-gray-300" />
                     <p>Star boards to access them quickly</p>
                   </div>
@@ -520,24 +582,24 @@ export function WorkspaceSidebar({
         </div>
 
         {/* Insights Section - Asana-style */}
-        <div className="p-3 border-b border-gray-200">
+        <div className="p-4 border-b border-gray-200/50">
           <div className="flex items-center justify-between mb-2">
             <button
               onClick={() => setInsightsExpanded(!insightsExpanded)}
-              className="flex items-center gap-1 hover:bg-gray-100 rounded p-1 -m-1 group"
+              className="flex items-center gap-1 ${classes.hover.bg} rounded p-1 -m-1 group"
             >
               <motion.div
                 animate={{ rotate: insightsExpanded ? 0 : -90 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronDown className="h-3 w-3 text-gray-400 group-hover:text-gray-600" />
+                <ChevronDown className="h-3 w-3 ${classes.text.muted} group-hover:${classes.text.secondary}" />
               </motion.div>
               <Zap className="w-4 h-4 mr-1 text-purple-600" />
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider group-hover:text-gray-600">
+              <span className="text-xs font-semibold ${classes.text.muted} uppercase tracking-wider group-hover:${classes.text.secondary}">
                 Insights
               </span>
             </button>
-            <span className="text-xs text-gray-400">{insightsItems.length}</span>
+            <span className="text-xs ${classes.text.muted}">{insightsItems.length}</span>
           </div>
           <AnimatePresence>
             {insightsExpanded && (
@@ -556,13 +618,13 @@ export function WorkspaceSidebar({
                       className="group cursor-pointer"
                       onClick={() => navigate(item.path)}
                     >
-                      <div className="flex items-center py-2 px-2 hover:bg-gray-100 rounded transition-colors">
+                      <div className="flex items-center py-2 px-2 ${classes.hover.bg} rounded transition-colors">
                         <Icon className={`h-4 w-4 mr-2 flex-shrink-0 ${item.color}`} />
                         <div className="flex-1">
-                          <div className="text-sm font-medium text-gray-700">{item.label}</div>
-                          <div className="text-xs text-gray-500">{item.description}</div>
+                          <div className="text-sm font-medium ${classes.text.primary}">{item.label}</div>
+                          <div className="text-xs ${classes.text.muted}">{item.description}</div>
                         </div>
-                        <ChevronRight className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <ChevronRight className="h-3 w-3 ${classes.text.muted} opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
                     </div>
                   );
@@ -573,24 +635,24 @@ export function WorkspaceSidebar({
         </div>
 
         {/* Teams Section - Asana-style */}
-        <div className="p-3 border-b border-gray-200">
+        <div className="p-4 border-b border-gray-200/50">
           <div className="flex items-center justify-between mb-2">
             <button
               onClick={() => setTeamsExpanded(!teamsExpanded)}
-              className="flex items-center gap-1 hover:bg-gray-100 rounded p-1 -m-1 group"
+              className="flex items-center gap-1 ${classes.hover.bg} rounded p-1 -m-1 group"
             >
               <motion.div
                 animate={{ rotate: teamsExpanded ? 0 : -90 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronDown className="h-3 w-3 text-gray-400 group-hover:text-gray-600" />
+                <ChevronDown className="h-3 w-3 ${classes.text.muted} group-hover:${classes.text.secondary}" />
               </motion.div>
               <Users className="w-4 h-4 mr-1 text-indigo-600" />
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider group-hover:text-gray-600">
+              <span className="text-xs font-semibold ${classes.text.muted} uppercase tracking-wider group-hover:${classes.text.secondary}">
                 Teams
               </span>
             </button>
-            <span className="text-xs text-gray-400">{teams.length}</span>
+            <span className="text-xs ${classes.text.muted}">{teams.length}</span>
           </div>
           <AnimatePresence>
             {teamsExpanded && (
@@ -607,14 +669,14 @@ export function WorkspaceSidebar({
                     className="group cursor-pointer"
                     onClick={() => setCurrentTeam(team)}
                   >
-                    <div className={`flex items-center py-2 px-2 hover:bg-gray-100 rounded transition-colors ${
+                    <div className={`flex items-center py-2 px-2 ${classes.hover.bg} rounded transition-colors ${
                       currentTeam?.id === team.id ? 'bg-blue-50 border-l-2 border-blue-500' : ''
                     }`}>
                       <div className="flex items-center gap-2 flex-1">
                         <div className="w-2 h-2 rounded-full bg-indigo-500 flex-shrink-0" />
                         <div className="flex-1">
-                          <div className="text-sm font-medium text-gray-700">{team.name}</div>
-                          <div className="text-xs text-gray-500">
+                          <div className="text-sm font-medium ${classes.text.primary}">{team.name}</div>
+                          <div className="text-xs ${classes.text.muted}">
                             {team.memberCount} member{team.memberCount !== 1 ? 's' : ''} • {team.type}
                           </div>
                         </div>
@@ -623,7 +685,7 @@ export function WorkspaceSidebar({
                         {team.visibility === 'private' && (
                           <div className="w-1.5 h-1.5 rounded-full bg-gray-400" title="Private team" />
                         )}
-                        <ChevronRight className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <ChevronRight className="h-3 w-3 ${classes.text.muted} opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
                     </div>
                   </div>
@@ -643,24 +705,24 @@ export function WorkspaceSidebar({
         </div>
 
         {/* Agents Section - Salesforce Agentforce-style */}
-        <div className="p-3 border-b border-gray-200">
+        <div className="p-4 border-b border-gray-200/50">
           <div className="flex items-center justify-between mb-2">
             <button
               onClick={() => setAgentsExpanded(!agentsExpanded)}
-              className="flex items-center gap-1 hover:bg-gray-100 rounded p-1 -m-1 group"
+              className="flex items-center gap-1 ${classes.hover.bg} rounded p-1 -m-1 group"
             >
               <motion.div
                 animate={{ rotate: agentsExpanded ? 0 : -90 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronDown className="h-3 w-3 text-gray-400 group-hover:text-gray-600" />
+                <ChevronDown className="h-3 w-3 ${classes.text.muted} group-hover:${classes.text.secondary}" />
               </motion.div>
               <Bot className="w-4 h-4 mr-1 text-emerald-600" />
-              <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider group-hover:text-gray-600">
+              <span className="text-xs font-semibold ${classes.text.muted} uppercase tracking-wider group-hover:${classes.text.secondary}">
                 Agents
               </span>
             </button>
-            <span className="text-xs text-gray-400">{getAgents().length}</span>
+            <span className="text-xs ${classes.text.muted}">{getAgents().length}</span>
           </div>
           <AnimatePresence>
             {agentsExpanded && (
@@ -676,13 +738,13 @@ export function WorkspaceSidebar({
                   className="group cursor-pointer"
                   onClick={() => navigate('/agents')}
                 >
-                  <div className="flex items-center py-2 px-2 hover:bg-gray-100 rounded transition-colors">
+                  <div className="flex items-center py-2 px-2 ${classes.hover.bg} rounded transition-colors">
                     <Activity className="h-4 w-4 mr-2 flex-shrink-0 text-emerald-600" />
                     <div className="flex-1">
-                      <div className="text-sm font-medium text-gray-700">Agent Dashboard</div>
-                      <div className="text-xs text-gray-500">Manage your AI workforce</div>
+                      <div className="text-sm font-medium ${classes.text.primary}">Agent Dashboard</div>
+                      <div className="text-xs ${classes.text.muted}">Manage your AI workforce</div>
                     </div>
-                    <ChevronRight className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <ChevronRight className="h-3 w-3 ${classes.text.muted} opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
                 </div>
 
@@ -703,9 +765,9 @@ export function WorkspaceSidebar({
                     switch (status) {
                       case 'active': return 'bg-green-100 text-green-700';
                       case 'training': return 'bg-yellow-100 text-yellow-700';
-                      case 'inactive': return 'bg-gray-100 text-gray-700';
+                      case 'inactive': return 'bg-gray-100 ${classes.text.primary}';
                       case 'error': return 'bg-red-100 text-red-700';
-                      default: return 'bg-gray-100 text-gray-700';
+                      default: return 'bg-gray-100 ${classes.text.primary}';
                     }
                   };
 
@@ -715,16 +777,16 @@ export function WorkspaceSidebar({
                       className="group cursor-pointer"
                       onClick={() => navigate(`/agents/${agent.id}`)}
                     >
-                      <div className="flex items-center py-2 px-2 hover:bg-gray-100 rounded transition-colors">
+                      <div className="flex items-center py-2 px-2 ${classes.hover.bg} rounded transition-colors">
                         <div className="flex items-center gap-2 flex-1">
                           <span className="text-sm flex-shrink-0">{getAgentIcon(agent.type)}</span>
                           <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium text-gray-700 truncate">{agent.name}</div>
+                            <div className="text-sm font-medium ${classes.text.primary} truncate">{agent.name}</div>
                             <div className="flex items-center gap-2 text-xs">
                               <span className={`px-1.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(agent.status)}`}>
                                 {agent.status}
                               </span>
-                              <span className="text-gray-500">
+                              <span className="${classes.text.muted}">
                                 {agent.metrics.currentTasks} active
                               </span>
                             </div>
@@ -741,7 +803,7 @@ export function WorkspaceSidebar({
                               className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded transition-opacity"
                               title="Pause agent"
                             >
-                              <Pause className="h-3 w-3 text-gray-500" />
+                              <Pause className="h-3 w-3 ${classes.text.muted}" />
                             </button>
                           ) : (
                             <button
@@ -752,10 +814,10 @@ export function WorkspaceSidebar({
                               className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded transition-opacity"
                               title="Start agent"
                             >
-                              <Play className="h-3 w-3 text-gray-500" />
+                              <Play className="h-3 w-3 ${classes.text.muted}" />
                             </button>
                           )}
-                          <ChevronRight className="h-3 w-3 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <ChevronRight className="h-3 w-3 ${classes.text.muted} opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                       </div>
                     </div>
@@ -796,10 +858,11 @@ export function WorkspaceSidebar({
         </div>
 
         {/* Add Items Dropdown */}
-        <div className="p-3 border-b border-gray-200">
-          <AddItemDropdown 
+        <div className="p-4 border-b border-gray-200/50">
+          <AddItemDropdown
             onCreateItem={handleCreateItem}
             currentFolder={targetFolder?.name}
+            onAddApp={handleAddApp}
           />
         </div>
 
@@ -810,16 +873,16 @@ export function WorkspaceSidebar({
             <div className="flex items-center justify-between mb-3">
               <button
                 onClick={() => setWorkspaceItemsExpanded(!workspaceItemsExpanded)}
-                className="flex items-center gap-1 hover:bg-gray-100 rounded p-1 -m-1 group flex-1"
+                className="flex items-center gap-1 ${classes.hover.bg} rounded p-1 -m-1 group flex-1"
               >
                 <motion.div
                   animate={{ rotate: workspaceItemsExpanded ? 0 : -90 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <ChevronDown className="h-3 w-3 text-gray-400 group-hover:text-gray-600" />
+                  <ChevronDown className="h-3 w-3 ${classes.text.muted} group-hover:${classes.text.secondary}" />
                 </motion.div>
                 <Building className="w-4 h-4 mr-1 text-blue-600" />
-                <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">{currentWorkspace.name}</span>
+                <span className="text-sm font-medium ${classes.text.primary} group-hover:text-gray-900">{currentWorkspace.name}</span>
               </button>
             </div>
             <AnimatePresence>
@@ -839,6 +902,12 @@ export function WorkspaceSidebar({
                     .filter(board => !board.folderId)
                     .map(board => renderBoard(board))
                   }
+
+                  {/* Root level apps */}
+                  {currentWorkspace.apps
+                    ?.filter(app => !app.folderId)
+                    ?.map(app => renderApp(app))
+                  }
                 </motion.div>
               )}
             </AnimatePresence>
@@ -847,16 +916,16 @@ export function WorkspaceSidebar({
       </div>
 
       {/* Footer */}
-      <div className="p-3 border-t border-gray-200">
+      <div className="p-4 border-t border-gray-200/50 bg-white/50">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
               <span className="text-white text-sm font-medium">U</span>
             </div>
-            <span className="text-sm font-medium text-gray-700">User</span>
+            <span className="text-sm font-medium ${classes.text.primary}">User</span>
           </div>
-          <button className="p-1 hover:bg-gray-100 rounded">
-            <Settings className="w-4 h-4 text-gray-400" />
+          <button className="p-1 ${classes.hover.bg} rounded">
+            <Settings className="w-4 h-4 ${classes.text.muted}" />
           </button>
         </div>
       </div>

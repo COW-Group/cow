@@ -73,7 +73,11 @@
       "Bash(grep:*)",
       "WebFetch(domain:animagraffs.com)",
       "Bash(git fetch:*)",
-      "WebFetch(domain:www.burberry.com)"
+      "WebFetch(domain:www.burberry.com)",
+      "WebFetch(domain:userpilot.com)",
+      "WebFetch(domain:whatfix.com)",
+      "WebFetch(domain:userguiding.com)",
+      "Bash(git checkout:*)"
     ],
     "deny": [],
     "ask": []

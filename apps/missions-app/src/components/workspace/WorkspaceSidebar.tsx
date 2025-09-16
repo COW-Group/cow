@@ -64,7 +64,7 @@ export function WorkspaceSidebar({
   const { teams, currentTeam, setCurrentTeam } = useTeamStore();
   const { getAgents, getAgentsByStatus, startAgent, stopAgent } = useAgentStore();
   const { initializeApps } = useMaunAppsStore();
-  const { openModal } = useAppStore();
+  const { openModal, currentUser } = useAppStore();
   const [workspaces, setWorkspaces] = useState<Workspace[]>([]);
   const [currentWorkspace, setCurrentWorkspace] = useState<Workspace | null>(null);
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
@@ -475,10 +475,12 @@ export function WorkspaceSidebar({
         <div className="py-2">
           <div
             className="flex items-center py-3 px-3 hover:bg-white/05 transition-colors rounded-xl cursor-pointer mb-2"
-            onClick={() => navigate('/my-work')}
+            onClick={() => navigate('/app/my-office')}
           >
             <Home className="w-5 h-5 mr-3 icon-adaptive-primary" />
-            <span className="text-sm font-semibold text-adaptive-primary">My Office</span>
+            <span className="text-sm font-semibold text-adaptive-primary">
+              {currentUser?.fullName.split(' ')[0] || 'My'} Office
+            </span>
           </div>
         </div>
         

@@ -120,11 +120,11 @@ export function UserTypeSelector({ onUserTypeSelect, selectedType, onBack }: Use
             color: '#1f2937'
           }}
         >
-          Choose Your Investment Path
+          Select Your Investor Type
         </h2>
         <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-          Our platform adapts to your investment sophistication level and regulatory requirements,
-          delivering tailored experiences for every type of precious metals investor.
+          Choose the category that best describes your role and investment approach.
+          This determines your platform experience and available features.
         </p>
       </div>
 

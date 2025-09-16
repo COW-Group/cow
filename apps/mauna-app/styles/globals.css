@@ -1,0 +1,327 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  /* Added html, body selector */
+  height: 100%; /* Ensure html and body take full height */
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* cream-25 */
+    --foreground: 222.2 84% 4.9%; /* ink-950 */
+    --card: 0 0% 100%; /* cream-25 */
+    --card-foreground: 222.2 84% 4.9%; /* ink-950 */
+    --popover: 0 0% 100%; /* cream-25 */
+    --popover-foreground: 222.2 84% 4.9%; /* ink-950 */
+    --primary: 222.2 47.4% 11.2%; /* logo-blue */
+    --primary-foreground: 210 40% 98%; /* cream-25 */
+    --secondary: 210 40% 96.1%; /* sage-900 */
+    --secondary-foreground: 222.2 47.4% 11.2%; /* cream-25 */
+    --muted: 210 40% 96.1%; /* ink-50 */
+    --muted-foreground: 215.4 16.3% 46.9%; /* ink-700 */
+    --accent: 210 40% 96.1%; /* ink-50 */
+    --accent-foreground: 222.2 47.4% 11.2%; /* ink-950 */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 214.3 31.8% 91.4%; /* brushed-silver */
+    --input: 214.3 31.8% 91.4%; /* brushed-silver */
+    --ring: 222.2 84% 4.9%; /* logo-blue */
+    --radius: 0.5rem;
+
+    /* Custom Brand Colors */
+    --cream-25: 39 100% 98%; /* #fefdfb */
+    --cream-50: 39 100% 96%; /* #fefdf9 */
+    --cream-100: 39 100% 94%; /* #fefdf7 */
+    --cream-200: 39 100% 88%; /* #fefdf3 */
+    --cream-300: 39 100% 82%; /* #fefde6 */
+    --cream-400: 39 100% 76%; /* #fefdcc */
+    --cream-500: 39 100% 70%; /* #fefdb2 */
+    --cream-600: 39 100% 64%; /* #fefd99 */
+    --cream-700: 39 100% 58%; /* #fefd7f */
+    --cream-800: 39 100% 52%; /* #fefd66 */
+    --cream-900: 39 100% 46%; /* #745132 */
+    --ink-50: 210 10% 96%; /* #f8fafc */
+    --ink-100: 210 10% 90%; /* #f0f4f8 */
+    --ink-200: 210 10% 80%; /* #e6eaf0 */
+    --ink-300: 210 10% 70%; /* #ccd3db */
+    --ink-400: 210 10% 60%; /* #b3bac4 */
+    --ink-500: 210 10% 50%; /* #99a1ac */
+    --ink-600: 210 10% 40%; /* #808893 */
+    --ink-700: 210 10% 30%; /* #666f7b */
+    --ink-800: 210 10% 20%; /* #4d5662 */
+    --ink-900: 210 10% 10%; /* #333d49 */
+    --ink-950: 210 10% 5%; /* #020617 */
+    --logo-blue: 200 80% 50%; /* #0066ff */
+    --soft-gold: 40 80% 70%; /* #d4af37 */
+    --brushed-silver: 210 15% 75%; /* #e2e8f0 */
+    --sage-50: 90 20% 95%; /* #f0fdf4 */
+    --sage-100: 90 20% 90%; /* #e6f9eb */
+    --sage-200: 90 20% 80%; /* #ccf2d6 */
+    --sage-300: 90 20% 70%; /* #99e6b2 */
+    --sage-400: 90 20% 60%; /* #66d98e */
+    --sage-500: 90 20% 50%; /* #33cc6b */
+    --sage-600: 90 20% 40%; /* #00bf47 */
+    --sage-700: 90 20% 30%; /* #009939 */
+    --sage-800: 90 20% 20%; /* #00732b */
+    --sage-900: 90 20% 10%; /* #14532d */
+    --moss-50: 120 20% 95%; /* #f0fdfa */
+    --moss-100: 120 20% 90%; /* #e6f9f5 */
+    --moss-200: 120 20% 80%; /* #ccf2ec */
+    --moss-300: 120 20% 70%; /* #99e6d9 */
+    --moss-400: 120 20% 60%; /* #66d9c6 */
+    --moss-500: 120 20% 50%; /* #33ccb3 */
+    --moss-600: 120 20% 40%; /* #00bf9f */
+    --moss-700: 120 20% 30%; /* #00997f */
+    --moss-800: 120 20% 20%; /* #007360 */
+    --moss-900: 120 20% 10%; /* #047857 */
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%; /* ink-950 */
+    --foreground: 210 40% 98%; /* cream-25 */
+    --card: 222.2 84% 4.9%; /* ink-950 */
+    --card-foreground: 210 40% 98%; /* cream-25 */
+    --popover: 222.2 84% 4.9%; /* ink-950 */
+    --popover-foreground: 210 40% 98%; /* cream-25 */
+    --primary: 210 40% 98%; /* logo-blue */
+    --primary-foreground: 222.2 47.4% 11.2%; /* cream-25 */
+    --secondary: 217.2 32.6% 17.5%; /* sage-900 */
+    --secondary-foreground: 210 40% 98%; /* cream-25 */
+    --muted: 217.2 32.6% 17.5%; /* ink-900 */
+    --muted-foreground: 215 20.2% 65.1%; /* ink-400 */
+    --accent: 217.2 32.6% 17.5%; /* ink-900 */
+    --accent-foreground: 210 40% 98%; /* cream-25 */
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%; /* ink-800 */
+    --input: 217.2 32.6% 17.5%; /* ink-800 */
+    --ring: 212.7 26.8% 83.9%; /* logo-blue */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-inter; /* Default to Inter */
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-montserrat; /* Headings use Montserrat */
+  }
+}
+
+/* Import fonts */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Caveat:wght@400;700&family=Lora:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700&display=swap");
+
+/* Font family utilities */
+.font-inter {
+  font-family: "Inter", sans-serif;
+}
+
+.font-caveat {
+  font-family: "Caveat", cursive;
+}
+
+.font-lora {
+  font-family: "Lora", serif;
+}
+
+.font-montserrat {
+  font-family: "Montserrat", sans-serif;
+}
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--cream-100)); /* Light track for light mode */
+  border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: hsl(var(--ink-800)); /* Dark track for dark mode */
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--sage-400)); /* Sage thumb */
+  border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: hsl(var(--moss-400)); /* Moss thumb for dark mode */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--sage-500));
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--moss-500));
+}
+
+/* Custom Typography Classes */
+.zen-heading {
+  font-weight: 300;
+  letter-spacing: 0.025em;
+}
+
+/* Glassmorphism Effect */
+.glassmorphism {
+  background-color: hsla(var(--cream-25), 0.1); /* 10% opacity */
+  backdrop-filter: blur(10px);
+  border: 1px solid hsla(var(--brushed-silver), 0.2); /* 20% opacity */
+}
+
+.dark .glassmorphism {
+  background-color: hsla(var(--ink-950), 0.1); /* 10% opacity */
+  border: 1px solid hsla(var(--ink-800), 0.2); /* 20% opacity */
+}
+
+/* Nature Backdrop for Dashboard */
+.nature-backdrop {
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  transition: background-image 0.5s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.nature-backdrop::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: hsla(var(--cream-25), 0.2); /* 20% opacity overlay */
+  z-index: 1;
+}
+
+.dark .nature-backdrop::before {
+  background-color: hsla(var(--ink-950), 0.15); /* 15% opacity overlay for dark mode */
+}
+
+.nature-backdrop > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Custom Button Styles */
+.zen-button-primary {
+  @apply bg-logo-blue text-cream-25 border border-soft-gold hover:bg-logo-blue/90 hover:shadow-lg transition-all duration-300 font-inter;
+}
+
+.zen-button-secondary {
+  @apply border border-sage-400 text-sage-900 bg-transparent hover:bg-sage-50 hover:text-sage-900 dark:border-moss-400 dark:text-moss-400 dark:hover:bg-moss-900 dark:hover:text-cream-25 transition-colors duration-300 font-inter;
+}
+
+.zen-card {
+  @apply glassmorphism border-brushed-silver/20 dark:border-ink-800/20 shadow-lg hover:shadow-xl transition-shadow duration-300;
+}
+
+.sunlight-hover:hover {
+  box-shadow: 0 8px 30px hsla(var(--sage-400), 0.2);
+}
+
+.dark .sunlight-hover:hover {
+  box-shadow: 0 8px 30px hsla(var(--moss-400), 0.2);
+}
+
+.timer-zen-glow {
+  animation: sunlight-glow 4s ease-in-out infinite;
+}
+
+@keyframes sunlight-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 20px hsla(var(--logo-blue), 0.3);
+  }
+  50% {
+    box-shadow: 0 0 40px hsla(var(--logo-blue), 0.5), 0 0 60px hsla(var(--soft-gold), 0.2);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out;
+}
+
+@keyframes rotate-toggle {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}
+
+.animate-rotate-toggle {
+  animation: rotate-toggle 0.3s ease-in-out;
+}
+
+/* Responsive Design Enhancements */
+@media (max-width: 768px) {
+  .nature-backdrop {
+    background-attachment: scroll; /* Better performance on mobile */
+  }
+}
+
+/* Focus states for accessibility */
+.zen-button-primary:focus-visible,
+.zen-button-secondary:focus-visible {
+  @apply ring-2 ring-logo-blue ring-offset-2;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .glassmorphism {
+    background-color: hsl(var(--background));
+    border: 2px solid hsl(var(--border));
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .timer-zen-glow,
+  .animate-fade-in,
+  .animate-rotate-toggle {
+    animation: none;
+  }
+
+  .nature-backdrop {
+    transition: none;
+  }
+}

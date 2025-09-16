@@ -16,6 +16,7 @@ interface MyWorkHeaderProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onNewItem: () => void;
+  title?: string;
 }
 
 const dateViewLabels: Record<DateViewOption, string> = {
@@ -32,7 +33,8 @@ export function MyWorkHeader({
   onDateViewChange,
   searchQuery,
   onSearchChange,
-  onNewItem
+  onNewItem,
+  title = "My Work"
 }: MyWorkHeaderProps) {
   const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
 
@@ -41,7 +43,7 @@ export function MyWorkHeader({
       {/* Title and Circle Icon */}
       <div className="flex items-center mb-6">
         <h1 className="text-2xl font-bold text-adaptive-primary mr-3">
-          My Work
+          {title}
         </h1>
         <Circle className="w-4 h-4 icon-adaptive-muted" />
       </div>

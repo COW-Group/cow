@@ -57,7 +57,7 @@ export function MainContent({
       <div className="flex items-center justify-between mb-8">
         <div className="flex items-center gap-3">
           <h1 className="text-2xl font-bold text-white">
-            My Work
+            My Office
           </h1>
           <Circle className="h-6 w-6 text-gray-400" />
         </div>

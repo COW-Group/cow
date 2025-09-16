@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run dev:*)",
+      "Read(//Users/likhitha/Projects/cow/**)",
+      "Bash(npx nx run:*)",
+      "Bash(npm install)",
+      "Bash(curl:*)",
+      "WebFetch(domain:feelingswheel.app)",
+      "WebSearch",
+      "WebFetch(domain:atlasofemotions.org)",
+      "Bash(npm install:*)",
+      "WebFetch(domain:blog.maximeheckel.com)",
+      "Bash(npx tsc:*)",
+      "Bash(npx next build:*)",
+      "Bash(npx eslint:*)",
+      "Bash(node:*)",
+      "Bash(timeout 10s npm run dev)",
+      "Read(//Users/likhitha/Projects/**)",
+      "Bash(npx nx:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

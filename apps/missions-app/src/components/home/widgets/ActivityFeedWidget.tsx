@@ -215,7 +215,7 @@ export function ActivityFeedWidget({
       {/* View All Button */}
       <div className="mt-4 pt-4 border-t border-gray-200">
         <button
-          onClick={() => navigate('/my-work')}
+          onClick={() => navigate('/app/my-office')}
           className="w-full text-sm text-blue-600 hover:text-blue-700 font-medium py-2 px-3 bg-blue-50 hover:bg-blue-100 rounded-md transition-colors flex items-center justify-center gap-1"
         >
           <Eye className="w-3 h-3" />

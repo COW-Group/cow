@@ -39,6 +39,7 @@ import {
   Award
 } from 'lucide-react';
 import { useAppStore, useWorkspaceStore } from '@/store';
+import { useBoardStore } from '../../store/board.store';
 import { Button } from '../ui/Button';
 import { ManageWorkspacesModal } from '../modals/ManageWorkspacesModal';
 
@@ -58,6 +59,7 @@ export function Sidebar() {
   } = useAppStore();
   
   const { workspaces } = useWorkspaceStore();
+  const { boards, fetchBoards } = useBoardStore();
   
   const [workspacesExpanded, setWorkspacesExpanded] = useState(true);
   const [selectedWorkspace, setSelectedWorkspace] = useState('Gold CRM');
@@ -80,12 +82,28 @@ export function Sidebar() {
   const contextMenuRef = useRef<HTMLDivElement>(null);
 
 
-  // Recent items
-  const recentItems = [
-    { id: 'recent-board-1', label: 'Leads Board', icon: Grid3x3, type: 'board', workspace: 'Gold CRM' },
-    { id: 'recent-board-2', label: 'Sales Pipeline', icon: BarChart3, type: 'dashboard', workspace: 'Gold CRM' },
-    { id: 'recent-doc-1', label: 'Q4 Strategy Doc', icon: FileText, type: 'doc', workspace: 'Gold CRM' },
-  ];
+  // Recent items from actual boards
+  const recentItems = React.useMemo(() => {
+    const recentBoards = boards
+      .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+      .slice(0, 3)
+      .map(board => ({
+        id: board.id,
+        label: board.title,
+        icon: Grid3x3,
+        type: 'board' as const,
+        workspace: 'Gold CRM',
+        path: `/boards/${board.id}`
+      }));
+
+    // Add mock items if we have fewer than 3 boards
+    const mockItems = [
+      { id: 'recent-board-2', label: 'Sales Pipeline', icon: BarChart3, type: 'dashboard' as const, workspace: 'Gold CRM' },
+      { id: 'recent-doc-1', label: 'Q4 Strategy Doc', icon: FileText, type: 'doc' as const, workspace: 'Gold CRM' },
+    ];
+
+    return [...recentBoards, ...mockItems].slice(0, 3);
+  }, [boards]);
 
   // Favorite items with enhanced data
   const favoriteItems = [
@@ -142,36 +160,53 @@ export function Sidebar() {
     }));
   };
 
-  // CRM-specific navigation items with proper structure
-  const crmWorkspaceStructure = [
-    {
-      id: 'main-workspace',
-      label: 'Main Workspace',
-      type: 'folder',
-      icon: Folder,
-      children: [
-        { id: 'leads', label: 'Leads', icon: Grid3x3, type: 'board', count: 12 },
-        { id: 'deals', label: 'Deals', icon: Grid3x3, type: 'board', count: 8 },
-        { id: 'contacts', label: 'Contacts', icon: Grid3x3, type: 'board', count: 156 },
-        { id: 'accounts', label: 'Accounts', icon: Grid3x3, type: 'board', count: 24 },
-      ]
-    },
-    {
-      id: 'reports-folder',
-      label: 'Reports & Dashboards',
-      type: 'folder',
-      icon: Folder,
-      children: [
-        { id: 'sales-dashboard', label: 'Sales Dashboard', icon: BarChart3, type: 'dashboard' },
-        { id: 'performance-report', label: 'Performance Report', icon: PieChart, type: 'report' },
-      ]
-    },
-    { id: 'activities', label: 'Activities', icon: Activity, type: 'board', count: 3 },
-    { id: 'email-template', label: 'Email Template', icon: Mail, type: 'doc' },
-  ];
+  // CRM-specific navigation items with real boards
+  const crmWorkspaceStructure = React.useMemo(() => {
+    const userBoards = boards.map(board => ({
+      id: board.id,
+      label: board.title,
+      icon: Grid3x3,
+      type: 'board' as const,
+      path: `/boards/${board.id}`,
+      count: board.groups?.reduce((total, group) => total + (group.tasks?.length || 0), 0) || 0
+    }));
+
+    const mainWorkspaceChildren = [
+      ...userBoards,
+      // Add default items if no boards exist
+      ...(userBoards.length === 0 ? [
+        { id: 'leads', label: 'Leads', icon: Grid3x3, type: 'board' as const, count: 12 },
+        { id: 'deals', label: 'Deals', icon: Grid3x3, type: 'board' as const, count: 8 },
+        { id: 'contacts', label: 'Contacts', icon: Grid3x3, type: 'board' as const, count: 156 },
+        { id: 'accounts', label: 'Accounts', icon: Grid3x3, type: 'board' as const, count: 24 },
+      ] : [])
+    ];
+
+    return [
+      {
+        id: 'main-workspace',
+        label: 'Main Workspace',
+        type: 'folder',
+        icon: Folder,
+        children: mainWorkspaceChildren
+      },
+      {
+        id: 'reports-folder',
+        label: 'Reports & Dashboards',
+        type: 'folder',
+        icon: Folder,
+        children: [
+          { id: 'sales-dashboard', label: 'Sales Dashboard', icon: BarChart3, type: 'dashboard' },
+          { id: 'performance-report', label: 'Performance Report', icon: PieChart, type: 'report' },
+        ]
+      },
+      { id: 'activities', label: 'Activities', icon: Activity, type: 'board', count: 3 },
+      { id: 'email-template', label: 'Email Template', icon: Mail, type: 'doc' },
+    ];
+  }, [boards]);
 
   const mainNavItems = [
-    { id: 'home', label: 'Home', icon: Home, path: '/dashboard' },
+    { id: 'home', label: 'My Office', icon: Home, path: '/my-office' },
     { id: 'my-work', label: 'My work', icon: Briefcase, path: '/my-work' },
     { id: 'more', label: 'More', icon: MoreHorizontal, path: '/more' },
   ];
@@ -243,6 +278,11 @@ export function Sidebar() {
     e.stopPropagation();
     setShowWorkspaceContextMenu(workspaceId);
   };
+
+  // Fetch boards on component mount
+  useEffect(() => {
+    fetchBoards();
+  }, [fetchBoards]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -354,6 +394,26 @@ export function Sidebar() {
             <div className="space-y-1">
               {recentItems.map((item) => {
                 const Icon = item.icon;
+
+                if (item.path) {
+                  return (
+                    <NavLink
+                      key={item.id}
+                      to={item.path}
+                      className={({ isActive }) =>
+                        `flex items-center gap-2 px-2 py-1.5 text-sm rounded transition-colors ${
+                          isActive
+                            ? 'bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                        }`
+                      }
+                    >
+                      <Icon className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                      <span className="truncate">{item.label}</span>
+                    </NavLink>
+                  );
+                }
+
                 return (
                   <button
                     key={item.id}
@@ -792,6 +852,31 @@ export function Sidebar() {
                             >
                               {item.children.map((child) => {
                                 const ChildIcon = child.icon;
+
+                                if (child.path) {
+                                  return (
+                                    <NavLink
+                                      key={child.id}
+                                      to={child.path}
+                                      className={({ isActive }) =>
+                                        `flex items-center gap-2 px-2 py-1.5 text-sm rounded transition-colors ${
+                                          isActive
+                                            ? 'bg-blue-50 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
+                                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                                        }`
+                                      }
+                                    >
+                                      <ChildIcon className="h-4 w-4 text-gray-500 flex-shrink-0" />
+                                      <span className="truncate">{child.label}</span>
+                                      {child.count !== undefined && (
+                                        <span className="ml-auto text-xs text-gray-500 bg-gray-100 dark:bg-gray-700 px-1.5 py-0.5 rounded">
+                                          {child.count}
+                                        </span>
+                                      )}
+                                    </NavLink>
+                                  );
+                                }
+
                                 return (
                                   <button
                                     key={child.id}

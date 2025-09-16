@@ -26,16 +26,16 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
   };
 
   const handleSearchClick = () => {
-    // For now, navigate to my-work with search focus
-    navigate('/my-work');
+    // Navigate to my-office with search focus
+    navigate('/app/my-office');
   };
 
   const handleHelpClick = () => {
-    navigate('/help');
+    navigate('/app/help');
   };
 
   const handleSettingsClick = () => {
-    console.log('Settings clicked'); // Can navigate to settings page when created
+    navigate('/app/settings');
   };
 
   const handleMoreClick = () => {
@@ -139,13 +139,32 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
                   <p className={`text-sm font-medium ${classes.text.primary}`}>Likhitha Palaypu</p>
                   <p className={`text-xs ${classes.text.muted}`}>likhitha@example.com</p>
                 </div>
-                <button className={`w-full px-4 py-2 text-left text-sm ${classes.text.muted} ${classes.hover.card} ${classes.hover.accent}`}>
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    navigate('/app/settings');
+                  }}
+                  className={`w-full px-4 py-2 text-left text-sm ${classes.text.muted} ${classes.hover.card} ${classes.hover.accent}`}
+                >
                   Profile Settings
                 </button>
-                <button className={`w-full px-4 py-2 text-left text-sm ${classes.text.muted} ${classes.hover.card} ${classes.hover.accent}`}>
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    navigate('/app/settings');
+                  }}
+                  className={`w-full px-4 py-2 text-left text-sm ${classes.text.muted} ${classes.hover.card} ${classes.hover.accent}`}
+                >
                   Account Settings
                 </button>
-                <button className={`w-full px-4 py-2 text-left text-sm ${classes.text.muted} ${classes.hover.card} ${classes.hover.accent}`}>
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    // Sign out functionality - navigate to home
+                    navigate('/');
+                  }}
+                  className={`w-full px-4 py-2 text-left text-sm ${classes.text.muted} ${classes.hover.card} ${classes.hover.accent}`}
+                >
                   Sign Out
                 </button>
               </div>

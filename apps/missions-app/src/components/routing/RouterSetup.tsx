@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { RootLayout } from '../layout/RootLayout';
 import { PublicLayout } from '../layout/PublicLayout';
 import { LandingPage } from '../../pages/LandingPage';
-import { MyWork } from '../../pages/MyWork';
+import { MyOffice } from '../../pages/MyOffice';
 import { BoardDetailPage } from '../../pages/BoardDetailPage';
 import { LatestBoard } from '../../pages/LatestBoard';
 import { Goals } from '../../pages/Goals';
@@ -18,6 +18,8 @@ import { SimpleMondayBoard } from '../board/SimpleMondayBoard';
 import { FlexibleBoard } from '../board/FlexibleBoard';
 import { InsightsPage } from '../../pages/insights/InsightsPage';
 import { AgentsPage } from '../../pages/AgentsPage';
+import { Settings } from '../../pages/Settings';
+import { HelpCenter } from '../../pages/HelpCenter';
 
 
 export function RouterSetup() {
@@ -31,8 +33,8 @@ export function RouterSetup() {
       {/* App routes with full layout */}
       <Route path="/app" element={<RootLayout />}>
         {/* Main pages */}
-        <Route index element={<Navigate to="my-work" replace />} />
-        <Route path="my-work" element={<MyWork />} />
+        <Route index element={<Navigate to="my-office" replace />} />
+        <Route path="my-office" element={<MyOffice />} />
 
         {/* Mission routes */}
         <Route path="missions" element={<MissionsDashboard />} />
@@ -70,11 +72,13 @@ export function RouterSetup() {
         <Route path="teams" element={<div className="p-6"><h1 className="text-2xl font-bold">Teams - Coming Soon</h1></div>} />
         <Route path="templates" element={<div className="p-6"><h1 className="text-2xl font-bold">Templates - Coming Soon</h1></div>} />
         <Route path="upgrade" element={<div className="p-6"><h1 className="text-2xl font-bold">Upgrade - Coming Soon</h1></div>} />
-        <Route path="help" element={<div className="p-6"><h1 className="text-2xl font-bold">Help Center - Coming Soon</h1></div>} />
+        <Route path="help" element={<HelpCenter />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
 
       {/* Legacy routes - redirect to app */}
-      <Route path="/my-work" element={<Navigate to="/app/my-work" replace />} />
+      <Route path="/my-work" element={<Navigate to="/app/my-office" replace />} />
+      <Route path="/my-office" element={<Navigate to="/app/my-office" replace />} />
       <Route path="/boards/*" element={<Navigate to="/app/boards" replace />} />
       <Route path="/missions/*" element={<Navigate to="/app/missions" replace />} />
       <Route path="/insights/*" element={<Navigate to="/app/insights" replace />} />

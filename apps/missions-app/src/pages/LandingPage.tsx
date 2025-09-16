@@ -180,17 +180,17 @@ export function LandingPage() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setShowLoginModal(false);
-    window.location.href = '/app/my-work';
+    window.location.href = '/app/my-office';
   };
 
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
     setShowSignUpModal(false);
-    window.location.href = '/app/my-work';
+    window.location.href = '/app/my-office';
   };
 
   const handleDemoLogin = () => {
-    window.location.href = '/app/my-work';
+    window.location.href = '/app/my-office';
   };
 
   return (
@@ -754,7 +754,7 @@ export function LandingPage() {
                   id="email"
                   value={loginData.email}
                   onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   placeholder="your@email.com"
                   required
                 />
@@ -769,7 +769,7 @@ export function LandingPage() {
                   id="password"
                   value={loginData.password}
                   onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   placeholder="••••••••"
                   required
                 />
@@ -837,7 +837,7 @@ export function LandingPage() {
                   id="name"
                   value={signUpData.name}
                   onChange={(e) => setSignUpData({ ...signUpData, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   placeholder="John Doe"
                   required
                 />
@@ -852,7 +852,7 @@ export function LandingPage() {
                   id="signup-email"
                   value={signUpData.email}
                   onChange={(e) => setSignUpData({ ...signUpData, email: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   placeholder="john@company.com"
                   required
                 />
@@ -867,7 +867,7 @@ export function LandingPage() {
                   id="company"
                   value={signUpData.company}
                   onChange={(e) => setSignUpData({ ...signUpData, company: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   placeholder="Your Company"
                 />
               </div>
@@ -881,7 +881,7 @@ export function LandingPage() {
                   id="signup-password"
                   value={signUpData.password}
                   onChange={(e) => setSignUpData({ ...signUpData, password: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
                   placeholder="••••••••"
                   required
                 />

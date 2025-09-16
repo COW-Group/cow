@@ -45,6 +45,7 @@ import { useAgentStore } from '../../store/agent.store';
 import { useMaunAppsStore } from '../../store/maun-apps.store';
 import { useAppStore } from '../../store';
 import { useAppTheme } from '../../hooks/useAppTheme';
+import { useAdaptiveColors } from '../../hooks/useAdaptiveColors';
 
 interface WorkspaceSidebarProps {
   currentWorkspaceId?: string;
@@ -59,6 +60,7 @@ export function WorkspaceSidebar({
 }: WorkspaceSidebarProps) {
   const navigate = useNavigate();
   const { classes } = useAppTheme();
+  const { colors, backgroundBrightness } = useAdaptiveColors();
   const { teams, currentTeam, setCurrentTeam } = useTeamStore();
   const { getAgents, getAgentsByStatus, startAgent, stopAgent } = useAgentStore();
   const { initializeApps } = useMaunAppsStore();
@@ -87,7 +89,7 @@ export function WorkspaceSidebar({
       icon: BarChart3, 
       path: '/insights/reporting',
       description: 'Track progress and analytics',
-      color: 'text-blue-600'
+      color: 'icon-adaptive-secondary'
     },
     { 
       id: 'portfolios', 
@@ -95,7 +97,7 @@ export function WorkspaceSidebar({
       icon: Briefcase, 
       path: '/insights/portfolios',
       description: 'Manage project portfolios',
-      color: 'text-green-600'
+      color: 'icon-adaptive-secondary'
     },
     { 
       id: 'goals', 
@@ -103,7 +105,7 @@ export function WorkspaceSidebar({
       icon: Target, 
       path: '/insights/goals',
       description: 'Set and track OKRs',
-      color: 'text-purple-600'
+      color: 'icon-adaptive-secondary'
     }
   ];
   
@@ -336,22 +338,22 @@ export function WorkspaceSidebar({
       <div key={folder.id}>
         {/* Folder Header */}
         <div
-          className={`flex items-center py-2 px-2 $${classes.hover.bg} rounded cursor-pointer group`}
+          className={`flex items-center py-2 px-2 $hover:bg-white/05 transition-colors rounded cursor-pointer group`}
           style={{ paddingLeft: `${paddingLeft}px` }}
           onClick={() => handleFolderToggle(folder.id)}
         >
           <div className="flex items-center flex-1 min-w-0">
             {isExpanded ? (
-              <ChevronDown className="w-4 h-4 ${classes.text.muted} mr-1 flex-shrink-0" />
+              <ChevronDown className="w-4 h-4 icon-adaptive-muted mr-1 flex-shrink-0" />
             ) : (
-              <ChevronRight className="w-4 h-4 ${classes.text.muted} mr-1 flex-shrink-0" />
+              <ChevronRight className="w-4 h-4 icon-adaptive-muted mr-1 flex-shrink-0" />
             )}
             {isExpanded ? (
               <FolderOpen className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: folder.color }} />
             ) : (
               <Folder className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: folder.color }} />
             )}
-            <span className="text-sm font-medium ${classes.text.primary} truncate">{folder.name}</span>
+            <span className="text-sm font-medium text-adaptive-primary truncate">{folder.name}</span>
           </div>
           <ItemContextMenu
             item={folder}
@@ -367,17 +369,17 @@ export function WorkspaceSidebar({
             {folder.boards.map(board => (
               <div
                 key={board.id}
-                className={`flex items-center py-2 px-2 $${classes.hover.bg} rounded cursor-pointer group`}
+                className={`flex items-center py-2 px-2 $hover:bg-white/05 transition-colors rounded cursor-pointer group`}
                 style={{ paddingLeft: `${paddingLeft + 20}px` }}
                 onClick={() => handleBoardClick(board)}
               >
                 <Grid3x3 className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: board.color }} />
-                <span className="text-sm ${classes.text.secondary} flex-1 truncate">{board.name}</span>
+                <span className="text-sm text-adaptive-secondary flex-1 truncate">{board.name}</span>
                 <button
                   onClick={(e) => handleStarToggle(e, board)}
-                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded mr-1"
+                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-white/08 transition-colors rounded mr-1"
                 >
-                  <Star className={`w-3 h-3 ${board.starred ? 'text-yellow-400 fill-yellow-400' : '${classes.text.muted}'}`} />
+                  <Star className={`w-3 h-3 ${board.starred ? 'icon-adaptive-secondary fill-white/30' : 'icon-adaptive-muted'}`} />
                 </button>
                 <ItemContextMenu
                   item={board}
@@ -391,17 +393,17 @@ export function WorkspaceSidebar({
             {folder.apps && folder.apps.map(app => (
               <div
                 key={app.id}
-                className={`flex items-center py-2 px-2 $${classes.hover.bg} rounded cursor-pointer group`}
+                className={`flex items-center py-2 px-2 $hover:bg-white/05 transition-colors rounded cursor-pointer group`}
                 style={{ paddingLeft: `${paddingLeft + 20}px` }}
                 onClick={() => handleAppClick(app)}
               >
-                <Zap className="w-4 h-4 mr-2 flex-shrink-0 text-purple-600" />
-                <span className="text-sm ${classes.text.secondary} flex-1 truncate">{app.name}</span>
+                <Zap className="w-4 h-4 mr-2 flex-shrink-0 icon-adaptive-secondary" />
+                <span className="text-sm text-adaptive-secondary flex-1 truncate">{app.name}</span>
                 <button
                   onClick={(e) => handleAppStarToggle(e, app)}
-                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded mr-1"
+                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-white/08 transition-colors rounded mr-1"
                 >
-                  <Star className={`w-3 h-3 ${app.starred ? 'text-yellow-400 fill-yellow-400' : '${classes.text.muted}'}`} />
+                  <Star className={`w-3 h-3 ${app.starred ? 'icon-adaptive-secondary fill-white/30' : 'icon-adaptive-muted'}`} />
                 </button>
               </div>
             ))}
@@ -417,16 +419,16 @@ export function WorkspaceSidebar({
   const renderBoard = (board: WorkspaceBoard) => (
     <div
       key={board.id}
-      className="flex items-center py-2 px-2 ${classes.hover.bg} rounded cursor-pointer group"
+      className="flex items-center py-2 px-2 hover:bg-white/05 transition-colors rounded cursor-pointer group"
       onClick={() => handleBoardClick(board)}
     >
       <Grid3x3 className="w-4 h-4 mr-2 flex-shrink-0" style={{ color: board.color }} />
-      <span className="text-sm ${classes.text.secondary} flex-1 truncate">{board.name}</span>
+      <span className="text-sm text-adaptive-secondary flex-1 truncate">{board.name}</span>
       <button
         onClick={(e) => handleStarToggle(e, board)}
-        className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded mr-1"
+        className="opacity-0 group-hover:opacity-100 p-1 hover:bg-white/08 transition-colors rounded mr-1"
       >
-        <Star className={`w-3 h-3 ${board.starred ? 'text-yellow-400 fill-yellow-400' : '${classes.text.muted}'}`} />
+        <Star className={`w-3 h-3 ${board.starred ? 'icon-adaptive-secondary fill-white/30' : 'icon-adaptive-muted'}`} />
       </button>
       <ItemContextMenu
         item={board}
@@ -439,24 +441,24 @@ export function WorkspaceSidebar({
   const renderApp = (app: any) => (
     <div
       key={app.id}
-      className="flex items-center py-2 px-2 ${classes.hover.bg} rounded cursor-pointer group"
+      className="flex items-center py-2 px-2 hover:bg-white/05 transition-colors rounded cursor-pointer group"
       onClick={() => handleAppClick(app)}
     >
-      <Zap className="w-4 h-4 mr-2 flex-shrink-0 text-purple-600" />
-      <span className="text-sm ${classes.text.secondary} flex-1 truncate">{app.name}</span>
+      <Zap className="w-4 h-4 mr-2 flex-shrink-0 icon-adaptive-secondary" />
+      <span className="text-sm text-adaptive-secondary flex-1 truncate">{app.name}</span>
       <button
         onClick={(e) => handleAppStarToggle(e, app)}
-        className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded mr-1"
+        className="opacity-0 group-hover:opacity-100 p-1 hover:bg-white/08 transition-colors rounded mr-1"
       >
-        <Star className={`w-3 h-3 ${app.starred ? 'text-yellow-400 fill-yellow-400' : '${classes.text.muted}'}`} />
+        <Star className={`w-3 h-3 ${app.starred ? 'icon-adaptive-secondary fill-white/30' : 'icon-adaptive-muted'}`} />
       </button>
     </div>
   );
 
   return (
-    <div className={`w-64 ${classes.bg.glass} border-r ${classes.border.glass} flex flex-col h-full shadow-lg`}>
+    <div className="w-64 liquid-glass-sidebar flex flex-col h-full rounded-3xl p-4">
       {/* Workspace Switcher Header */}
-      <div className={`p-4 border-b ${classes.border.glass}`}>
+      <div className="mb-4">
         <WorkspaceSwitcher 
           currentWorkspace={currentWorkspace}
           onWorkspaceChange={(workspace) => {
@@ -470,57 +472,55 @@ export function WorkspaceSidebar({
       {/* Navigation */}
       <div className="flex-1 overflow-y-auto">
         {/* Quick Access */}
-        <div className="p-4 border-b border-gray-200/50">
-          <div className="space-y-1">
-            <div
-              className="flex items-center py-2 px-3 ${classes.hover.bg}/80 rounded-lg cursor-pointer transition-all duration-200"
-              onClick={() => navigate('/my-work')}
-            >
-              <Home className="w-4 h-4 mr-3 text-blue-600" />
-              <span className="text-sm font-medium ${classes.text.primary}">My Office</span>
-            </div>
+        <div className="py-2">
+          <div
+            className="flex items-center py-3 px-3 hover:bg-white/05 transition-colors rounded-xl cursor-pointer mb-2"
+            onClick={() => navigate('/my-work')}
+          >
+            <Home className="w-5 h-5 mr-3 icon-adaptive-primary" />
+            <span className="text-sm font-semibold text-adaptive-primary">My Office</span>
           </div>
         </div>
         
         {/* Recent - Enhanced Asana-style */}
-        <div className="p-4 border-b border-gray-200/50">
-          <div className="flex items-center justify-between mb-3">
+        <div className="px-2 mb-6">
+          <div className="flex items-center justify-between mb-2">
             <button
               onClick={() => setRecentExpanded(!recentExpanded)}
-              className="flex items-center gap-1 ${classes.hover.bg}/80 rounded-lg p-2 -m-1 group transition-all duration-200"
+              className="flex items-center gap-2 hover:bg-white/05 transition-colors rounded-lg p-2 -m-2 group"
             >
               <motion.div
                 animate={{ rotate: recentExpanded ? 0 : -90 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronDown className="h-3 w-3 ${classes.text.muted} group-hover:${classes.text.secondary}" />
+                <ChevronDown className="h-3 w-3 icon-adaptive-muted group-hover:icon-adaptive-secondary" />
               </motion.div>
-              <Clock className="w-4 h-4 mr-1 text-orange-600" />
-              <span className="text-xs font-semibold ${classes.text.muted} uppercase tracking-wider group-hover:${classes.text.secondary}">
+              <Clock className="w-4 h-4 icon-adaptive-secondary" />
+              <span className="text-xs font-bold text-adaptive-secondary uppercase tracking-wider">
                 Recent
               </span>
             </button>
-            <span className="text-xs ${classes.text.muted}">{recentItems.length}</span>
+            <span className="text-xs text-adaptive-subtle font-medium">{recentItems.length}</span>
           </div>
           <AnimatePresence>
             {recentExpanded && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.2 }}
-                className="space-y-1 overflow-hidden ml-6"
+                className="space-y-1 overflow-hidden pl-2"
               >
                 {recentItems.map((item) => {
                   const Icon = item.icon;
                   return (
                     <div
                       key={item.id}
-                      className="flex items-center py-1 px-2 ${classes.hover.bg} rounded cursor-pointer group"
+                      className="flex items-center py-2.5 px-3 hover:bg-white/05 transition-colors rounded-lg cursor-pointer group"
                       onClick={() => navigate(item.path)}
                     >
-                      <Icon className="w-3 h-3 mr-2 flex-shrink-0" style={{ color: item.color }} />
-                      <span className="text-sm ${classes.text.secondary} truncate">{item.name}</span>
+                      <Icon className="w-4 h-4 mr-3 flex-shrink-0" style={{ color: item.color }} />
+                      <span className="text-sm text-adaptive-secondary truncate font-medium">{item.name}</span>
                     </div>
                   );
                 })}
@@ -530,50 +530,50 @@ export function WorkspaceSidebar({
         </div>
 
         {/* Favorites - Enhanced Asana-style */}
-        <div className="p-4 border-b border-gray-200/50">
-          <div className="flex items-center justify-between mb-3">
+        <div className="px-2 mb-6">
+          <div className="flex items-center justify-between mb-2">
             <button
               onClick={() => setFavoritesExpanded(!favoritesExpanded)}
-              className="flex items-center gap-1 ${classes.hover.bg}/80 rounded-lg p-2 -m-1 group transition-all duration-200"
+              className="flex items-center gap-2 hover:bg-white/05 transition-colors rounded-lg p-2 -m-2 group"
             >
               <motion.div
                 animate={{ rotate: favoritesExpanded ? 0 : -90 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronDown className="h-3 w-3 ${classes.text.muted} group-hover:${classes.text.secondary}" />
+                <ChevronDown className="h-3 w-3 icon-adaptive-muted group-hover:icon-adaptive-secondary" />
               </motion.div>
-              <Star className="w-4 h-4 mr-1 text-yellow-400 fill-yellow-400" />
-              <span className="text-xs font-semibold ${classes.text.muted} uppercase tracking-wider group-hover:${classes.text.secondary}">
+              <Star className="w-4 h-4 icon-adaptive-secondary fill-white/20" />
+              <span className="text-xs font-bold text-adaptive-secondary uppercase tracking-wider">
                 Favorites
               </span>
             </button>
-            <span className="text-xs ${classes.text.muted}">{starredBoards.length}</span>
+            <span className="text-xs text-adaptive-subtle font-medium">{starredBoards.length}</span>
           </div>
           <AnimatePresence>
             {favoritesExpanded && (
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.2 }}
-                className="space-y-1 overflow-hidden ml-6"
+                className="space-y-1 overflow-hidden pl-2"
               >
                 {starredBoards.length > 0 ? (
                   starredBoards.slice(0, 5).map(board => (
                     <div
                       key={board.id}
-                      className="flex items-center py-1 px-2 ${classes.hover.bg} rounded cursor-pointer group"
+                      className="flex items-center py-2.5 px-3 hover:bg-white/05 transition-colors rounded-lg cursor-pointer group"
                       onClick={() => handleBoardClick(board)}
                     >
-                      <Grid3x3 className="w-3 h-3 mr-2 flex-shrink-0" style={{ color: board.color }} />
-                      <span className="text-sm ${classes.text.secondary} truncate flex-1">{board.name}</span>
-                      <Star className="h-3 w-3 text-yellow-500 flex-shrink-0" fill="currentColor" />
+                      <Grid3x3 className="w-4 h-4 mr-3 flex-shrink-0" style={{ color: board.color }} />
+                      <span className="text-sm text-adaptive-secondary truncate flex-1 font-medium">{board.name}</span>
+                      <Star className="h-4 w-4 icon-adaptive-secondary flex-shrink-0" fill="currentColor" />
                     </div>
                   ))
                 ) : (
-                  <div className="text-xs ${classes.text.muted} text-center py-4 px-2">
-                    <Star className="h-6 w-6 mx-auto mb-2 text-gray-300" />
-                    <p>Star boards to access them quickly</p>
+                  <div className="text-xs text-adaptive-subtle text-center py-6 px-3">
+                    <Star className="h-8 w-8 mx-auto mb-3 icon-adaptive-muted" />
+                    <p className="font-medium">Star boards to access them quickly</p>
                   </div>
                 )}
               </motion.div>
@@ -582,24 +582,24 @@ export function WorkspaceSidebar({
         </div>
 
         {/* Insights Section - Asana-style */}
-        <div className="p-4 border-b border-gray-200/50">
+        <div className="px-2 mb-6">
           <div className="flex items-center justify-between mb-2">
             <button
               onClick={() => setInsightsExpanded(!insightsExpanded)}
-              className="flex items-center gap-1 ${classes.hover.bg} rounded p-1 -m-1 group"
+              className="flex items-center gap-1 hover:bg-white/05 transition-colors rounded p-1 -m-1 group"
             >
               <motion.div
                 animate={{ rotate: insightsExpanded ? 0 : -90 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronDown className="h-3 w-3 ${classes.text.muted} group-hover:${classes.text.secondary}" />
+                <ChevronDown className="h-3 w-3 icon-adaptive-muted group-hover:icon-adaptive-secondary" />
               </motion.div>
-              <Zap className="w-4 h-4 mr-1 text-purple-600" />
-              <span className="text-xs font-semibold ${classes.text.muted} uppercase tracking-wider group-hover:${classes.text.secondary}">
+              <Zap className="w-4 h-4 mr-1 icon-adaptive-secondary" />
+              <span className="text-xs font-semibold text-adaptive-muted uppercase tracking-wider group-hover:text-adaptive-secondary">
                 Insights
               </span>
             </button>
-            <span className="text-xs ${classes.text.muted}">{insightsItems.length}</span>
+            <span className="text-xs text-adaptive-subtle">{insightsItems.length}</span>
           </div>
           <AnimatePresence>
             {insightsExpanded && (
@@ -618,13 +618,13 @@ export function WorkspaceSidebar({
                       className="group cursor-pointer"
                       onClick={() => navigate(item.path)}
                     >
-                      <div className="flex items-center py-2 px-2 ${classes.hover.bg} rounded transition-colors">
+                      <div className="flex items-center py-2 px-2 hover:bg-white/05 transition-colors rounded">
                         <Icon className={`h-4 w-4 mr-2 flex-shrink-0 ${item.color}`} />
                         <div className="flex-1">
-                          <div className="text-sm font-medium ${classes.text.primary}">{item.label}</div>
-                          <div className="text-xs ${classes.text.muted}">{item.description}</div>
+                          <div className="text-sm font-medium text-adaptive-primary">{item.label}</div>
+                          <div className="text-xs text-adaptive-muted">{item.description}</div>
                         </div>
-                        <ChevronRight className="h-3 w-3 ${classes.text.muted} opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <ChevronRight className="h-3 w-3 icon-adaptive-muted opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
                     </div>
                   );
@@ -635,24 +635,24 @@ export function WorkspaceSidebar({
         </div>
 
         {/* Teams Section - Asana-style */}
-        <div className="p-4 border-b border-gray-200/50">
+        <div className="px-2 mb-6">
           <div className="flex items-center justify-between mb-2">
             <button
               onClick={() => setTeamsExpanded(!teamsExpanded)}
-              className="flex items-center gap-1 ${classes.hover.bg} rounded p-1 -m-1 group"
+              className="flex items-center gap-1 hover:bg-white/05 transition-colors rounded p-1 -m-1 group"
             >
               <motion.div
                 animate={{ rotate: teamsExpanded ? 0 : -90 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronDown className="h-3 w-3 ${classes.text.muted} group-hover:${classes.text.secondary}" />
+                <ChevronDown className="h-3 w-3 icon-adaptive-muted group-hover:icon-adaptive-secondary" />
               </motion.div>
-              <Users className="w-4 h-4 mr-1 text-indigo-600" />
-              <span className="text-xs font-semibold ${classes.text.muted} uppercase tracking-wider group-hover:${classes.text.secondary}">
+              <Users className="w-4 h-4 mr-1 icon-adaptive-secondary" />
+              <span className="text-xs font-semibold text-adaptive-muted uppercase tracking-wider group-hover:text-adaptive-secondary">
                 Teams
               </span>
             </button>
-            <span className="text-xs ${classes.text.muted}">{teams.length}</span>
+            <span className="text-xs text-adaptive-subtle">{teams.length}</span>
           </div>
           <AnimatePresence>
             {teamsExpanded && (
@@ -669,14 +669,14 @@ export function WorkspaceSidebar({
                     className="group cursor-pointer"
                     onClick={() => setCurrentTeam(team)}
                   >
-                    <div className={`flex items-center py-2 px-2 ${classes.hover.bg} rounded transition-colors ${
-                      currentTeam?.id === team.id ? 'bg-blue-50 border-l-2 border-blue-500' : ''
+                    <div className={`flex items-center py-2 px-2 hover:bg-white/05 transition-colors rounded ${
+                      currentTeam?.id === team.id ? 'bg-white/08 border-l-2 border-white/30' : ''
                     }`}>
                       <div className="flex items-center gap-2 flex-1">
-                        <div className="w-2 h-2 rounded-full bg-indigo-500 flex-shrink-0" />
+                        <div className="w-2 h-2 rounded-full bg-white/80 flex-shrink-0" style={{filter: 'drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6))'}} />
                         <div className="flex-1">
-                          <div className="text-sm font-medium ${classes.text.primary}">{team.name}</div>
-                          <div className="text-xs ${classes.text.muted}">
+                          <div className="text-sm font-medium text-adaptive-primary">{team.name}</div>
+                          <div className="text-xs text-adaptive-muted">
                             {team.memberCount} member{team.memberCount !== 1 ? 's' : ''} • {team.type}
                           </div>
                         </div>
@@ -685,14 +685,14 @@ export function WorkspaceSidebar({
                         {team.visibility === 'private' && (
                           <div className="w-1.5 h-1.5 rounded-full bg-gray-400" title="Private team" />
                         )}
-                        <ChevronRight className="h-3 w-3 ${classes.text.muted} opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <ChevronRight className="h-3 w-3 icon-adaptive-muted opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
                     </div>
                   </div>
                 ))}
                 <div className="pt-2 border-t border-gray-100 mt-2">
                   <button
-                    className="flex items-center gap-2 py-2 px-2 text-sm text-blue-600 hover:bg-blue-50 rounded transition-colors w-full"
+                    className="flex items-center gap-2 py-2 px-2 text-sm text-adaptive-secondary hover:bg-white/05 transition-colors rounded w-full"
                     onClick={() => {/* TODO: Open create team modal */}}
                   >
                     <Plus className="h-3 w-3" />
@@ -705,24 +705,24 @@ export function WorkspaceSidebar({
         </div>
 
         {/* Agents Section - Salesforce Agentforce-style */}
-        <div className="p-4 border-b border-gray-200/50">
+        <div className="px-2 mb-6">
           <div className="flex items-center justify-between mb-2">
             <button
               onClick={() => setAgentsExpanded(!agentsExpanded)}
-              className="flex items-center gap-1 ${classes.hover.bg} rounded p-1 -m-1 group"
+              className="flex items-center gap-1 hover:bg-white/05 transition-colors rounded p-1 -m-1 group"
             >
               <motion.div
                 animate={{ rotate: agentsExpanded ? 0 : -90 }}
                 transition={{ duration: 0.2 }}
               >
-                <ChevronDown className="h-3 w-3 ${classes.text.muted} group-hover:${classes.text.secondary}" />
+                <ChevronDown className="h-3 w-3 icon-adaptive-muted group-hover:icon-adaptive-secondary" />
               </motion.div>
-              <Bot className="w-4 h-4 mr-1 text-emerald-600" />
-              <span className="text-xs font-semibold ${classes.text.muted} uppercase tracking-wider group-hover:${classes.text.secondary}">
+              <Bot className="w-4 h-4 mr-1 icon-adaptive-secondary" />
+              <span className="text-xs font-semibold text-adaptive-muted uppercase tracking-wider group-hover:text-adaptive-secondary">
                 Agents
               </span>
             </button>
-            <span className="text-xs ${classes.text.muted}">{getAgents().length}</span>
+            <span className="text-xs text-adaptive-subtle">{getAgents().length}</span>
           </div>
           <AnimatePresence>
             {agentsExpanded && (
@@ -738,13 +738,13 @@ export function WorkspaceSidebar({
                   className="group cursor-pointer"
                   onClick={() => navigate('/agents')}
                 >
-                  <div className="flex items-center py-2 px-2 ${classes.hover.bg} rounded transition-colors">
-                    <Activity className="h-4 w-4 mr-2 flex-shrink-0 text-emerald-600" />
+                  <div className="flex items-center py-2 px-2 hover:bg-white/05 transition-colors rounded">
+                    <Activity className="h-4 w-4 mr-2 flex-shrink-0 icon-adaptive-secondary" />
                     <div className="flex-1">
-                      <div className="text-sm font-medium ${classes.text.primary}">Agent Dashboard</div>
-                      <div className="text-xs ${classes.text.muted}">Manage your AI workforce</div>
+                      <div className="text-sm font-medium text-adaptive-primary">Agent Dashboard</div>
+                      <div className="text-xs text-adaptive-muted">Manage your AI workforce</div>
                     </div>
-                    <ChevronRight className="h-3 w-3 ${classes.text.muted} opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <ChevronRight className="h-3 w-3 icon-adaptive-muted opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
                 </div>
 
@@ -763,11 +763,11 @@ export function WorkspaceSidebar({
 
                   const getStatusColor = (status: string) => {
                     switch (status) {
-                      case 'active': return 'bg-green-100 text-green-700';
-                      case 'training': return 'bg-yellow-100 text-yellow-700';
-                      case 'inactive': return 'bg-gray-100 ${classes.text.primary}';
-                      case 'error': return 'bg-red-100 text-red-700';
-                      default: return 'bg-gray-100 ${classes.text.primary}';
+                      case 'active': return 'text-green-400';
+                      case 'training': return 'text-blue-400';
+                      case 'inactive': return 'text-gray-400';
+                      case 'error': return 'text-red-400';
+                      default: return 'text-gray-400';
                     }
                   };
 
@@ -777,16 +777,16 @@ export function WorkspaceSidebar({
                       className="group cursor-pointer"
                       onClick={() => navigate(`/agents/${agent.id}`)}
                     >
-                      <div className="flex items-center py-2 px-2 ${classes.hover.bg} rounded transition-colors">
+                      <div className="flex items-center py-2 px-2 hover:bg-white/05 transition-colors rounded">
                         <div className="flex items-center gap-2 flex-1">
                           <span className="text-sm flex-shrink-0">{getAgentIcon(agent.type)}</span>
                           <div className="flex-1 min-w-0">
-                            <div className="text-sm font-medium ${classes.text.primary} truncate">{agent.name}</div>
+                            <div className="text-sm font-medium text-adaptive-primary truncate">{agent.name}</div>
                             <div className="flex items-center gap-2 text-xs">
                               <span className={`px-1.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(agent.status)}`}>
                                 {agent.status}
                               </span>
-                              <span className="${classes.text.muted}">
+                              <span className="text-adaptive-muted">
                                 {agent.metrics.currentTasks} active
                               </span>
                             </div>
@@ -800,10 +800,10 @@ export function WorkspaceSidebar({
                                 e.stopPropagation();
                                 stopAgent(agent.id);
                               }}
-                              className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded transition-opacity"
+                              className="opacity-0 group-hover:opacity-100 p-1 hover:bg-white/08 transition-colors rounded transition-opacity"
                               title="Pause agent"
                             >
-                              <Pause className="h-3 w-3 ${classes.text.muted}" />
+                              <Pause className="h-3 w-3 icon-adaptive-muted" />
                             </button>
                           ) : (
                             <button
@@ -811,13 +811,13 @@ export function WorkspaceSidebar({
                                 e.stopPropagation();
                                 startAgent(agent.id);
                               }}
-                              className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded transition-opacity"
+                              className="opacity-0 group-hover:opacity-100 p-1 hover:bg-white/08 transition-colors rounded transition-opacity"
                               title="Start agent"
                             >
-                              <Play className="h-3 w-3 ${classes.text.muted}" />
+                              <Play className="h-3 w-3 icon-adaptive-muted" />
                             </button>
                           )}
-                          <ChevronRight className="h-3 w-3 ${classes.text.muted} opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <ChevronRight className="h-3 w-3 icon-adaptive-muted opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                       </div>
                     </div>
@@ -827,7 +827,7 @@ export function WorkspaceSidebar({
                 {/* Agent Templates Quick Access */}
                 <div className="pt-2 border-t border-gray-100 mt-2">
                   <button
-                    className="flex items-center gap-2 py-2 px-2 text-sm text-emerald-600 hover:bg-emerald-50 rounded transition-colors w-full"
+                    className="flex items-center gap-2 py-2 px-2 text-sm text-adaptive-secondary hover:bg-white/05 transition-colors rounded w-full"
                     onClick={() => navigate('/agents/create')}
                   >
                     <Plus className="h-3 w-3" />
@@ -839,15 +839,15 @@ export function WorkspaceSidebar({
                 {getAgents().length > 0 && (
                   <div className="pt-2 border-t border-gray-100 mt-2">
                     <div className="grid grid-cols-2 gap-2 text-xs">
-                      <div className="bg-emerald-50 rounded p-2">
-                        <div className="font-medium text-emerald-700">{getAgentsByStatus('active').length}</div>
-                        <div className="text-emerald-600">Active</div>
+                      <div className="rounded p-2">
+                        <div className="font-medium text-adaptive-primary">{getAgentsByStatus('active').length}</div>
+                        <div className="text-adaptive-secondary">Active</div>
                       </div>
-                      <div className="bg-blue-50 rounded p-2">
-                        <div className="font-medium text-blue-700">
+                      <div className="rounded p-2">
+                        <div className="font-medium text-adaptive-primary">
                           {getAgents().reduce((sum, agent) => sum + agent.metrics.tasksCompleted, 0)}
                         </div>
-                        <div className="text-blue-600">Tasks Done</div>
+                        <div className="text-adaptive-secondary">Tasks Done</div>
                       </div>
                     </div>
                   </div>
@@ -858,7 +858,7 @@ export function WorkspaceSidebar({
         </div>
 
         {/* Add Items Dropdown */}
-        <div className="p-4 border-b border-gray-200/50">
+        <div className="px-2 mb-6">
           <AddItemDropdown
             onCreateItem={handleCreateItem}
             currentFolder={targetFolder?.name}
@@ -869,20 +869,20 @@ export function WorkspaceSidebar({
 
         {/* Current Workspace Content - Enhanced */}
         {currentWorkspace && (
-          <div className="p-3">
+          <div className="px-2 py-3">
             <div className="flex items-center justify-between mb-3">
               <button
                 onClick={() => setWorkspaceItemsExpanded(!workspaceItemsExpanded)}
-                className="flex items-center gap-1 ${classes.hover.bg} rounded p-1 -m-1 group flex-1"
+                className="flex items-center gap-1 hover:bg-white/05 transition-colors rounded p-1 -m-1 group flex-1"
               >
                 <motion.div
                   animate={{ rotate: workspaceItemsExpanded ? 0 : -90 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <ChevronDown className="h-3 w-3 ${classes.text.muted} group-hover:${classes.text.secondary}" />
+                  <ChevronDown className="h-3 w-3 icon-adaptive-muted group-hover:icon-adaptive-secondary" />
                 </motion.div>
-                <Building className="w-4 h-4 mr-1 text-blue-600" />
-                <span className="text-sm font-medium ${classes.text.primary} group-hover:text-gray-900">{currentWorkspace.name}</span>
+                <Building className="w-4 h-4 mr-1 icon-adaptive-secondary" />
+                <span className="text-sm font-medium text-adaptive-primary group-hover:text-adaptive-primary">{currentWorkspace.name}</span>
               </button>
             </div>
             <AnimatePresence>
@@ -915,17 +915,20 @@ export function WorkspaceSidebar({
         )}
       </div>
 
-      {/* Footer */}
-      <div className="p-4 border-t border-gray-200/50 bg-white/50">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-              <span className="text-white text-sm font-medium">U</span>
+      {/* Clean Footer */}
+      <div className="mt-auto">
+        <div className="flex items-center justify-between p-3 hover:bg-white/05 transition-colors rounded-2xl">
+          <div className="flex items-center space-x-3">
+            <div className="w-9 h-9 bg-gradient-to-br from-blue-500/80 to-purple-600/80 rounded-full flex items-center justify-center border border-white/20">
+              <span className="text-white text-sm font-semibold">U</span>
             </div>
-            <span className="text-sm font-medium ${classes.text.primary}">User</span>
+            <div className="flex flex-col">
+              <span className="text-sm font-semibold text-adaptive-primary">User</span>
+              <span className="text-xs text-adaptive-muted font-medium">Online</span>
+            </div>
           </div>
-          <button className="p-1 ${classes.hover.bg} rounded">
-            <Settings className="w-4 h-4 ${classes.text.muted}" />
+          <button className="p-2.5 hover:bg-white/08 transition-colors rounded-xl">
+            <Settings className="w-4 h-4 icon-adaptive-muted" />
           </button>
         </div>
       </div>

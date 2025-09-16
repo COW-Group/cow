@@ -247,24 +247,13 @@ export function MyOffice() {
       <div className="flex-1 min-h-screen relative">
         {/* Toggle Buttons */}
         <div className="absolute top-6 right-6 z-10 flex gap-3">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowOnboarding(true)}
-            className="bg-blue-50/90 backdrop-blur-xl border-blue-200/50 shadow-lg hover:shadow-xl transition-all duration-300 text-blue-700 hover:text-blue-800"
-          >
-            <Compass className="w-4 h-4 mr-2" />
-            Get Started
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
+          <button
             onClick={() => setShowDashboard(false)}
-            className="bg-white/90 backdrop-blur-xl border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300"
+            className="liquid-button-secondary inline-flex items-center px-4 py-2.5 text-sm font-medium rounded-xl"
           >
             <CheckSquare className="w-4 h-4 mr-2" />
             My Tasks
-          </Button>
+          </button>
         </div>
         <CustomizableHomePage />
 
@@ -281,24 +270,13 @@ export function MyOffice() {
     <div className="flex-1 min-h-screen relative">
       {/* Toggle Buttons */}
       <div className="absolute top-6 right-6 z-10 flex gap-3">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowOnboarding(true)}
-          className="bg-blue-50/90 backdrop-blur-xl border-blue-200/50 shadow-lg hover:shadow-xl transition-all duration-300 text-blue-700 hover:text-blue-800"
-        >
-          <Compass className="w-4 h-4 mr-2" />
-          Get Started
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
+        <button
           onClick={() => setShowDashboard(true)}
-          className="bg-white/90 backdrop-blur-xl border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300"
+          className="liquid-button-secondary inline-flex items-center px-4 py-2.5 text-sm font-medium rounded-xl"
         >
           <LayoutDashboard className="w-4 h-4 mr-2" />
           Dashboard
-        </Button>
+        </button>
       </div>
 
       <div className="p-6">
@@ -313,10 +291,10 @@ export function MyOffice() {
         />
 
         {loading ? (
-          <div className="bg-white/90 backdrop-blur-xl rounded-2xl border border-gray-200/50 shadow-lg p-16">
+          <div className="liquid-glass-sidebar rounded-2xl p-16">
             <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-              <span className="ml-3 text-gray-600">Loading your work...</span>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white/40"></div>
+              <span className="ml-3 text-adaptive-secondary">Loading your work...</span>
             </div>
           </div>
         ) : hasAssignments ? (
@@ -337,15 +315,15 @@ export function MyOffice() {
               />
             )}
             {view === 'calendar' && (
-              <div className="bg-white/90 backdrop-blur-xl rounded-2xl border border-gray-200/50 shadow-lg p-12 text-center">
-                <p className="text-gray-600">
+              <div className="liquid-glass-sidebar rounded-2xl p-12 text-center">
+                <p className="text-adaptive-secondary">
                   Calendar view coming soon...
                 </p>
               </div>
             )}
           </div>
         ) : (
-          <EmptyState onHelp={handleHelp} />
+          <EmptyState onHelp={handleHelp} onGetStarted={() => setShowOnboarding(true)} />
         )}
       </div>
 

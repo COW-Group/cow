@@ -8,6 +8,7 @@ import { CreateItemModal } from '../workspace/CreateItemModal';
 import { MaunAppMarketplace } from '../apps/MaunAppMarketplace';
 import { MaunAppLauncher } from '../apps/MaunAppLauncher';
 import { useMaunAppsStore } from '../../store/maun-apps.store';
+import { VantaBackground } from '../background/VantaBackground';
 
 export function RootLayout() {
   const [currentWorkspaceId, setCurrentWorkspaceId] = useState<string>('workspace-main');
@@ -15,28 +16,27 @@ export function RootLayout() {
   const { activeApp } = useMaunAppsStore();
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Hero Background */}
+    <div className="min-h-screen">
+      {/* Vanta.js Background */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-gray-50 to-purple-50"></div>
-        <div className="absolute inset-0 bg-black/2"></div>
+        <VantaBackground />
       </div>
 
-      {/* App Header */}
+      {/* Floating Header */}
       <AppHeader />
 
       {/* Main Content Area */}
-      <div className="relative z-10 pt-16"> {/* Account for app header only */}
-        {/* Enhanced Workspace Sidebar - Always Show */}
-        <div className="fixed left-0 top-16 bottom-0 z-10">
-          <WorkspaceSidebar 
+      <div className="relative z-10 pt-16">
+        {/* Enhanced Workspace Sidebar - Floating with proper spacing */}
+        <div className="fixed left-4 top-20 bottom-4 z-10 w-80">
+          <WorkspaceSidebar
             currentWorkspaceId={currentWorkspaceId}
             onWorkspaceChange={setCurrentWorkspaceId}
           />
         </div>
-        
+
         {/* Main Content */}
-        <div className="ml-64">
+        <div className="ml-88">
           <main className="min-h-screen">
             <Outlet />
           </main>

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Plus,
   Grid3x3,
@@ -20,7 +21,9 @@ interface AddItemDropdownProps {
 
 export function AddItemDropdown({ onCreateItem, currentFolder, onAddApp }: AddItemDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -34,6 +37,63 @@ export function AddItemDropdown({ onCreateItem, currentFolder, onAddApp }: AddIt
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const updateDropdownPosition = () => {
+    if (buttonRef.current && isOpen) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      const dropdownHeight = 400; // Estimated dropdown height
+      const dropdownWidth = 288; // w-72 = 288px
+      const viewportHeight = window.innerHeight;
+      const viewportWidth = window.innerWidth;
+
+      // Calculate optimal position
+      let top = rect.bottom + 8;
+      let left = rect.left;
+
+      // Check if dropdown would go below viewport
+      if (top + dropdownHeight > viewportHeight) {
+        // Position above the button instead
+        top = rect.top - dropdownHeight - 8;
+      }
+
+      // Check if dropdown would go beyond right edge
+      if (left + dropdownWidth > viewportWidth) {
+        // Align to right edge of button
+        left = rect.right - dropdownWidth;
+      }
+
+      // Ensure dropdown doesn't go beyond left edge
+      if (left < 8) {
+        left = 8;
+      }
+
+      // Ensure dropdown doesn't go above top of viewport
+      if (top < 8) {
+        top = 8;
+      }
+
+      setDropdownStyle({
+        position: 'fixed' as const,
+        top,
+        left,
+        zIndex: 9999,
+        maxHeight: Math.min(dropdownHeight, viewportHeight - 16),
+        overflowY: 'auto' as const,
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (isOpen) {
+      updateDropdownPosition();
+      window.addEventListener('scroll', updateDropdownPosition);
+      window.addEventListener('resize', updateDropdownPosition);
+    }
+    return () => {
+      window.removeEventListener('scroll', updateDropdownPosition);
+      window.removeEventListener('resize', updateDropdownPosition);
+    };
+  }, [isOpen]);
 
   const handleItemClick = (type: CreateItemType) => {
     onCreateItem(type);
@@ -81,18 +141,22 @@ export function AddItemDropdown({ onCreateItem, currentFolder, onAddApp }: AddIt
   return (
     <div className="relative" ref={dropdownRef}>
       <button
+        ref={buttonRef}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        className="flex items-center space-x-2 px-3 py-2 bg-white/10 text-adaptive-primary rounded-lg hover:bg-white/15 transition-colors"
       >
         <Plus className="w-4 h-4" />
         <span className="text-sm font-medium">Add</span>
         <ChevronDown className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
-      {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-64 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-          <div className="py-2">
-            <div className="px-3 py-2 text-xs font-medium text-gray-500 uppercase tracking-wide border-b border-gray-100">
+      {isOpen && createPortal(
+        <div
+          className="w-72 liquid-glass-sidebar rounded-lg shadow-lg min-w-max"
+          style={dropdownStyle}
+        >
+          <div className="py-2 max-h-full overflow-y-auto">
+            <div className="px-3 py-2 text-xs font-medium text-adaptive-muted uppercase tracking-wide border-b border-white/10">
               {currentFolder ? `Add to ${currentFolder}` : 'Add to workspace'}
             </div>
             
@@ -103,21 +167,21 @@ export function AddItemDropdown({ onCreateItem, currentFolder, onAddApp }: AddIt
                   <button
                     key={item.type}
                     onClick={() => handleItemClick(item.type)}
-                    className="w-full flex items-center px-3 py-3 hover:bg-gray-50 transition-colors group"
+                    className="w-full flex items-center px-3 py-3 hover:bg-white/05 transition-colors group"
                   >
-                    <div className={`p-2 rounded-lg ${item.color} bg-gray-100 group-hover:bg-white mr-3`}>
+                    <div className={`p-2 rounded-lg ${item.color} bg-white/10 group-hover:bg-white/15 mr-3`}>
                       <Icon className="w-4 h-4" />
                     </div>
                     <div className="flex-1 text-left">
-                      <div className="text-sm font-medium text-gray-900">{item.label}</div>
-                      <div className="text-xs text-gray-500">{item.description}</div>
+                      <div className="text-sm font-medium text-adaptive-primary">{item.label}</div>
+                      <div className="text-xs text-adaptive-muted">{item.description}</div>
                     </div>
                   </button>
                 );
               })}
             </div>
 
-            <div className="border-t border-gray-100 pt-2">
+            <div className="border-t border-white/10 pt-2">
               {onAddApp && (
                 <button
                   onClick={() => {
@@ -126,23 +190,24 @@ export function AddItemDropdown({ onCreateItem, currentFolder, onAddApp }: AddIt
                   }}
                   className="w-full flex items-center px-3 py-3 hover:bg-gray-50 transition-colors group"
                 >
-                  <div className="p-2 rounded-lg text-purple-600 bg-gray-100 group-hover:bg-white mr-3">
+                  <div className="p-2 rounded-lg text-purple-400 bg-white/10 group-hover:bg-white/15 mr-3">
                     <Zap className="w-4 h-4" />
                   </div>
                   <div className="flex-1 text-left">
-                    <div className="text-sm font-medium text-gray-900">Add App</div>
-                    <div className="text-xs text-gray-500">Install an app to workspace</div>
+                    <div className="text-sm font-medium text-adaptive-primary">Add App</div>
+                    <div className="text-xs text-adaptive-muted">Install an app to workspace</div>
                   </div>
                 </button>
               )}
               <div className="px-3 py-2">
-                <button className="w-full text-left text-xs text-gray-500 hover:text-gray-700">
+                <button className="w-full text-left text-xs text-adaptive-muted hover:text-adaptive-secondary">
                   Browse template center
                 </button>
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

@@ -43,49 +43,52 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
   };
 
   return (
-    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-40">
-      <div className="glass-header rounded-full px-6 py-3 flex items-center gap-6">
+    <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
+      <div className="liquid-glass-sidebar rounded-2xl px-8 py-4 flex items-center gap-8 shadow-lg">
         {/* Left side - Logo and brand */}
-        <div className="flex items-center space-x-3 cursor-pointer smooth-hover px-3 py-2 rounded-full" onClick={() => navigate('/')}>
-          <Circle className="h-6 w-6 fill-yellow-400 text-yellow-400" />
-          <span className={`text-xl font-bold ${classes.text.primary} tracking-tight`}>
+        <div className="flex items-center space-x-3 cursor-pointer hover:bg-white/05 transition-colors px-4 py-2 rounded-xl" onClick={() => navigate('/')}>
+          <Circle className="h-7 w-7 fill-yellow-400 text-yellow-400" />
+          <span className="text-xl font-bold text-adaptive-primary tracking-tight">
             COW
           </span>
         </div>
 
+        {/* Separator */}
+        <div className="h-6 w-px bg-white/10"></div>
+
         {/* Right side - Icons and avatar */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-1">
           {/* Notifications */}
           <div className="relative">
             <button
               onClick={handleNotificationsClick}
-              className={`p-2 ${classes.text.muted} ${classes.hover.accent} smooth-hover rounded-full ${classes.hover.bg}`}
+              className="relative p-2.5 icon-adaptive-muted hover:bg-white/08 transition-colors rounded-xl"
               aria-label="Notifications"
             >
               <Bell className="h-5 w-5" />
-              <div className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full flex items-center justify-center">
+              <div className="absolute -top-0.5 -right-0.5 h-3 w-3 bg-red-500 rounded-full flex items-center justify-center">
                 <span className="text-xs text-white font-bold">3</span>
               </div>
             </button>
 
             {/* Notifications Dropdown */}
             {showNotifications && (
-              <div className={`absolute right-0 top-full mt-2 w-80 glass-modal rounded-2xl shadow-lg py-2 z-50`}>
-                <div className={`px-4 py-2 border-b ${classes.border.default}`}>
-                  <h3 className={`text-sm font-semibold ${classes.text.primary}`}>Notifications</h3>
+              <div className="absolute right-0 top-full mt-3 w-80 liquid-glass-sidebar rounded-2xl shadow-lg py-2 z-50">
+                <div className="px-4 py-2 border-b border-white/10">
+                  <h3 className="text-sm font-semibold text-adaptive-primary">Notifications</h3>
                 </div>
                 <div className="max-h-64 overflow-y-auto">
-                  <div className={`px-4 py-3 ${classes.hover.card} cursor-pointer`}>
-                    <p className={`text-sm ${classes.text.primary}`}>New lead added to CRM</p>
-                    <p className={`text-xs ${classes.text.muted}`}>2 minutes ago</p>
+                  <div className="px-4 py-3 hover:bg-white/05 transition-colors cursor-pointer rounded-lg mx-2">
+                    <p className="text-sm text-adaptive-primary">New lead added to CRM</p>
+                    <p className="text-xs text-adaptive-muted">2 minutes ago</p>
                   </div>
-                  <div className={`px-4 py-3 ${classes.hover.card} cursor-pointer`}>
-                    <p className={`text-sm ${classes.text.primary}`}>Board updated: Sales Pipeline</p>
-                    <p className={`text-xs ${classes.text.muted}`}>1 hour ago</p>
+                  <div className="px-4 py-3 hover:bg-white/05 transition-colors cursor-pointer rounded-lg mx-2">
+                    <p className="text-sm text-adaptive-primary">Board updated: Sales Pipeline</p>
+                    <p className="text-xs text-adaptive-muted">1 hour ago</p>
                   </div>
-                  <div className={`px-4 py-3 ${classes.hover.card} cursor-pointer`}>
-                    <p className={`text-sm ${classes.text.primary}`}>New comment on task</p>
-                    <p className={`text-xs ${classes.text.muted}`}>3 hours ago</p>
+                  <div className="px-4 py-3 hover:bg-white/05 transition-colors cursor-pointer rounded-lg mx-2">
+                    <p className="text-sm text-adaptive-primary">New comment on task</p>
+                    <p className="text-xs text-adaptive-muted">3 hours ago</p>
                   </div>
                 </div>
               </div>
@@ -95,7 +98,7 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
           {/* Search */}
           <button
             onClick={handleSearchClick}
-            className={`p-2 ${classes.text.muted} ${classes.hover.accent} smooth-hover rounded-full ${classes.hover.bg}`}
+            className="p-2.5 icon-adaptive-muted hover:bg-white/08 transition-colors rounded-xl"
             aria-label="Search"
           >
             <Search className="h-5 w-5" />
@@ -107,7 +110,7 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
           {/* Settings */}
           <button
             onClick={handleSettingsClick}
-            className={`p-2 ${classes.text.muted} ${classes.hover.accent} smooth-hover rounded-full ${classes.hover.bg}`}
+            className="p-2.5 icon-adaptive-muted hover:bg-white/08 transition-colors rounded-xl"
             aria-label="Settings"
           >
             <Settings className="h-5 w-5" />
@@ -116,7 +119,7 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
           {/* Help */}
           <button
             onClick={handleHelpClick}
-            className={`p-2 ${classes.text.muted} ${classes.hover.accent} smooth-hover rounded-full ${classes.hover.bg}`}
+            className="p-2.5 icon-adaptive-muted hover:bg-white/08 transition-colors rounded-xl"
             aria-label="Help"
           >
             <HelpCircle className="h-5 w-5" />
@@ -126,25 +129,25 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
           <div className="relative">
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className={`h-8 w-8 rounded-full ${classes.bg.secondary} flex items-center justify-center cursor-pointer ${classes.hover.bg} smooth-hover ${classes.border.muted} border`}
+              className="h-9 w-9 rounded-full bg-gradient-to-br from-blue-500/80 to-purple-600/80 flex items-center justify-center cursor-pointer hover:bg-white/08 transition-colors border border-white/20"
               aria-label="User menu"
             >
-              <span className={`text-sm ${classes.text.primary} font-medium`}>LP</span>
+              <span className="text-sm text-white font-medium">LP</span>
             </button>
 
             {/* User Menu Dropdown */}
             {showUserMenu && (
-              <div className={`absolute right-0 top-full mt-2 w-48 glass-modal rounded-2xl shadow-lg py-2 z-50`}>
-                <div className={`px-4 py-2 border-b ${classes.border.default}`}>
-                  <p className={`text-sm font-medium ${classes.text.primary}`}>Likhitha Palaypu</p>
-                  <p className={`text-xs ${classes.text.muted}`}>likhitha@example.com</p>
+              <div className="absolute right-0 top-full mt-3 w-48 liquid-glass-sidebar rounded-2xl shadow-lg py-2 z-50">
+                <div className="px-4 py-2 border-b border-white/10">
+                  <p className="text-sm font-medium text-adaptive-primary">Likhitha Palaypu</p>
+                  <p className="text-xs text-adaptive-muted">likhitha@example.com</p>
                 </div>
                 <button
                   onClick={() => {
                     setShowUserMenu(false);
                     navigate('/app/settings');
                   }}
-                  className={`w-full px-4 py-2 text-left text-sm ${classes.text.muted} ${classes.hover.card} ${classes.hover.accent}`}
+                  className="w-full px-4 py-2 text-left text-sm text-adaptive-secondary hover:bg-white/05 hover:text-adaptive-primary transition-colors rounded-lg mx-2 mt-1"
                 >
                   Profile Settings
                 </button>
@@ -153,7 +156,7 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
                     setShowUserMenu(false);
                     navigate('/app/settings');
                   }}
-                  className={`w-full px-4 py-2 text-left text-sm ${classes.text.muted} ${classes.hover.card} ${classes.hover.accent}`}
+                  className="w-full px-4 py-2 text-left text-sm text-adaptive-secondary hover:bg-white/05 hover:text-adaptive-primary transition-colors rounded-lg mx-2"
                 >
                   Account Settings
                 </button>
@@ -163,7 +166,7 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
                     // Sign out functionality - navigate to home
                     navigate('/');
                   }}
-                  className={`w-full px-4 py-2 text-left text-sm ${classes.text.muted} ${classes.hover.card} ${classes.hover.accent}`}
+                  className="w-full px-4 py-2 text-left text-sm text-adaptive-secondary hover:bg-white/05 hover:text-adaptive-primary transition-colors rounded-lg mx-2 mb-1"
                 >
                   Sign Out
                 </button>

@@ -40,10 +40,10 @@ export function MyWorkHeader({
     <div className="mb-6">
       {/* Title and Circle Icon */}
       <div className="flex items-center mb-6">
-        <h1 className="text-2xl font-bold text-black dark:text-white mr-3">
+        <h1 className="text-2xl font-bold text-adaptive-primary mr-3">
           My Work
         </h1>
-        <Circle className="w-4 h-4 text-gray-400" />
+        <Circle className="w-4 h-4 icon-adaptive-muted" />
       </div>
 
       {/* Tabs and Controls Row */}
@@ -54,8 +54,8 @@ export function MyWorkHeader({
             onClick={() => onViewChange('table')}
             className={`text-sm pb-2 border-b-2 transition-colors ${
               view === 'table'
-                ? 'text-blue-500 border-blue-500'
-                : 'text-gray-400 border-transparent hover:text-gray-600 dark:hover:text-gray-300'
+                ? 'text-adaptive-primary border-white/30'
+                : 'text-adaptive-muted border-transparent hover:text-adaptive-secondary'
             }`}
             aria-pressed={view === 'table'}
             role="tab"
@@ -66,8 +66,8 @@ export function MyWorkHeader({
             onClick={() => onViewChange('calendar')}
             className={`text-sm pb-2 border-b-2 transition-colors ${
               view === 'calendar'
-                ? 'text-blue-500 border-blue-500'
-                : 'text-gray-400 border-transparent hover:text-gray-600 dark:hover:text-gray-300'
+                ? 'text-adaptive-primary border-white/30'
+                : 'text-adaptive-muted border-transparent hover:text-adaptive-secondary'
             }`}
             aria-pressed={view === 'calendar'}
             role="tab"
@@ -81,7 +81,7 @@ export function MyWorkHeader({
           {/* New Item Button */}
           <button
             onClick={onNewItem}
-            className="inline-flex items-center justify-center px-3 py-2 bg-blue-500 text-white text-sm font-medium rounded hover:bg-blue-400 transition-colors"
+            className="liquid-button-primary inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium rounded-xl"
             aria-label="Create new item"
           >
             <Plus className="w-4 h-4 mr-1.5" />
@@ -90,13 +90,13 @@ export function MyWorkHeader({
 
           {/* Search Input */}
           <div className="relative flex-1 sm:min-w-64">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 icon-adaptive-muted" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               placeholder="Search"
-              className="w-full pl-10 pr-4 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="liquid-input w-full pl-10 pr-4 py-2.5 text-sm rounded-xl"
               aria-label="Search assignments"
             />
           </div>
@@ -105,17 +105,17 @@ export function MyWorkHeader({
           <div className="relative">
             <button
               onClick={() => setIsDateDropdownOpen(!isDateDropdownOpen)}
-              className="inline-flex items-center px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              className="liquid-button-secondary inline-flex items-center px-4 py-2.5 text-sm rounded-xl"
               aria-expanded={isDateDropdownOpen}
               aria-haspopup="true"
             >
-              <Calendar className="w-4 h-4 text-gray-400 mr-2" />
+              <Calendar className="w-4 h-4 icon-adaptive-muted mr-2" />
               <span>{dateViewLabels[dateView]}</span>
               <ChevronDown className={`w-4 h-4 ml-2 transition-transform ${isDateDropdownOpen ? 'rotate-180' : ''}`} />
             </button>
 
             {isDateDropdownOpen && (
-              <div className="absolute right-0 top-full mt-1 w-36 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 z-10">
+              <div className="liquid-dropdown absolute right-0 top-full mt-2 w-36 rounded-xl z-10">
                 <div className="py-1">
                   {(Object.entries(dateViewLabels) as [DateViewOption, string][]).map(([value, label]) => (
                     <button
@@ -124,10 +124,8 @@ export function MyWorkHeader({
                         onDateViewChange(value);
                         setIsDateDropdownOpen(false);
                       }}
-                      className={`w-full text-left px-3 py-2 text-sm transition-colors ${
-                        dateView === value
-                          ? 'bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400'
-                          : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
+                      className={`liquid-dropdown-item w-full text-left px-3 py-2 text-sm ${
+                        dateView === value ? 'active' : ''
                       }`}
                       role="menuitem"
                     >

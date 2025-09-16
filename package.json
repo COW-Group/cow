@@ -16,7 +16,7 @@
     "serve:support-center": "nx serve support-center",
     "serve:admin-portal": "nx serve admin-portal",
     "serve:missions-app": "nx serve missions-app",
-    "serve:maun-app": "nx serve maun-app",
+    "serve:mauna-app": "nx serve mauna-app",
     "test": "nx run-many --target=test --all",
     "lint": "nx run-many --target=lint --all",
     "lint:fix": "nx run-many --target=lint --all --fix",
@@ -127,7 +127,7 @@
     "apps",
     "libs",
     "apps/missions-engine/*",
-    "apps/maun-app"
+    "apps/mauna-app"
   ],
   "engines": {
     "node": ">=18.0.0",

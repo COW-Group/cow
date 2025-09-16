@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "./ui/button"
 import { Card } from "./ui/card"
-import { ArrowRight, Building2, User, Users, TrendingUp, Shield, Briefcase } from "lucide-react"
+import { ArrowRight, Building2, User, Users, TrendingUp, Shield, Briefcase, ChevronLeft } from "lucide-react"
 
 export interface UserType {
   id: string
@@ -68,9 +68,12 @@ const userTypes: UserType[] = [
 interface UserTypeSelectorProps {
   onUserTypeSelect: (userType: UserType) => void
   selectedType?: string
+  onBack?: () => void
+  selectedCountry?: any
+  selectedClassification?: any
 }
 
-export function UserTypeSelector({ onUserTypeSelect, selectedType }: UserTypeSelectorProps) {
+export function UserTypeSelector({ onUserTypeSelect, selectedType, onBack }: UserTypeSelectorProps) {
   const [hoveredType, setHoveredType] = useState<string | null>(null)
   const [isVisible, setIsVisible] = useState(false)
 
@@ -84,6 +87,25 @@ export function UserTypeSelector({ onUserTypeSelect, selectedType }: UserTypeSel
     <div className={`w-full max-w-7xl mx-auto px-8 transition-all duration-1000 ${
       isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
     }`}>
+      {/* Back Button */}
+      {onBack && (
+        <div className="mb-8">
+          <Button
+            variant="ghost"
+            onClick={onBack}
+            className="group flex items-center gap-2 px-4 py-3 rounded-xl text-white/80 hover:text-white transition-all duration-200 hover:scale-105"
+            style={{
+              background: 'rgba(255, 255, 255, 0.08)',
+              backdropFilter: 'blur(20px) saturate(180%)',
+              border: '1px solid rgba(255, 255, 255, 0.12)'
+            }}
+          >
+            <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+            <span className="font-medium text-sm">Back to Investment Classification</span>
+          </Button>
+        </div>
+      )}
+
       <div className="text-center mb-16">
         <div className="mb-8">
           <div className="w-16 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto mb-6" />

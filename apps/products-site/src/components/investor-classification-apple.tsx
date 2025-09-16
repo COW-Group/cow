@@ -195,6 +195,62 @@ const investorClassifications: InvestorClassification[] = [
     ]
   },
   {
+    id: "ultra-high-net-worth",
+    title: "Ultra High Net Worth",
+    subtitle: "Wealth Management",
+    description: "Comprehensive wealth management with Performance RWA strategies tailored for ultra-high-net-worth individuals and family offices.",
+    icon: <Building2 className="w-6 h-6" />,
+    minimumInvestment: "$10,000,000",
+    regulatoryRequirements: [
+      "Comprehensive wealth verification",
+      "Investment sophistication certification",
+      "Enhanced background screening",
+      "Family office documentation"
+    ],
+    jurisdictionalNotes: {
+      "US": "Qualified purchaser status under Investment Company Act",
+      "GB": "High net worth individual certification",
+      "AU": "Wholesale client classification",
+      "CA": "Accredited investor status",
+      "DE": "Professional client under MiFID II",
+      "SG": "Accredited investor under Securities Act"
+    },
+    eligibilityCriteria: [
+      "Net worth >$10M (excluding primary residence)",
+      "Annual income >$2M",
+      "Extensive investment experience",
+      "Portfolio >$10M"
+    ]
+  },
+  {
+    id: "sovereign-wealth",
+    title: "Sovereign Wealth",
+    subtitle: "Institutional Capital",
+    description: "Sovereign wealth funds, central banks, and institutional investors managing Performance RWA allocations at the highest scale.",
+    icon: <Building2 className="w-6 h-6" />,
+    minimumInvestment: "$100,000,000",
+    regulatoryRequirements: [
+      "Sovereign entity verification",
+      "Regulatory authority documentation",
+      "Investment mandate approval",
+      "Institutional governance framework"
+    ],
+    jurisdictionalNotes: {
+      "US": "Qualified institutional buyer (QIB) status",
+      "GB": "Professional client under FCA rules",
+      "AU": "Wholesale client - institutional category",
+      "CA": "Permitted client - institutional investor",
+      "DE": "Professional client under MiFID II",
+      "SG": "Institutional investor under SFA"
+    },
+    eligibilityCriteria: [
+      "Sovereign wealth fund or central bank",
+      "Assets under management >$100B",
+      "Institutional governance structure",
+      "Regulatory oversight and reporting"
+    ]
+  },
+  {
     id: "institutional",
     title: "Institutional",
     subtitle: "Enterprise Solutions",
@@ -228,6 +284,7 @@ export function InvestorClassificationApple({ selectedCountry, onClassificationS
   const [selectedClassification, setSelectedClassification] = useState<string | null>(null)
   const [hoveredClassification, setHoveredClassification] = useState<string | null>(null)
   const [isVisible, setIsVisible] = useState(false)
+  const [selectedScale, setSelectedScale] = useState<string | null>(null)
 
   // Apple-style adaptive text and button styles
   const adaptiveText = useAdaptiveText()
@@ -249,6 +306,46 @@ export function InvestorClassificationApple({ selectedCountry, onClassificationS
     if (!selectedCountry) return null
     return classification.jurisdictionalNotes[selectedCountry.code]
   }
+
+  // Group tiers by investment scale
+  const investmentScales = [
+    {
+      id: 'starter',
+      title: 'Getting Started',
+      subtitle: '$10 - $999',
+      description: 'Perfect for beginners and small investments',
+      color: '#10b981',
+      tiers: investorClassifications.slice(0, 2), // Explorer ($10), Builder ($100)
+      icon: <TrendingUp className="w-6 h-6" />
+    },
+    {
+      id: 'growth',
+      title: 'Building Wealth',
+      subtitle: '$1K - $100K',
+      description: 'Advanced tools for growing portfolios',
+      color: '#3b82f6',
+      tiers: investorClassifications.slice(2, 5), // Accelerator ($1K), Professional ($10K), Premium ($100K)
+      icon: <Building2 className="w-6 h-6" />
+    },
+    {
+      id: 'affluent',
+      title: 'High Net Worth',
+      subtitle: '$500K - $1M',
+      description: 'Sophisticated wealth management',
+      color: '#8b5cf6',
+      tiers: [investorClassifications[5], investorClassifications[8]], // Executive ($500K), Institutional ($1M)
+      icon: <Shield className="w-6 h-6" />
+    },
+    {
+      id: 'institutional',
+      title: 'Ultra Wealthy & Institutional',
+      subtitle: '$10M - $100M+',
+      description: 'Exclusive access for the largest investors',
+      color: '#f59e0b',
+      tiers: investorClassifications.slice(6, 8), // Ultra High Net Worth ($10M), Sovereign Wealth ($100M)
+      icon: <Building2 className="w-6 h-6" />
+    }
+  ]
 
   return (
     <div className="fixed inset-0 z-50">
@@ -342,230 +439,415 @@ export function InvestorClassificationApple({ selectedCountry, onClassificationS
           </p>
         </div>
 
-        {/* Classification Cards */}
+        {/* Progressive Disclosure - Investment Scales or Detailed View */}
         <div className="max-w-8xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6 mb-16">
-            {investorClassifications.map((classification, index) => {
-              const jurisdictionalNote = getJurisdictionalNote(classification)
-              const isSelected = selectedClassification === classification.id
-              const isHovered = hoveredClassification === classification.id
-
-              return (
+          {!selectedScale ? (
+            // Investment Scale Selection
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+              {investmentScales.map((scale, index) => (
                 <div
-                  key={classification.id}
+                  key={scale.id}
                   className={`relative cursor-pointer transition-all duration-500 ease-out transform ${
                     isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                  } ${
-                    isSelected ? 'scale-105 z-10' : isHovered ? 'scale-102 z-10' : 'hover:scale-102'
-                  }`}
+                  } hover:scale-105`}
                   style={{
-                    transitionDelay: `${400 + index * 100}ms`
+                    transitionDelay: `${400 + index * 150}ms`
                   }}
-                  onClick={() => handleClassificationSelect(classification)}
-                  onMouseEnter={() => setHoveredClassification(classification.id)}
-                  onMouseLeave={() => setHoveredClassification(null)}
+                  onClick={() => setSelectedScale(scale.id)}
                 >
-                  {/* Highlight Badge */}
-                  {classification.highlight && (
-                    <div className="absolute -top-3 left-6 z-20">
-                      <div className="px-3 py-1 rounded-full text-xs font-medium text-white" style={{
-                        background: 'linear-gradient(135deg, #007AFF 0%, #5856D6 100%)',
-                        boxShadow: '0 4px 16px rgba(0, 122, 255, 0.3)'
-                      }}>
-                        {classification.highlight}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Card */}
                   <div
-                    className="relative overflow-hidden rounded-2xl p-8 h-full transition-all duration-300"
+                    className="relative overflow-hidden rounded-3xl p-8 h-full transition-all duration-300 hover:shadow-2xl"
                     style={{
-                      background: isSelected
-                        ? 'rgba(255, 255, 255, 0.15)'
-                        : isHovered
-                          ? 'rgba(255, 255, 255, 0.12)'
-                          : 'rgba(255, 255, 255, 0.08)',
+                      background: 'rgba(255, 255, 255, 0.10)',
                       backdropFilter: 'blur(20px) saturate(180%)',
-                      border: isSelected
-                        ? '2px solid rgba(0, 122, 255, 0.6)'
-                        : isHovered
-                          ? '1px solid rgba(255, 255, 255, 0.3)'
-                          : '1px solid rgba(255, 255, 255, 0.15)',
-                      boxShadow: isSelected
-                        ? '0 20px 60px rgba(0, 122, 255, 0.2), 0 8px 24px rgba(0,0,0,0.1)'
-                        : isHovered
-                          ? '0 16px 40px rgba(0,0,0,0.15)'
-                          : '0 8px 24px rgba(0,0,0,0.08)'
+                      border: '1px solid rgba(255, 255, 255, 0.18)',
+                      boxShadow: '0 12px 32px rgba(0,0,0,0.12)'
                     }}
                   >
-                    {/* Header */}
-                    <div className="flex items-start justify-between mb-6">
-                      <div className="flex items-center gap-4">
-                        <div
-                          className={`p-3 rounded-xl transition-all duration-300 ${
-                            isSelected || isHovered
-                              ? 'text-white'
-                              : 'text-white/70'
-                          }`}
-                          style={{
-                            background: isSelected
-                              ? 'linear-gradient(135deg, #007AFF 0%, #5856D6 100%)'
-                              : isHovered
-                                ? 'rgba(255, 255, 255, 0.15)'
-                                : 'rgba(255, 255, 255, 0.1)'
-                          }}
-                        >
-                          {classification.icon}
-                        </div>
-                        <div>
-                          <h3 className="text-2xl font-semibold mb-1" style={{
-                            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                            letterSpacing: '-0.01em',
-                            color: 'rgba(0, 0, 0, 0.9)',
-                            fontWeight: 600
-                          }}>
-                            {classification.title}
-                          </h3>
-                          <p className="text-sm font-medium" style={{
-                            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                            color: 'rgba(0, 0, 0, 0.6)',
-                            fontWeight: 500
-                          }}>
-                            {classification.subtitle}
-                          </p>
+                    {/* Scale Header */}
+                    <div className="text-center mb-8">
+                      <div className="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-2xl" style={{
+                        background: `linear-gradient(135deg, ${scale.color}20, ${scale.color}10)`,
+                        border: `1px solid ${scale.color}30`
+                      }}>
+                        <div style={{ color: scale.color }}>
+                          {scale.icon}
                         </div>
                       </div>
+                      <h3 className="text-2xl mb-2" style={{
+                        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                        letterSpacing: '-0.02em',
+                        color: 'rgba(0, 0, 0, 0.92)',
+                        fontWeight: 500,
+                        lineHeight: 1.15
+                      }}>
+                        {scale.title}
+                      </h3>
+                      <div className="text-lg mb-4" style={{
+                        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                        color: 'rgba(0, 0, 0, 0.65)',
+                        fontWeight: 450,
+                        letterSpacing: '-0.005em',
+                        lineHeight: 1.3
+                      }}>
+                        {scale.subtitle}
+                      </div>
+                      <p className="text-sm leading-relaxed" style={{
+                        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                        color: 'rgba(0, 0, 0, 0.58)',
+                        fontWeight: 400,
+                        letterSpacing: '0.005em',
+                        lineHeight: 1.45
+                      }}>
+                        {scale.description}
+                      </p>
+                    </div>
 
-                      {isSelected && (
-                        <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{
-                          background: 'linear-gradient(135deg, #007AFF 0%, #5856D6 100%)'
+                    {/* Tier Preview */}
+                    <div className="space-y-3 mb-8">
+                      {scale.tiers.slice(0, 2).map((tier, tierIndex) => (
+                        <div key={tier.id} className="flex items-center gap-3 p-3 rounded-xl" style={{
+                          background: 'rgba(0, 0, 0, 0.03)',
+                          border: '1px solid rgba(0, 0, 0, 0.05)'
                         }}>
-                          <CheckCircle className="w-4 h-4 text-white" />
+                          <div className="w-2 h-2 rounded-full" style={{
+                            background: scale.color
+                          }} />
+                          <span className="text-sm" style={{
+                            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                            color: 'rgba(0, 0, 0, 0.75)',
+                            fontWeight: 450,
+                            letterSpacing: '-0.003em'
+                          }}>
+                            {tier.title} - {tier.minimumInvestment}
+                          </span>
+                        </div>
+                      ))}
+                      {scale.tiers.length > 2 && (
+                        <div className="text-center text-sm" style={{
+                          fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                          color: 'rgba(0, 0, 0, 0.48)',
+                          fontWeight: 400,
+                          letterSpacing: '0.003em'
+                        }}>
+                          +{scale.tiers.length - 2} more options
                         </div>
                       )}
                     </div>
 
-                    {/* Description */}
-                    <p className="mb-8 leading-relaxed" style={{
-                      fontSize: '16px',
-                      lineHeight: 1.6,
-                      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                      color: 'rgba(0, 0, 0, 0.7)',
-                      fontWeight: 400
-                    }}>
-                      {classification.description}
-                    </p>
-
-                    {/* Investment Details */}
-                    <div className="space-y-6 mb-8">
-                      <div className="flex justify-between items-center py-3 border-b border-black/10">
-                        <span className="font-medium" style={{
-                          fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                          color: 'rgba(0, 0, 0, 0.6)',
-                          fontWeight: 500
-                        }}>Minimum Investment</span>
-                        <span className="font-semibold text-lg" style={{
-                          fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                          color: 'rgba(0, 0, 0, 0.9)',
-                          fontWeight: 600
-                        }}>
-                          {classification.minimumInvestment}
-                        </span>
-                      </div>
-
-                      {/* Jurisdictional Note */}
-                      {jurisdictionalNote && (
-                        <div className="p-4 rounded-xl" style={{
-                          background: 'rgba(0, 122, 255, 0.08)',
-                          border: '1px solid rgba(0, 122, 255, 0.2)'
-                        }}>
-                          <div className="flex items-start gap-3">
-                            <Info className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                            <div>
-                              <div className="font-medium text-sm mb-1" style={{
-                                fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                                color: 'rgba(0, 0, 0, 0.9)',
-                                fontWeight: 500
-                              }}>
-                                {selectedCountry?.name} Classification
-                              </div>
-                              <div className="text-sm leading-relaxed" style={{
-                                fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                                color: 'rgba(0, 0, 0, 0.7)',
-                                fontWeight: 400
-                              }}>
-                                {jurisdictionalNote}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Key Requirements */}
-                      <div>
-                        <div className="text-xs font-medium uppercase tracking-wide mb-3" style={{
-                          fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                          color: 'rgba(0, 0, 0, 0.5)',
-                          fontWeight: 500
-                        }}>
-                          Key Requirements
-                        </div>
-                        <div className="space-y-2">
-                          {classification.regulatoryRequirements.slice(0, 2).map((req, reqIndex) => (
-                            <div key={reqIndex} className="flex items-start gap-3">
-                              <div className="w-1.5 h-1.5 rounded-full bg-green-500 mt-2 flex-shrink-0" />
-                              <span className="text-sm leading-relaxed" style={{
-                                fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                                color: 'rgba(0, 0, 0, 0.7)',
-                                fontWeight: 400
-                              }}>{req}</span>
-                            </div>
-                          ))}
-                          {classification.regulatoryRequirements.length > 2 && (
-                            <div className="text-sm ml-6" style={{
-                              fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                              color: 'rgba(0, 0, 0, 0.5)',
-                              fontWeight: 400
-                            }}>
-                              +{classification.regulatoryRequirements.length - 2} more requirements
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Action Button */}
+                    {/* Explore Button */}
                     <Button
-                      className={`w-full py-4 text-base font-medium rounded-xl transition-all duration-300 ${
-                        isSelected
-                          ? 'shadow-lg'
-                          : 'hover:shadow-lg'
-                      }`}
+                      className="w-full py-4 text-base font-medium rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-105"
                       style={{
-                        background: isSelected
-                          ? 'linear-gradient(135deg, #007AFF 0%, #5856D6 100%)'
-                          : isHovered
-                            ? 'rgba(0, 0, 0, 0.08)'
-                            : 'rgba(0, 0, 0, 0.05)',
+                        background: 'rgba(0, 0, 0, 0.06)',
                         border: '1px solid rgba(0, 0, 0, 0.1)',
-                        color: isSelected ? 'white' : 'rgba(0, 0, 0, 0.8)',
-                        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-                        fontWeight: 500
+                        color: 'rgba(0, 0, 0, 0.82)',
+                        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                        fontWeight: 470,
+                        letterSpacing: '-0.005em'
                       }}
                     >
                       <span className="flex items-center justify-center gap-2">
-                        {isSelected ? 'Selected' : 'Select Plan'}
-                        <ArrowRight className={`w-4 h-4 transition-transform ${
-                          isHovered ? 'translate-x-1' : ''
-                        }`} />
+                        Explore Options
+                        <ArrowRight className="w-4 h-4" />
                       </span>
                     </Button>
                   </div>
                 </div>
-              )
-            })}
-          </div>
+              ))}
+            </div>
+          ) : (
+            // Selected Scale - Show Individual Tiers
+            <div>
+              {/* Back to Scales */}
+              <div className="mb-8">
+                <Button
+                  variant="ghost"
+                  onClick={() => setSelectedScale(null)}
+                  className="group flex items-center gap-2 px-4 py-3 rounded-xl transition-all duration-200 hover:scale-105"
+                  style={{
+                    background: 'rgba(0, 0, 0, 0.05)',
+                    backdropFilter: 'blur(20px)',
+                    border: '1px solid rgba(0, 0, 0, 0.1)',
+                    color: 'rgba(0, 0, 0, 0.7)'
+                  }}
+                >
+                  <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+                  <span className="font-medium text-sm">Back to Investment Scales</span>
+                </Button>
+              </div>
+
+              {/* Scale Title */}
+              <div className="text-center mb-12">
+                {(() => {
+                  const currentScale = investmentScales.find(s => s.id === selectedScale)
+                  return currentScale ? (
+                    <div>
+                      <div className="flex items-center justify-center w-20 h-20 mx-auto mb-6 rounded-3xl" style={{
+                        background: `linear-gradient(135deg, ${currentScale.color}15, ${currentScale.color}08)`,
+                        border: `1px solid ${currentScale.color}25`
+                      }}>
+                        <div style={{ color: currentScale.color }}>
+                          {currentScale.icon}
+                        </div>
+                      </div>
+                      <h2 className="text-4xl mb-6" style={{
+                        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                        letterSpacing: '-0.025em',
+                        color: 'rgba(0, 0, 0, 0.92)',
+                        fontWeight: 400,
+                        lineHeight: 1.1
+                      }}>
+                        {currentScale.title}
+                      </h2>
+                      <p className="text-xl" style={{
+                        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                        color: 'rgba(0, 0, 0, 0.62)',
+                        fontWeight: 400,
+                        letterSpacing: '0.001em',
+                        lineHeight: 1.4
+                      }}>
+                        {currentScale.description}
+                      </p>
+                    </div>
+                  ) : null
+                })()}
+              </div>
+
+              {/* Scale's Tier Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+                {(() => {
+                  const currentScale = investmentScales.find(s => s.id === selectedScale)
+                  return currentScale ? currentScale.tiers.map((classification, index) => {
+                    const jurisdictionalNote = getJurisdictionalNote(classification)
+                    const isSelected = selectedClassification === classification.id
+                    const isHovered = hoveredClassification === classification.id
+
+                    return (
+                      <div
+                        key={classification.id}
+                        className={`relative cursor-pointer transition-all duration-500 ease-out transform ${
+                          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+                        } ${
+                          isSelected ? 'scale-105 z-10' : isHovered ? 'scale-102 z-10' : 'hover:scale-102'
+                        }`}
+                        style={{
+                          transitionDelay: `${200 + index * 100}ms`
+                        }}
+                        onClick={() => handleClassificationSelect(classification)}
+                        onMouseEnter={() => setHoveredClassification(classification.id)}
+                        onMouseLeave={() => setHoveredClassification(null)}
+                      >
+                        {/* Highlight Badge */}
+                        {classification.highlight && (
+                          <div className="absolute -top-3 left-6 z-20">
+                            <div className="px-3 py-1 rounded-full text-xs font-medium text-white" style={{
+                              background: 'linear-gradient(135deg, #007AFF 0%, #5856D6 100%)',
+                              boxShadow: '0 4px 16px rgba(0, 122, 255, 0.3)'
+                            }}>
+                              {classification.highlight}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Card */}
+                        <div
+                          className="relative overflow-hidden rounded-2xl p-8 h-full transition-all duration-300"
+                          style={{
+                            background: isSelected
+                              ? 'rgba(255, 255, 255, 0.15)'
+                              : isHovered
+                                ? 'rgba(255, 255, 255, 0.12)'
+                                : 'rgba(255, 255, 255, 0.08)',
+                            backdropFilter: 'blur(20px) saturate(180%)',
+                            border: isSelected
+                              ? '2px solid rgba(0, 122, 255, 0.6)'
+                              : isHovered
+                                ? '1px solid rgba(255, 255, 255, 0.3)'
+                                : '1px solid rgba(255, 255, 255, 0.15)',
+                            boxShadow: isSelected
+                              ? '0 20px 60px rgba(0, 122, 255, 0.2), 0 8px 24px rgba(0,0,0,0.1)'
+                              : isHovered
+                                ? '0 16px 40px rgba(0,0,0,0.15)'
+                                : '0 8px 24px rgba(0,0,0,0.08)'
+                          }}
+                        >
+                          {/* Header */}
+                          <div className="flex items-start justify-between mb-6">
+                            <div className="flex items-center gap-4">
+                              <div
+                                className={`p-3 rounded-xl transition-all duration-300 ${
+                                  isSelected || isHovered
+                                    ? 'text-white'
+                                    : 'text-white/70'
+                                }`}
+                                style={{
+                                  background: isSelected
+                                    ? 'linear-gradient(135deg, #007AFF 0%, #5856D6 100%)'
+                                    : isHovered
+                                      ? 'rgba(255, 255, 255, 0.15)'
+                                      : 'rgba(255, 255, 255, 0.1)'
+                                }}
+                              >
+                                {classification.icon}
+                              </div>
+                              <div>
+                                <h3 className="text-2xl mb-1" style={{
+                                  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                                  letterSpacing: '-0.022em',
+                                  color: 'rgba(0, 0, 0, 0.95)',
+                                  fontWeight: 500,
+                                  lineHeight: 1.15
+                                }}>
+                                  {classification.title}
+                                </h3>
+                                <p className="text-sm" style={{
+                                  fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                                  color: 'rgba(0, 0, 0, 0.64)',
+                                  fontWeight: 400,
+                                  letterSpacing: '-0.003em',
+                                  lineHeight: 1.2
+                                }}>
+                                  {classification.subtitle}
+                                </p>
+                              </div>
+                            </div>
+
+                            {isSelected && (
+                              <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{
+                                background: 'linear-gradient(135deg, #007AFF 0%, #5856D6 100%)'
+                              }}>
+                                <CheckCircle className="w-4 h-4 text-white" />
+                              </div>
+                            )}
+                          </div>
+
+                          {/* Description */}
+                          <p className="mb-8 leading-relaxed" style={{
+                            fontSize: '16px',
+                            lineHeight: 1.55,
+                            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                            color: 'rgba(0, 0, 0, 0.72)',
+                            fontWeight: 400,
+                            letterSpacing: '0.01em'
+                          }}>
+                            {classification.description}
+                          </p>
+
+                          {/* Investment Details */}
+                          <div className="space-y-6 mb-8">
+                            <div className="flex justify-between items-center py-3 border-b border-black/10">
+                              <span style={{
+                                fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                                color: 'rgba(0, 0, 0, 0.62)',
+                                fontWeight: 450,
+                                letterSpacing: '-0.003em'
+                              }}>Minimum Investment</span>
+                              <span className="text-lg" style={{
+                                fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                                color: 'rgba(0, 0, 0, 0.92)',
+                                fontWeight: 500,
+                                letterSpacing: '-0.015em'
+                              }}>
+                                {classification.minimumInvestment}
+                              </span>
+                            </div>
+
+                            {/* Jurisdictional Note */}
+                            {jurisdictionalNote && (
+                              <div className="p-4 rounded-xl" style={{
+                                background: 'rgba(0, 122, 255, 0.08)',
+                                border: '1px solid rgba(0, 122, 255, 0.2)'
+                              }}>
+                                <div className="flex items-start gap-3">
+                                  <Info className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                                  <div>
+                                    <div className="font-medium text-sm mb-1" style={{
+                                      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                                      color: 'rgba(0, 0, 0, 0.9)',
+                                      fontWeight: 500
+                                    }}>
+                                      {selectedCountry?.name} Classification
+                                    </div>
+                                    <div className="text-sm leading-relaxed" style={{
+                                      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                                      color: 'rgba(0, 0, 0, 0.7)',
+                                      fontWeight: 400
+                                    }}>
+                                      {jurisdictionalNote}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Key Requirements */}
+                            <div>
+                              <div className="text-xs font-medium uppercase tracking-wide mb-3" style={{
+                                fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                                color: 'rgba(0, 0, 0, 0.5)',
+                                fontWeight: 500
+                              }}>
+                                Key Requirements
+                              </div>
+                              <div className="space-y-2">
+                                {classification.regulatoryRequirements.slice(0, 2).map((req, reqIndex) => (
+                                  <div key={reqIndex} className="flex items-start gap-3">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 mt-2 flex-shrink-0" />
+                                    <span className="text-sm leading-relaxed" style={{
+                                      fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                                      color: 'rgba(0, 0, 0, 0.7)',
+                                      fontWeight: 400
+                                    }}>{req}</span>
+                                  </div>
+                                ))}
+                                {classification.regulatoryRequirements.length > 2 && (
+                                  <div className="text-sm ml-6" style={{
+                                    fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                                    color: 'rgba(0, 0, 0, 0.5)',
+                                    fontWeight: 400
+                                  }}>
+                                    +{classification.regulatoryRequirements.length - 2} more requirements
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* Action Button */}
+                          <Button
+                            className={`w-full py-4 text-base font-medium rounded-xl transition-all duration-300 ${
+                              isSelected
+                                ? 'shadow-lg'
+                                : 'hover:shadow-lg'
+                            }`}
+                            style={{
+                              background: isSelected
+                                ? 'linear-gradient(135deg, #007AFF 0%, #5856D6 100%)'
+                                : isHovered
+                                  ? 'rgba(0, 0, 0, 0.08)'
+                                  : 'rgba(0, 0, 0, 0.05)',
+                              border: '1px solid rgba(0, 0, 0, 0.1)',
+                              color: isSelected ? 'white' : 'rgba(0, 0, 0, 0.8)',
+                              fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                              fontWeight: 500
+                            }}
+                          >
+                            <span className="flex items-center justify-center gap-2">
+                              {isSelected ? 'Selected' : 'Select Plan'}
+                              <ArrowRight className={`w-4 h-4 transition-transform ${
+                                isHovered ? 'translate-x-1' : ''
+                              }`} />
+                            </span>
+                          </Button>
+                        </div>
+                      </div>
+                    )
+                  }) : []
+                })()}
+              </div>
+            </div>
+          )}
 
           {/* Footer */}
           <div className={`text-center transition-all duration-700 delay-700 ${

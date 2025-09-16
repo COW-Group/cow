@@ -4,6 +4,9 @@ import { Toaster } from 'react-hot-toast';
 import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
 import OnboardingPage from './pages/OnboardingPage';
+import CountrySelectionPage from './pages/CountrySelectionPage';
+import InvestorClassificationPage from './pages/InvestorClassificationPage';
+import UserTypeSelectionPage from './pages/UserTypeSelectionPage';
 import InstitutionalDashboardPage from './pages/InstitutionalDashboardPage';
 import AccreditedDashboardPage from './pages/AccreditedDashboardPage';
 import InternationalDashboardPage from './pages/InternationalDashboardPage';
@@ -22,6 +25,9 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
+        <Route path="/onboarding/country-selection" element={<CountrySelectionPage />} />
+        <Route path="/onboarding/investor-classification" element={<InvestorClassificationPage />} />
+        <Route path="/onboarding/user-type" element={<UserTypeSelectionPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/dashboard/institutional" element={<InstitutionalDashboardPage />} />
         <Route path="/dashboard/accredited" element={<AccreditedDashboardPage />} />

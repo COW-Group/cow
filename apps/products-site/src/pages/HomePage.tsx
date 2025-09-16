@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Button } from "../components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { ArrowRight, Shield, TrendingUp, Coins, Wallet, Plane, Star, CheckCircle, Clock, Circle, Phone, Calendar, ChevronLeft } from "lucide-react"
@@ -15,6 +15,7 @@ import { useState, useEffect } from "react"
 type ViewState = 'country-selection' | 'investor-classification' | 'default' | 'user-selection' | 'personalized'
 
 export default function HomePage() {
+  const navigate = useNavigate()
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showTechModal, setShowTechModal] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState(null)
@@ -26,7 +27,11 @@ export default function HomePage() {
 
   useEffect(() => {
     setIsClient(true)
-  }, [])
+    // Redirect to the new onboarding flow when starting the onboarding process
+    if (viewState === 'country-selection') {
+      navigate('/onboarding/country-selection')
+    }
+  }, [navigate, viewState])
 
   const handleCountrySelect = (country: Country) => {
     setSelectedCountry(country)

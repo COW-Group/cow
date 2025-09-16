@@ -2,6 +2,7 @@ import { useState, useEffect } from "react"
 import { Button } from "./ui/button"
 import { Card } from "./ui/card"
 import { ArrowRight, Building2, User, Users, TrendingUp, Shield, Briefcase, ChevronLeft } from "lucide-react"
+import { HeroBackground } from "./hero-background"
 
 export interface UserType {
   id: string
@@ -73,9 +74,37 @@ interface UserTypeSelectorProps {
   selectedClassification?: any
 }
 
-export function UserTypeSelector({ onUserTypeSelect, selectedType, onBack }: UserTypeSelectorProps) {
+// Filter user types based on investment classification
+const getAvailableUserTypes = (classificationId?: string) => {
+  if (!classificationId) return userTypes
+
+  // Low-tier investors ($10-$999) - Individual only
+  const individualOnlyTiers = ['explorer', 'builder']
+
+  // Mid-tier investors ($1K-$100K) - Individual or Advisor
+  const individualAdvisorTiers = ['accelerator', 'professional', 'premium']
+
+  // High-tier investors ($500K+) - All types available
+  const allTypesTiers = ['executive', 'institutional', 'ultra-high-net-worth', 'sovereign-wealth']
+
+  if (individualOnlyTiers.includes(classificationId)) {
+    return userTypes.filter(type => type.id === 'individual')
+  }
+
+  if (individualAdvisorTiers.includes(classificationId)) {
+    return userTypes.filter(type => ['individual', 'advisor'].includes(type.id))
+  }
+
+  // For high-tier and institutional, all types are available
+  return userTypes
+}
+
+export function UserTypeSelector({ onUserTypeSelect, selectedType, onBack, selectedClassification }: UserTypeSelectorProps) {
   const [hoveredType, setHoveredType] = useState<string | null>(null)
   const [isVisible, setIsVisible] = useState(false)
+
+  // Get filtered user types based on selected classification
+  const availableUserTypes = getAvailableUserTypes(selectedClassification?.id)
 
   // Entrance animation
   useEffect(() => {
@@ -84,52 +113,112 @@ export function UserTypeSelector({ onUserTypeSelect, selectedType, onBack }: Use
   }, [])
 
   return (
-    <div className={`w-full max-w-7xl mx-auto px-8 transition-all duration-1000 ${
-      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-    }`}>
-      {/* Back Button */}
-      {onBack && (
-        <div className="mb-8">
-          <Button
-            variant="ghost"
-            onClick={onBack}
-            className="group flex items-center gap-2 px-4 py-3 rounded-xl text-white/80 hover:text-white transition-all duration-200 hover:scale-105"
-            style={{
-              background: 'rgba(255, 255, 255, 0.08)',
-              backdropFilter: 'blur(20px) saturate(180%)',
-              border: '1px solid rgba(255, 255, 255, 0.12)'
-            }}
-          >
-            <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
-            <span className="font-medium text-sm">Back to Investment Classification</span>
-          </Button>
-        </div>
-      )}
-
-      <div className="text-center mb-16">
-        <div className="mb-8">
-          <div className="w-16 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto mb-6" />
-          <div className="text-sm text-gray-500 font-light tracking-wider uppercase mb-6">
-            Step 2 of 2
-          </div>
-        </div>
-        <h2
-          className="text-4xl font-light mb-6"
-          style={{
-            letterSpacing: '0.02em',
-            color: '#1f2937'
-          }}
-        >
-          Select Your Investor Type
-        </h2>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-          Choose the category that best describes your role and investment approach.
-          This determines your platform experience and available features.
-        </p>
+    <div className="fixed inset-0 z-50">
+      {/* Full Screen Vanta Background */}
+      <div className="absolute inset-0 z-0">
+        <HeroBackground />
       </div>
 
-      <div className="grid md:grid-cols-3 gap-8">
-        {userTypes.map((type) => (
+      {/* Scrollable Content */}
+      <div className="relative z-10 w-full h-full overflow-auto">
+        <div className={`w-full mx-auto transition-all duration-700 ease-out ${
+          isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+        }`} style={{
+          minHeight: '100vh',
+          padding: '2rem',
+          paddingTop: 'max(2rem, env(safe-area-inset-top) + 2rem)',
+          paddingBottom: 'max(2rem, env(safe-area-inset-bottom) + 2rem)'
+        }}>
+
+        {/* Navigation */}
+        <div className="flex items-center justify-between mb-16 max-w-7xl mx-auto">
+          {onBack && (
+            <Button
+              variant="ghost"
+              onClick={onBack}
+              className="group flex items-center gap-2 px-4 py-3 rounded-xl text-white/80 hover:text-white transition-all duration-200 hover:scale-105"
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                backdropFilter: 'blur(20px) saturate(180%)',
+                border: '1px solid rgba(255, 255, 255, 0.12)'
+              }}
+            >
+              <ChevronLeft className="w-4 h-4 transition-transform group-hover:-translate-x-0.5" />
+              <span className="font-medium text-sm">Back</span>
+            </Button>
+          )}
+
+          <div className="text-center">
+            <div className="text-2xl font-light mb-2 tracking-wide" style={{
+              fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+              color: 'rgba(255, 255, 255, 0.9)',
+              fontWeight: 300
+            }}>
+              COW
+            </div>
+          </div>
+
+          <div className="w-20" /> {/* Spacer for balance */}
+        </div>
+
+        {/* Header */}
+        <div className="text-center mb-20 max-w-4xl mx-auto">
+          <div className={`text-xs font-medium uppercase tracking-widest mb-4 transition-all duration-500 delay-100 ${
+            isVisible ? 'opacity-100' : 'opacity-0'
+          }`} style={{
+            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+            color: 'rgba(255, 255, 255, 0.5)',
+            fontWeight: 500
+          }}>
+            Step 3 of 3
+          </div>
+
+          <h1 className={`text-5xl md:text-6xl font-light mb-6 leading-tight transition-all duration-700 delay-200 ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+          }`} style={{
+            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+            letterSpacing: '-0.02em',
+            color: 'rgba(255, 255, 255, 0.9)',
+            fontWeight: 300
+          }}>
+            {availableUserTypes.length === 1 ? (
+              <>
+                Confirm your<br />
+                investor profile
+              </>
+            ) : (
+              <>
+                Select your<br />
+                investor type
+              </>
+            )}
+          </h1>
+
+          <p className={`text-xl leading-relaxed max-w-2xl mx-auto transition-all duration-700 delay-300 ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`} style={{
+            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+            fontWeight: 400,
+            lineHeight: 1.5,
+            color: 'rgba(255, 255, 255, 0.7)'
+          }}>
+            {availableUserTypes.length === 1
+              ? 'Based on your selected investment level, this is your recommended investor category for accessing Performance RWA tokens.'
+              : 'Choose the category that best describes your role and investment approach. This determines your platform experience and available features.'
+            }
+          </p>
+        </div>
+
+        {/* User Type Cards */}
+        <div className="max-w-8xl mx-auto">
+          <div className={`grid gap-8 ${
+            availableUserTypes.length === 1
+              ? 'grid-cols-1 max-w-md mx-auto'
+              : availableUserTypes.length === 2
+                ? 'md:grid-cols-2 max-w-4xl mx-auto'
+                : 'md:grid-cols-3'
+          }`}>
+        {availableUserTypes.map((type) => (
           <Card
             key={type.id}
             className={`relative overflow-hidden transition-all duration-500 cursor-pointer group ${
@@ -263,25 +352,32 @@ export function UserTypeSelector({ onUserTypeSelect, selectedType, onBack }: Use
             )}
           </Card>
         ))}
-      </div>
+          </div>
 
-      {/* Trust Indicators */}
-      <div className="mt-16 text-center">
-        <div className="flex items-center justify-center gap-8 text-sm text-gray-500">
-          <div className="flex items-center gap-2">
-            <Shield className="w-4 h-4" />
-            <span>SEC Registered</span>
+          {/* Trust Indicators */}
+          <div className={`mt-16 text-center transition-all duration-700 delay-700 ${
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}>
+            <div className="flex items-center justify-center gap-8 text-sm" style={{
+              color: 'rgba(255, 255, 255, 0.6)'
+            }}>
+              <div className="flex items-center gap-2">
+                <Shield className="w-4 h-4" />
+                <span>SEC Registered</span>
+              </div>
+              <div className="w-px h-4" style={{ backgroundColor: 'rgba(255, 255, 255, 0.3)' }} />
+              <div className="flex items-center gap-2">
+                <TrendingUp className="w-4 h-4" />
+                <span>$2.8B+ Assets Under Management</span>
+              </div>
+              <div className="w-px h-4" style={{ backgroundColor: 'rgba(255, 255, 255, 0.3)' }} />
+              <div className="flex items-center gap-2">
+                <Users className="w-4 h-4" />
+                <span>Trusted by 15,000+ Investors</span>
+              </div>
+            </div>
           </div>
-          <div className="w-px h-4 bg-gray-300" />
-          <div className="flex items-center gap-2">
-            <TrendingUp className="w-4 h-4" />
-            <span>$2.8B+ Assets Under Management</span>
-          </div>
-          <div className="w-px h-4 bg-gray-300" />
-          <div className="flex items-center gap-2">
-            <Users className="w-4 h-4" />
-            <span>Trusted by 15,000+ Investors</span>
-          </div>
+        </div>
         </div>
       </div>
     </div>

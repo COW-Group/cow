@@ -477,7 +477,7 @@ export function WorkspaceSidebar({
               onClick={() => navigate('/my-work')}
             >
               <Home className="w-4 h-4 mr-3 text-blue-600" />
-              <span className="text-sm font-medium ${classes.text.primary}">Home</span>
+              <span className="text-sm font-medium ${classes.text.primary}">My Office</span>
             </div>
           </div>
         </div>

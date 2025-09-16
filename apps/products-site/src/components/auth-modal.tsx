@@ -10,9 +10,15 @@ import { Loader2 } from "lucide-react"
 interface AuthModalProps {
   isOpen: boolean
   onClose: () => void
+  userType?: {
+    id: string
+    title: string
+    subtitle: string
+    description: string
+  } | null
 }
 
-export function AuthModal({ isOpen, onClose }: AuthModalProps) {
+export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
   const [isLogin, setIsLogin] = useState(true)
   const [isResetPassword, setIsResetPassword] = useState(false)
   const [isResendConfirmation, setIsResendConfirmation] = useState(false)

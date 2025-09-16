@@ -72,7 +72,8 @@
       "Bash(npx eslint:*)",
       "Bash(grep:*)",
       "WebFetch(domain:animagraffs.com)",
-      "Bash(git fetch:*)"
+      "Bash(git fetch:*)",
+      "WebFetch(domain:www.burberry.com)"
     ],
     "deny": [],
     "ask": []

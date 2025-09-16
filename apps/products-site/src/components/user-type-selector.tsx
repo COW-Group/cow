@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "./ui/button"
 import { Card } from "./ui/card"
 import { ArrowRight, Building2, User, Users, TrendingUp, Shield, Briefcase } from "lucide-react"
@@ -72,10 +72,25 @@ interface UserTypeSelectorProps {
 
 export function UserTypeSelector({ onUserTypeSelect, selectedType }: UserTypeSelectorProps) {
   const [hoveredType, setHoveredType] = useState<string | null>(null)
+  const [isVisible, setIsVisible] = useState(false)
+
+  // Entrance animation
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), 200)
+    return () => clearTimeout(timer)
+  }, [])
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-8">
+    <div className={`w-full max-w-7xl mx-auto px-8 transition-all duration-1000 ${
+      isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+    }`}>
       <div className="text-center mb-16">
+        <div className="mb-8">
+          <div className="w-16 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent mx-auto mb-6" />
+          <div className="text-sm text-gray-500 font-light tracking-wider uppercase mb-6">
+            Step 2 of 2
+          </div>
+        </div>
         <h2
           className="text-4xl font-light mb-6"
           style={{
@@ -97,19 +112,22 @@ export function UserTypeSelector({ onUserTypeSelect, selectedType }: UserTypeSel
             key={type.id}
             className={`relative overflow-hidden transition-all duration-500 cursor-pointer group ${
               selectedType === type.id
-                ? 'ring-2 ring-blue-500 shadow-xl scale-105'
+                ? 'ring-2 ring-blue-500 shadow-2xl scale-105'
                 : hoveredType === type.id
-                  ? 'shadow-xl scale-102'
-                  : 'shadow-lg hover:shadow-xl'
+                  ? 'shadow-2xl scale-102 -translate-y-1'
+                  : 'shadow-lg hover:shadow-2xl hover:-translate-y-1'
             }`}
             style={{
               background: selectedType === type.id
-                ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 51, 234, 0.05) 100%)'
-                : 'rgba(255, 255, 255, 0.95)',
-              backdropFilter: 'blur(20px)',
+                ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(147, 51, 234, 0.08) 100%)'
+                : hoveredType === type.id
+                  ? 'rgba(255, 255, 255, 0.98)'
+                  : 'rgba(255, 255, 255, 0.95)',
+              backdropFilter: 'blur(25px) saturate(180%)',
               border: selectedType === type.id
-                ? '2px solid rgba(59, 130, 246, 0.2)'
-                : '1px solid rgba(0, 0, 0, 0.08)'
+                ? '2px solid rgba(59, 130, 246, 0.3)'
+                : '1px solid rgba(0, 0, 0, 0.06)',
+              borderRadius: '16px'
             }}
             onMouseEnter={() => setHoveredType(type.id)}
             onMouseLeave={() => setHoveredType(null)}
@@ -119,11 +137,14 @@ export function UserTypeSelector({ onUserTypeSelect, selectedType }: UserTypeSel
               {/* Icon and Header */}
               <div className="flex items-center gap-4 mb-6">
                 <div
-                  className={`p-3 rounded-2xl transition-all duration-300 ${
+                  className={`p-3 rounded-2xl transition-all duration-500 ${
                     selectedType === type.id || hoveredType === type.id
-                      ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg'
-                      : 'bg-gray-100 text-gray-600'
+                      ? 'bg-gradient-to-br from-blue-500 to-purple-600 text-white shadow-lg scale-110'
+                      : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
                   }`}
+                  style={{
+                    transform: selectedType === type.id || hoveredType === type.id ? 'scale(1.1)' : 'scale(1)'
+                  }}
                 >
                   {type.icon}
                 </div>
@@ -185,21 +206,26 @@ export function UserTypeSelector({ onUserTypeSelect, selectedType }: UserTypeSel
 
               {/* CTA */}
               <Button
-                className={`w-full mt-6 transition-all duration-300 ${
+                className={`w-full mt-6 transition-all duration-500 rounded-xl ${
                   selectedType === type.id
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg'
-                    : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-xl'
+                    : hoveredType === type.id
+                      ? 'bg-gray-900 text-white shadow-lg'
+                      : 'bg-gray-50 text-gray-700 hover:bg-gray-100'
                 }`}
                 style={{
-                  background: selectedType === type.id || hoveredType === type.id
+                  background: selectedType === type.id
                     ? 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)'
-                    : undefined
+                    : hoveredType === type.id
+                      ? 'linear-gradient(135deg, #1f2937 0%, #111827 100%)'
+                      : undefined,
+                  transform: hoveredType === type.id ? 'translateY(-2px)' : 'translateY(0)'
                 }}
               >
                 <span className="flex items-center justify-center gap-2">
                   {selectedType === type.id ? 'Selected' : 'Get Started'}
-                  <ArrowRight className={`w-4 h-4 transition-transform ${
-                    hoveredType === type.id ? 'translate-x-1' : ''
+                  <ArrowRight className={`w-4 h-4 transition-all duration-300 ${
+                    hoveredType === type.id || selectedType === type.id ? 'translate-x-1 scale-110' : ''
                   }`} />
                 </span>
               </Button>

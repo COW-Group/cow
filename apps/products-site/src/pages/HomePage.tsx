@@ -8,21 +8,54 @@ import { HeroBackground } from "../components/hero-background"
 import { AuthModal } from "../components/auth-modal"
 import { UserTypeSelector, UserType } from "../components/user-type-selector"
 import { DefaultHero, IndividualHero, AdvisorHero, InstitutionalHero } from "../components/hero-sections"
+import { CountrySelector, Country } from "../components/country-selector-fixed"
+import { InvestorClassificationApple } from "../components/investor-classification-apple"
 import { useState, useEffect } from "react"
 
-type ViewState = 'default' | 'user-selection' | 'personalized'
+type ViewState = 'country-selection' | 'investor-classification' | 'default' | 'user-selection' | 'personalized'
 
 export default function HomePage() {
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showTechModal, setShowTechModal] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState(null)
   const [isClient, setIsClient] = useState(false)
-  const [viewState, setViewState] = useState<ViewState>('default')
+  const [viewState, setViewState] = useState<ViewState>('country-selection')
   const [selectedUserType, setSelectedUserType] = useState<UserType | null>(null)
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null)
+  const [selectedInvestorClass, setSelectedInvestorClass] = useState<any>(null)
 
   useEffect(() => {
     setIsClient(true)
   }, [])
+
+  const handleCountrySelect = (country: Country) => {
+    setSelectedCountry(country)
+  }
+
+  const handleCountryContinue = () => {
+    setViewState('investor-classification')
+  }
+
+  const handleInvestorClassificationSelect = (classification: any) => {
+    setSelectedInvestorClass(classification)
+    // Skip user type selection for institutional investors, go directly to personalized
+    if (classification.id === 'institutional') {
+      setSelectedUserType({ id: 'institutional', title: 'Institutional Client' } as UserType)
+      setViewState('personalized')
+    } else {
+      setViewState('default')
+    }
+  }
+
+  const handleBackToCountrySelection = () => {
+    setViewState('country-selection')
+    setSelectedInvestorClass(null)
+  }
+
+  const handleBackToInvestorClassification = () => {
+    setViewState('investor-classification')
+    setSelectedUserType(null)
+  }
 
   const handleUserTypeSelect = (userType: UserType) => {
     setSelectedUserType(userType)
@@ -44,6 +77,25 @@ export default function HomePage() {
   }
 
   const renderHeroSection = () => {
+    if (viewState === 'country-selection') {
+      return (
+        <CountrySelector
+          onCountrySelect={handleCountrySelect}
+          onContinue={handleCountryContinue}
+        />
+      )
+    }
+
+    if (viewState === 'investor-classification') {
+      return (
+        <InvestorClassificationApple
+          selectedCountry={selectedCountry}
+          onClassificationSelect={handleInvestorClassificationSelect}
+          onBack={handleBackToCountrySelection}
+        />
+      )
+    }
+
     if (viewState === 'default') {
       return <DefaultHero onSelectUserType={() => setViewState('user-selection')} />
     }
@@ -277,6 +329,11 @@ export default function HomePage() {
     return null
   }
 
+  // Don't render navigation or other content during onboarding flow
+  if (viewState === 'country-selection' || viewState === 'investor-classification') {
+    return renderHeroSection()
+  }
+
   return (
     <div className="min-h-screen bg-white text-gray-900">
       {/* Navigation */}
@@ -291,7 +348,18 @@ export default function HomePage() {
             boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)'
           }}
         >
-          {/* Back Button for Personalized View */}
+          {/* Back Button for Navigation */}
+          {viewState === 'user-selection' && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleBackToInvestorClassification}
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
+            >
+              <ChevronLeft className="w-4 h-4" />
+              Back
+            </Button>
+          )}
           {viewState === 'personalized' && (
             <Button
               variant="ghost"
@@ -315,15 +383,33 @@ export default function HomePage() {
             COW
           </Link>
 
-          {/* User Type Indicator */}
-          {selectedUserType && viewState === 'personalized' && (
-            <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full">
-              <div className="w-2 h-2 bg-blue-500 rounded-full" />
-              <span className="text-sm text-blue-700 font-medium">
-                {selectedUserType.title}
-              </span>
-            </div>
-          )}
+          {/* Location, Investor Class, and User Type Indicators */}
+          <div className="flex items-center gap-3">
+            {selectedCountry && (
+              <div className="flex items-center gap-2 px-3 py-1 bg-gray-50 rounded-full">
+                <span className="text-sm">{selectedCountry.code === 'US' ? '🇺🇸' : selectedCountry.code === 'GB' ? '🇬🇧' : selectedCountry.code === 'AU' ? '🇦🇺' : selectedCountry.code === 'CA' ? '🇨🇦' : selectedCountry.code === 'DE' ? '🇩🇪' : selectedCountry.code === 'SG' ? '🇸🇬' : '🌍'}</span>
+                <span className="text-sm text-gray-700 font-medium">
+                  {selectedCountry.code}
+                </span>
+              </div>
+            )}
+            {selectedInvestorClass && (viewState === 'user-selection' || viewState === 'personalized') && (
+              <div className="flex items-center gap-2 px-3 py-1 bg-purple-50 rounded-full">
+                <div className="w-2 h-2 bg-purple-500 rounded-full" />
+                <span className="text-sm text-purple-700 font-medium">
+                  {selectedInvestorClass.title}
+                </span>
+              </div>
+            )}
+            {selectedUserType && viewState === 'personalized' && (
+              <div className="flex items-center gap-2 px-3 py-1 bg-blue-50 rounded-full">
+                <div className="w-2 h-2 bg-blue-500 rounded-full" />
+                <span className="text-sm text-blue-700 font-medium">
+                  {selectedUserType.title}
+                </span>
+              </div>
+            )}
+          </div>
 
           <div className="flex-1" />
 

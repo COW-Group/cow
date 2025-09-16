@@ -55,20 +55,8 @@ export default function UserTypeSelectionPage() {
       userTypeTitle: userType.title
     })
 
-    // Navigate to appropriate dashboard based on user type
-    switch (userType.id) {
-      case 'individual':
-        navigate(`/dashboard/retail?${params.toString()}`)
-        break
-      case 'advisor':
-        navigate(`/dashboard/accredited?${params.toString()}`)
-        break
-      case 'institutional':
-        navigate(`/dashboard/institutional?${params.toString()}`)
-        break
-      default:
-        navigate(`/dashboard?${params.toString()}`)
-    }
+    // Navigate to home page to complete signup/login with onboarding data preserved
+    navigate(`/?onboarding=complete&${params.toString()}`)
   }
 
   const handleBackToInvestorClassification = () => {

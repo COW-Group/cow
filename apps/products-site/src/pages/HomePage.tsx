@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { Button } from "../components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { ArrowRight, Shield, TrendingUp, Coins, Wallet, Plane, Star, CheckCircle, Clock, Circle, Phone, Calendar, ChevronLeft } from "lucide-react"
@@ -16,6 +16,7 @@ type ViewState = 'country-selection' | 'investor-classification' | 'default' | '
 
 export default function HomePage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showTechModal, setShowTechModal] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState(null)
@@ -27,11 +28,34 @@ export default function HomePage() {
 
   useEffect(() => {
     setIsClient(true)
-    // Redirect to the new onboarding flow when starting the onboarding process
-    if (viewState === 'country-selection') {
+
+    // Check if user is returning from completed onboarding
+    const onboardingComplete = searchParams.get('onboarding')
+    if (onboardingComplete === 'complete') {
+      // Show auth modal for signup/login with onboarding data preserved
+      setShowAuthModal(true)
+      setViewState('default')
+
+      // Store onboarding data in sessionStorage for after auth
+      const onboardingData = {
+        country: searchParams.get('country'),
+        countryName: searchParams.get('countryName'),
+        currency: searchParams.get('currency'),
+        classificationId: searchParams.get('classificationId'),
+        classificationTitle: searchParams.get('classificationTitle'),
+        minimumInvestment: searchParams.get('minimumInvestment'),
+        userType: searchParams.get('userType'),
+        userTypeTitle: searchParams.get('userTypeTitle')
+      }
+      sessionStorage.setItem('onboardingData', JSON.stringify(onboardingData))
+
+      // Clean up URL parameters
+      navigate('/', { replace: true })
+    } else if (viewState === 'country-selection') {
+      // Redirect to the new onboarding flow when starting the onboarding process
       navigate('/onboarding/country-selection')
     }
-  }, [navigate, viewState])
+  }, [navigate, viewState, searchParams])
 
   const handleCountrySelect = (country: Country) => {
     setSelectedCountry(country)

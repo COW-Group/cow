@@ -1,4 +1,5 @@
 "use client"
+// Test automatic deployment
 
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"

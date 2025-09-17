@@ -1,48 +1,38 @@
 "use client"
 
-import { useState, useEffect, useCallback, useRef, useMemo } from "react"
+import { useState, useEffect, useCallback, useRef, useMemo, Suspense, lazy } from "react"
 import { CentralDashboardDisplay } from "@/components/central-dashboard-display"
 import { TaskList } from "@/components/task-list"
 import { TaskForm } from "@/components/task-form"
 import { TaskEditDialog } from "@/components/task-edit-dialog"
-import { TaskListManager } from "@/components/task-list-manager"
-import { GlobalTaskOrderDisplay } from "@/components/global-task-order-display"
 import Breaths from "@/components/breaths"
-import { RubricSection } from "@/components/rubric-section"
-import { WorldClockSection } from "@/components/world-clock-section"
 import { useAuth } from "@/hooks/use-auth"
 import { useRouter } from "next/navigation"
-import type { Step, TaskList as TTaskList, Breath, RubricData } from "@/lib/types"
+import type { Step, TaskList as TTaskList, Breath, RubricData, AppSettings } from "@/lib/types"
 import { useToast } from "@/hooks/use-toast"
 import { TaskListService } from "@/lib/task-list-service"
 import { DatabaseService } from "@/lib/database-service"
-import { Header } from "@/components/header"
-import { DashboardMenu } from "@/components/dashboard-menu"
 import { calculateTaskTimes } from "@/lib/time-calculation"
+import { FloatingNav } from "@/components/floating-nav"
 
-type AppSettings = {
-  soundEnabled: boolean
-  darkMode: boolean
-  defaultDuration: number
-  autoLoop: boolean
-  focusMode: boolean
-  showWeather: boolean
-  showGreeting: boolean
-  showMantra: boolean
-  showSteps: boolean
-  showQuotes: boolean
-  background: string
-  sound: string
-}
 
 const NO_TASK_LIST_SELECTED_ID = "no-list-selected"
 const ONE_OFF_TASK_ID = "one-off-task-id"
 const ALL_ACTIVE_TASKS_ID = "all-active-tasks"
 
+// Lazy load heavy components
+const LazyTaskListManager = lazy(() => import("@/components/task-list-manager").then(m => ({ default: m.TaskListManager })))
+const LazyRubricSection = lazy(() => import("@/components/rubric-section").then(m => ({ default: m.RubricSection })))
+const LazyWorldClockSection = lazy(() => import("@/components/world-clock-section").then(m => ({ default: m.WorldClockSection })))
+const LazyGlobalTaskOrderDisplay = lazy(() => import("@/components/global-task-order-display").then(m => ({ default: m.GlobalTaskOrderDisplay })))
+
 export default function FocusPage() {
   const { user, loading } = useAuth()
   const router = useRouter()
   const { toast } = useToast()
+
+  // Loading state for better UX
+  const [isInitializing, setIsInitializing] = useState(true)
 
   const [pomodoroTime, setPomodoroTime] = useState(25 * 60 * 1000)
   const [pomodoroRunning, setPomodoroRunning] = useState(false)
@@ -52,7 +42,6 @@ export default function FocusPage() {
   const [totalSessionDuration, setTotalSessionDuration] = useState(pomodoroTime)
   const [autoloopEnabled, setAutoloopEnabled] = useState(false)
 
-  const [menuOpen, setMenuOpen] = useState(false)
   const [showRubric, setShowRubric] = useState(false)
   const [showBreaths, setShowBreaths] = useState(false)
   const [showTaskForm, setShowTaskForm] = useState(false)
@@ -74,24 +63,55 @@ export default function FocusPage() {
   const [taskToEdit, setTaskToEdit] = useState<Step | null>(null)
 
   const [settings, setSettings] = useState<AppSettings>({
-    soundEnabled: true,
-    darkMode: false,
-    defaultDuration: 25 * 60 * 1000,
-    autoLoop: false,
     focusMode: false,
-    showWeather: false,
+    showWeather: true,
     showGreeting: true,
     showMantra: false,
-    showSteps: true,
-    showQuotes: false,
-    background: "default",
-    sound: "default",
+    showTasks: true,
+    showQuotes: true,
+    darkMode: false,
+    soundEnabled: true,
+    defaultDuration: 30,
+    autoLoop: false,
+    showCalendarMenu: true,
+    showTasksMenu: true,
+    showJournalMenu: true,
+    showVisionBoardMenu: true,
+    showBalanceMenu: true,
+    showWealthManagementMenu: true,
+    showLinksMenu: true,
+    showMantrasMenu: true,
+    showQuotesMenu: true,
+    showCompletedMountainsMenu: true,
+    showAudioSettingsMenu: true,
+    showMountainPreferencesMenu: true,
+    showBubblesMenu: true,
     showHabitsMenu: true,
+    showHelpMenu: true,
+    showHeaderMain: true,
+    showHeaderFocus: true,
+    showHeaderEmotional: true,
+    showHeaderHealth: true,
+    showHeaderVision: true,
+    showHeaderWealth: true,
+    showHeaderSocial: true,
+    showHeaderProjects: true,
+    showHeaderSales: true,
+    showHeaderMarketplace: true,
   })
 
   const hasFetchedInitialData = useRef(false)
   const [taskListService, setTaskListService] = useState<TaskListService | null>(null)
   const [databaseService, setDatabaseService] = useState<DatabaseService | null>(null)
+
+  // Memoized service initialization
+  const initializeServices = useCallback(() => {
+    if (user && !databaseService && !taskListService) {
+      const dbService = new DatabaseService()
+      setDatabaseService(dbService)
+      setTaskListService(new TaskListService(user.id, dbService))
+    }
+  }, [user, databaseService, taskListService])
 
   const timeRemainingRef = useRef(timeRemaining)
   useEffect(() => {
@@ -100,14 +120,12 @@ export default function FocusPage() {
 
   useEffect(() => {
     if (user) {
-      const dbService = new DatabaseService()
-      setDatabaseService(dbService)
-      setTaskListService(new TaskListService(user.id, dbService))
+      initializeServices()
     } else {
       setDatabaseService(null)
       setTaskListService(null)
     }
-  }, [user])
+  }, [user, initializeServices])
 
   useEffect(() => {
     if (!loading && !user) {
@@ -135,6 +153,7 @@ export default function FocusPage() {
     return selectedList?.steps.filter((step) => !step.completed)[0]
   }
 
+  // Memoized calculation to prevent unnecessary re-calculations
   const calculateAndSetEstimatedTimes = useCallback(() => {
     setTaskLists((prevLists) => {
       const selectedList = prevLists.find((list) => list.id === currentTaskListId)
@@ -163,7 +182,7 @@ export default function FocusPage() {
 
       return prevLists.map((list) => (list.id === currentTaskListId ? { ...list, steps: updatedSteps } : list))
     })
-  }, [currentTaskListId, currentTask, isRunning, pomodoroTime])
+  }, [currentTaskListId, currentTask?.id, currentTask?.duration, isRunning, pomodoroTime])
 
   const handleSetCurrentTaskListId = useCallback(
     (newListId: string) => {
@@ -171,7 +190,7 @@ export default function FocusPage() {
       setCurrentTaskListId(newListId)
 
       const newCurrentTask = getTopMostTask(taskLists, newListId, NO_TASK_LIST_SELECTED_ID)
-      const newTime = newCurrentTask?.duration || settings.defaultDuration
+      const newTime = newCurrentTask?.duration || (settings.defaultDuration * 60 * 1000)
 
       setIsRunning(false)
       setTimeRemaining(newTime)
@@ -203,58 +222,71 @@ export default function FocusPage() {
     [taskLists, settings.defaultDuration, toast],
   )
 
+  // Optimized data fetching with better error handling and loading states
   useEffect(() => {
     const fetchData = async () => {
       if (user && databaseService && taskListService && !hasFetchedInitialData.current) {
         hasFetchedInitialData.current = true
-
-        let profileName = user.email?.split("@")[0] || "User"
-        try {
-          const profile = await databaseService.createOrUpdateUserProfile(user.id, profileName)
-          if (profile?.name) {
-            profileName = profile.name
-          }
-          setUserProfileName(profileName)
-        } catch (error) {
-          console.error("Failed to create or fetch user profile:", error)
-          setUserProfileName(profileName)
-          toast({ title: "Error", description: "Failed to load user profile.", variant: "destructive" })
-        }
+        setIsInitializing(true)
 
         try {
-          const fetchedLists = await databaseService.fetchTaskLists(user.id)
-          setTaskLists(fetchedLists)
+          // Parallel execution of independent operations
+          const [profile, fetchedLists] = await Promise.allSettled([
+            databaseService.createOrUpdateUserProfile(user.id, user.email?.split("@")[0] || "User"),
+            databaseService.fetchTaskLists(user.id)
+          ])
 
-          if (fetchedLists.length > 0) {
-            const initialListId = fetchedLists.find((list) => list.id === ALL_ACTIVE_TASKS_ID)?.id || fetchedLists[0].id
-            setCurrentTaskListId(initialListId)
-
-            const initialTask = getTopMostTask(fetchedLists, initialListId, NO_TASK_LIST_SELECTED_ID)
-            const initialTime = initialTask?.duration || settings.defaultDuration
-
-            setCurrentTask(initialTask)
-            setTimeRemaining(initialTime)
-            setTotalSessionDuration(initialTime)
-
-            toast({ title: "Welcome!", description: `Viewing "${fetchedLists.find((list) => list.id === initialListId)?.name || "All Active Tasks"}".` })
+          // Handle profile result
+          if (profile.status === 'fulfilled' && profile.value?.name) {
+            setUserProfileName(profile.value.name)
           } else {
-            const defaultList = await databaseService.createTaskList(user.id, "My First List", 0)
-            setTaskLists([defaultList])
+            setUserProfileName(user.email?.split("@")[0] || "User")
+            if (profile.status === 'rejected') {
+              console.error("Failed to create or fetch user profile:", profile.reason)
+            }
+          }
 
-            setCurrentTaskListId(defaultList.id)
+          // Handle task lists result
+          if (fetchedLists.status === 'fulfilled') {
+            const lists = fetchedLists.value
+            setTaskLists(lists)
+
+            if (lists.length > 0) {
+              const initialListId = lists.find((list) => list.id === ALL_ACTIVE_TASKS_ID)?.id || lists[0].id
+              setCurrentTaskListId(initialListId)
+
+              const initialTask = getTopMostTask(lists, initialListId, NO_TASK_LIST_SELECTED_ID)
+              const initialTime = initialTask?.duration || (settings.defaultDuration * 60 * 1000)
+
+              setCurrentTask(initialTask)
+              setTimeRemaining(initialTime)
+              setTotalSessionDuration(initialTime)
+
+              toast({ title: "Welcome!", description: `Viewing "${lists.find((list) => list.id === initialListId)?.name || "All Active Tasks"}".` })
+            } else {
+              const defaultList = await databaseService.createTaskList(user.id, "My First List", 0)
+              setTaskLists([defaultList])
+
+              setCurrentTaskListId(defaultList.id)
+              setCurrentTask(undefined)
+              setTimeRemaining(settings.defaultDuration * 60 * 1000)
+              setTotalSessionDuration(settings.defaultDuration * 60 * 1000)
+
+              toast({ title: "Welcome!", description: "A default task list has been created for you." })
+            }
+          } else {
+            console.error("Failed to fetch task lists:", fetchedLists.reason)
+            toast({ title: "Error", description: "Failed to load task lists.", variant: "destructive" })
+            setCurrentTaskListId(NO_TASK_LIST_SELECTED_ID)
             setCurrentTask(undefined)
-            setTimeRemaining(settings.defaultDuration)
-            setTotalSessionDuration(settings.defaultDuration)
-
-            toast({ title: "Welcome!", description: "A default task list has been created for you." })
+            setTimeRemaining(settings.defaultDuration * 60 * 1000)
+            setTotalSessionDuration(settings.defaultDuration * 60 * 1000)
           }
         } catch (error) {
-          console.error("Failed to fetch task lists:", error)
-          toast({ title: "Error", description: "Failed to load task lists.", variant: "destructive" })
-          setCurrentTaskListId(NO_TASK_LIST_SELECTED_ID)
-          setCurrentTask(undefined)
-          setTimeRemaining(settings.defaultDuration)
-          setTotalSessionDuration(settings.defaultDuration)
+          console.error("Unexpected error during data fetching:", error)
+          toast({ title: "Error", description: "An unexpected error occurred.", variant: "destructive" })
+        } finally {
+          setIsInitializing(false)
         }
       }
     }
@@ -262,23 +294,24 @@ export default function FocusPage() {
     fetchData()
   }, [user, databaseService, taskListService, toast, settings.defaultDuration])
 
+  // Debounce calculations to avoid excessive re-renders
   useEffect(() => {
-    calculateAndSetEstimatedTimes()
-  }, [currentTaskListId, currentTask, isRunning, timeRemaining, calculateAndSetEstimatedTimes])
+    const timeoutId = setTimeout(() => {
+      calculateAndSetEstimatedTimes()
+    }, 100)
+    return () => clearTimeout(timeoutId)
+  }, [currentTaskListId, currentTask?.id, isRunning, calculateAndSetEstimatedTimes])
 
+  // Optimized timer with better performance
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null
 
     if (isRunning && timeRemaining > 0) {
       interval = setInterval(() => {
-        setTimeRemaining((prevTime) => {
-          const newTime = prevTime - 1000
-          return newTime
-        })
+        setTimeRemaining((prevTime) => prevTime - 1000)
       }, 1000)
     } else if (timeRemaining <= 0 && isRunning) {
       setIsRunning(false)
-      if (interval) clearInterval(interval)
       toast({
         title: "Time's Up!",
         description: `Your ${pomodoroPhase} session has ended.`,
@@ -287,13 +320,12 @@ export default function FocusPage() {
         const nextPhase = pomodoroPhase === "work" ? "break" : "work"
         handleSwitchPhase(nextPhase)
       }
-      calculateAndSetEstimatedTimes()
     }
 
     return () => {
       if (interval) clearInterval(interval)
     }
-  }, [isRunning, timeRemaining, pomodoroPhase, autoloopEnabled, toast, calculateAndSetEstimatedTimes])
+  }, [isRunning, timeRemaining, pomodoroPhase, autoloopEnabled, toast])
 
   const toggleTimer = useCallback(() => {
     setIsRunning((prev) => {
@@ -587,7 +619,7 @@ export default function FocusPage() {
         if (currentTask?.id === taskId) {
           const newCurrentTask = getTopMostTask(taskLists, currentTaskListId, NO_TASK_LIST_SELECTED_ID)
           setCurrentTask(newCurrentTask)
-          const newTime = newCurrentTask?.duration || settings.defaultDuration
+          const newTime = newCurrentTask?.duration || (settings.defaultDuration * 60 * 1000)
           setTimeRemaining(newTime)
           setTotalSessionDuration(newTime)
           console.log(`[handleDeleteTask] Updated currentTask:`, newCurrentTask ? { id: newCurrentTask.id, label: newCurrentTask.label } : null)
@@ -835,7 +867,7 @@ export default function FocusPage() {
       id: "rubric",
       isVisible: showRubric,
       component: (
-        <RubricSection
+        <LazyRubricSection
           task={activeTaskForDisplay}
           onSaveRubric={handleSaveRubric}
           onClose={() => setShowRubric(false)}
@@ -940,7 +972,7 @@ export default function FocusPage() {
       id: "taskListManager",
       isVisible: showTaskListSelector && user?.id,
       component: (
-        <TaskListManager
+        <LazyTaskListManager
           isOpen={showTaskListSelector}
           onClose={() => setMenuOpen(false)}
           taskLists={taskLists}
@@ -978,7 +1010,7 @@ export default function FocusPage() {
       id: "worldClockSection",
       isVisible: showWorldClockSection,
       component: (
-        <WorldClockSection
+        <LazyWorldClockSection
           initialTimezone={activeTaskForDisplay?.timezone}
           onSave={handleUpdateCurrentTaskTimezone}
           onClose={() => setShowWorldClockSection(false)}
@@ -989,7 +1021,7 @@ export default function FocusPage() {
       id: "globalTaskOrder",
       isVisible: showGlobalTaskOrder,
       component: (
-        <GlobalTaskOrderDisplay
+        <LazyGlobalTaskOrderDisplay
           taskLists={taskLists}
           noTaskListSelectedId={NO_TASK_LIST_SELECTED_ID}
           userId={user?.id || ""}
@@ -1003,19 +1035,27 @@ export default function FocusPage() {
 
   const activeSections = sections.filter((s) => s.isVisible)
 
-  if (loading) {
+  // Enhanced loading UI
+  if (loading || isInitializing) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 to-black text-cream-25">
-        Loading...
+      <div className="min-h-screen relative flex flex-col items-center justify-center font-inter">
+        <div className="glassmorphism p-8 rounded-2xl shadow-lg">
+          <div className="flex flex-col items-center space-y-4">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cream-25"></div>
+            <div className="text-xl font-light text-cream-25 text-center">
+              {loading ? "Authenticating..." : "Loading focus environment..."}
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
 
   return (
     <>
-      <div className="content-wrapper flex flex-col">
-        <Header isMenuOpen={menuOpen} onToggleMenu={() => setMenuOpen(!menuOpen)} />
-        <main className="flex-1 flex flex-col items-center p-4 relative z-10 mt-16">
+      <FloatingNav settings={settings} onSettingsUpdate={setSettings} />
+      <div className="content-wrapper absolute inset-0 flex items-center justify-center z-40 focus-mobile-layout overflow-hidden">
+        <div className="w-full h-full flex flex-col items-center justify-center p-4 pt-32 md:pt-48 sm:pt-24" style={{ maxHeight: '100vh', overflow: 'hidden' }}>
           <CentralDashboardDisplay
             userProfileName={userProfileName}
             pomodoroTime={pomodoroTime}
@@ -1057,28 +1097,17 @@ export default function FocusPage() {
 
           {activeSections.map((section) => (
             <div key={section.id} className="mt-8 mx-auto relative z-10 w-full max-w-4xl px-4">
-              {section.component}
+              <Suspense fallback={
+                <div className="flex items-center justify-center p-8">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-cream-25"></div>
+                </div>
+              }>
+                {section.component}
+              </Suspense>
             </div>
           ))}
           <div className="h-[500px] w-full"></div>
-        </main>
-        <DashboardMenu
-          isOpen={menuOpen}
-          onClose={() => setMenuOpen(false)}
-          settings={settings}
-          updateSettings={setSettings}
-          openSettings={() => {}}
-          openTaskListManager={() => setShowTaskListSelector(true)}
-          openVisionBoard={() => router.push("/vision")}
-          handleSignOut={async () => {
-            if (user && databaseService) {
-              await databaseService.signOut()
-              router.push("/")
-            }
-          }}
-          currentUser={user}
-          userProfileName={userProfileName}
-        />
+        </div>
       </div>
     </>
   )

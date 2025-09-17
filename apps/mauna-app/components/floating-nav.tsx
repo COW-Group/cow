@@ -28,6 +28,7 @@ import type { AppSettings } from "@/lib/types"
 interface FloatingNavProps {
   settings?: AppSettings
   onSettingsUpdate?: (settings: AppSettings) => void
+  minimal?: boolean
 }
 
 export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {}) {
@@ -137,9 +138,14 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
   const hoverColor = isDarkBackground ? 'hover:bg-white/20' : 'hover:bg-black/10'
 
   return (
-    <nav className="fixed top-8 left-1/2 transform -translate-x-1/2 z-50">
+    <nav
+      className="fixed left-1/2 transform -translate-x-1/2 z-50"
+      style={{
+        top: `max(2rem, calc(env(safe-area-inset-top) + 1rem))` // Respect safe area + 1rem padding
+      }}
+    >
       <div
-        className="px-6 py-3 flex items-center gap-8 transition-all duration-500"
+        className="px-6 py-3 flex items-center gap-8 transition-all duration-500 sm:px-4 sm:py-2 sm:gap-4 touch-manipulation"
         style={{
           background: 'rgba(255, 255, 255, 0.08)',
           backdropFilter: 'blur(40px) saturate(200%)',
@@ -188,7 +194,7 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
                 variant="ghost"
                 size="icon"
                 onClick={() => setShowDashboardMenu(false)}
-                className={`h-9 w-9 rounded-xl ${iconColor} ${hoverColor} transition-all duration-300 hover:scale-95`}
+                className={`h-11 w-11 rounded-xl ${iconColor} ${hoverColor} transition-all duration-300 hover:scale-95 touch-target sm:h-9 sm:w-9`}
                 aria-label="Close navigation menu"
               >
                 <X className="h-4 w-4" />
@@ -217,7 +223,7 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
               variant="ghost"
               size="icon"
               onClick={() => setShowDashboardMenu(true)}
-              className={`h-10 w-10 rounded-xl ${iconColor} ${hoverColor} transition-all duration-300 hover:scale-95 group`}
+              className={`h-12 w-12 rounded-xl ${iconColor} ${hoverColor} transition-all duration-300 hover:scale-95 group touch-target sm:h-10 sm:w-10`}
               aria-label="Open navigation menu"
             >
               <div className="flex items-center gap-1">

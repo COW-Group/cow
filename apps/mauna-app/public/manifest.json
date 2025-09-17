@@ -1,11 +1,15 @@
 {
   "name": "MAUNA App",
   "short_name": "MAUNA",
-  "description": "A Progressive Web App with a fixed parallax background for iPhone",
+  "description": "Your personal growth and well-being companion",
   "start_url": "/",
-  "display": "standalone",
+  "display": "fullscreen",
   "background_color": "#fefdfb",
   "theme_color": "#0066ff",
+  "orientation": "portrait-primary",
+  "categories": ["productivity", "wellness", "lifestyle"],
+  "lang": "en",
+  "scope": "/",
   "icons": [
     {
       "src": "/apple-touch-icon.png",
@@ -25,5 +29,20 @@
       "purpose": "any maskable"
     }
   ],
-  "orientation": "portrait"
+  "shortcuts": [
+    {
+      "name": "Focus Timer",
+      "short_name": "Focus",
+      "description": "Start a focus session",
+      "url": "/focus",
+      "icons": [{"src": "/logo.png", "sizes": "192x192"}]
+    },
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your dashboard",
+      "url": "/dashboard",
+      "icons": [{"src": "/logo.png", "sizes": "192x192"}]
+    }
+  ]
 }

@@ -26,13 +26,6 @@ const imageCategories = {
     "/images/nature-backdrops/night/cee-R_c77Rx9UzM-unsplash.jpg",
     "/images/nature-backdrops/night/krzysztof-kowalik-AywBz5soMy4-unsplash.jpg",
     "/images/nature-backdrops/night/shawn-shGeY3Tv1S0-unsplash.jpg",
-    // New additions - to be added after downloading high-quality night images
-    "/images/nature-backdrops/night/milky-way-desert-landscape.jpg",
-    "/images/nature-backdrops/night/aurora-mountain-reflection.jpg",
-    "/images/nature-backdrops/night/forest-stars-silhouette.jpg",
-    "/images/nature-backdrops/night/lake-reflection-stars.jpg",
-    "/images/nature-backdrops/night/rocky-formation-galaxy.jpg",
-    "/images/nature-backdrops/night/snowy-peaks-aurora.jpg",
   ],
 }
 
@@ -148,7 +141,7 @@ export default function DynamicParallaxBackground() {
         `}</style>
       </div>
       {/* Overlay for text readability, placed above parallax-container */}
-      <div className="absolute inset-0 bg-black/30 z-[-99]"></div>
+      <div className="absolute inset-0 bg-black/0 z-[-99]"></div>
     </>
   )
 }

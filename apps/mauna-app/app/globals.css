@@ -6,17 +6,21 @@
 @layer base {
   html {
     height: 100%;
-    background: transparent; /* Prevent default white background */
+    background: #000; /* Black background to prevent blue areas */
   }
 
   body {
     height: 100%;
-    background: transparent; /* Override bg-background */
+    background: #000; /* Black background to match notch area */
     color: hsl(var(--foreground));
-    overflow-x: hidden; /* Prevent horizontal scrollbar */
-    overflow-y: auto; /* Allow vertical scrollbar */
+    overflow: hidden; /* Prevent all scrolling */
     overscroll-behavior: none; /* Prevent iOS bounce */
-    @apply font-inter; /* Default to Inter using CSS variable */
+    -webkit-overflow-scrolling: auto;
+    position: fixed; /* Lock position */
+    width: 100%;
+    top: 0;
+    left: 0;
+    @apply font-inter;
   }
 
   * {
@@ -310,50 +314,105 @@
 /* Parallax Background */
 .parallax-container {
   position: fixed;
-  inset: 0; /* Shorthand for top: 0; right: 0; bottom: 0; left: 0 */
-  width: 100%;
-  height: 100%;
-  z-index: -100; /* Lowered z-index to ensure it's behind everything */
+  /* Extend beyond safe areas to eliminate blue areas */
+  top: calc(-1 * env(safe-area-inset-top, 0px));
+  left: calc(-1 * env(safe-area-inset-left, 0px));
+  right: calc(-1 * env(safe-area-inset-right, 0px));
+  bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
+  width: calc(100% + env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px));
+  height: calc(100% + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px));
+  z-index: -100;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed; /* Desktop parallax */
-  will-change: transform; /* Optimize for iOS rendering */
-  transition: background-image 0.5s ease-in-out; /* Smooth transition for image changes */
+  background-attachment: fixed;
+  will-change: transform;
+  transition: background-image 0.5s ease-in-out;
 }
 
 /* iOS fallback for background-attachment: fixed */
 @supports (-webkit-touch-callout: none) {
   .parallax-container {
-    background-attachment: scroll; /* iOS disables fixed for performance */
-    background: none; /* Clear CSS background */
+    background-attachment: scroll;
+    background: none;
   }
   .parallax-container::before {
     content: "";
     position: fixed;
-    inset: 0;
+    /* Extend beyond safe areas for iOS */
+    top: calc(-1 * env(safe-area-inset-top, 0px));
+    left: calc(-1 * env(safe-area-inset-left, 0px));
+    right: calc(-1 * env(safe-area-inset-right, 0px));
+    bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
+    width: calc(100% + env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px));
+    height: calc(100% + env(safe-area-inset-top, 0px) + env(safe-area-inset-bottom, 0px));
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    z-index: -1; /* Ensure it's behind content */
-    width: 100%;
-    height: 100%;
-    will-change: transform; /* Optimize for iOS rendering */
+    z-index: -1;
+    will-change: transform;
   }
 }
 
 /* Content with Safe Area padding */
 .content-wrapper {
-  padding-top: env(safe-area-inset-top);
-  padding-right: env(safe-area-inset-right);
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left: env(safe-area-inset-left);
   min-height: 100dvh; /* Ensure content spans full dynamic viewport */
   position: relative;
-  z-index: 1; /* Above parallax background */
-  overflow-y: auto; /* Allow content to scroll */
-  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-  background-color: transparent; /* Explicitly set to transparent */
+  z-index: 10; /* Above parallax background */
+  overflow: hidden; /* Prevent any scrolling */
+  background-color: transparent;
+  /* Safe area handling for content */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* PWA Safe Area Support */
+@supports (padding: max(0px)) {
+  .pwa-safe-top {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+
+  .pwa-safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .pwa-safe-left {
+    padding-left: max(1rem, env(safe-area-inset-left));
+  }
+
+  .pwa-safe-right {
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+}
+
+/* PWA Display Mode Detection */
+@media (display-mode: standalone) {
+  html, body {
+    /* Black background to prevent blue areas in PWA mode */
+    background: #000 !important;
+  }
+
+  .parallax-container {
+    /* Ensure background extends fully in PWA mode */
+    top: calc(-1 * max(44px, env(safe-area-inset-top, 0px))) !important;
+    left: calc(-1 * env(safe-area-inset-left, 0px)) !important;
+    right: calc(-1 * env(safe-area-inset-right, 0px)) !important;
+    bottom: calc(-1 * env(safe-area-inset-bottom, 0px)) !important;
+    width: calc(100% + env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px)) !important;
+    height: calc(100% + max(44px, env(safe-area-inset-top, 0px)) + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .parallax-container::before {
+    /* iOS PWA fallback */
+    top: calc(-1 * max(44px, env(safe-area-inset-top, 0px))) !important;
+    left: calc(-1 * env(safe-area-inset-left, 0px)) !important;
+    right: calc(-1 * env(safe-area-inset-right, 0px)) !important;
+    bottom: calc(-1 * env(safe-area-inset-bottom, 0px)) !important;
+    width: calc(100% + env(safe-area-inset-left, 0px) + env(safe-area-inset-right, 0px)) !important;
+    height: calc(100% + max(44px, env(safe-area-inset-top, 0px)) + env(safe-area-inset-bottom, 0px)) !important;
+  }
 }
 
 /* Reduced Motion */
@@ -449,10 +508,114 @@
   animation: rotate-toggle 0.3s ease-in-out;
 }
 
-/* Responsive Design Enhancements */
+/* Mobile-First Responsive Design Enhancements */
 @media (max-width: 768px) {
   .nature-backdrop {
     background-attachment: scroll; /* Better performance on mobile */
+  }
+
+  /* Mobile timer display optimization */
+  .text-8xl {
+    font-size: 4rem; /* Reduced from 8xl for mobile */
+    line-height: 1;
+  }
+
+  /* Mobile glassmorphism adjustments */
+  .glassmorphism {
+    backdrop-filter: blur(20px) saturate(150%); /* Reduced blur for performance */
+    -webkit-backdrop-filter: blur(20px) saturate(150%);
+  }
+
+  /* Mobile touch target minimum size */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Mobile focus page layout */
+  .focus-mobile-layout {
+    padding: 1rem;
+    height: 100dvh; /* Dynamic viewport height for mobile */
+  }
+
+  /* Mobile text scaling */
+  .text-4xl {
+    font-size: 2rem; /* Reduced from 4xl for mobile */
+  }
+
+  .text-lg {
+    font-size: 1rem; /* Slightly smaller for mobile readability */
+  }
+
+  /* Mobile-optimized button spacing */
+  .mobile-button-spacing {
+    gap: 0.75rem; /* Reduced gap for mobile */
+  }
+
+  /* Better mobile font weights for readability */
+  .font-light {
+    font-weight: 400; /* Increase to normal weight on mobile */
+  }
+
+  /* Mobile-optimized shadows */
+  .timer-zen-glow {
+    animation: none; /* Disable animations for better mobile performance */
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small mobile devices */
+  .text-8xl {
+    font-size: 3rem; /* Further reduced for small screens */
+  }
+
+  .text-4xl {
+    font-size: 1.5rem;
+  }
+
+  /* Compact padding for small screens */
+  .focus-mobile-layout {
+    padding: 0.5rem;
+  }
+
+  /* Smaller glassmorphism blur for performance */
+  .glassmorphism {
+    backdrop-filter: blur(15px) saturate(130%);
+    -webkit-backdrop-filter: blur(15px) saturate(130%);
+  }
+}
+
+/* Specific iPhone screen sizes */
+@media only screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) {
+  /* iPhone 14 Pro */
+  body {
+    /* Specific handling for Dynamic Island */
+    padding-top: max(44px, env(safe-area-inset-top));
+  }
+}
+
+@media only screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) {
+  /* iPhone 14 Pro Max */
+  body {
+    padding-top: max(44px, env(safe-area-inset-top));
+  }
+}
+
+/* Prevent touch scrolling and elasticity */
+@media (pointer: coarse) {
+  * {
+    /* Disable touch scroll on all elements for mobile */
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Allow text selection only on specific elements */
+  input, textarea, [contenteditable] {
+    -webkit-user-select: auto;
+    user-select: auto;
+    touch-action: auto;
   }
 }
 

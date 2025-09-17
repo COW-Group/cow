@@ -136,12 +136,6 @@ export function CentralDashboardDisplay({
   const [showRitual, setShowRitual] = useState<"starting" | "ending" | null>(null)
   const [isEditingOneOff, setIsEditingOneOff] = useState(false)
   const [showWorldClockDisplay, setShowWorldClockDisplay] = useState(false)
-  const [showAdvancedControls, setShowAdvancedControls] = useState(false)
-  const [isInFocusMode, setIsInFocusMode] = useState(false)
-  const [isTaskChanging, setIsTaskChanging] = useState(false)
-  const [previousTaskId, setPreviousTaskId] = useState<string | undefined>(undefined)
-  const [touchStartX, setTouchStartX] = useState<number | null>(null)
-  const [touchStartY, setTouchStartY] = useState<number | null>(null)
 
   const [internalOneOffTask, setInternalOneOffTask] = useState<Step>({
     id: "one-off",
@@ -183,32 +177,6 @@ export function CentralDashboardDisplay({
       label: oneOffTaskLabel,
     }))
   }, [oneOffTaskLabel])
-
-  // Auto-enter focus mode when timer is running
-  useEffect(() => {
-    setIsInFocusMode(isRunning || pomodoroRunning)
-    if (isRunning || pomodoroRunning) {
-      setShowAdvancedControls(false)
-      setShowPushBackOptions(false)
-      setShowRitual(null)
-    }
-  }, [isRunning, pomodoroRunning])
-
-  // Detect task changes and trigger transition animations
-  useEffect(() => {
-    const currentTaskId = currentTask?.id
-    if (currentTaskId !== previousTaskId) {
-      if (previousTaskId !== undefined) {
-        // Trigger transition animation
-        setIsTaskChanging(true)
-        const timeoutId = setTimeout(() => {
-          setIsTaskChanging(false)
-        }, 500) // Animation duration
-        return () => clearTimeout(timeoutId)
-      }
-      setPreviousTaskId(currentTaskId)
-    }
-  }, [currentTask?.id, previousTaskId])
 
   useEffect(() => {
     if (archPathRef.current) {
@@ -260,7 +228,6 @@ export function CentralDashboardDisplay({
     currentTask?.startingRitual || (isOneOffMode ? internalOneOffTask.startingRitual : undefined)
   const displayEndingRitual = currentTask?.endingRitual || (isOneOffMode ? internalOneOffTask.endingRitual : undefined)
   const displayTimezone = currentTask?.timezone || (isOneOffMode ? internalOneOffTask.timezone : undefined)
-  const displayColor = currentTask?.color || (isOneOffMode ? internalOneOffTask.color : "rgba(255, 255, 255, 0.8)")
 
   const displayAudioUrl = currentTask?.audioUrl || (isOneOffMode ? internalOneOffTask.audioUrl : undefined)
   const displayAudioType = currentTask?.audioType || (isOneOffMode ? internalOneOffTask.audioType : undefined)
@@ -269,52 +236,6 @@ export function CentralDashboardDisplay({
     if (displayAudioUrl) {
       window.open(displayAudioUrl, "_blank")
     }
-  }
-
-  // 30/30 inspired gesture handlers
-  const handleTimerTouchStart = (e: React.TouchEvent) => {
-    // Prevent default to improve touch responsiveness
-    e.preventDefault()
-    setTouchStartX(e.touches[0].clientX)
-    setTouchStartY(e.touches[0].clientY)
-  }
-
-  const handleTimerTouchEnd = (e: React.TouchEvent) => {
-    if (!touchStartX || !touchStartY) return
-
-    const touchEndX = e.changedTouches[0].clientX
-    const touchEndY = e.changedTouches[0].clientY
-    const deltaX = touchEndX - touchStartX
-    const deltaY = touchEndY - touchStartY
-    const distance = Math.abs(deltaX)
-
-    // Enhanced swipe detection with mobile-optimized thresholds
-    const swipeThreshold = 30 // Reduced for better mobile sensitivity
-    const maxVerticalDeviation = 80 // Allow more vertical movement
-
-    // Swipe gestures for timer control (mobile optimized)
-    if (Math.abs(deltaX) > swipeThreshold && Math.abs(deltaY) < maxVerticalDeviation) {
-      // Simulate haptic feedback for mobile
-      if ('vibrate' in navigator) {
-        navigator.vibrate(50)
-      }
-
-      if (deltaX > 0) {
-        // Swipe right: Add 5 minutes
-        pushBackTask(5)
-      } else {
-        // Swipe left: Subtract 5 minutes
-        pushBackTask(-5)
-      }
-    }
-
-    setTouchStartX(null)
-    setTouchStartY(null)
-  }
-
-  const handleTimerDoubleClick = () => {
-    // Double tap to play/pause (30/30 inspired)
-    toggleTimer()
   }
 
   const getPriorityDisplay = () => {
@@ -351,7 +272,7 @@ export function CentralDashboardDisplay({
             <div className="flex flex-col gap-4">
               <Button
                 variant="ghost"
-                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200 touch-manipulation min-h-[48px] sm:text-base sm:px-4 sm:py-2"
+                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200"
                 onClick={onTogglePomodoro}
                 disabled={!hasTasks}
               >
@@ -360,7 +281,7 @@ export function CentralDashboardDisplay({
               </Button>
               <Button
                 variant="ghost"
-                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200 touch-manipulation min-h-[48px] sm:text-base sm:px-4 sm:py-2"
+                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200"
                 onClick={() => {}}
               >
                 <Calendar className="h-5 w-5 mr-2" />
@@ -425,200 +346,149 @@ export function CentralDashboardDisplay({
               <WorldClockDisplay timezone={displayTimezone} onClick={null} />
             )}
 
-            <div
-              className="relative mb-8 cursor-pointer transition-all duration-300 hover:scale-105 select-none touch-manipulation min-h-[120px] min-w-[280px] flex items-center justify-center"
-              onClick={() => !isInFocusMode && setShowAdvancedControls(!showAdvancedControls)}
-              onDoubleClick={handleTimerDoubleClick}
-              onTouchStart={handleTimerTouchStart}
-              onTouchEnd={handleTimerTouchEnd}
-              title="Tap for controls • Double-tap to play/pause • Swipe left/right to adjust time"
-            >
-              <span
-                className="text-8xl font-bold font-montserrat mb-8 transition-all duration-500 sm:text-6xl xs:text-5xl"
-                style={{
-                  color: isInFocusMode && displayColor ? displayColor : '#f9fafb',
-                  textShadow: isInFocusMode && displayColor ? `0 0 20px ${displayColor}40` : 'none'
-                }}
-              >
-                {formatTimeDigital(Math.floor(timeRemaining / 1000))}
-              </span>
-              {currentTask && isInFocusMode && (
-                <div
-                  className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 rounded-full transition-all duration-500"
-                  style={{ backgroundColor: displayColor }}
-                />
-              )}
-            </div>
+            <span className="text-8xl font-bold font-montserrat text-cream-25 mb-8">
+              {formatTimeDigital(Math.floor(timeRemaining / 1000))}
+            </span>
 
-            {/* Essential Controls - Always Visible */}
-            <div className="flex gap-2 mb-4 justify-center">
+            <div className="flex flex-wrap gap-2 mb-8 justify-center">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={skipToNextTask}
+                aria-label={autoloopEnabled ? "Next task (autoloop)" : "Skip to next task"}
+                className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
+              >
+                <SkipForward className="h-5 w-5" />
+              </Button>
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={toggleTimer}
                 aria-label={isRunning || pomodoroRunning ? "Pause timer" : "Start timer"}
-                className="w-14 h-14 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200 hover:scale-105"
-                style={{
-                  borderColor: isInFocusMode && displayColor ? displayColor : 'rgba(249, 250, 251, 0.3)',
-                  color: isInFocusMode && displayColor ? displayColor : '#f9fafb'
-                }}
+                className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
               >
-                {isRunning || pomodoroRunning ? <Pause className="h-6 w-6" /> : <Play className="h-6 w-6" />}
+                {isRunning || pomodoroRunning ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
               </Button>
-              {!isInFocusMode && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={completeTask}
-                  aria-label="Complete task"
-                  className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
-                >
-                  <CheckCircle className="h-5 w-5" />
-                </Button>
-              )}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={completeTask}
+                aria-label="Complete task"
+                className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
+              >
+                <CheckCircle className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTaskLock}
+                aria-label={currentTask?.locked ? "Unlock task" : "Lock task"}
+                className={`w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200 ${
+                  currentTask?.locked ? "bg-cream-25/20" : ""
+                }`}
+              >
+                {currentTask?.locked ? <Lock className="h-5 w-5" /> : <Unlock className="h-5 w-5" />}
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowPushBackOptions(!showPushBackOptions)}
+                aria-label="Adjust time"
+                className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
+              >
+                <Clock className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowRitual(showRitual === "starting" ? null : "starting")}
+                aria-label="Show starting ritual"
+                className={`w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200 ${
+                  showRitual === "starting" ? "bg-cream-25/20" : ""
+                }`}
+              >
+                <Sunrise className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowRitual(showRitual === "ending" ? null : "ending")}
+                aria-label="Show ending ritual"
+                className={`w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200 ${
+                  showRitual === "ending" ? "bg-cream-25/20" : ""
+                }`}
+              >
+                <Sunset className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTaskFormVisibility}
+                aria-label="Toggle task form display"
+                className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
+              >
+                <FileText className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTaskListVisibility}
+                aria-label="Toggle task list display"
+                className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
+              >
+                <ListTodo className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleRubricVisibility}
+                aria-label="Toggle rubric display"
+                className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
+              >
+                <Award className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleBreathsVisibility}
+                aria-label="Toggle breaths display"
+                className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
+              >
+                <Wind className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTaskListSelectorVisibility}
+                aria-label="Toggle task list selector display"
+                className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
+              >
+                <ListFilter className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleGlobalTaskOrderVisibility}
+                aria-label="Toggle global task order display"
+                className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
+              >
+                <ListOrdered className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => {
+                  setShowWorldClockDisplay((prev) => !prev)
+                  toggleWorldClockSectionVisibility()
+                }}
+                aria-label="Toggle world clock display and settings"
+                className={`w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200 ${
+                  showWorldClockDisplay ? "bg-cream-25/20" : ""
+                }`}
+              >
+                <Globe className="h-5 w-5" />
+              </Button>
             </div>
-
-            {/* Advanced Controls - Progressive Disclosure */}
-            {!isInFocusMode && (showAdvancedControls || !currentTask) && (
-              <div className="flex flex-wrap gap-2 mb-8 justify-center animate-in fade-in slide-in-from-top-4 duration-300">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={skipToNextTask}
-                  aria-label={autoloopEnabled ? "Next task (autoloop)" : "Skip to next task"}
-                  className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
-                >
-                  <SkipForward className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleTaskLock}
-                  aria-label={currentTask?.locked ? "Unlock task" : "Lock task"}
-                  className={`w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200 ${
-                    currentTask?.locked ? "bg-cream-25/20" : ""
-                  }`}
-                >
-                  {currentTask?.locked ? <Lock className="h-5 w-5" /> : <Unlock className="h-5 w-5" />}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setShowPushBackOptions(!showPushBackOptions)}
-                  aria-label="Adjust time"
-                  className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
-                >
-                  <Clock className="h-5 w-5" />
-                </Button>
-
-                {/* Ritual Controls */}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setShowRitual(showRitual === "starting" ? null : "starting")}
-                  aria-label="Show starting ritual"
-                  className={`w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200 ${
-                    showRitual === "starting" ? "bg-cream-25/20" : ""
-                  }`}
-                >
-                  <Sunrise className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => setShowRitual(showRitual === "ending" ? null : "ending")}
-                  aria-label="Show ending ritual"
-                  className={`w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200 ${
-                    showRitual === "ending" ? "bg-cream-25/20" : ""
-                  }`}
-                >
-                  <Sunset className="h-5 w-5" />
-                </Button>
-                {/* Task Management Controls */}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleTaskFormVisibility}
-                  aria-label="Toggle task form display"
-                  className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
-                >
-                  <FileText className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleTaskListVisibility}
-                  aria-label="Toggle task list display"
-                  className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
-                >
-                  <ListTodo className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleTaskListSelectorVisibility}
-                  aria-label="Toggle task list selector display"
-                  className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
-                >
-                  <ListFilter className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleGlobalTaskOrderVisibility}
-                  aria-label="Toggle global task order display"
-                  className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
-                >
-                  <ListOrdered className="h-5 w-5" />
-                </Button>
-
-                {/* Wellness & Evaluation Controls */}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleRubricVisibility}
-                  aria-label="Toggle rubric display"
-                  className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
-                >
-                  <Award className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleBreathsVisibility}
-                  aria-label="Toggle breaths display"
-                  className="w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200"
-                >
-                  <Wind className="h-5 w-5" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => {
-                    setShowWorldClockDisplay((prev) => !prev)
-                    toggleWorldClockSectionVisibility()
-                  }}
-                  aria-label="Toggle world clock display and settings"
-                  className={`w-12 h-12 rounded-full glassmorphism border border-cream-25/30 text-cream-25 hover:bg-cream-25/10 transition-all duration-200 ${
-                    showWorldClockDisplay ? "bg-cream-25/20" : ""
-                  }`}
-                >
-                  <Globe className="h-5 w-5" />
-                </Button>
-              </div>
-            )}
-
-            {/* Quick Access Hint */}
-            {!isInFocusMode && !showAdvancedControls && currentTask && (
-              <div className="text-center mb-4">
-                <button
-                  onClick={() => setShowAdvancedControls(true)}
-                  className="text-cream-25/60 hover:text-cream-25 text-sm transition-colors duration-200"
-                >
-                  Tap timer for more controls
-                </button>
-              </div>
-            )}
 
             <div className="flex flex-col items-center gap-3 mb-4 flex-wrap justify-center text-cream-25">
               {!currentTask && isOneOffMode && !isEditingOneOff ? (
@@ -705,20 +575,10 @@ export function CentralDashboardDisplay({
                 </div>
               ) : (
                 <>
-                  <h2
-                    className={`text-5xl font-light text-center glassmorphism rounded-lg px-6 py-3 border border-cream-25/30 backdrop-blur-sm transition-all duration-500 ${
-                      isTaskChanging ? 'scale-110 opacity-90' : 'scale-100 opacity-100'
-                    }`}
-                    style={{
-                      color: displayColor && currentTask ? displayColor : '#f9fafb',
-                      borderColor: displayColor && currentTask ? `${displayColor}40` : 'rgba(249, 250, 251, 0.3)'
-                    }}
-                  >
+                  <h2 className="text-5xl font-light text-center glassmorphism rounded-lg px-6 py-3 border border-cream-25/30 backdrop-blur-sm">
                     {displayLabel}
                   </h2>
-                  <div className={`transition-all duration-300 ${isTaskChanging ? 'animate-pulse' : ''}`}>
-                    {getPriorityDisplay()}
-                  </div>
+                  {getPriorityDisplay()}
                   {!currentTask && isOneOffMode && (
                     <Button
                       variant="ghost"
@@ -872,7 +732,7 @@ export function CentralDashboardDisplay({
             <div className="flex flex-col gap-4">
               <Button
                 variant="ghost"
-                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200 touch-manipulation min-h-[48px] sm:text-base sm:px-4 sm:py-2"
+                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200"
                 onClick={() => {}}
               >
                 <Heart className="h-5 w-5 mr-2" />
@@ -880,7 +740,7 @@ export function CentralDashboardDisplay({
               </Button>
               <Button
                 variant="ghost"
-                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200 touch-manipulation min-h-[48px] sm:text-base sm:px-4 sm:py-2"
+                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200"
                 onClick={() => {}}
               >
                 <Brain className="h-5 w-5 mr-2" />
@@ -902,7 +762,7 @@ export function CentralDashboardDisplay({
             <div className="flex flex-col gap-4">
               <Button
                 variant="ghost"
-                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200 touch-manipulation min-h-[48px] sm:text-base sm:px-4 sm:py-2"
+                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200"
                 onClick={onExploreVisionBoardClick}
               >
                 <Compass className="h-5 w-5 mr-2" />
@@ -924,7 +784,7 @@ export function CentralDashboardDisplay({
             <div className="flex flex-col gap-4">
               <Button
                 variant="ghost"
-                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200 touch-manipulation min-h-[48px] sm:text-base sm:px-4 sm:py-2"
+                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200"
                 onClick={() => {}}
               >
                 <DollarSign className="h-5 w-5 mr-2" />
@@ -932,7 +792,7 @@ export function CentralDashboardDisplay({
               </Button>
               <Button
                 variant="ghost"
-                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200 touch-manipulation min-h-[48px] sm:text-base sm:px-4 sm:py-2"
+                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200"
                 onClick={() => {}}
               >
                 <Target className="h-5 w-5 mr-2" />
@@ -954,7 +814,7 @@ export function CentralDashboardDisplay({
             <div className="flex flex-col gap-4">
               <Button
                 variant="ghost"
-                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200 touch-manipulation min-h-[48px] sm:text-base sm:px-4 sm:py-2"
+                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200"
                 onClick={() => {}}
               >
                 <Users className="h-5 w-5 mr-2" />
@@ -962,7 +822,7 @@ export function CentralDashboardDisplay({
               </Button>
               <Button
                 variant="ghost"
-                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200 touch-manipulation min-h-[48px] sm:text-base sm:px-4 sm:py-2"
+                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200"
                 onClick={() => {}}
               >
                 <Share2 className="h-5 w-5 mr-2" />
@@ -984,7 +844,7 @@ export function CentralDashboardDisplay({
             <div className="flex flex-col gap-4">
               <Button
                 variant="ghost"
-                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200 touch-manipulation min-h-[48px] sm:text-base sm:px-4 sm:py-2"
+                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200"
                 onClick={() => {}}
               >
                 <Briefcase className="h-5 w-5 mr-2" />
@@ -992,7 +852,7 @@ export function CentralDashboardDisplay({
               </Button>
               <Button
                 variant="ghost"
-                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200 touch-manipulation min-h-[48px] sm:text-base sm:px-4 sm:py-2"
+                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200"
                 onClick={() => {}}
               >
                 <Target className="h-5 w-5 mr-2" />
@@ -1014,7 +874,7 @@ export function CentralDashboardDisplay({
             <div className="flex flex-col gap-4">
               <Button
                 variant="ghost"
-                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200 touch-manipulation min-h-[48px] sm:text-base sm:px-4 sm:py-2"
+                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200"
                 onClick={() => {}}
               >
                 <TrendingUp className="h-5 w-5 mr-2" />
@@ -1022,7 +882,7 @@ export function CentralDashboardDisplay({
               </Button>
               <Button
                 variant="ghost"
-                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200 touch-manipulation min-h-[48px] sm:text-base sm:px-4 sm:py-2"
+                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200"
                 onClick={() => {}}
               >
                 <Plus className="h-5 w-5 mr-2" />
@@ -1044,7 +904,7 @@ export function CentralDashboardDisplay({
             <div className="flex flex-col gap-4">
               <Button
                 variant="ghost"
-                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200 touch-manipulation min-h-[48px] sm:text-base sm:px-4 sm:py-2"
+                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200"
                 onClick={() => {}}
               >
                 <ShoppingCart className="h-5 w-5 mr-2" />
@@ -1052,7 +912,7 @@ export function CentralDashboardDisplay({
               </Button>
               <Button
                 variant="ghost"
-                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200 touch-manipulation min-h-[48px] sm:text-base sm:px-4 sm:py-2"
+                className="text-cream-25 text-lg px-6 py-3 rounded-full border border-cream-25/50 hover:bg-cream-25/10 hover:text-cream-25 transition-colors duration-200"
                 onClick={() => {}}
               >
                 <Store className="h-5 w-5 mr-2" />

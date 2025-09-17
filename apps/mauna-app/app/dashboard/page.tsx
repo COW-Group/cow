@@ -47,6 +47,7 @@ export default function DashboardPage() {
     showAudioSettingsMenu: true,
     showMountainPreferencesMenu: true,
     showBubblesMenu: true,
+    showHabitsMenu: true,
     showHelpMenu: true,
     showHeaderMain: true,
     showHeaderFocus: true,

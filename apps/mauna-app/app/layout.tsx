@@ -32,9 +32,33 @@ export const metadata: Metadata = {
   title: "MAUNA App",
   description: "Your personal growth and well-being companion",
   generator: "v0.dev",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "MAUNA",
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  openGraph: {
+    type: "website",
+    siteName: "MAUNA App",
+    title: "MAUNA App",
+    description: "Your personal growth and well-being companion",
+  },
   icons: {
     icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
+}
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
 }
 
 export default function RootLayout({

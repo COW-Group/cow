@@ -44,6 +44,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     showAudioSettingsMenu: true,
     showMountainPreferencesMenu: true,
     showBubblesMenu: true,
+    showHabitsMenu: true,
     showHelpMenu: true,
     // Initialize new header menu visibility settings to true by default
     showHeaderMain: true,
@@ -62,12 +63,19 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const isMobile = useIsMobile()
   const pathname = usePathname()
   const isDashboardPage = pathname === "/dashboard"
+  const isFocusPage = pathname === "/focus"
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-2xl">Loading...</div>
-      </div>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <TooltipProvider>
+          <DynamicParallaxBackground />
+          <div className="min-h-screen flex items-center justify-center">
+            <div className="text-2xl">Loading...</div>
+          </div>
+          <Toaster />
+        </TooltipProvider>
+      </ThemeProvider>
     )
   }
 
@@ -97,7 +105,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             isMobile ? "overflow-y-auto" : "overflow-hidden",
           )}
         >
-          {!isDashboardPage && (
+          {!isDashboardPage && !isFocusPage && (
             <>
               <Header isMenuOpen={isAppMenuOpen} onToggleMenu={toggleAppMenu} settings={appSettings} />
               <DashboardMenu

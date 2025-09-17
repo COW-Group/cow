@@ -174,9 +174,24 @@ export function RubricSection({ task, onSaveRubric, onClose }: RubricSectionProp
     return (achievedPoints / totalPossiblePoints) * 100
   }, [criteria, levels, selectedFulfillment])
 
-  // Only render if task exists AND (rubric exists OR is being edited)
-  if (!task || (!task.rubric && !isEditing)) {
-    return null
+  // Don't render if no task exists
+  if (!task) {
+    return (
+      <Card className="bg-cream-50/10 backdrop-blur-sm border border-cream-25/30 rounded-xl p-6 shadow-lg w-full max-w-md">
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+          <CardTitle className="text-2xl font-bold text-cream-25">Rubric</CardTitle>
+          <Button variant="ghost" size="icon" onClick={onClose} className="text-cream-25 hover:bg-white/20">
+            <X className="h-6 w-6" />
+          </Button>
+        </CardHeader>
+        <CardContent className="text-cream-25/80">
+          <div className="text-center py-8">
+            <p>No active task to create a rubric for.</p>
+            <p className="text-sm text-cream-25/60 mt-2">Start a task to create and manage its rubric.</p>
+          </div>
+        </CardContent>
+      </Card>
+    )
   }
 
   return (
@@ -188,7 +203,17 @@ export function RubricSection({ task, onSaveRubric, onClose }: RubricSectionProp
         </Button>
       </CardHeader>
       <CardContent className="text-cream-25/80">
-        {isEditing ? (
+        {!task.rubric && !isEditing ? (
+          <div className="text-center py-8">
+            <p className="mb-4">No rubric exists for this task yet.</p>
+            <Button
+              onClick={() => setIsEditing(true)}
+              className="bg-cream-25/20 hover:bg-cream-25/30 text-cream-25 border border-cream-25/30"
+            >
+              Create Rubric
+            </Button>
+          </div>
+        ) : isEditing ? (
           <div className="space-y-4">
             {/* Criteria Management */}
             <div className="flex items-center gap-2">

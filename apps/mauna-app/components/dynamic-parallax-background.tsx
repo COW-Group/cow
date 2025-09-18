@@ -130,16 +130,14 @@ export default function DynamicParallaxBackground() {
       <div
         className="parallax-container"
         style={currentBackground ? { backgroundImage: `url('${currentBackground}')` } : {}}
-      >
-        {/* iOS fallback for background-attachment: fixed */}
-        <style jsx global>{`
-          @supports (-webkit-touch-callout: none) {
-            .parallax-container::before {
-              background-image: ${currentBackground ? `url('${currentBackground}')` : "none"};
-            }
-          }
-        `}</style>
-      </div>
+      />
+      {/* iOS fallback background for background-attachment: fixed */}
+      {currentBackground && (
+        <div
+          className="parallax-container-ios-fallback"
+          style={{ backgroundImage: `url('${currentBackground}')` }}
+        />
+      )}
       {/* Overlay for text readability, placed above parallax-container */}
       <div className="absolute inset-0 bg-black/0 z-[-99]"></div>
     </>

@@ -973,7 +973,7 @@ export function DashboardMenu({
             </div>
 
             {/* Navigation with improved styling */}
-            <div className="flex-1 overflow-y-auto max-h-[60vh] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-cream-25/20">
+            <div className="flex-1 overflow-y-auto max-h-[50vh] sm:max-h-[60vh] scrollbar-thin scrollbar-track-transparent scrollbar-thumb-cream-25/20">
               <NavLinks activeCategory={activeCategory} setActiveCategory={setActiveCategory} settings={currentSettings} />
             </div>
           </div>

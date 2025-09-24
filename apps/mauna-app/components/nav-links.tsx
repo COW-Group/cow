@@ -45,7 +45,7 @@ const createGlassButton = (
     <Button
       key={category}
       variant="ghost"
-      className="w-full justify-start gap-3 font-inter h-12 rounded-2xl transition-all duration-300 border-0"
+      className="w-full justify-start gap-2 sm:gap-3 font-inter h-10 sm:h-12 rounded-xl sm:rounded-2xl transition-all duration-300 border-0 touch-manipulation"
       onClick={() => setActiveCategory(category)}
       style={isActive ? {
         background: 'rgba(255, 255, 255, 0.15)',
@@ -71,46 +71,46 @@ const createGlassButton = (
       }}
     >
       <div
-        className="p-1.5 rounded-xl"
+        className="p-1 sm:p-1.5 rounded-lg sm:rounded-xl"
         style={isActive ? {
           background: 'rgba(255, 255, 255, 0.2)'
         } : {
           background: 'transparent'
         }}
       >
-        <IconComponent className="h-4 w-4" />
+        <IconComponent className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
       </div>
-      <span className="font-medium">{label}</span>
+      <span className="font-medium text-sm sm:text-base">{label}</span>
     </Button>
   )
 }
 
 export function NavLinks({ activeCategory, setActiveCategory, settings }: NavLinksProps) {
   return (
-    <nav className="space-y-3">
+    <nav className="space-y-2 sm:space-y-3">
       {/* Page Management Section */}
-      <div className="space-y-2">
-        <p className="text-xs font-medium uppercase tracking-wider px-2" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Page Management</p>
+      <div className="space-y-1.5 sm:space-y-2">
+        <p className="text-xs font-medium uppercase tracking-wider px-1 sm:px-2" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Page Management</p>
         {createGlassButton("floating-nav", activeCategory, setActiveCategory, LayoutDashboard, "Navigation Pages")}
         {createGlassButton("app-features", activeCategory, setActiveCategory, CheckSquare, "App Features")}
       </div>
 
       {/* Dashboard Configuration Section */}
-      <div className="space-y-2 pt-4" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-        <p className="text-xs font-medium uppercase tracking-wider px-2" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Dashboard</p>
+      <div className="space-y-1.5 sm:space-y-2 pt-3 sm:pt-4" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+        <p className="text-xs font-medium uppercase tracking-wider px-1 sm:px-2" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Dashboard</p>
         {createGlassButton("dashboard-elements", activeCategory, setActiveCategory, Folders, "Dashboard Elements")}
       </div>
 
       {/* App Preferences Section */}
-      <div className="space-y-2 pt-4" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-        <p className="text-xs font-medium uppercase tracking-wider px-2" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Preferences</p>
+      <div className="space-y-1.5 sm:space-y-2 pt-3 sm:pt-4" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+        <p className="text-xs font-medium uppercase tracking-wider px-1 sm:px-2" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Preferences</p>
         {createGlassButton("appearance", activeCategory, setActiveCategory, Palette, "Appearance")}
         {createGlassButton("notifications", activeCategory, setActiveCategory, Bell, "Notifications")}
       </div>
 
       {/* Account Section */}
-      <div className="space-y-2 pt-4" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-        <p className="text-xs font-medium uppercase tracking-wider px-2" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Account</p>
+      <div className="space-y-1.5 sm:space-y-2 pt-3 sm:pt-4" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
+        <p className="text-xs font-medium uppercase tracking-wider px-1 sm:px-2" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Account</p>
         {createGlassButton("settings", activeCategory, setActiveCategory, Cog, "Settings")}
       </div>
     </nav>

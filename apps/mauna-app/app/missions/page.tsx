@@ -416,12 +416,13 @@ export default function MissionsPage() {
     let endDate: Date | null = null
 
     switch (timeframe) {
-      case "current-quarter":
+      case "current-quarter": {
         const currentQuarter = Math.floor(now.getMonth() / 3) // 0, 1, 2, 3
         startDate = new Date(now.getFullYear(), currentQuarter * 3, 1)
         endDate = new Date(now.getFullYear(), currentQuarter * 3 + 3, 0) // Last day of the quarter
         break
-      case "next-quarter":
+      }
+      case "next-quarter": {
         let nextQuarterMonth = Math.floor(now.getMonth() / 3) * 3 + 3
         let nextQuarterYear = now.getFullYear()
         if (nextQuarterMonth >= 12) {
@@ -431,6 +432,7 @@ export default function MissionsPage() {
         startDate = new Date(nextQuarterYear, nextQuarterMonth, 1)
         endDate = new Date(nextQuarterYear, nextQuarterMonth + 3, 0)
         break
+      }
       case "current-year":
         startDate = new Date(now.getFullYear(), 0, 1)
         endDate = new Date(now.getFullYear(), 11, 31)
@@ -679,7 +681,7 @@ export default function MissionsPage() {
   if (selectedCompanyProject) {
     return (
       <div className="min-h-screen">
-        <Header isMenuOpen={false} onToggleMenu={() => {}} /> {/* Pass dummy props for now */}
+        <Header isMenuOpen={false} onToggleMenu={() => console.log('Menu toggle')} />
         <main className="pt-20 p-4">
           <div className="max-w-7xl mx-auto">
             <div className="flex items-center gap-4 mb-6">
@@ -725,7 +727,7 @@ export default function MissionsPage() {
 
     return (
       <div className="min-h-screen">
-        <Header isMenuOpen={false} onToggleMenu={() => {}} />
+        <Header isMenuOpen={false} onToggleMenu={() => console.log('Menu toggle')} />
         <main className="pt-20 p-4">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center gap-4 mb-6">
@@ -783,7 +785,7 @@ export default function MissionsPage() {
   if (activeCard === "fibers" && selectedStrand) {
     return (
       <div className="min-h-screen">
-        <Header isMenuOpen={false} onToggleMenu={() => {}} />
+        <Header isMenuOpen={false} onToggleMenu={() => console.log('Menu toggle')} />
         <main className="pt-20 p-4">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center gap-4 mb-6">
@@ -859,7 +861,7 @@ export default function MissionsPage() {
   if (activeCard === "strands" && selectedPillar) {
     return (
       <div className="min-h-screen">
-        <Header isMenuOpen={false} onToggleMenu={() => {}} />
+        <Header isMenuOpen={false} onToggleMenu={() => console.log('Menu toggle')} />
         <main className="pt-20 p-4">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center gap-4 mb-6">
@@ -948,7 +950,7 @@ export default function MissionsPage() {
   if (activeCard === "pillars" && selectedMission) {
     return (
       <div className="min-h-screen">
-        <Header isMenuOpen={false} onToggleMenu={() => {}} />
+        <Header isMenuOpen={false} onToggleMenu={() => console.log('Menu toggle')} />
         <main className="pt-20 p-4">
           <div className="max-w-6xl mx-auto">
             <div className="flex items-center gap-4 mb-6">
@@ -1035,7 +1037,7 @@ export default function MissionsPage() {
 
   return (
     <div className="min-h-screen">
-      <Header isMenuOpen={false} onToggleMenu={() => {}} /> {/* Pass dummy props for now */}
+      <Header isMenuOpen={false} onToggleMenu={() => console.log('Menu toggle')} />
       <main className="pt-20 p-4">
         <div className="max-w-6xl mx-auto">
           {/* Header Section */}

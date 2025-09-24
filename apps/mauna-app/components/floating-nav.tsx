@@ -145,11 +145,11 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
       }}
     >
       <div
-        className="px-6 py-3 flex items-center gap-8 transition-all duration-500 sm:px-4 sm:py-2 sm:gap-4 touch-manipulation"
+        className="px-4 py-2 sm:px-6 sm:py-3 flex items-center gap-4 sm:gap-6 md:gap-8 transition-all duration-500 touch-manipulation"
         style={{
           background: 'rgba(255, 255, 255, 0.08)',
           backdropFilter: 'blur(40px) saturate(200%)',
-          borderRadius: '24px',
+          borderRadius: '20px',
           border: '1px solid rgba(255, 255, 255, 0.12)',
           boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 20px 40px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.04)'
         }}
@@ -159,14 +159,14 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
           <SoundSelector iconColor={iconColor} />
         </div>
 
-        {/* Brand Identity - Refined */}
-        <div className="flex items-center gap-4">
+        {/* Brand Identity - Responsive */}
+        <div className="flex items-center gap-2 sm:gap-4">
           <div className="flex items-center justify-center">
-            <LogoMountain className={`h-7 w-auto ${iconColor} transition-all duration-300`} />
+            <LogoMountain className={`h-5 sm:h-6 md:h-7 w-auto ${iconColor} transition-all duration-300`} />
           </div>
-          <div className="h-6 w-px bg-white/15"></div>
+          <div className="h-4 sm:h-6 w-px bg-white/15"></div>
           <span
-            className="text-lg font-inter font-extralight tracking-wider select-none"
+            className="text-sm sm:text-base md:text-lg font-inter font-extralight tracking-wider select-none"
             style={{
               color: textColor,
               letterSpacing: '0.12em',
@@ -177,77 +177,143 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
           </span>
         </div>
 
-        {/* Refined Navigation Menu */}
+        {/* Navigation Menu - Mobile Dropdown Design */}
         <div className="relative">
-          {showDashboardMenu ? (
-            // Expanded navigation - Premium glass container
-            <div
-              className="flex items-center gap-1 px-3 py-2 rounded-2xl backdrop-blur-md"
-              style={{
-                background: 'rgba(255, 255, 255, 0.06)',
-                backdropFilter: 'blur(20px) saturate(180%)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 8px 32px rgba(0, 0, 0, 0.04)'
-              }}
-            >
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setShowDashboardMenu(false)}
-                className={`h-11 w-11 rounded-xl ${iconColor} ${hoverColor} transition-all duration-300 hover:scale-95 touch-target sm:h-9 sm:w-9`}
-                aria-label="Close navigation menu"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-              <div className="h-5 w-px bg-white/8 mx-1"></div>
-              {menuItems.map((item, index) => (
-                <Button
-                  key={item.path}
-                  variant="ghost"
-                  size="icon"
-                  className={`h-9 w-9 rounded-xl ${iconColor} ${hoverColor} transition-all duration-300 hover:scale-95`}
-                  onClick={() => {
-                    router.push(item.path)
-                    setShowDashboardMenu(false)
-                  }}
-                  title={item.label}
-                  aria-label={`Navigate to ${item.label}`}
-                >
-                  <item.icon className="h-4 w-4" />
-                </Button>
-              ))}
-            </div>
-          ) : (
-            // Collapsed state - Minimalist dot indicator
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setShowDashboardMenu(true)}
-              className={`h-12 w-12 rounded-xl ${iconColor} ${hoverColor} transition-all duration-300 hover:scale-95 group touch-target sm:h-10 sm:w-10`}
-              aria-label="Open navigation menu"
-            >
+          {/* Menu Toggle Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowDashboardMenu(!showDashboardMenu)}
+            className={`h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 rounded-lg sm:rounded-xl ${iconColor} ${hoverColor} transition-all duration-300 hover:scale-95 group touch-target`}
+            aria-label={showDashboardMenu ? "Close navigation menu" : "Open navigation menu"}
+          >
+            {showDashboardMenu ? (
+              <X className="h-3 w-3 sm:h-4 sm:w-4" />
+            ) : (
               <div className="flex items-center gap-1">
                 <div className="w-1 h-1 rounded-full bg-current opacity-60 group-hover:opacity-100 transition-opacity"></div>
                 <div className="w-1 h-1 rounded-full bg-current opacity-40 group-hover:opacity-80 transition-opacity"></div>
                 <div className="w-1 h-1 rounded-full bg-current opacity-20 group-hover:opacity-60 transition-opacity"></div>
               </div>
-            </Button>
+            )}
+          </Button>
+
+          {/* Mobile/PWA Dropdown Menu */}
+          {showDashboardMenu && (
+            <div
+              className="absolute top-full mt-3 left-1/2 transform -translate-x-1/2 w-[calc(100vw-2rem)] max-w-80 min-w-72 z-[100] animate-in slide-in-from-top-2 duration-300"
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                backdropFilter: 'blur(60px) saturate(200%)',
+                borderRadius: '20px',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 20px 40px rgba(0, 0, 0, 0.1), 0 8px 24px rgba(0, 0, 0, 0.06)'
+              }}
+            >
+              {/* Dropdown Header */}
+              <div className="p-4 border-b border-white/10">
+                <div className="flex items-center justify-between">
+                  <h3
+                    className="text-sm font-medium font-inter"
+                    style={{
+                      color: 'rgba(255, 255, 255, 0.9)',
+                      textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
+                    }}
+                  >
+                    Navigation
+                  </h3>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowDashboardMenu(false)}
+                    className={`h-6 w-6 rounded-lg ${iconColor} ${hoverColor} transition-all duration-200`}
+                    aria-label="Close menu"
+                  >
+                    <X className="h-3 w-3" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Navigation Items Grid */}
+              <div className="p-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {menuItems.map((item, index) => (
+                    <Button
+                      key={item.path}
+                      variant="ghost"
+                      onClick={() => {
+                        router.push(item.path)
+                        setShowDashboardMenu(false)
+                      }}
+                      className="flex flex-col items-center gap-2 h-auto p-3 rounded-xl transition-all duration-300 border-0 touch-manipulation group"
+                      style={{
+                        background: 'rgba(255, 255, 255, 0.04)',
+                        backdropFilter: 'blur(10px) saturate(150%)',
+                        border: '1px solid rgba(255, 255, 255, 0.08)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
+                        e.currentTarget.style.transform = 'scale(1.02)'
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)'
+                        e.currentTarget.style.transform = 'scale(1)'
+                      }}
+                    >
+                      {/* Icon Container */}
+                      <div
+                        className="p-2 rounded-lg transition-all duration-200"
+                        style={{
+                          background: 'rgba(255, 255, 255, 0.1)',
+                          backdropFilter: 'blur(5px)'
+                        }}
+                      >
+                        <item.icon
+                          className="h-4 w-4 transition-all duration-200"
+                          style={{ color: 'rgba(255, 255, 255, 0.9)' }}
+                        />
+                      </div>
+
+                      {/* Label */}
+                      <span
+                        className="text-xs font-medium text-center leading-tight font-inter"
+                        style={{
+                          color: 'rgba(255, 255, 255, 0.85)',
+                          textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
+                        }}
+                      >
+                        {item.label}
+                      </span>
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Backdrop for mobile (close on tap outside) */}
+          {showDashboardMenu && (
+            <div
+              className="fixed inset-0 z-[99] bg-transparent"
+              onClick={() => setShowDashboardMenu(false)}
+              aria-label="Close navigation menu"
+            />
           )}
         </div>
 
-        {/* Dashboard Settings - Refined Menu Button */}
+        {/* Dashboard Settings - Responsive Menu Button */}
         <div className="relative">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setIsDashboardMenuOpen(true)}
-            className={`h-10 w-10 rounded-xl ${iconColor} ${hoverColor} transition-all duration-300 hover:scale-95 group`}
+            className={`h-8 w-8 sm:h-9 sm:w-9 md:h-10 md:w-10 rounded-lg sm:rounded-xl ${iconColor} ${hoverColor} transition-all duration-300 hover:scale-95 group touch-target`}
             aria-label="Open dashboard menu"
           >
             <div className="flex flex-col items-center gap-0.5">
-              <div className="w-4 h-0.5 rounded-full bg-current opacity-80 group-hover:opacity-100 transition-all group-hover:w-5"></div>
-              <div className="w-3 h-0.5 rounded-full bg-current opacity-60 group-hover:opacity-90 transition-all group-hover:w-4"></div>
-              <div className="w-2 h-0.5 rounded-full bg-current opacity-40 group-hover:opacity-70 transition-all group-hover:w-3"></div>
+              <div className="w-3 sm:w-4 h-0.5 rounded-full bg-current opacity-80 group-hover:opacity-100 transition-all group-hover:w-4 sm:group-hover:w-5"></div>
+              <div className="w-2 sm:w-3 h-0.5 rounded-full bg-current opacity-60 group-hover:opacity-90 transition-all group-hover:w-3 sm:group-hover:w-4"></div>
+              <div className="w-1.5 sm:w-2 h-0.5 rounded-full bg-current opacity-40 group-hover:opacity-70 transition-all group-hover:w-2 sm:group-hover:w-3"></div>
             </div>
           </Button>
         </div>

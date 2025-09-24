@@ -134,7 +134,7 @@ export default function DashboardPage() {
             {/* Primary Time Display */}
             <div className="relative">
               <div
-                className="text-[8rem] font-inter font-extralight text-cream-25 leading-none"
+                className="text-[4rem] xs:text-[5rem] sm:text-[6rem] md:text-[7rem] lg:text-[8rem] font-inter font-extralight text-cream-25 leading-none"
                 style={{
                   fontFeatureSettings: '"tnum" 1, "lnum" 1',
                   fontWeight: '200',
@@ -146,14 +146,14 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Date and Greeting Horizontal Layout */}
-            <div className="flex items-center space-x-8 text-center">
+            {/* Date and Greeting Responsive Layout */}
+            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-8 text-center">
               {/* Date */}
               <div className="flex flex-col items-center">
-                <div className="text-sm font-inter font-light text-cream-25/60 uppercase tracking-[0.2em] mb-1">
+                <div className="text-xs sm:text-sm font-inter font-light text-cream-25/60 uppercase tracking-[0.2em] mb-1">
                   {new Date().toLocaleDateString('en-US', { weekday: 'long' })}
                 </div>
-                <div className="text-lg font-inter font-normal text-cream-25/80 tracking-wide">
+                <div className="text-base sm:text-lg font-inter font-normal text-cream-25/80 tracking-wide">
                   {new Date().toLocaleDateString('en-US', {
                     month: 'long',
                     day: 'numeric'
@@ -161,27 +161,28 @@ export default function DashboardPage() {
                 </div>
               </div>
 
-              {/* Vertical Divider */}
-              <div className="h-12 w-px bg-cream-25/20"></div>
+              {/* Vertical/Horizontal Divider */}
+              <div className="hidden sm:block h-12 w-px bg-cream-25/20"></div>
+              <div className="sm:hidden w-16 h-px bg-cream-25/20"></div>
 
               {/* Greeting */}
               <div className="flex flex-col items-center">
-                <div className="text-sm font-inter font-light text-cream-25/60 uppercase tracking-[0.2em] mb-1">
+                <div className="text-xs sm:text-sm font-inter font-light text-cream-25/60 uppercase tracking-[0.2em] mb-1">
                   {greeting}
                 </div>
-                <div className="text-lg font-inter font-normal text-cream-25/80 tracking-wide">
+                <div className="text-base sm:text-lg font-inter font-normal text-cream-25/80 tracking-wide">
                   {capitalizedUserName}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Action Cards - Directly Below Date/Greeting */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-3xl mt-8">
-          {/* Minimalist Elegant Buttons */}
+          {/* Action Cards - Responsive Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8 w-full max-w-3xl mt-6 sm:mt-8 px-4 sm:px-0">
+          {/* Focus Button */}
           <Button
             variant="ghost"
-            className="group relative text-cream-25 text-lg px-8 py-4 rounded-2xl transition-all duration-300 border-0"
+            className="group relative text-cream-25 text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-all duration-300 border-0 touch-manipulation"
             style={{
               background: hasTasks
                 ? 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.02) 100%)'
@@ -209,7 +210,7 @@ export default function DashboardPage() {
 
           <Button
             variant="ghost"
-            className="group relative text-cream-25 text-lg px-8 py-4 rounded-2xl transition-all duration-300 border-0"
+            className="group relative text-cream-25 text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-all duration-300 border-0 touch-manipulation"
             style={{
               background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.02) 100%)',
               backdropFilter: 'blur(40px) saturate(180%)',

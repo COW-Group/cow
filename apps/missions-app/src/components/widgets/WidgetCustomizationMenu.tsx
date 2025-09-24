@@ -545,6 +545,7 @@ export function WidgetCustomizationMenu({
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }

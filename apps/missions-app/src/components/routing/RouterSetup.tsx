@@ -12,14 +12,12 @@ import { Reports } from '../../pages/Reports';
 import { BoardManagement } from '../../pages/BoardManagement';
 import { MissionsDashboard } from '../../pages/MissionsDashboard';
 import { MissionPage } from '../../pages/MissionPage';
-import { BoardsPage } from '../../pages/BoardsPage';
 import { BoardPage } from '../../pages/BoardPage';
-import { SimpleMondayBoard } from '../board/SimpleMondayBoard';
-import { FlexibleBoard } from '../board/FlexibleBoard';
 import { InsightsPage } from '../../pages/insights/InsightsPage';
 import { AgentsPage } from '../../pages/AgentsPage';
 import { Settings } from '../../pages/Settings';
 import { HelpCenter } from '../../pages/HelpCenter';
+import { BoardDemo } from '../../pages/BoardDemo';
 
 
 export function RouterSetup() {
@@ -41,9 +39,7 @@ export function RouterSetup() {
         <Route path="missions/create" element={<MissionPage editMode={false} />} />
         <Route path="missions/:id" element={<MissionPage editMode={true} />} />
 
-        {/* Board routes */}
-        <Route path="boards" element={<BoardsPage />} />
-        <Route path="boards/latest" element={<LatestBoard />} />
+        {/* Individual Board routes - accessed from sidebar only */}
         <Route path="boards/:boardId" element={<BoardPage />} />
         <Route path="board-management" element={<BoardManagement />} />
 
@@ -54,11 +50,8 @@ export function RouterSetup() {
         <Route path="agents/*" element={<AgentsPage />} />
 
 
-        {/* Monday.com Style Board Demo */}
-        <Route path="monday-board" element={<SimpleMondayBoard />} />
-
-        {/* Flexible Board with Monday.com-style flexibility */}
-        <Route path="flexible-board" element={<FlexibleBoard />} />
+        {/* Main Board Interface - Monday.com Style */}
+        <Route path="board" element={<BoardDemo />} />
 
         {/* Other pages */}
         <Route path="goals" element={<Goals />} />
@@ -79,7 +72,7 @@ export function RouterSetup() {
       {/* Legacy routes - redirect to app */}
       <Route path="/my-work" element={<Navigate to="/app/my-office" replace />} />
       <Route path="/my-office" element={<Navigate to="/app/my-office" replace />} />
-      <Route path="/boards/*" element={<Navigate to="/app/boards" replace />} />
+      <Route path="/boards/*" element={<Navigate to="/app/my-office" replace />} />
       <Route path="/missions/*" element={<Navigate to="/app/missions" replace />} />
       <Route path="/insights/*" element={<Navigate to="/app/insights" replace />} />
 

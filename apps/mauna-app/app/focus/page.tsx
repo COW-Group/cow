@@ -947,9 +947,9 @@ export default function FocusPage() {
             )
           }}
           onReorderAndSave={handleReorderAndSaveTasks}
-          setCurrentTaskIndex={() => {}}
+          setCurrentTaskIndex={() => console.log('setCurrentTaskIndex')}
           autoloopEndIndex={null}
-          setAutoloopEndIndex={() => {}}
+          setAutoloopEndIndex={() => console.log('setAutoloopEndIndex')}
           autoloopEnabled={false}
           toggleTaskCompletion={handleToggleTaskCompletion}
           taskLists={taskLists}
@@ -1067,7 +1067,7 @@ export default function FocusPage() {
               currentTaskListId ? taskLists.find((list) => list.id === currentTaskListId)?.steps.length > 0 : false
             }
             dashboardType="focus"
-            onDashboardTypeChange={() => {}}
+            onDashboardTypeChange={() => console.log('onDashboardTypeChange')}
             timeRemaining={timeRemaining}
             isRunning={isRunning}
             toggleTimer={toggleTimer}
@@ -1090,7 +1090,7 @@ export default function FocusPage() {
             totalSessionDuration={totalSessionDuration}
             onSwitchPhase={handleSwitchPhase}
             onExploreVisionBoardClick={() => router.push("/vision")}
-            onOpenDashboardMenu={() => {}}
+            onOpenDashboardMenu={() => console.log('onOpenDashboardMenu')}
             onUpdateCurrentTaskTimezone={handleUpdateCurrentTaskTimezone}
             toggleWorldClockSectionVisibility={() => setShowWorldClockSection((prev) => !prev)}
           />

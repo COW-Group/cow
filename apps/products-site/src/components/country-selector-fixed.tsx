@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { Button } from "./ui/button"
-import { ChevronDown, Globe, ArrowRight } from "lucide-react"
+import { ChevronDown, Globe, ArrowRight, Info } from "lucide-react"
 import { HeroBackground } from "./hero-background"
 import { useAdaptiveText, useAdaptiveButton } from "../hooks/useAdaptiveText"
 
@@ -46,15 +46,57 @@ export function CountrySelector({ onCountrySelect, onContinue }: CountrySelector
   const [isDropdownOpen, setIsDropdownOpen] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [isVisible, setIsVisible] = useState(false)
+  const [showTooltip, setShowTooltip] = useState(false)
+  const [isDarkBackground, setIsDarkBackground] = useState(false)
 
   // Apple-style adaptive text and button styles
   const adaptiveText = useAdaptiveText()
   const adaptiveButton = useAdaptiveButton()
 
-  // Entrance animation
+  // Dynamic background detection
   useEffect(() => {
-    const timer = setTimeout(() => setIsVisible(true), 100)
-    return () => clearTimeout(timer)
+    const detectBackgroundLuminance = () => {
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      if (!ctx) return
+
+      canvas.width = 100
+      canvas.height = 100
+
+      // Sample multiple points on the background
+      const imageData = ctx.getImageData(0, 0, 100, 100)
+      let totalLuminance = 0
+      let sampleCount = 0
+
+      // Sample every 10th pixel for performance
+      for (let i = 0; i < imageData.data.length; i += 40) {
+        const r = imageData.data[i] || 0
+        const g = imageData.data[i + 1] || 0
+        const b = imageData.data[i + 2] || 0
+
+        // Calculate relative luminance
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+        totalLuminance += luminance
+        sampleCount++
+      }
+
+      const avgLuminance = totalLuminance / sampleCount
+      setIsDarkBackground(avgLuminance < 0.5)
+    }
+
+    // Initial detection
+    const timer = setTimeout(() => {
+      detectBackgroundLuminance()
+      setIsVisible(true)
+    }, 200)
+
+    // Re-detect every 2 seconds for dynamic backgrounds
+    const interval = setInterval(detectBackgroundLuminance, 2000)
+
+    return () => {
+      clearTimeout(timer)
+      clearInterval(interval)
+    }
   }, [])
 
   const filteredCountries = countries.filter(country =>
@@ -75,6 +117,26 @@ export function CountrySelector({ onCountrySelect, onContinue }: CountrySelector
     }
   }
 
+  // Apple Liquid Glass text styles - Professional implementation
+  const getTextStyles = (isLogo = false) => {
+    return {
+      color: 'rgba(0, 0, 0, 0.85)',
+      background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05))',
+      backgroundClip: 'text',
+      WebkitBackgroundClip: 'text',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
+      fontWeight: isLogo ? 200 : 300,
+      letterSpacing: isLogo ? '0.05em' : '0.02em',
+      fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", Inter, sans-serif',
+      fontFeatureSettings: '"ss01", "ss02"',
+      fontOpticalSizing: 'auto',
+      WebkitFontSmoothing: 'antialiased',
+      MozOsxFontSmoothing: 'grayscale',
+      transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+    }
+  }
+
   return (
     <div className="fixed inset-0 z-50">
       {/* Full Screen Vanta Background */}
@@ -84,53 +146,58 @@ export function CountrySelector({ onCountrySelect, onContinue }: CountrySelector
 
       {/* Scrollable Content */}
       <div className="relative z-10 w-full h-full overflow-auto flex items-center justify-center">
-        <div className={`relative w-full max-w-lg mx-auto px-4 sm:px-6 md:px-8 py-12 sm:py-16 md:py-20 transition-all duration-1000 ${
+        <div className={`relative w-full max-w-xs sm:max-w-sm lg:max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 transition-all duration-1000 ${
           isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
         }`} style={{
           minHeight: '100vh',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          paddingTop: 'max(3rem, env(safe-area-inset-top) + 3rem)',
-          paddingBottom: 'max(3rem, env(safe-area-inset-bottom) + 3rem)'
+          paddingTop: 'max(2rem, env(safe-area-inset-top) + 2rem)',
+          paddingBottom: 'max(2rem, env(safe-area-inset-bottom) + 2rem)',
+          paddingLeft: 'max(1rem, env(safe-area-inset-left) + 1rem)',
+          paddingRight: 'max(1rem, env(safe-area-inset-right) + 1rem)'
         }}>
-        {/* Logo */}
-        <div className="text-center mb-8 sm:mb-12">
-          <div className="text-2xl sm:text-3xl font-light mb-3 sm:mb-4 tracking-wider text-readable" style={{
-            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-            fontWeight: 300,
-            color: 'rgba(0, 0, 0, 0.9)'
-          }}>
+        {/* Unified Brand Container */}
+        <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+          {/* Logo */}
+          <div
+            className="text-2xl sm:text-3xl lg:text-4xl mb-3 sm:mb-4 tracking-wider"
+            style={getTextStyles(true)}
+          >
             COW
           </div>
-          <div className="w-12 sm:w-16 h-px bg-gradient-to-r from-transparent via-current to-transparent mx-auto opacity-30" style={{
-            color: 'rgba(0, 0, 0, 0.3)'
-          }} />
-        </div>
 
-        {/* Welcome Text */}
-        <div className="text-center mb-8 sm:mb-12">
-          <h1 className="text-xl sm:text-2xl lg:text-3xl font-medium mb-3 sm:mb-4 leading-relaxed px-2 text-readable"
-            style={{
-              letterSpacing: '0.02em',
-              fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-              fontWeight: 500,
-              color: 'rgba(0, 0, 0, 0.9)'
-            }}
-          >
-            Welcome to COW
-          </h1>
-          <p className="text-sm sm:text-base leading-relaxed px-4 max-w-md mx-auto text-readable" style={{
-            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-            fontWeight: 400,
-            color: 'rgba(0, 0, 0, 0.7)'
-          }}>
-            Please select your location to continue to the platform
-          </p>
+          {/* Divider */}
+          <div className="w-12 sm:w-16 lg:w-20 h-px mx-auto opacity-30 bg-gradient-to-r from-transparent via-black to-transparent mb-6 sm:mb-8" />
+
+          {/* Brand Message */}
+          <div className="space-y-2 sm:space-y-3">
+            <p
+              className="text-xs sm:text-sm lg:text-base opacity-80 px-2"
+              style={{
+                ...getTextStyles(),
+                fontSize: 'clamp(12px, 3vw, 16px)',
+                opacity: 0.8
+              }}
+            >
+              Let's Create Your
+            </p>
+            <h1
+              className="text-2xl sm:text-3xl lg:text-4xl leading-relaxed px-2"
+              style={{
+                ...getTextStyles(),
+                fontSize: 'clamp(24px, 8vw, 48px)',
+                fontWeight: 300
+              }}
+            >
+              Cycles of Wealth
+            </h1>
+          </div>
         </div>
 
         {/* Country Selector */}
-        <div className="relative mb-6 sm:mb-8">
+        <div className="relative mb-6 sm:mb-8 lg:mb-10">
           <div
             className={`relative cursor-pointer transition-all duration-300 ${
               isDropdownOpen ? 'ring-1 ring-blue-200' : ''
@@ -141,18 +208,19 @@ export function CountrySelector({ onCountrySelect, onContinue }: CountrySelector
               backdropFilter: 'blur(10px)',
               border: '1px solid rgba(0, 0, 0, 0.1)',
               borderRadius: '12px',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+              boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+              minHeight: '48px'
             }}
           >
-            <div className="flex items-center justify-between p-3 sm:p-4">
-              <div className="flex items-center gap-3">
-                <Globe className="w-5 h-5 text-gray-600" />
-                <div className="text-left">
+            <div className="flex items-center justify-between p-3 sm:p-4 lg:p-5" style={{ minHeight: '48px' }}>
+              <div className="flex items-center gap-3 flex-1">
+                <Globe className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 flex-shrink-0" />
+                <div className="text-left flex-1 min-w-0">
                   {selectedCountry ? (
-                    <div className="flex items-center gap-2">
-                      <span className="text-xl">{selectedCountry.flag}</span>
-                      <div>
-                        <div className="font-medium text-sm sm:text-base" style={{
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <span className="text-xl sm:text-2xl flex-shrink-0">{selectedCountry.flag}</span>
+                      <div className="min-w-0 flex-1">
+                        <div className="font-medium text-sm sm:text-base lg:text-lg truncate" style={{
                           fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                           color: 'rgba(0, 0, 0, 0.9)',
                           fontWeight: 500
@@ -167,7 +235,7 @@ export function CountrySelector({ onCountrySelect, onContinue }: CountrySelector
                       </div>
                     </div>
                   ) : (
-                    <div className="text-sm sm:text-base" style={{
+                    <div className="text-sm sm:text-base lg:text-lg" style={{
                       fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
                       color: 'rgba(0, 0, 0, 0.5)',
                       fontWeight: 400
@@ -175,9 +243,34 @@ export function CountrySelector({ onCountrySelect, onContinue }: CountrySelector
                   )}
                 </div>
               </div>
-              <ChevronDown className={`w-5 h-5 text-gray-600 transition-transform duration-200 ${
-                isDropdownOpen ? 'rotate-180' : ''
-              }`} />
+              <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                <div className="relative">
+                  <Info
+                    className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 hover:text-gray-600 active:text-gray-600 cursor-pointer transition-colors"
+                    onClick={() => setShowTooltip(!showTooltip)}
+                    onMouseEnter={() => setShowTooltip(true)}
+                    onMouseLeave={() => setShowTooltip(false)}
+                    style={{ minHeight: '44px', minWidth: '44px', padding: '12px' }}
+                  />
+                  {showTooltip && (
+                    <div
+                      className="fixed inset-x-4 bottom-20 sm:absolute sm:bottom-full sm:right-0 sm:left-auto sm:inset-x-auto sm:mb-2 w-auto sm:w-64 p-3 text-xs sm:text-sm bg-white/95 backdrop-blur-sm rounded-lg shadow-lg z-50 border border-gray-200"
+                      style={{
+                        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
+                        color: 'rgba(0, 0, 0, 0.8)',
+                        fontWeight: 400
+                      }}
+                      onClick={() => setShowTooltip(false)}
+                    >
+                      Your location helps us provide relevant pricing, regulatory information, and language preferences.
+                      <div className="hidden sm:block absolute top-full right-4 w-0 h-0 border-l-[6px] border-r-[6px] border-t-[6px] border-l-transparent border-r-transparent border-t-white/95"></div>
+                    </div>
+                  )}
+                </div>
+                <ChevronDown className={`w-5 h-5 sm:w-6 sm:h-6 text-gray-600 transition-transform duration-200 ${
+                  isDropdownOpen ? 'rotate-180' : ''
+                }`} />
+              </div>
             </div>
           </div>
 
@@ -189,9 +282,10 @@ export function CountrySelector({ onCountrySelect, onContinue }: CountrySelector
                 backdropFilter: 'blur(15px)',
                 border: '1px solid rgba(0, 0, 0, 0.1)',
                 borderRadius: '12px',
-                maxHeight: '300px',
+                maxHeight: 'min(40vh, 320px)',
                 overflowY: 'auto',
-                boxShadow: '0 8px 32px rgba(0,0,0,0.15)'
+                boxShadow: '0 8px 32px rgba(0,0,0,0.15)',
+                bottom: 'auto'
               }}
             >
               {/* Search */}
@@ -256,41 +350,38 @@ export function CountrySelector({ onCountrySelect, onContinue }: CountrySelector
         <Button
           onClick={handleContinue}
           disabled={!selectedCountry}
-          className={`w-full py-3 sm:py-4 text-sm sm:text-base transition-all duration-300 ${
+          className={`w-full py-3 sm:py-4 lg:py-5 text-sm sm:text-base transition-all duration-300 ${
             selectedCountry
               ? 'shadow-lg hover:scale-105'
               : 'cursor-not-allowed'
           }`}
           style={{
             background: selectedCountry
-              ? 'rgba(0, 122, 255, 1)'
+              ? 'linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.1))'
               : 'rgba(0, 0, 0, 0.1)',
-            backdropFilter: 'blur(10px)',
-            border: selectedCountry ? '1px solid rgba(0, 122, 255, 1)' : '1px solid rgba(0, 0, 0, 0.2)',
+            backdropFilter: selectedCountry ? 'blur(20px)' : 'blur(10px)',
+            border: selectedCountry
+              ? '1px solid rgba(255, 255, 255, 0.3)'
+              : '1px solid rgba(0, 0, 0, 0.2)',
             borderRadius: '12px',
             fontWeight: '500',
             letterSpacing: '0.01em',
-            color: selectedCountry ? 'white' : 'rgba(0, 0, 0, 0.7)'
+            color: selectedCountry ? 'rgba(0, 0, 0, 0.9)' : 'rgba(0, 0, 0, 0.7)',
+            boxShadow: selectedCountry
+              ? '0 8px 32px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.4)'
+              : 'none',
+            minHeight: '48px',
+            fontSize: 'clamp(14px, 4vw, 16px)'
           }}
         >
-          <span className="flex items-center justify-center gap-2">
-            Continue
-            <ArrowRight className={`w-4 h-4 transition-transform ${
+          <span className="flex items-center justify-center gap-2 sm:gap-3">
+            <span className="text-sm sm:text-base lg:text-lg font-medium">Continue</span>
+            <ArrowRight className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${
               selectedCountry ? 'group-hover:translate-x-1' : ''
             }`} />
           </span>
         </Button>
 
-        {/* Footer */}
-        <div className="text-center mt-6 sm:mt-8">
-          <p className="text-xs sm:text-sm leading-relaxed px-4 max-w-sm mx-auto" style={{
-            fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-            color: 'rgba(0, 0, 0, 0.6)',
-            fontWeight: 400
-          }}>
-            Your location helps us provide relevant pricing, regulatory information, and language preferences.
-          </p>
-        </div>
         </div>
       </div>
     </div>

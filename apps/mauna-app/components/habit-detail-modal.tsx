@@ -615,15 +615,73 @@ export function HabitDetailModal({
                   />
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <label className="text-sm font-medium text-cream-25">Frequency</label>
-                  <input
-                    type="text"
-                    value={habit.frequency || ""}
-                    onChange={(e) => onUpdate(habit.id, { frequency: e.target.value })}
-                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-cream-25 placeholder:text-cream-25/40 focus:outline-none focus:border-white/20 transition-colors"
-                    placeholder="e.g., Daily, Weekly, Custom"
-                  />
+
+                  {/* Day Selector Buttons */}
+                  <div className="flex justify-between gap-2">
+                    {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, index) => {
+                      const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+                      const isSelected = habit.frequency?.includes(dayNames[index]) || habit.frequency === "Every day!"
+
+                      return (
+                        <button
+                          key={`${day}-${index}`}
+                          type="button"
+                          onClick={() => {
+                            const currentFreq = habit.frequency || ""
+                            let newDays: string[] = []
+
+                            // Parse current days
+                            dayNames.forEach(dayName => {
+                              if (currentFreq.includes(dayName)) {
+                                newDays.push(dayName)
+                              }
+                            })
+
+                            // Toggle this day
+                            if (newDays.includes(dayNames[index])) {
+                              newDays = newDays.filter(d => d !== dayNames[index])
+                            } else {
+                              newDays.push(dayNames[index])
+                            }
+
+                            // Update frequency string
+                            const newFreq = newDays.length === 7
+                              ? "Every day!"
+                              : newDays.length === 0
+                              ? ""
+                              : newDays.join(", ")
+
+                            onUpdate(habit.id, { frequency: newFreq })
+                          }}
+                          className={`flex-1 h-12 sm:h-14 rounded-lg font-semibold text-sm transition-all ${
+                            isSelected
+                              ? 'bg-green-500 text-white shadow-lg'
+                              : 'bg-white/5 text-cream-25/50 border border-white/10'
+                          }`}
+                        >
+                          {day}
+                        </button>
+                      )
+                    })}
+                  </div>
+
+                  {/* Every Day Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const isEveryDay = habit.frequency === "Every day!"
+                      onUpdate(habit.id, { frequency: isEveryDay ? "" : "Every day!" })
+                    }}
+                    className={`w-full py-3 rounded-lg font-semibold transition-all ${
+                      habit.frequency === "Every day!"
+                        ? 'bg-green-500 text-white shadow-lg'
+                        : 'bg-white/5 text-cream-25/70 border border-white/10 hover:bg-white/10'
+                    }`}
+                  >
+                    Every day!
+                  </button>
                 </div>
 
                 <div className="space-y-2">

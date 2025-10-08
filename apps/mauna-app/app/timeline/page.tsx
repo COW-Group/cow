@@ -4,8 +4,9 @@ import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/hooks/use-auth"
 import { AuthService } from "@/lib/auth-service"
+import { TimelineWrapper } from "@/components/TimelineWrapper"
 import { FloatingNav } from "@/components/floating-nav"
-import { Loader2Icon, Clock } from "lucide-react"
+import { Loader2Icon } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import type { AppSettings } from "@/lib/types"
 
@@ -125,7 +126,7 @@ export default function TimelinePage() {
           {/* Timeline Content */}
           <div className="w-full max-w-7xl flex-1">
             <Card
-              className="w-full h-full overflow-x-auto border-0 shadow-xl"
+              className="w-full h-full overflow-y-auto border-0 shadow-xl"
               style={{
                 background: 'rgba(255, 255, 255, 0.08)',
                 backdropFilter: 'blur(40px) saturate(200%)',
@@ -135,27 +136,7 @@ export default function TimelinePage() {
               }}
             >
               <CardContent className="p-4 sm:p-6">
-                <div className="flex flex-col items-center justify-center min-h-[400px] space-y-6">
-                  <div
-                    className="w-20 h-20 rounded-2xl flex items-center justify-center"
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.1)',
-                      backdropFilter: 'blur(10px) saturate(150%)',
-                      border: '1px solid rgba(255, 255, 255, 0.15)',
-                    }}
-                  >
-                    <Clock className="h-10 w-10 text-cream-25/80" />
-                  </div>
-                  <div className="text-center space-y-3">
-                    <h2 className="text-2xl font-lora font-extralight text-cream-25 tracking-wider">
-                      Timeline View
-                    </h2>
-                    <p className="text-base text-cream-25/70 font-inter max-w-md">
-                      Your timeline view will display your activities, habits, and goals across time.
-                      Timeline features coming soon.
-                    </p>
-                  </div>
-                </div>
+                <TimelineWrapper />
               </CardContent>
             </Card>
           </div>

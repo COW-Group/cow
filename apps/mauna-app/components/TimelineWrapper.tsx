@@ -109,12 +109,15 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
       if (error) {
         console.error("[TimelineWrapper.loadTimelineItems] Error fetching timeline items:", error)
         setError("Failed to load timeline items: " + error.message)
-        toast({ title: "Error", description: "Failed to load timeline items.", variant: "destructive" })
+        toast({ title: "Error", description: "Failed to load timeline items: " + error.message, variant: "destructive" })
         setLoading(false)
         return
       }
 
-      console.log("[TimelineWrapper.loadTimelineItems] Raw steps data:", JSON.stringify(data, null, 2))
+      console.log("[TimelineWrapper.loadTimelineItems] Raw steps data:", data?.length || 0, "steps")
+      if (data && data.length > 0) {
+        console.log("[TimelineWrapper.loadTimelineItems] First step sample:", data[0])
+      }
 
       // Map steps to timeline items
       const timelineItems: TimelineItem[] = data
@@ -135,13 +138,19 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
             }))
             .sort((a: Breath, b: Breath) => a.position - b.position)
 
+          // Convert duration to minutes if it's in milliseconds (> 1000)
+          let durationInMinutes = step.duration || 15
+          if (durationInMinutes > 1000) {
+            durationInMinutes = Math.round(durationInMinutes / 60000) // Convert ms to minutes
+          }
+
           return {
             id: step.id,
             label: step.label,
             description: step.description || "No description",
             color: step.color || "#FFD700",
             scheduledTime: scheduledTime,
-            duration: step.duration || 15,
+            duration: durationInMinutes,
             type: step.tag === "habit" ? "habit" : "activity",
             isCompleted: step.completed || false,
             icon: step.icon || null,

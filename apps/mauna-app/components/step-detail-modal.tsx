@@ -1,0 +1,474 @@
+"use client"
+
+import React, { useState, useEffect } from "react"
+import { X, Clock, Palette, Trash2, Copy, CheckCircle2, Circle } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
+
+interface Breath {
+  id: string
+  name: string
+  completed: boolean
+  isRunning: boolean
+  timeEstimationSeconds: number
+  position: number
+}
+
+interface StepItem {
+  id: string
+  label: string
+  description: string
+  color: string
+  scheduledTime: string
+  duration: number
+  type: "habit" | "activity"
+  isCompleted: boolean
+  icon?: string
+  frequency?: string
+  isBuildHabit?: boolean
+  history?: string[]
+  breaths?: Breath[]
+}
+
+interface StepDetailModalProps {
+  step: StepItem
+  onClose: () => void
+  onUpdate: (stepId: string, updates: Partial<StepItem>) => Promise<void>
+  onDelete?: (stepId: string) => Promise<void>
+  onDuplicate?: (stepId: string) => Promise<void>
+  onToggleBreath?: (stepId: string, breathId: string, completed: boolean) => Promise<void>
+}
+
+const colorOptions = [
+  "#FF8C00", // Orange
+  "#00B7EB", // Blue
+  "#FF4040", // Red
+  "#00CD00", // Green
+  "#9B30FF", // Purple
+  "#FFD700", // Gold
+  "#00CED1", // Cyan
+  "#808080", // Gray
+]
+
+const frequencyOptions = [
+  { value: "Every day!", label: "Every day" },
+  { value: "Monday, Tuesday, Wednesday, Thursday, Friday", label: "Weekdays" },
+  { value: "Saturday, Sunday", label: "Weekends" },
+  { value: "custom", label: "Custom" },
+]
+
+const dayOptions = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+export function StepDetailModal({
+  step,
+  onClose,
+  onUpdate,
+  onDelete,
+  onDuplicate,
+  onToggleBreath,
+}: StepDetailModalProps) {
+  const [editLabel, setEditLabel] = useState(step.label)
+  const [editDescription, setEditDescription] = useState(step.description || "")
+  const [editColor, setEditColor] = useState(step.color)
+  const [editScheduledTime, setEditScheduledTime] = useState(step.scheduledTime)
+  const [editDuration, setEditDuration] = useState(step.duration)
+  const [editFrequency, setEditFrequency] = useState(step.frequency || "Every day!")
+  const [selectedDays, setSelectedDays] = useState<string[]>([])
+  const [isCustomFrequency, setIsCustomFrequency] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+
+  useEffect(() => {
+    // Parse frequency into selected days for custom mode
+    if (step.frequency && step.frequency !== "Every day!") {
+      const days = step.frequency.split(", ").filter(d => dayOptions.includes(d))
+      setSelectedDays(days)
+
+      // Check if it's a preset or custom
+      const isWeekdays = step.frequency === "Monday, Tuesday, Wednesday, Thursday, Friday"
+      const isWeekends = step.frequency === "Saturday, Sunday"
+      setIsCustomFrequency(!isWeekdays && !isWeekends && days.length > 0)
+    }
+  }, [step.frequency])
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose()
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [onClose])
+
+  const handleSave = async () => {
+    setIsSaving(true)
+    try {
+      await onUpdate(step.id, {
+        label: editLabel,
+        description: editDescription,
+        color: editColor,
+        scheduledTime: editScheduledTime,
+        duration: editDuration,
+        frequency: editFrequency,
+      })
+      onClose()
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!onDelete) return
+
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete "${step.label}"? This action cannot be undone.`
+    )
+
+    if (confirmDelete) {
+      await onDelete(step.id)
+      onClose()
+    }
+  }
+
+  const handleDuplicate = async () => {
+    if (!onDuplicate) return
+    await onDuplicate(step.id)
+    onClose()
+  }
+
+  const handleComplete = async () => {
+    await onUpdate(step.id, { isCompleted: !step.isCompleted })
+  }
+
+  const handleToggleBreathCompletion = async (e: React.MouseEvent, breathId: string, currentCompleted: boolean) => {
+    e.stopPropagation()
+    if (onToggleBreath) {
+      await onToggleBreath(step.id, breathId, !currentCompleted)
+    }
+  }
+
+  const handleFrequencyChange = (value: string) => {
+    if (value === "custom") {
+      setIsCustomFrequency(true)
+      setEditFrequency("")
+    } else {
+      setIsCustomFrequency(false)
+      setEditFrequency(value)
+      setSelectedDays([])
+    }
+  }
+
+  const handleDayToggle = (day: string) => {
+    const newDays = selectedDays.includes(day)
+      ? selectedDays.filter(d => d !== day)
+      : [...selectedDays, day]
+
+    setSelectedDays(newDays)
+
+    // Update frequency string
+    if (newDays.length === 7) {
+      setEditFrequency("Every day!")
+      setIsCustomFrequency(false)
+    } else if (newDays.length === 0) {
+      setEditFrequency("")
+    } else {
+      setEditFrequency(newDays.join(", "))
+    }
+  }
+
+  // Count completed breaths
+  const completedBreaths = step.breaths?.filter(b => b.completed).length || 0
+  const totalBreaths = step.breaths?.length || 0
+
+  return (
+    <div
+      className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-sm overflow-hidden"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
+    >
+      <div className="h-full w-full sm:h-auto sm:w-auto sm:absolute sm:inset-4 sm:m-auto sm:max-w-2xl sm:max-h-[calc(100vh-2rem)] flex items-center justify-center p-4">
+        <div className="w-full h-full bg-gray-900/95 backdrop-blur-xl sm:rounded-3xl flex flex-col overflow-hidden shadow-2xl" style={{ maxHeight: "100%" }}>
+          {/* Header */}
+          <div className="flex-shrink-0 flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-white/10">
+            <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+              <div
+                className="w-3 h-10 rounded-full flex-shrink-0 shadow-lg"
+                style={{
+                  backgroundColor: step.color,
+                  boxShadow: `0 4px 12px ${step.color}60`,
+                }}
+              />
+              <div className="min-w-0 flex-1">
+                <h2 className="text-lg sm:text-xl font-semibold text-cream-25 truncate">{step.label}</h2>
+                <p className="text-xs sm:text-sm text-cream-25/60 truncate capitalize">{step.type}</p>
+              </div>
+            </div>
+
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-white/10 rounded-lg transition-colors flex-shrink-0"
+            >
+              <X className="w-5 h-5 sm:w-6 sm:h-6 text-cream-25" />
+            </button>
+          </div>
+
+          {/* Content */}
+          <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6">
+            <div className="space-y-4 sm:space-y-5">
+              {/* Step Name */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-cream-25">Step Name</label>
+                <input
+                  type="text"
+                  value={editLabel}
+                  onChange={(e) => setEditLabel(e.target.value)}
+                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-cream-25 placeholder:text-cream-25/40 focus:outline-none focus:border-white/30 focus:ring-2 focus:ring-white/10 transition-all"
+                  placeholder="Enter step name"
+                />
+              </div>
+
+              {/* Description */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-cream-25">Description</label>
+                <Textarea
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                  className="min-h-[100px] bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none focus:border-white/30"
+                  placeholder="Enter step description"
+                />
+              </div>
+
+              {/* Time and Duration Row */}
+              <div className="grid grid-cols-2 gap-4">
+                {/* When - Scheduled Time */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-cream-25 flex items-center gap-2">
+                    <Clock className="w-4 h-4" />
+                    When?
+                  </label>
+                  <input
+                    type="time"
+                    value={editScheduledTime}
+                    onChange={(e) => setEditScheduledTime(e.target.value)}
+                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-cream-25 focus:outline-none focus:border-white/30 focus:ring-2 focus:ring-white/10 transition-all font-mono text-lg"
+                  />
+                </div>
+
+                {/* How long - Duration */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-cream-25">Duration (min)</label>
+                  <input
+                    type="number"
+                    value={editDuration}
+                    onChange={(e) => setEditDuration(parseInt(e.target.value) || 0)}
+                    min="1"
+                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-cream-25 focus:outline-none focus:border-white/30 focus:ring-2 focus:ring-white/10 transition-all text-lg"
+                    placeholder="30"
+                  />
+                </div>
+              </div>
+
+              {/* Color */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-cream-25 flex items-center gap-2">
+                  <Palette className="w-4 h-4" />
+                  Color
+                </label>
+                <div className="grid grid-cols-8 gap-2">
+                  {colorOptions.map((color) => (
+                    <button
+                      key={color}
+                      onClick={() => setEditColor(color)}
+                      className={`w-full aspect-square rounded-xl transition-all hover:scale-110 ${
+                        editColor === color
+                          ? "ring-2 ring-white ring-offset-2 ring-offset-gray-900 scale-105"
+                          : ""
+                      }`}
+                      style={{
+                        backgroundColor: color,
+                        boxShadow: editColor === color ? `0 4px 12px ${color}80` : 'none'
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Frequency */}
+              <div className="space-y-3">
+                <label className="text-sm font-medium text-cream-25">Frequency</label>
+
+                {/* Preset Frequency Options */}
+                <div className="grid grid-cols-2 gap-2">
+                  {frequencyOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => handleFrequencyChange(option.value)}
+                      className={`px-4 py-3 rounded-lg font-medium text-sm transition-all ${
+                        (option.value === "custom" && isCustomFrequency) ||
+                        (option.value !== "custom" && editFrequency === option.value)
+                          ? "bg-white/15 text-cream-25 border-2 border-white/30"
+                          : "bg-white/5 text-cream-25/70 border border-white/10 hover:bg-white/10"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Custom Day Selector */}
+                {isCustomFrequency && (
+                  <div className="space-y-2">
+                    <div className="flex justify-between gap-2">
+                      {["M", "T", "W", "T", "F", "S", "S"].map((day, index) => {
+                        const fullDay = dayOptions[index]
+                        const isSelected = selectedDays.includes(fullDay)
+
+                        return (
+                          <button
+                            key={`${day}-${index}`}
+                            onClick={() => handleDayToggle(fullDay)}
+                            className={`flex-1 h-12 rounded-lg font-semibold text-sm transition-all ${
+                              isSelected
+                                ? "bg-green-500 text-white shadow-lg scale-105"
+                                : "bg-white/5 text-cream-25/50 border border-white/10 hover:bg-white/10"
+                            }`}
+                          >
+                            {day}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Breaths Section */}
+              {step.breaths && step.breaths.length > 0 && (
+                <div className="space-y-3 p-4 rounded-xl bg-white/5 border border-white/10">
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-semibold text-cream-25 uppercase tracking-wide">Breaths</label>
+                    <span className="text-xs font-medium text-cream-25/60 px-2 py-1 rounded-full bg-white/10">
+                      {completedBreaths}/{totalBreaths} completed
+                    </span>
+                  </div>
+                  <div className="space-y-2">
+                    {step.breaths
+                      .sort((a, b) => a.position - b.position)
+                      .map((breath) => {
+                        const breathMinutes = Math.ceil(breath.timeEstimationSeconds / 60)
+                        return (
+                          <button
+                            key={breath.id}
+                            onClick={(e) => handleToggleBreathCompletion(e, breath.id, breath.completed)}
+                            className="w-full flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
+                          >
+                            {/* Checkbox */}
+                            <div
+                              className="flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center transition-all group-hover:scale-110"
+                              style={{
+                                borderWidth: '2px',
+                                borderColor: breath.completed ? step.color : "rgba(249, 250, 251, 0.3)",
+                                backgroundColor: breath.completed ? step.color : "transparent",
+                                boxShadow: breath.completed ? `0 4px 8px ${step.color}40` : 'none'
+                              }}
+                            >
+                              {breath.completed ? (
+                                <CheckCircle2 className="w-4 h-4 text-white" strokeWidth={3} />
+                              ) : (
+                                <Circle className="w-3 h-3 text-cream-25/20" />
+                              )}
+                            </div>
+
+                            {/* Content */}
+                            <div className="flex-1 flex items-center justify-between text-left">
+                              <span
+                                className="text-sm font-medium transition-all"
+                                style={{
+                                  color: breath.completed ? "rgba(249, 250, 251, 0.5)" : "rgba(249, 250, 251, 0.9)",
+                                  textDecoration: breath.completed ? "line-through" : "none",
+                                }}
+                              >
+                                {breath.name}
+                              </span>
+                              <span className="text-xs text-cream-25/40 font-inter ml-2">
+                                {breathMinutes}m
+                              </span>
+                            </div>
+                          </button>
+                        )
+                      })}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Footer Actions */}
+          <div className="flex-shrink-0 px-4 sm:px-6 py-4 border-t border-white/10 space-y-3 bg-gray-900/50">
+            {/* Primary Actions */}
+            <div className="grid grid-cols-2 gap-3">
+              <Button
+                onClick={handleComplete}
+                disabled={isSaving}
+                className="py-3 text-base font-semibold rounded-xl flex items-center justify-center gap-2 transition-all hover:scale-105"
+                style={{
+                  backgroundColor: step.isCompleted ? "rgba(255, 255, 255, 0.1)" : "#00CD00",
+                  color: "white",
+                }}
+              >
+                <CheckCircle2 className="w-5 h-5" />
+                {step.isCompleted ? "Completed" : "Mark Complete"}
+              </Button>
+
+              <Button
+                onClick={handleSave}
+                disabled={isSaving}
+                className="py-3 text-base font-semibold rounded-xl transition-all hover:scale-105"
+                style={{ backgroundColor: "#FF4040", color: "white" }}
+              >
+                {isSaving ? "Saving..." : "Save Changes"}
+              </Button>
+            </div>
+
+            {/* Secondary Actions */}
+            <div className="grid grid-cols-2 gap-3">
+              {onDuplicate && (
+                <Button
+                  onClick={handleDuplicate}
+                  disabled={isSaving}
+                  className="py-2.5 text-sm font-medium rounded-xl border-2 hover:bg-white/5 transition-all"
+                  style={{
+                    backgroundColor: "transparent",
+                    color: "rgba(249, 250, 251, 0.7)",
+                    borderColor: "rgba(255, 255, 255, 0.2)"
+                  }}
+                >
+                  <Copy className="w-4 h-4 mr-2" />
+                  Duplicate
+                </Button>
+              )}
+
+              {onDelete && (
+                <Button
+                  onClick={handleDelete}
+                  disabled={isSaving}
+                  className="py-2.5 text-sm font-medium rounded-xl border-2 hover:bg-red-500/10 transition-all"
+                  style={{
+                    backgroundColor: "transparent",
+                    color: "#DC2626",
+                    borderColor: "#DC2626"
+                  }}
+                >
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Delete
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

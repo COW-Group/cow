@@ -6,6 +6,8 @@ import { useAuth } from "@/hooks/use-auth"
 import { AuthService } from "@/lib/auth-service"
 import { TimelineWrapper } from "@/components/TimelineWrapper"
 import { FloatingNav } from "@/components/floating-nav"
+import { VisionDataProvider } from "@/lib/vision-data-provider"
+import { databaseService } from "@/lib/database-service"
 import { Loader2Icon } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import type { AppSettings } from "@/lib/types"
@@ -101,8 +103,12 @@ export default function TimelinePage() {
     )
   }
 
+  if (!user?.id) {
+    return null // Let the loading/redirect logic handle this
+  }
+
   return (
-    <>
+    <VisionDataProvider userId={user.id} databaseService={databaseService}>
       <FloatingNav settings={appSettings} onSettingsUpdate={handleUpdateAppSettings} />
       <div className="min-h-screen relative flex flex-col font-inter">
         <main className="flex-1 flex flex-col items-center justify-start p-4 pt-32 md:pt-36 sm:pt-28 relative z-10">
@@ -142,6 +148,6 @@ export default function TimelinePage() {
           </div>
         </main>
       </div>
-    </>
+    </VisionDataProvider>
   )
 }

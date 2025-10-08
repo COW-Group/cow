@@ -511,14 +511,14 @@ export const DailyPlanner: React.FC = () => {
                         <li key={target.stepId} className="flex items-center gap-2">
                           <span>{step?.label}</span>
                           <Select
-                            value={target.taskListId || ""}
-                            onValueChange={(value) => handleTaskListChange(target.stepId, goal.id, value)}
+                            value={target.taskListId || "none"}
+                            onValueChange={(value) => handleTaskListChange(target.stepId, goal.id, value === "none" ? undefined : value)}
                           >
                             <SelectTrigger className="bg-white/20 border-white/30 text-cream-25 w-48">
                               <SelectValue placeholder="No Task List" />
                             </SelectTrigger>
                             <SelectContent className="bg-deep-blue text-cream-25">
-                              <SelectItem value="">No Task List</SelectItem>
+                              <SelectItem value="none">No Task List</SelectItem>
                               {taskLists.map((taskList) => (
                                 <SelectItem key={taskList.id} value={taskList.id}>
                                   {taskList.name}

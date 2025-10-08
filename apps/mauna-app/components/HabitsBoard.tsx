@@ -219,6 +219,149 @@ const calculateCurrentStreak = (history: string[], skipped?: { [date: string]: b
   return streak
 }
 
+// Sortable Category Component
+interface SortableCategoryProps {
+  category: Category
+  isExpanded: boolean
+  isUncategorized: boolean
+  groupStats: { completionPercentage: number; currentStreak: number }
+  calendarDates: any[]
+  showQuickActions: boolean
+  toggleGroup: (groupId: string) => void
+  children: React.ReactNode
+}
+
+const SortableCategory: React.FC<SortableCategoryProps> = ({
+  category,
+  isExpanded,
+  isUncategorized,
+  groupStats,
+  calendarDates,
+  showQuickActions,
+  toggleGroup,
+  children,
+}) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: category.id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  }
+
+  return (
+    <div ref={setNodeRef} style={style} className={isUncategorized ? '' : 'border-b border-white/5'}>
+      {/* Group Row - for both categorized and uncategorized */}
+      {isUncategorized ? (
+        /* Uncategorized drag handle - minimal UI */
+        <div className="flex items-stretch">
+          {/* Quick Actions Spacer */}
+          {showQuickActions && (
+            <div className="flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] sticky left-0 bg-gray-900 z-20" />
+          )}
+
+          {/* Drag Handle for Uncategorized */}
+          <div
+            className={`flex-shrink-0 px-2 py-1 sticky bg-gray-900/50 border-r border-white/10 z-10 flex items-center ${
+              showQuickActions ? 'left-[240px] sm:left-[280px] md:left-[320px]' : 'left-0'
+            }`}
+          >
+            <button
+              {...attributes}
+              {...listeners}
+              className="cursor-grab active:cursor-grabbing p-1 hover:bg-white/10 rounded transition-colors"
+              title="Drag to reorder"
+            >
+              <GripVertical className="w-3 h-3 text-cream-25/40" />
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div
+          className="flex items-stretch hover:bg-white/5 transition-colors"
+        >
+          {/* Quick Actions Spacer for Group Row */}
+          {showQuickActions && (
+            <div className="flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] sticky left-0 bg-gray-900 z-20" />
+          )}
+
+          {/* Group Label */}
+          <div
+            className={`flex-shrink-0 px-4 py-3 sticky bg-gray-900 border-r border-white/10 z-10 flex items-center gap-2 ${
+              showQuickActions ? 'left-[240px] sm:left-[280px] md:w-[320px] w-32 sm:w-40' : 'left-0 w-48 sm:w-64'
+            }`}
+          >
+            {/* Drag Handle */}
+            <button
+              {...attributes}
+              {...listeners}
+              className="cursor-grab active:cursor-grabbing p-1 hover:bg-white/10 rounded transition-colors"
+              title="Drag to reorder categories"
+            >
+              <GripVertical className="w-4 h-4 text-cream-25/60" />
+            </button>
+
+            {/* Expand/Collapse */}
+            <button
+              onClick={() => toggleGroup(category.id)}
+              className="flex items-center gap-2 flex-1"
+            >
+              {isExpanded ? (
+                <ChevronDown className="w-4 h-4 text-cream-25" />
+              ) : (
+                <ChevronRight className="w-4 h-4 text-cream-25" />
+              )}
+              <div
+                className="w-1 h-8 rounded-full"
+                style={{ backgroundColor: category.color }}
+              />
+              <span className="text-sm font-medium text-cream-25 uppercase tracking-wide truncate">
+                {category.name}
+              </span>
+            </button>
+          </div>
+
+          {/* Group Progress Bar */}
+          {calendarDates.map((dateInfo, index) => (
+            <div
+              key={`group-${category.id}-${index}`}
+              className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center"
+              style={{
+                background: `linear-gradient(90deg, ${category.color}33 0%, ${category.color}22 100%)`,
+              }}
+            >
+              <div className="w-full h-full" />
+            </div>
+          ))}
+
+          {/* Group Stats */}
+          <div className="flex-shrink-0 flex items-center">
+            <div className="w-20 px-2 text-center border-r border-white/5">
+              <div className="text-lg font-medium text-cream-25">{groupStats.currentStreak}</div>
+            </div>
+            <div className="w-20 px-2 text-center border-r border-white/5">
+              <div className="text-lg font-medium text-cream-25">{groupStats.completionPercentage}%</div>
+            </div>
+            <div className="w-20 px-2 text-center">
+              <div className="text-lg font-medium text-cream-25">{category.habits.length}</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Habits Content */}
+      {children}
+    </div>
+  )
+}
+
 // Sortable Habit Row Component
 interface SortableHabitRowProps {
   habit: HabitItem
@@ -762,6 +905,7 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
   const [selectedTime, setSelectedTime] = useState({ hour: '08', minute: '00' })
   const [selectedMetric, setSelectedMetric] = useState<'streak' | 'count' | 'rate'>('streak')
   const [localCategories, setLocalCategories] = useState(categories)
+  const [categoryOrder, setCategoryOrder] = useState<string[]>([])
   const { toast } = useToast()
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
@@ -773,10 +917,42 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
     })
   )
 
-  // Update local categories when categories change
+  // Load category order from localStorage on mount
   useEffect(() => {
-    setLocalCategories(categories)
-  }, [categories])
+    const savedOrder = localStorage.getItem('habitsCategoryOrder')
+    if (savedOrder) {
+      try {
+        setCategoryOrder(JSON.parse(savedOrder))
+      } catch (e) {
+        console.error('Failed to parse category order:', e)
+      }
+    }
+  }, [])
+
+  // Update local categories when categories change, applying saved order
+  useEffect(() => {
+    if (categoryOrder.length > 0) {
+      // Sort categories based on saved order
+      const orderedCategories = [...categories].sort((a, b) => {
+        const aIndex = categoryOrder.indexOf(a.id)
+        const bIndex = categoryOrder.indexOf(b.id)
+
+        // If both are in the order, sort by their index
+        if (aIndex !== -1 && bIndex !== -1) {
+          return aIndex - bIndex
+        }
+        // If only a is in the order, it comes first
+        if (aIndex !== -1) return -1
+        // If only b is in the order, it comes first
+        if (bIndex !== -1) return 1
+        // Neither in order, maintain original order
+        return 0
+      })
+      setLocalCategories(orderedCategories)
+    } else {
+      setLocalCategories(categories)
+    }
+  }, [categories, categoryOrder])
 
   const calendarDates = generateCalendarDates(14)
 
@@ -902,6 +1078,30 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
     })
 
     toast({ title: "Habit Reordered", description: "Habit order updated successfully" })
+  }
+
+  const handleCategoryDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (!over || active.id === over.id) {
+      return
+    }
+
+    setLocalCategories((categories) => {
+      const oldIndex = categories.findIndex((cat) => cat.id === active.id)
+      const newIndex = categories.findIndex((cat) => cat.id === over.id)
+
+      const reorderedCategories = arrayMove(categories, oldIndex, newIndex)
+
+      // Save the new order to localStorage
+      const newOrder = reorderedCategories.map(cat => cat.id)
+      localStorage.setItem('habitsCategoryOrder', JSON.stringify(newOrder))
+      setCategoryOrder(newOrder)
+
+      return reorderedCategories
+    })
+
+    toast({ title: "Categories Reordered", description: "Category order updated successfully" })
   }
 
   // Scroll to today on mount
@@ -1179,112 +1379,73 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
               <p className="text-cream-25/60 text-lg">No habits yet. Create your first habit!</p>
             </div>
           ) : (
-            filteredCategories.map((category) => {
-              const isExpanded = expandedGroups.has(category.id)
-              const groupStats = calculateGroupStats(category.habits, calendarDates)
-              const isUncategorized = category.id === 'uncategorized'
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={handleCategoryDragEnd}
+            >
+              <SortableContext
+                items={filteredCategories.map(cat => cat.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                {filteredCategories.map((category) => {
+                  const isExpanded = expandedGroups.has(category.id)
+                  const groupStats = calculateGroupStats(category.habits, calendarDates)
+                  const isUncategorized = category.id === 'uncategorized'
 
-              return (
-                <div key={category.id} className={isUncategorized ? '' : 'border-b border-white/5'}>
-                  {/* Group Row - skip for uncategorized */}
-                  {!isUncategorized && (
-                    <div
-                      className="flex items-stretch hover:bg-white/5 cursor-pointer transition-colors"
-                      onClick={() => toggleGroup(category.id)}
+                  return (
+                    <SortableCategory
+                      key={category.id}
+                      category={category}
+                      isExpanded={isExpanded}
+                      isUncategorized={isUncategorized}
+                      groupStats={groupStats}
+                      calendarDates={calendarDates}
+                      showQuickActions={showQuickActions}
+                      toggleGroup={toggleGroup}
                     >
-                      {/* Quick Actions Spacer for Group Row */}
-                      {showQuickActions && (
-                        <div className="flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] sticky left-0 bg-gray-900 z-20" />
+                      {/* Habits - always shown for uncategorized, conditionally for grouped */}
+                      {(isUncategorized || isExpanded) && (
+                        <DndContext
+                          sensors={sensors}
+                          collisionDetection={closestCenter}
+                          onDragEnd={(event) => handleDragEnd(event, category.id)}
+                        >
+                          <SortableContext
+                            items={category.habits.map(h => h.id)}
+                            strategy={verticalListSortingStrategy}
+                          >
+                            {category.habits.map((habit) => (
+                              <SortableHabitRow
+                                key={habit.id}
+                                habit={habit}
+                                calendarDates={calendarDates}
+                                showQuickActions={showQuickActions}
+                                showColorPicker={showColorPicker}
+                                setShowColorPicker={setShowColorPicker}
+                                showTimePicker={showTimePicker}
+                                setShowTimePicker={setShowTimePicker}
+                                selectedTime={selectedTime}
+                                setSelectedTime={setSelectedTime}
+                                selectedMetric={selectedMetric}
+                                handleHabitClick={handleHabitClick}
+                                handleMarkComplete={handleMarkComplete}
+                                handleUpdateHabit={updateHabit}
+                                calculateCurrentStreak={calculateCurrentStreak}
+                                calculateLongestStreak={calculateLongestStreak}
+                                getColorWithSaturation={getColorWithSaturation}
+                                colorOptions={colorOptions}
+                                toast={toast}
+                              />
+                            ))}
+                          </SortableContext>
+                        </DndContext>
                       )}
-
-                      {/* Group Label */}
-                      <div
-                        className={`flex-shrink-0 px-4 py-3 sticky bg-gray-900 border-r border-white/10 z-10 flex items-center gap-2 ${
-                          showQuickActions ? 'left-[240px] sm:left-[280px] md:w-[320px] w-32 sm:w-40' : 'left-0 w-48 sm:w-64'
-                        }`}
-                      >
-                      {isExpanded ? (
-                        <ChevronDown className="w-4 h-4 text-cream-25" />
-                      ) : (
-                        <ChevronRight className="w-4 h-4 text-cream-25" />
-                      )}
-                      <div
-                        className="w-1 h-8 rounded-full"
-                        style={{ backgroundColor: category.color }}
-                      />
-                      <span className="text-sm font-medium text-cream-25 uppercase tracking-wide truncate">
-                        {category.name}
-                      </span>
-                    </div>
-
-                    {/* Group Progress Bar */}
-                    {calendarDates.map((dateInfo, index) => (
-                      <div
-                        key={`group-${category.id}-${index}`}
-                        className="flex-shrink-0 w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center"
-                        style={{
-                          background: `linear-gradient(90deg, ${category.color}33 0%, ${category.color}22 100%)`,
-                        }}
-                      >
-                        <div className="w-full h-full" />
-                      </div>
-                    ))}
-
-                    {/* Group Stats */}
-                    <div className="flex-shrink-0 flex items-center">
-                      <div className="w-20 px-2 text-center border-r border-white/5">
-                        <div className="text-lg font-medium text-cream-25">{groupStats.currentStreak}</div>
-                      </div>
-                      <div className="w-20 px-2 text-center border-r border-white/5">
-                        <div className="text-lg font-medium text-cream-25">{groupStats.completionPercentage}%</div>
-                      </div>
-                      <div className="w-20 px-2 text-center">
-                        <div className="text-lg font-medium text-cream-25">{category.habits.length}</div>
-                      </div>
-                    </div>
-                  </div>
-                  )}
-
-                  {/* Habits - always shown for uncategorized, conditionally for grouped */}
-                  {(isUncategorized || isExpanded) && (
-                    <DndContext
-                      sensors={sensors}
-                      collisionDetection={closestCenter}
-                      onDragEnd={(event) => handleDragEnd(event, category.id)}
-                    >
-                      <SortableContext
-                        items={category.habits.map(h => h.id)}
-                        strategy={verticalListSortingStrategy}
-                      >
-                        {category.habits.map((habit) => (
-                          <SortableHabitRow
-                            key={habit.id}
-                            habit={habit}
-                            calendarDates={calendarDates}
-                            showQuickActions={showQuickActions}
-                            showColorPicker={showColorPicker}
-                            setShowColorPicker={setShowColorPicker}
-                            showTimePicker={showTimePicker}
-                            setShowTimePicker={setShowTimePicker}
-                            selectedTime={selectedTime}
-                            setSelectedTime={setSelectedTime}
-                            selectedMetric={selectedMetric}
-                            handleHabitClick={handleHabitClick}
-                            handleMarkComplete={handleMarkComplete}
-                            handleUpdateHabit={updateHabit}
-                            calculateCurrentStreak={calculateCurrentStreak}
-                            calculateLongestStreak={calculateLongestStreak}
-                            getColorWithSaturation={getColorWithSaturation}
-                            colorOptions={colorOptions}
-                            toast={toast}
-                          />
-                        ))}
-                      </SortableContext>
-                    </DndContext>
-                  )}
-                </div>
-              )
-            })
+                    </SortableCategory>
+                  )
+                })}
+              </SortableContext>
+            </DndContext>
           )}
 
           {/* Daily Totals with Metric Selector */}

@@ -86,14 +86,7 @@ export function VisionDataProvider({
     [fetchData],
   )
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-deep-blue to-dark-purple text-cream-25">
-        <div className="h-10 w-10 animate-spin text-vibrant-blue" />
-      </div>
-    )
-  }
-
+  // Don't block rendering while loading - let children render with empty data
   return (
     <VisionDataContext.Provider value={{ ranges, taskLists, lengths, setRanges, refreshData }}>
       {children}

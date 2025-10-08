@@ -15,6 +15,7 @@ interface HabitItem {
   frequency: string
   isBuildHabit: boolean
   habitGroup?: string
+  lengthId?: string | null
   history?: string[]
   notes?: { [date: string]: string }
   units?: { [date: string]: number }
@@ -73,7 +74,7 @@ export const HabitsBoardWrapper = ({ currentMonth = new Date() }: { currentMonth
       console.log("[HabitsBoardWrapper.loadHabits] Executing Supabase query for steps with tag='habit'")
       const { data, error } = await databaseService.supabase
         .from("steps")
-        .select("id, label, description, color, duration, frequency, isbuildhabit, history, tag, habit_group, habit_notes, habit_units, habit_skipped")
+        .select("id, label, description, color, duration, frequency, isbuildhabit, history, tag, habit_group, habit_notes, habit_units, habit_skipped, length_id")
         .eq("user_id", user.id)
         .eq("tag", "habit")
         .order("habit_group", { ascending: true, nullsFirst: false })
@@ -105,6 +106,7 @@ export const HabitsBoardWrapper = ({ currentMonth = new Date() }: { currentMonth
           frequency: step.frequency || "Every day!",
           isBuildHabit: step.isbuildhabit ?? true,
           habitGroup: step.habit_group || null,
+          lengthId: step.length_id || null,
           history: step.history || [],
           notes: cleanNotes,
           units: step.habit_units || {},
@@ -236,6 +238,7 @@ export const HabitsBoardWrapper = ({ currentMonth = new Date() }: { currentMonth
     if (updates.habitGroup !== undefined) dbUpdates.habit_group = updates.habitGroup
     if (updates.units !== undefined) dbUpdates.habit_units = updates.units
     if (updates.skipped !== undefined) dbUpdates.habit_skipped = updates.skipped
+    if (updates.lengthId !== undefined) dbUpdates.length_id = updates.lengthId
 
     // Handle time update - merge with existing notes
     if (updates.time !== undefined) {

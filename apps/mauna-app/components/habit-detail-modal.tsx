@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight, Edit2, Calendar as CalendarIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { useVisionData } from "@/lib/vision-data-provider"
 
 interface HabitItem {
   id: string
@@ -14,6 +15,7 @@ interface HabitItem {
   frequency: string
   isBuildHabit: boolean
   habitGroup?: string
+  lengthId?: string | null
   history?: string[]
   notes?: { [date: string]: string }
   units?: { [date: string]: number }
@@ -222,11 +224,49 @@ export function HabitDetailModal({
   const [editLabel, setEditLabel] = useState(habit.label)
   const [editDescription, setEditDescription] = useState(habit.description || "")
   const [editColor, setEditColor] = useState(habit.color)
+  const [selectedRangeId, setSelectedRangeId] = useState<string>("")
+  const [selectedMountainId, setSelectedMountainId] = useState<string>("")
+  const [selectedHillId, setSelectedHillId] = useState<string>("")
+  const [selectedTerrainId, setSelectedTerrainId] = useState<string>("")
+  const [selectedLengthId, setSelectedLengthId] = useState<string>("")
   const calendarScrollRef = React.useRef<HTMLDivElement>(null)
+
+  // Get vision data for hierarchy selectors
+  const { ranges, lengths } = useVisionData()
+
+  // Compute available options based on selections
+  const availableMountains = ranges.find(r => r.id === selectedRangeId)?.mountains || []
+  const availableHills = availableMountains.find(m => m.id === selectedMountainId)?.hills || []
+  const availableTerrains = availableHills.find(h => h.id === selectedHillId)?.terrains || []
+  const availableLengths = availableTerrains.find(t => t.id === selectedTerrainId)?.lengths || []
 
   const currentStreak = calculateCurrentStreak(habit.history || [], habit.skipped)
   const longestStreak = calculateLongestStreak(habit.history || [], habit.skipped)
   const totalCount = habit.history?.length || 0
+
+  // Initialize hierarchy from habit's lengthId
+  useEffect(() => {
+    if (habit.lengthId && ranges.length > 0) {
+      // Find the full hierarchy path from lengthId
+      for (const range of ranges) {
+        for (const mountain of range.mountains || []) {
+          for (const hill of mountain.hills || []) {
+            for (const terrain of hill.terrains || []) {
+              const length = terrain.lengths?.find(l => l.id === habit.lengthId)
+              if (length) {
+                setSelectedRangeId(range.id)
+                setSelectedMountainId(mountain.id)
+                setSelectedHillId(hill.id)
+                setSelectedTerrainId(terrain.id)
+                setSelectedLengthId(length.id)
+                return
+              }
+            }
+          }
+        }
+      }
+    }
+  }, [habit.lengthId, ranges])
 
   useEffect(() => {
     setJournalNote(habit.notes?.[selectedDate] || "")
@@ -268,6 +308,7 @@ export function HabitDetailModal({
       label: editLabel,
       description: editDescription,
       color: editColor,
+      lengthId: selectedLengthId || null,
     })
     setIsEditingHabit(false)
   }
@@ -600,43 +641,100 @@ export function HabitDetailModal({
                   <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-2">
                       <label className="text-xs font-medium text-cream-25/70">Range</label>
-                      <input
-                        type="text"
-                        placeholder="Select Range"
-                        className="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-cream-25 placeholder:text-cream-25/40 focus:outline-none focus:border-white/20 transition-colors"
-                      />
+                      <select
+                        value={selectedRangeId}
+                        onChange={(e) => {
+                          setSelectedRangeId(e.target.value)
+                          setSelectedMountainId("")
+                          setSelectedHillId("")
+                          setSelectedTerrainId("")
+                          setSelectedLengthId("")
+                        }}
+                        className="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-cream-25 focus:outline-none focus:border-white/20 transition-colors"
+                      >
+                        <option value="" className="bg-gray-900">Select Range</option>
+                        {ranges.map(range => (
+                          <option key={range.id} value={range.id} className="bg-gray-900">
+                            {range.name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-medium text-cream-25/70">Mountain</label>
-                      <input
-                        type="text"
-                        placeholder="Select Mountain"
-                        className="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-cream-25 placeholder:text-cream-25/40 focus:outline-none focus:border-white/20 transition-colors"
-                      />
+                      <select
+                        value={selectedMountainId}
+                        onChange={(e) => {
+                          setSelectedMountainId(e.target.value)
+                          setSelectedHillId("")
+                          setSelectedTerrainId("")
+                          setSelectedLengthId("")
+                        }}
+                        disabled={!selectedRangeId}
+                        className="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-cream-25 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:border-white/20 transition-colors"
+                      >
+                        <option value="" className="bg-gray-900">Select Mountain</option>
+                        {availableMountains.map(mountain => (
+                          <option key={mountain.id} value={mountain.id} className="bg-gray-900">
+                            {mountain.name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-medium text-cream-25/70">Hill</label>
-                      <input
-                        type="text"
-                        placeholder="Select Hill"
-                        className="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-cream-25 placeholder:text-cream-25/40 focus:outline-none focus:border-white/20 transition-colors"
-                      />
+                      <select
+                        value={selectedHillId}
+                        onChange={(e) => {
+                          setSelectedHillId(e.target.value)
+                          setSelectedTerrainId("")
+                          setSelectedLengthId("")
+                        }}
+                        disabled={!selectedMountainId}
+                        className="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-cream-25 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:border-white/20 transition-colors"
+                      >
+                        <option value="" className="bg-gray-900">Select Hill</option>
+                        {availableHills.map(hill => (
+                          <option key={hill.id} value={hill.id} className="bg-gray-900">
+                            {hill.name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-medium text-cream-25/70">Terrain</label>
-                      <input
-                        type="text"
-                        placeholder="Select Terrain"
-                        className="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-cream-25 placeholder:text-cream-25/40 focus:outline-none focus:border-white/20 transition-colors"
-                      />
+                      <select
+                        value={selectedTerrainId}
+                        onChange={(e) => {
+                          setSelectedTerrainId(e.target.value)
+                          setSelectedLengthId("")
+                        }}
+                        disabled={!selectedHillId}
+                        className="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-cream-25 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:border-white/20 transition-colors"
+                      >
+                        <option value="" className="bg-gray-900">Select Terrain</option>
+                        {availableTerrains.map(terrain => (
+                          <option key={terrain.id} value={terrain.id} className="bg-gray-900">
+                            {terrain.name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                     <div className="space-y-2 col-span-2">
                       <label className="text-xs font-medium text-cream-25/70">Length</label>
-                      <input
-                        type="text"
-                        placeholder="Select Length"
-                        className="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-cream-25 placeholder:text-cream-25/40 focus:outline-none focus:border-white/20 transition-colors"
-                      />
+                      <select
+                        value={selectedLengthId}
+                        onChange={(e) => setSelectedLengthId(e.target.value)}
+                        disabled={!selectedTerrainId}
+                        className="w-full px-3 py-2 text-sm rounded-lg bg-white/5 border border-white/10 text-cream-25 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:border-white/20 transition-colors"
+                      >
+                        <option value="" className="bg-gray-900">Select Length</option>
+                        {availableLengths.map(length => (
+                          <option key={length.id} value={length.id} className="bg-gray-900">
+                            {length.name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
                 </div>
@@ -669,21 +767,83 @@ export function HabitDetailModal({
               <>
                 {activeTab === "overview" && (
                   <div className="space-y-4 sm:space-y-6">
-                    <div className="grid grid-cols-3 gap-3 sm:gap-4">
+                    {/* Stats Grid */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+                      {/* Current Streak */}
                       <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10">
-                        <div className="text-xs sm:text-sm text-cream-25/60 uppercase tracking-wide mb-1 sm:mb-2">Current</div>
+                        <div className="text-xs sm:text-sm text-cream-25/60 uppercase tracking-wide mb-1 sm:mb-2">Current Streak</div>
                         <div className="text-2xl sm:text-4xl font-bold text-cream-25">{currentStreak}</div>
-                        <div className="text-[10px] sm:text-xs text-cream-25/50 mt-0.5 sm:mt-1">days</div>
+                        <div className="text-[10px] sm:text-xs text-cream-25/50 mt-0.5 sm:mt-1">days in a row</div>
                       </div>
+
+                      {/* Longest Streak */}
                       <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10">
-                        <div className="text-xs sm:text-sm text-cream-25/60 uppercase tracking-wide mb-1 sm:mb-2">Longest</div>
+                        <div className="text-xs sm:text-sm text-cream-25/60 uppercase tracking-wide mb-1 sm:mb-2">Longest Streak</div>
                         <div className="text-2xl sm:text-4xl font-bold text-cream-25">{longestStreak}</div>
-                        <div className="text-[10px] sm:text-xs text-cream-25/50 mt-0.5 sm:mt-1">days</div>
+                        <div className="text-[10px] sm:text-xs text-cream-25/50 mt-0.5 sm:mt-1">days total</div>
                       </div>
+
+                      {/* Total Completions */}
                       <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10">
                         <div className="text-xs sm:text-sm text-cream-25/60 uppercase tracking-wide mb-1 sm:mb-2">Total</div>
                         <div className="text-2xl sm:text-4xl font-bold text-cream-25">{totalCount}</div>
-                        <div className="text-[10px] sm:text-xs text-cream-25/50 mt-0.5 sm:mt-1">times</div>
+                        <div className="text-[10px] sm:text-xs text-cream-25/50 mt-0.5 sm:mt-1">completions</div>
+                      </div>
+
+                      {/* This Week */}
+                      <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10">
+                        <div className="text-xs sm:text-sm text-cream-25/60 uppercase tracking-wide mb-1 sm:mb-2">This Week</div>
+                        <div className="text-2xl sm:text-4xl font-bold text-cream-25">
+                          {(() => {
+                            const today = new Date()
+                            const startOfWeek = new Date(today)
+                            startOfWeek.setDate(today.getDate() - today.getDay() + 1) // Monday
+                            const weekDays = Array.from({ length: 7 }, (_, i) => {
+                              const date = new Date(startOfWeek)
+                              date.setDate(startOfWeek.getDate() + i)
+                              return date.toISOString().split("T")[0]
+                            })
+                            return weekDays.filter(d => habit.history?.includes(d) && new Date(d) <= today).length
+                          })()}
+                        </div>
+                        <div className="text-[10px] sm:text-xs text-cream-25/50 mt-0.5 sm:mt-1">of 7 days</div>
+                      </div>
+
+                      {/* This Month */}
+                      <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10">
+                        <div className="text-xs sm:text-sm text-cream-25/60 uppercase tracking-wide mb-1 sm:mb-2">This Month</div>
+                        <div className="text-2xl sm:text-4xl font-bold text-cream-25">
+                          {(() => {
+                            const today = new Date()
+                            const monthStart = new Date(today.getFullYear(), today.getMonth(), 1)
+                            const monthDates = []
+                            for (let d = new Date(monthStart); d <= today; d.setDate(d.getDate() + 1)) {
+                              monthDates.push(new Date(d).toISOString().split("T")[0])
+                            }
+                            return monthDates.filter(d => habit.history?.includes(d)).length
+                          })()}
+                        </div>
+                        <div className="text-[10px] sm:text-xs text-cream-25/50 mt-0.5 sm:mt-1">
+                          of {new Date().getDate()} days
+                        </div>
+                      </div>
+
+                      {/* Completion Rate */}
+                      <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10">
+                        <div className="text-xs sm:text-sm text-cream-25/60 uppercase tracking-wide mb-1 sm:mb-2">Success Rate</div>
+                        <div className="text-2xl sm:text-4xl font-bold text-cream-25">
+                          {(() => {
+                            const today = new Date()
+                            const last30Days = Array.from({ length: 30 }, (_, i) => {
+                              const date = new Date()
+                              date.setDate(today.getDate() - i)
+                              return date.toISOString().split("T")[0]
+                            })
+                            const completed = last30Days.filter(d => habit.history?.includes(d)).length
+                            return Math.round((completed / 30) * 100)
+                          })()}%
+                        </div>
+                        <div className="text-[10px] sm:text-xs text-cream-25/50 mt-0.5 sm:mt-1">last 30 days</div>
                       </div>
                     </div>
 

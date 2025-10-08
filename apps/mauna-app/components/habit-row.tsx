@@ -11,6 +11,7 @@ interface HabitItem {
   frequency: string
   isBuildHabit: boolean
   habitGroup?: string
+  lengthId?: string | null
   history?: string[]
   notes?: { [date: string]: string }
   units?: { [date: string]: number }

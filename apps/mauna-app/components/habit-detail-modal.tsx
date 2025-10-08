@@ -268,6 +268,11 @@ export function HabitDetailModal({
     }
   }, [habit.lengthId, ranges])
 
+  // Reset selectedDate to current date when modal opens with a new habit
+  useEffect(() => {
+    setSelectedDate(new Date().toISOString().split("T")[0])
+  }, [habit.id])
+
   useEffect(() => {
     setJournalNote(habit.notes?.[selectedDate] || "")
     setUnits(habit.units?.[selectedDate] || 0)

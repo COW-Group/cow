@@ -888,7 +888,10 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
   const [categoryOrder, setCategoryOrder] = useState<string[]>([])
 
   // Board items for individual habit positioning
-  type BoardItem = { type: 'ungrouped-habit', id: string } | { type: 'category', id: string }
+  type BoardItem =
+    | { type: 'ungrouped-habit', id: string }
+    | { type: 'category', id: string }
+    | { type: 'grouped-habit', id: string, categoryId: string }
   const [boardItems, setBoardItems] = useState<BoardItem[]>([])
 
   const { toast } = useToast()
@@ -914,7 +917,7 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
     }
   }, [])
 
-  // Build board items from categories
+  // Build board items from categories - flatten everything for board-level DnD
   useEffect(() => {
     const newBoardItems: BoardItem[] = []
     const uncategorizedCategory = categories.find(cat => cat.id === 'uncategorized')
@@ -926,22 +929,39 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
       const validItems = boardItems.filter(item => {
         if (item.type === 'ungrouped-habit') {
           return uncategorizedCategory?.habits.some(h => h.id === item.id)
+        } else if (item.type === 'grouped-habit') {
+          const cat = groupedCategories.find(c => c.id === item.categoryId)
+          return cat?.habits.some(h => h.id === item.id)
         } else {
           return groupedCategories.some(cat => cat.id === item.id)
         }
       })
 
-      // Add new ungrouped habits that aren't in the saved order
+      // Add new ungrouped habits
       uncategorizedCategory?.habits.forEach(habit => {
         if (!validItems.some(item => item.type === 'ungrouped-habit' && item.id === habit.id)) {
           validItems.push({ type: 'ungrouped-habit', id: habit.id })
         }
       })
 
-      // Add new categories that aren't in the saved order
+      // Add new categories and their habits
       groupedCategories.forEach(cat => {
-        if (!validItems.some(item => item.type === 'category' && item.id === cat.id)) {
+        const catIndex = validItems.findIndex(item => item.type === 'category' && item.id === cat.id)
+        if (catIndex === -1) {
+          // Add category
           validItems.push({ type: 'category', id: cat.id })
+          // Add its habits right after
+          cat.habits.forEach(habit => {
+            validItems.push({ type: 'grouped-habit', id: habit.id, categoryId: cat.id })
+          })
+        } else {
+          // Category exists, check for new habits
+          cat.habits.forEach(habit => {
+            if (!validItems.some(item => item.type === 'grouped-habit' && item.id === habit.id && item.categoryId === cat.id)) {
+              // Insert after the category
+              validItems.splice(catIndex + 1, 0, { type: 'grouped-habit', id: habit.id, categoryId: cat.id })
+            }
+          })
         }
       })
 
@@ -953,9 +973,12 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
         newBoardItems.push({ type: 'ungrouped-habit', id: habit.id })
       })
 
-      // Add grouped categories
+      // Add grouped categories and their habits
       groupedCategories.forEach(cat => {
         newBoardItems.push({ type: 'category', id: cat.id })
+        cat.habits.forEach(habit => {
+          newBoardItems.push({ type: 'grouped-habit', id: habit.id, categoryId: cat.id })
+        })
       })
 
       setBoardItems(newBoardItems)
@@ -1057,29 +1080,43 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
     setSelectedHabit(allHabits[prevIndex])
   }
 
-  const handleDragEnd = (event: DragEndEvent, categoryId: string) => {
+  const handleDragEnd = async (event: DragEndEvent, categoryId: string) => {
     const { active, over } = event
 
     if (!over || active.id === over.id) {
       return
     }
 
+    const category = categories.find(cat => cat.id === categoryId)
+    if (!category) return
+
+    // Check if the drop target is within the same category
+    const isWithinCategory = category.habits.some(h => h.id === over.id)
+
+    if (!isWithinCategory) {
+      // Habit dragged outside its category - ungroup it
+      const habit = category.habits.find(h => h.id === active.id)
+      if (habit) {
+        await updateHabit(habit.id, { habitGroup: null })
+        toast({ title: "Habit Ungrouped", description: `"${habit.label}" removed from "${category.name}"` })
+      }
+      return
+    }
+
+    // Reorder within the same category
     setLocalCategories((categories) => {
-      return categories.map((category) => {
-        if (category.id !== categoryId) {
-          return category
+      return categories.map((cat) => {
+        if (cat.id !== categoryId) {
+          return cat
         }
 
-        const oldIndex = category.habits.findIndex((h) => h.id === active.id)
-        const newIndex = category.habits.findIndex((h) => h.id === over.id)
+        const oldIndex = cat.habits.findIndex((h) => h.id === active.id)
+        const newIndex = cat.habits.findIndex((h) => h.id === over.id)
 
-        const newHabits = arrayMove(category.habits, oldIndex, newIndex)
-
-        // TODO: Persist the new order to the database
-        // You can add an order field to habits and update it here
+        const newHabits = arrayMove(cat.habits, oldIndex, newIndex)
 
         return {
-          ...category,
+          ...cat,
           habits: newHabits,
         }
       })
@@ -1095,12 +1132,11 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
       return
     }
 
-    // Check if this is an ungrouped habit being dropped into a category
     const activeItem = boardItems.find(item => item.id === active.id)
     const overItem = boardItems.find(item => item.id === over.id)
 
+    // Case 1: Ungrouped habit dropped onto a category header - group it
     if (activeItem?.type === 'ungrouped-habit' && overItem?.type === 'category') {
-      // Ungrouped habit dropped onto a category - assign it to that group
       const category = categories.find(cat => cat.id === overItem.id)
       const habit = categories.find(cat => cat.id === 'uncategorized')?.habits.find(h => h.id === activeItem.id)
 
@@ -1108,6 +1144,33 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
         await updateHabit(habit.id, { habitGroup: category.name })
         toast({ title: "Habit Grouped", description: `"${habit.label}" moved to "${category.name}"` })
         return
+      }
+    }
+
+    // Case 2: Grouped habit dragged outside its category - ungroup it
+    if (activeItem?.type === 'grouped-habit') {
+      const category = categories.find(cat => cat.id === activeItem.categoryId)
+      const habit = category?.habits.find(h => h.id === activeItem.id)
+
+      // Check if dropped outside the category
+      const droppedOnOwnCategory = overItem?.type === 'category' && overItem.id === activeItem.categoryId
+      const droppedOnOwnGroupMember = overItem?.type === 'grouped-habit' && overItem.categoryId === activeItem.categoryId
+
+      if (!droppedOnOwnCategory && !droppedOnOwnGroupMember && habit) {
+        // Ungroup the habit
+        await updateHabit(habit.id, { habitGroup: null })
+        toast({ title: "Habit Ungrouped", description: `"${habit.label}" removed from "${category?.name}"` })
+        return
+      }
+
+      // Check if dropped onto a different category - re-group it
+      if (overItem?.type === 'category' && overItem.id !== activeItem.categoryId) {
+        const newCategory = categories.find(cat => cat.id === overItem.id)
+        if (habit && newCategory) {
+          await updateHabit(habit.id, { habitGroup: newCategory.name })
+          toast({ title: "Habit Moved", description: `"${habit.label}" moved to "${newCategory.name}"` })
+          return
+        }
       }
     }
 
@@ -1440,8 +1503,41 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
                         toast={toast}
                       />
                     )
+                  } else if (boardItem.type === 'grouped-habit') {
+                    // Render individual grouped habit
+                    const category = categories.find(cat => cat.id === boardItem.categoryId)
+                    const habit = category?.habits.find(h => h.id === boardItem.id)
+                    if (!habit) return null
+
+                    // Only show if category is expanded
+                    const isExpanded = expandedGroups.has(category.id)
+                    if (!isExpanded) return null
+
+                    return (
+                      <SortableHabitRow
+                        key={habit.id}
+                        habit={habit}
+                        calendarDates={calendarDates}
+                        showQuickActions={showQuickActions}
+                        showColorPicker={showColorPicker}
+                        setShowColorPicker={setShowColorPicker}
+                        showTimePicker={showTimePicker}
+                        setShowTimePicker={setShowTimePicker}
+                        selectedTime={selectedTime}
+                        setSelectedTime={setSelectedTime}
+                        selectedMetric={selectedMetric}
+                        handleHabitClick={handleHabitClick}
+                        handleMarkComplete={handleMarkComplete}
+                        handleUpdateHabit={updateHabit}
+                        calculateCurrentStreak={calculateCurrentStreak}
+                        calculateLongestStreak={calculateLongestStreak}
+                        getColorWithSaturation={getColorWithSaturation}
+                        colorOptions={colorOptions}
+                        toast={toast}
+                      />
+                    )
                   } else {
-                    // Render grouped category
+                    // Render category header
                     const category = categories.find(cat => cat.id === boardItem.id)
                     if (!category) return null
 
@@ -1459,43 +1555,7 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
                         showQuickActions={showQuickActions}
                         toggleGroup={toggleGroup}
                       >
-                        {/* Habits within category */}
-                        {isExpanded && (
-                          <DndContext
-                            sensors={sensors}
-                            collisionDetection={closestCenter}
-                            onDragEnd={(event) => handleDragEnd(event, category.id)}
-                          >
-                            <SortableContext
-                              items={category.habits.map(h => h.id)}
-                              strategy={verticalListSortingStrategy}
-                            >
-                              {category.habits.map((habit) => (
-                                <SortableHabitRow
-                                  key={habit.id}
-                                  habit={habit}
-                                  calendarDates={calendarDates}
-                                  showQuickActions={showQuickActions}
-                                  showColorPicker={showColorPicker}
-                                  setShowColorPicker={setShowColorPicker}
-                                  showTimePicker={showTimePicker}
-                                  setShowTimePicker={setShowTimePicker}
-                                  selectedTime={selectedTime}
-                                  setSelectedTime={setSelectedTime}
-                                  selectedMetric={selectedMetric}
-                                  handleHabitClick={handleHabitClick}
-                                  handleMarkComplete={handleMarkComplete}
-                                  handleUpdateHabit={updateHabit}
-                                  calculateCurrentStreak={calculateCurrentStreak}
-                                  calculateLongestStreak={calculateLongestStreak}
-                                  getColorWithSaturation={getColorWithSaturation}
-                                  colorOptions={colorOptions}
-                                  toast={toast}
-                                />
-                              ))}
-                            </SortableContext>
-                          </DndContext>
-                        )}
+                        {/* Habits are rendered as individual board items */}
                       </SortableCategory>
                     )
                   }

@@ -258,32 +258,8 @@ const SortableCategory: React.FC<SortableCategoryProps> = ({
 
   return (
     <div ref={setNodeRef} style={style} className={isUncategorized ? '' : 'border-b border-white/5'}>
-      {/* Group Row - for both categorized and uncategorized */}
-      {isUncategorized ? (
-        /* Uncategorized drag handle - minimal UI */
-        <div className="flex items-stretch">
-          {/* Quick Actions Spacer */}
-          {showQuickActions && (
-            <div className="flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] sticky left-0 bg-gray-900 z-20" />
-          )}
-
-          {/* Drag Handle for Uncategorized */}
-          <div
-            className={`flex-shrink-0 px-2 py-1 sticky bg-gray-900/50 border-r border-white/10 z-10 flex items-center ${
-              showQuickActions ? 'left-[240px] sm:left-[280px] md:left-[320px]' : 'left-0'
-            }`}
-          >
-            <button
-              {...attributes}
-              {...listeners}
-              className="cursor-grab active:cursor-grabbing p-1 hover:bg-white/10 rounded transition-colors"
-              title="Drag to reorder"
-            >
-              <GripVertical className="w-3 h-3 text-cream-25/40" />
-            </button>
-          </div>
-        </div>
-      ) : (
+      {/* Group Row - only for categorized habits */}
+      {!isUncategorized && (
         <div
           className="flex items-stretch hover:bg-white/5 transition-colors"
         >

@@ -233,6 +233,8 @@ interface SortableCategoryProps {
   showQuickActions: boolean
   toggleGroup: (groupId: string) => void
   children: React.ReactNode
+  onUpdateCategory?: (categoryId: string, updates: { name?: string; color?: string }) => void
+  colorOptions: any[]
 }
 
 const SortableCategory: React.FC<SortableCategoryProps> = ({
@@ -244,6 +246,8 @@ const SortableCategory: React.FC<SortableCategoryProps> = ({
   showQuickActions,
   toggleGroup,
   children,
+  onUpdateCategory,
+  colorOptions,
 }) => {
   const {
     attributes,
@@ -254,10 +258,24 @@ const SortableCategory: React.FC<SortableCategoryProps> = ({
     isDragging,
   } = useSortable({ id: category.id })
 
+  const [showColorPicker, setShowColorPicker] = useState(false)
+  const [isEditingName, setIsEditingName] = useState(false)
+  const [editedName, setEditedName] = useState(category.name)
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false)
+  const colorPickerButtonRef = useRef<HTMLButtonElement>(null)
+  const [colorPickerPosition, setColorPickerPosition] = useState<{ top: number; left: number } | null>(null)
+
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
+  }
+
+  const handleSaveName = () => {
+    if (editedName.trim() && editedName !== category.name && onUpdateCategory) {
+      onUpdateCategory(category.id, { name: editedName.trim() })
+    }
+    setIsEditingName(false)
   }
 
   return (
@@ -267,44 +285,180 @@ const SortableCategory: React.FC<SortableCategoryProps> = ({
         <div
           className="flex items-stretch hover:bg-white/5 transition-colors"
         >
-          {/* Quick Actions Spacer for Group Row */}
+          {/* Quick Action Icons for Groups */}
           {showQuickActions && (
-            <div className="flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] sticky left-0 bg-gray-900 z-20" />
+            <div className="flex items-stretch flex-shrink-0 sticky left-0 z-20 bg-gray-900">
+              {/* Edit Group Name */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setIsEditingName(true)
+                  setEditedName(category.name)
+                }}
+                className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center hover:opacity-80 transition-opacity"
+                style={{ backgroundColor: `${category.color}40` }}
+                title="Edit group name"
+              >
+                <Edit2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              </button>
+
+              {/* Color Picker for Group */}
+              <div className="relative">
+                <button
+                  ref={colorPickerButtonRef}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    if (showColorPicker) {
+                      setShowColorPicker(false)
+                      setColorPickerPosition(null)
+                    } else {
+                      const rect = colorPickerButtonRef.current?.getBoundingClientRect()
+                      if (rect) {
+                        setColorPickerPosition({
+                          top: rect.bottom + window.scrollY,
+                          left: rect.left + window.scrollX,
+                        })
+                      }
+                      setShowColorPicker(true)
+                    }
+                  }}
+                  className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center hover:opacity-80 transition-opacity"
+                  style={{ backgroundColor: `${category.color}60` }}
+                  title="Change group color"
+                >
+                  <Palette className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+                </button>
+
+                {/* Color Picker Dropdown */}
+                {showColorPicker && colorPickerPosition && typeof window !== 'undefined' && ReactDOM.createPortal(
+                  <>
+                    {/* Backdrop */}
+                    <div
+                      className="fixed inset-0"
+                      style={{ zIndex: 999998 }}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setShowColorPicker(false)
+                        setColorPickerPosition(null)
+                      }}
+                    />
+
+                    {/* Dropdown */}
+                    <div
+                      className="absolute rounded-lg shadow-2xl"
+                      style={{
+                        zIndex: 999999,
+                        background: 'rgba(40, 40, 40, 0.98)',
+                        backdropFilter: 'blur(20px)',
+                        border: '1px solid rgba(255, 255, 255, 0.15)',
+                        top: `${colorPickerPosition.top}px`,
+                        left: `${colorPickerPosition.left}px`,
+                      }}
+                    >
+                      <div className="flex">
+                        {colorOptions.map((color) => (
+                          <button
+                            key={color.value}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              if (onUpdateCategory) {
+                                onUpdateCategory(category.id, { color: color.value })
+                              }
+                              setShowColorPicker(false)
+                              setColorPickerPosition(null)
+                            }}
+                            className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center hover:opacity-80 transition-opacity relative"
+                            style={{ backgroundColor: color.value }}
+                            title={color.name}
+                          >
+                            {category.color === color.value && (
+                              <Check className="w-4 h-4 sm:w-5 sm:h-5 text-white relative z-10" />
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </>,
+                  document.body
+                )}
+              </div>
+
+              {/* Reorder/Drag */}
+              <button
+                {...attributes}
+                {...listeners}
+                className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center hover:opacity-80 transition-opacity cursor-grab active:cursor-grabbing"
+                style={{ backgroundColor: `${category.color}80` }}
+                title="Drag to reorder"
+              >
+                <Menu className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              </button>
+
+              {/* Notifications for Group */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setNotificationsEnabled(!notificationsEnabled)
+                }}
+                className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center hover:opacity-80 transition-opacity"
+                style={{ backgroundColor: `${category.color}A0` }}
+                title={notificationsEnabled ? "Disable notifications" : "Enable notifications"}
+              >
+                <Bell className={`w-4 h-4 sm:w-5 sm:h-5 text-white ${notificationsEnabled ? 'fill-white' : ''}`} />
+              </button>
+
+              {/* Time (placeholder for future time-based reordering) */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                }}
+                className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center hover:opacity-80 transition-opacity"
+                style={{ backgroundColor: category.color }}
+                title="Time-based reordering"
+              >
+                <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+              </button>
+            </div>
           )}
 
           {/* Group Label */}
           <div
             className={`flex-shrink-0 px-4 py-3 sticky bg-gray-900 border-r border-white/10 z-10 flex items-center gap-2 ${
-              showQuickActions ? 'left-[240px] sm:left-[280px] md:w-[320px] w-32 sm:w-40' : 'left-0 w-48 sm:w-64'
+              showQuickActions ? 'left-[240px] sm:left-[280px] md:left-[320px] w-32 sm:w-40' : 'left-0 w-48 sm:w-64'
             }`}
           >
-            {/* Drag Handle */}
-            <button
-              {...attributes}
-              {...listeners}
-              className="cursor-grab active:cursor-grabbing p-1 hover:bg-white/10 rounded transition-colors"
-              title="Drag to reorder categories"
-            >
-              <GripVertical className="w-4 h-4 text-cream-25/60" />
-            </button>
-
             {/* Expand/Collapse */}
             <button
               onClick={() => toggleGroup(category.id)}
-              className="flex items-center gap-2 flex-1"
+              className="flex items-center gap-2 flex-1 min-w-0"
             >
               {isExpanded ? (
-                <ChevronDown className="w-4 h-4 text-cream-25" />
+                <ChevronDown className="w-4 h-4 text-cream-25 flex-shrink-0" />
               ) : (
-                <ChevronRight className="w-4 h-4 text-cream-25" />
+                <ChevronRight className="w-4 h-4 text-cream-25 flex-shrink-0" />
               )}
               <div
-                className="w-1 h-8 rounded-full"
+                className="w-1 h-8 rounded-full flex-shrink-0"
                 style={{ backgroundColor: category.color }}
               />
-              <span className="text-sm font-medium text-cream-25 uppercase tracking-wide truncate">
-                {category.name}
-              </span>
+              {isEditingName ? (
+                <Input
+                  value={editedName}
+                  onChange={(e) => setEditedName(e.target.value)}
+                  onBlur={handleSaveName}
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') handleSaveName()
+                    if (e.key === 'Escape') setIsEditingName(false)
+                  }}
+                  className="text-sm font-medium text-cream-25 uppercase tracking-wide bg-white/10 border-white/20 px-2 py-1 h-auto flex-1 min-w-0"
+                  autoFocus
+                  onClick={(e) => e.stopPropagation()}
+                />
+              ) : (
+                <span className="text-sm font-medium text-cream-25 uppercase tracking-wide truncate">
+                  {category.name}
+                </span>
+              )}
             </button>
           </div>
 
@@ -1190,6 +1344,30 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
     toast({ title: "Items Reordered", description: "Order updated successfully" })
   }
 
+  const handleUpdateCategory = async (categoryId: string, updates: { name?: string; color?: string }) => {
+    const category = categories.find(cat => cat.id === categoryId)
+    if (!category) return
+
+    // Update all habits in this category with the new group name or color
+    const habitsToUpdate = category.habits
+
+    for (const habit of habitsToUpdate) {
+      const habitUpdates: Partial<HabitItem> = {}
+      if (updates.name) habitUpdates.habitGroup = updates.name
+      if (updates.color) habitUpdates.color = updates.color
+
+      if (Object.keys(habitUpdates).length > 0) {
+        await updateHabit(habit.id, habitUpdates)
+      }
+    }
+
+    if (updates.name) {
+      toast({ title: "Group Updated", description: `Group renamed to "${updates.name}"` })
+    } else if (updates.color) {
+      toast({ title: "Group Updated", description: `Group color changed` })
+    }
+  }
+
   // Scroll to today on mount
   useEffect(() => {
     if (scrollContainerRef.current) {
@@ -1459,26 +1637,30 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
             </div>
           </div>
 
-          {/* Habits List */}
-          {boardItems.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-cream-25/60 text-lg">No habits yet. Create your first habit!</p>
-            </div>
-          ) : (
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleBoardItemDragEnd}
-            >
-              <SortableContext
-                items={boardItems.map(item => item.id)}
-                strategy={verticalListSortingStrategy}
+          {/* Habits List - Scrollable */}
+          <div className="flex-1 overflow-y-auto overflow-x-hidden">
+            {boardItems.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-cream-25/60 text-lg">No habits yet. Create your first habit!</p>
+              </div>
+            ) : (
+              <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleBoardItemDragEnd}
               >
+                <SortableContext
+                  items={boardItems.map(item => item.id)}
+                  strategy={verticalListSortingStrategy}
+                >
                 {boardItems.map((boardItem) => {
                   if (boardItem.type === 'ungrouped-habit') {
                     // Render individual ungrouped habit
                     const habit = categories.find(cat => cat.id === 'uncategorized')?.habits.find(h => h.id === boardItem.id)
                     if (!habit) return null
+
+                    // Filter: only show ungrouped habits if no group is selected or if 'uncategorized' is selected
+                    if (selectedGroup && selectedGroup !== 'uncategorized') return null
 
                     return (
                       <SortableHabitRow
@@ -1507,7 +1689,10 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
                     // Render individual grouped habit
                     const category = categories.find(cat => cat.id === boardItem.categoryId)
                     const habit = category?.habits.find(h => h.id === boardItem.id)
-                    if (!habit) return null
+                    if (!habit || !category) return null
+
+                    // Filter: only show if this habit's category matches the selected group (or no group selected)
+                    if (selectedGroup && selectedGroup !== category.id) return null
 
                     // Only show if category is expanded
                     const isExpanded = expandedGroups.has(category.id)
@@ -1541,6 +1726,9 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
                     const category = categories.find(cat => cat.id === boardItem.id)
                     if (!category) return null
 
+                    // Filter: only show if this category matches the selected group (or no group selected)
+                    if (selectedGroup && selectedGroup !== category.id) return null
+
                     const isExpanded = expandedGroups.has(category.id)
                     const groupStats = calculateGroupStats(category.habits, calendarDates)
 
@@ -1554,15 +1742,18 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
                         calendarDates={calendarDates}
                         showQuickActions={showQuickActions}
                         toggleGroup={toggleGroup}
+                        onUpdateCategory={handleUpdateCategory}
+                        colorOptions={colorOptions}
                       >
                         {/* Habits are rendered as individual board items */}
                       </SortableCategory>
                     )
                   }
                 })}
-              </SortableContext>
-            </DndContext>
-          )}
+                </SortableContext>
+              </DndContext>
+            )}
+          </div>
 
           {/* Daily Totals with Metric Selector */}
           {filteredCategories.length > 0 && (

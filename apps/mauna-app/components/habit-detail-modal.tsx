@@ -423,6 +423,96 @@ export function HabitDetailModal({
             </div>
           )}
 
+          {/* Instagram-Story-Style Habit Navigation Tracker */}
+          {!isEditingHabit && (
+            <div className="flex-shrink-0 px-4 sm:px-6 py-3 border-b border-white/5">
+              <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-1 -mx-2 px-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+                {allHabits.map((h, index) => {
+                  const isActive = h.id === habit.id
+                  const habitStreak = calculateCurrentStreak(h.history || [], h.skipped)
+                  const habitTotal = h.history?.length || 0
+
+                  return (
+                    <button
+                      key={h.id}
+                      onClick={() => {
+                        // Find the index and navigate
+                        const currentIndex = allHabits.findIndex(hab => hab.id === habit.id)
+                        const targetIndex = index
+                        const diff = targetIndex - currentIndex
+
+                        if (diff > 0) {
+                          // Navigate forward
+                          for (let i = 0; i < diff; i++) {
+                            onNext?.()
+                          }
+                        } else if (diff < 0) {
+                          // Navigate backward
+                          for (let i = 0; i < Math.abs(diff); i++) {
+                            onPrevious?.()
+                          }
+                        }
+                      }}
+                      className={`flex-shrink-0 flex flex-col items-center gap-1.5 transition-all duration-300 ${
+                        isActive ? 'scale-110' : 'opacity-60 hover:opacity-100'
+                      }`}
+                    >
+                      {/* Circular Avatar with Ring */}
+                      <div className="relative">
+                        {/* Progress Ring */}
+                        <svg className="w-12 h-12 sm:w-14 sm:h-14 -rotate-90" viewBox="0 0 100 100">
+                          {/* Background circle */}
+                          <circle
+                            cx="50"
+                            cy="50"
+                            r="45"
+                            fill="none"
+                            stroke="rgba(255, 255, 255, 0.1)"
+                            strokeWidth="3"
+                          />
+                          {/* Progress circle */}
+                          <circle
+                            cx="50"
+                            cy="50"
+                            r="45"
+                            fill="none"
+                            stroke={h.color}
+                            strokeWidth={isActive ? "4" : "3"}
+                            strokeLinecap="round"
+                            strokeDasharray={`${(habitTotal > 0 ? Math.min(habitStreak / 30, 1) : 0) * 283} 283`}
+                            className="transition-all duration-500"
+                            style={{
+                              filter: isActive ? `drop-shadow(0 0 4px ${h.color})` : 'none'
+                            }}
+                          />
+                        </svg>
+
+                        {/* Inner Circle with Color */}
+                        <div
+                          className={`absolute inset-0 m-2 rounded-full flex items-center justify-center text-xs font-bold text-white transition-all duration-300`}
+                          style={{
+                            backgroundColor: h.color,
+                            opacity: isActive ? 1 : 0.8,
+                            boxShadow: isActive ? `0 4px 12px ${h.color}60` : 'none'
+                          }}
+                        >
+                          {habitStreak > 0 ? habitStreak : h.label.charAt(0).toUpperCase()}
+                        </div>
+                      </div>
+
+                      {/* Habit Name */}
+                      <span className={`text-[10px] sm:text-xs font-medium transition-colors max-w-[60px] truncate ${
+                        isActive ? 'text-cream-25' : 'text-cream-25/60'
+                      }`}>
+                        {h.label}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
           <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 sm:px-6 py-4 sm:py-6" style={{ flex: "1 1 0%" }}>
             {isEditingHabit ? (
               <div className="space-y-4 sm:space-y-6">

@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+import {
+  BarChart, Bar, XAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, LineChart, Line, AreaChart, Area,
   RadialBarChart, RadialBar, Legend
 } from 'recharts';
@@ -314,7 +314,6 @@ export function Reports() {
                 <AreaChart data={reportData.taskCompletionData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
-                  <YAxis />
                   <Tooltip content={<CustomTooltip />} />
                   <Area 
                     type="monotone" 
@@ -406,7 +405,6 @@ export function Reports() {
                 <BarChart data={reportData.budgetData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="category" />
-                  <YAxis />
                   <Tooltip content={<CustomTooltip />} />
                   <Bar dataKey="allocated" fill="#E5E7EB" name="Allocated" />
                   <Bar dataKey="spent" fill="#3B82F6" name="Spent" />
@@ -433,7 +431,6 @@ export function Reports() {
                 <BarChart data={reportData.teamProductivityData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
-                  <YAxis />
                   <Tooltip content={<CustomTooltip />} />
                   <Bar dataKey="completed" fill="#10B981" name="Completed" />
                   <Bar dataKey="assigned" fill="#E5E7EB" name="Assigned" />
@@ -497,7 +494,6 @@ export function Reports() {
                 <LineChart data={reportData.goalProgressData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
-                  <YAxis />
                   <Tooltip content={<CustomTooltip />} />
                   <Line 
                     type="monotone" 

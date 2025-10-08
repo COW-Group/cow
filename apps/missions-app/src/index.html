@@ -23,6 +23,21 @@
       z-index: 9999;
     }
   </style>
+  <script>
+    // Define global process variable for browser compatibility
+    if (typeof window !== 'undefined') {
+      window.global = window;
+      window.process = {
+        env: {
+          NODE_ENV: 'development',
+          REACT_APP_SUPABASE_URL: 'https://spnoztsuvgxrdmkeygdu.supabase.co',
+          REACT_APP_SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNwbm96dHN1dmd4cmRta2V5Z2R1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA0MDQ5NzEsImV4cCI6MjA2NTk4MDk3MX0.WIL49nW6pTtfoueVnKiPfNaHukVKzoo4nxSAfLemcOU',
+          NEXT_PUBLIC_SUPABASE_URL: 'https://spnoztsuvgxrdmkeygdu.supabase.co',
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNwbm96dHN1dmd4cmRta2V5Z2R1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA0MDQ5NzEsImV4cCI6MjA2NTk4MDk3MX0.WIL49nW6pTtfoueVnKiPfNaHukVKzoo4nxSAfLemcOU'
+        }
+      };
+    }
+  </script>
 </head>
 <body>
   <div id="loading">

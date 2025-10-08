@@ -17,16 +17,16 @@ export function LatestBoard() {
     .filter(board => board.updatedAt) // Only boards with update timestamps
     .sort((a, b) => new Date(b.updatedAt!).getTime() - new Date(a.updatedAt!).getTime())[0];
 
-  // If no boards exist yet, redirect to boards page to create one
+  // If no boards exist yet, redirect to my office
   if (boards.length === 0) {
-    return <Navigate to="/boards" replace />;
+    return <Navigate to="/app/my-office" replace />;
   }
 
   // If we have a latest board, redirect to it
   if (latestBoard) {
-    return <Navigate to={`/boards/${latestBoard.id}`} replace />;
+    return <Navigate to={`/app/boards/${latestBoard.id}`} replace />;
   }
 
-  // Fallback: redirect to boards page
-  return <Navigate to="/boards" replace />;
+  // Fallback: redirect to my office
+  return <Navigate to="/app/my-office" replace />;
 }

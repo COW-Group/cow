@@ -12,7 +12,7 @@ import {
   CheckSquare,
   Type
 } from 'lucide-react';
-import { Popover, Transition } from '@headlessui/react';
+// import { Popover, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 
 interface AddColumnPopoverProps {

@@ -64,6 +64,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const pathname = usePathname()
   const isDashboardPage = pathname === "/dashboard"
   const isFocusPage = pathname === "/focus"
+  const isHabitsPage = pathname === "/habits"
 
   if (loading) {
     return (
@@ -105,7 +106,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             isMobile ? "overflow-y-auto" : "overflow-hidden",
           )}
         >
-          {!isDashboardPage && !isFocusPage && (
+          {!isDashboardPage && !isFocusPage && !isHabitsPage && (
             <>
               <Header isMenuOpen={isAppMenuOpen} onToggleMenu={toggleAppMenu} settings={appSettings} />
               <DashboardMenu

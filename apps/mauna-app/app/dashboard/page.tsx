@@ -53,6 +53,7 @@ export default function DashboardPage() {
     showHeaderFocus: true,
     showHeaderEmotional: true,
     showHeaderHealth: true,
+    showHeaderHabits: true,
     showHeaderVision: true,
     showHeaderWealth: true,
     showHeaderSocial: true,

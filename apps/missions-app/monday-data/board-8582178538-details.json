@@ -1,0 +1,766 @@
+{
+  "board_info": {
+    "id": "8582178538",
+    "name": "All Group Book of Accounts",
+    "description": "No description",
+    "state": "active",
+    "kind": "private",
+    "url": "https://mycow-io.monday.com/boards/8582178538",
+    "updated_at": "2025-05-05T10:59:15Z",
+    "item_terminology": "Account",
+    "items_count": 179,
+    "items_limit": 100000,
+    "board_folder_id": "16144251",
+    "workspace": {
+      "id": "8999031",
+      "name": "MyCow Group",
+      "kind": "open",
+      "description": "Everything C.O.W."
+    },
+    "creator": {
+      "id": "70356209",
+      "name": "Owner Cow Group",
+      "email": "owner@mycow.io"
+    },
+    "owners": [
+      {
+        "id": "70356209",
+        "name": "Owner Cow Group"
+      },
+      {
+        "id": "82967988",
+        "name": "Likhitha Palaypu"
+      }
+    ]
+  },
+  "groups": [
+    {
+      "id": "new_group7744",
+      "title": "Accounts"
+    }
+  ],
+  "columns": [
+    {
+      "id": "name",
+      "title": "Name",
+      "type": "name",
+      "settings": {}
+    },
+    {
+      "id": "start_date",
+      "title": "FIN Payable Period",
+      "type": "timeline",
+      "settings": {}
+    },
+    {
+      "id": "numbers",
+      "title": "FIN Next Payment (USD)",
+      "type": "numbers",
+      "settings": {
+        "unit": {
+          "symbol": "$",
+          "custom_unit": "",
+          "direction": "left"
+        }
+      }
+    },
+    {
+      "id": "formula_mknj4v76",
+      "title": "FIN USD Units (Next Payment / 100)",
+      "type": "formula",
+      "settings": {
+        "formula": "{numbers}/100"
+      }
+    },
+    {
+      "id": "color_mknjbk9x",
+      "title": "FIN Status",
+      "type": "status",
+      "settings": {
+        "done_colors": [9],
+        "deactivated_labels": [],
+        "color_mapping": {
+          "0": 2,
+          "1": 19,
+          "2": 11,
+          "3": 9,
+          "4": 8,
+          "6": 15,
+          "7": 6,
+          "8": 110,
+          "9": 1,
+          "10": 10,
+          "11": 158,
+          "12": 12,
+          "13": 17,
+          "15": 13,
+          "17": 154,
+          "19": 3,
+          "101": 0,
+          "102": 101,
+          "103": 4,
+          "110": 103,
+          "154": 156,
+          "156": 102,
+          "158": 7
+        },
+        "labels": {
+          "0": "Negotiations",
+          "1": "Budgeted",
+          "2": "Not Budgeted",
+          "3": "Sales In Progress",
+          "4": "Amount Received",
+          "5": "Next Budget Updated",
+          "6": "Sales Serviced",
+          "7": "Budget Allocated",
+          "8": "Scheduled",
+          "9": "Paid"
+        }
+      }
+    },
+    {
+      "id": "color_mknjxj5",
+      "title": "FIN Priority",
+      "type": "status",
+      "settings": {
+        "labels": {
+          "0": "Bare Minimum❗️",
+          "1": "Luxury",
+          "2": "Unnecessary",
+          "5": "Not Marked",
+          "10": "Lower Target",
+          "109": "Ideal",
+          "110": "Target"
+        }
+      }
+    },
+    {
+      "id": "direct_doc_mknjk8fj",
+      "title": "monday Doc v2",
+      "type": "direct_doc",
+      "settings": {
+        "doc_type": 1,
+        "auto_map_on_move": true
+      }
+    },
+    {
+      "id": "color_mknj8rr2",
+      "title": "FIN Account Owner Group",
+      "type": "status",
+      "settings": {
+        "labels": {
+          "0": "Business Bank Account",
+          "1": "Palaypu Family",
+          "2": "MyCow Group",
+          "3": "Personal Bank Account",
+          "4": "Must Expand",
+          "5": "Uncategorized"
+        }
+      }
+    },
+    {
+      "id": "color_mknjd01t",
+      "title": "FIN Account Type",
+      "type": "status",
+      "settings": {
+        "labels": {
+          "0": "Capital Account",
+          "3": "Expense Account",
+          "5": "Uncategorized",
+          "105": "Income Account",
+          "156": "Cash Account"
+        }
+      }
+    },
+    {
+      "id": "text_mknjszv5",
+      "title": "FIN Sub-Category 2 (archive)",
+      "type": "text",
+      "settings": {}
+    },
+    {
+      "id": "text_mknjdxeb",
+      "title": "FIN Responsible Person",
+      "type": "text",
+      "settings": {}
+    },
+    {
+      "id": "color_mknjqmt6",
+      "title": "FIN Likki's Category",
+      "type": "status",
+      "settings": {
+        "labels": {
+          "0": "Special Experiences & Activities",
+          "1": "Spiritual (Being), Mental (Thinking), Emotional (Feeling), Social (Relating), & Physical (Body) Health & Vibrance",
+          "3": "Hibernative Curiosity, Creativity, and Contribution",
+          "5": "Uncategorized",
+          "6": "Financing, Legal, Taxes, and Public Health & Vibrance 🧑‍⚖️",
+          "8": "Nomad's Soul Home & Base Soul Home"
+        }
+      }
+    },
+    {
+      "id": "color_mknjd5q7",
+      "title": "FIN Likki's Sub-Category",
+      "type": "status",
+      "settings": {
+        "labels": {
+          "0": "Travel",
+          "1": "Social Health & Vibrance",
+          "2": "Base Home",
+          "3": "Legal Health & Vibrance",
+          "4": "Public Health & Vibrance",
+          "6": "Financial Health & Vibrance",
+          "7": "Physical Health & Vibrance",
+          "8": "Style",
+          "9": "Spiritual, Mental, Emotional Health & Vibrance",
+          "10": "Digital Home",
+          "11": "Vehicle",
+          "12": "Income",
+          "13": "Responsible Payments",
+          "14": "Entertainment"
+        }
+      }
+    },
+    {
+      "id": "numeric_mknj9nn0",
+      "title": "FIN Total Balance (USD) Anchor",
+      "type": "numbers",
+      "settings": {
+        "unit": {
+          "symbol": "$",
+          "custom_unit": "",
+          "direction": "left"
+        }
+      }
+    },
+    {
+      "id": "date_mknj8z0s",
+      "title": "FIN Next Payable / Receivable Date",
+      "type": "date",
+      "settings": {
+        "hide_footer": false
+      }
+    },
+    {
+      "id": "numeric_mknjwcaw",
+      "title": "FIN Next Payment (INR)(ARCHIVE COLUMN)",
+      "type": "numbers",
+      "settings": {
+        "unit": {
+          "symbol": "custom",
+          "custom_unit": " ₹",
+          "direction": "left"
+        }
+      }
+    },
+    {
+      "id": "formula_mknjfyn7",
+      "title": "FIN INR Units (Next Payment / 7200)",
+      "type": "formula",
+      "settings": {
+        "formula": "{numeric_mknjwcaw}/7200"
+      }
+    },
+    {
+      "id": "subtasks_mknveny6",
+      "title": "Subitems",
+      "type": "subtasks",
+      "settings": {
+        "displayType": "BOARD_INLINE",
+        "itemTypeName": "column.subtasks.title",
+        "allowMultipleItems": true,
+        "boardIds": [8652099834]
+      }
+    },
+    {
+      "id": "boolean_mknv7pa0",
+      "title": "Done",
+      "type": "checkbox",
+      "settings": {}
+    },
+    {
+      "id": "duration_mknvb659",
+      "title": "Time tracking",
+      "type": "time_tracking",
+      "settings": {}
+    },
+    {
+      "id": "email_mknvc2z7",
+      "title": "Email",
+      "type": "email",
+      "settings": {}
+    },
+    {
+      "id": "formula_mknv2261",
+      "title": "FIN Total Balance (INR) Formula",
+      "type": "formula",
+      "settings": {
+        "formula": "CONCATENATE(\"₹\", TEXT({numeric_mknj9nn0}*85.38, \"#,##0.00\"))"
+      }
+    },
+    {
+      "id": "color_mknvh5v",
+      "title": "Billing Interval",
+      "type": "status",
+      "settings": {
+        "labels": {
+          "0": "Daily",
+          "1": "Weekly",
+          "2": "Monthly",
+          "3": "Yearly",
+          "5": "One-Time"
+        }
+      }
+    },
+    {
+      "id": "formula_mkq72ycn",
+      "title": "FIN Next Payment (INR)",
+      "type": "formula",
+      "settings": {
+        "formula": "CONCATENATE(\"₹\", TEXT({numeric_mknjwcaw}*85.38, \"#,##0.00\"))"
+      }
+    },
+    {
+      "id": "timerange_mkq7rvx8",
+      "title": "Budget Release Cycle",
+      "type": "timeline",
+      "settings": {
+        "hide_footer": false
+      }
+    },
+    {
+      "id": "timerange_mkq77vkj",
+      "title": "Paid Until",
+      "type": "timeline",
+      "settings": {
+        "hide_footer": false
+      }
+    },
+    {
+      "id": "color_mkq7kv93",
+      "title": "FIN Urgency",
+      "type": "status",
+      "settings": {
+        "labels": {
+          "0": "Very Urgent",
+          "1": "Not Urgent",
+          "2": "Not Marked",
+          "5": "Unecessary",
+          "10": "Urgent",
+          "109": "Neutral",
+          "110": "Somewhat Urgent"
+        }
+      }
+    },
+    {
+      "id": "color_mkq7z8zm",
+      "title": "FIN Primary Account Owner",
+      "type": "status",
+      "settings": {
+        "labels": {
+          "0": "Likhitha Palaypu",
+          "1": "Palaypu Family",
+          "2": "Lekha Palaypu",
+          "3": "Ireem LLC -> MyCow Group of Companies Inc",
+          "4": "Geetha Darbha",
+          "6": "Kautilya Palaypu",
+          "7": "Laxmi Prasad Palaypu",
+          "8": "My Global SQFT Inc",
+          "9": "Interups Inc",
+          "104": "Ryzer WealthCorp Limited"
+        }
+      }
+    },
+    {
+      "id": "color_mkq7fvz",
+      "title": "FIN Category",
+      "type": "status",
+      "settings": {
+        "labels": {
+          "0": "FCLT ✈️",
+          "4": "POPS 📇",
+          "6": "FCLT 💻",
+          "12": "SALE 🎯",
+          "14": "FCLT 🏢",
+          "16": "LEG 👩🏻‍⚖️",
+          "17": "TECH 💻",
+          "18": "OPS 🎯",
+          "102": "Palaypu Family 💗",
+          "103": "FIN 💸",
+          "104": "LEAD",
+          "105": "LAUNCH",
+          "106": "STR",
+          "107": "RED",
+          "109": "IR",
+          "110": "GOLD",
+          "151": "RAIL"
+        }
+      }
+    },
+    {
+      "id": "color_mkq72ebw",
+      "title": "FIN Sub-Category",
+      "type": "status",
+      "settings": {
+        "labels": {
+          "0": "Household 🧹",
+          "1": "Subscriptions 📱",
+          "2": "Healthcare ⛑",
+          "3": "Rentals 🏘 🚗 & Assets",
+          "4": "POPS 📇",
+          "6": "FCLT 💻",
+          "7": "Entertainment 🍿",
+          "8": "Debts 💳",
+          "9": "Financing, Legal, Taxes, and Public Health & Vibrance 🧑‍⚖️",
+          "10": "Pocket Money 🤑",
+          "11": "Cash 💵",
+          "12": "SALE 🎯",
+          "13": "Learning & Development 🦋",
+          "14": "FCLT 🏢",
+          "15": "Financing & Taxes 🧑‍⚖️",
+          "16": "LEG 👩🏻‍⚖️",
+          "17": "TECH 💻",
+          "18": "OPS 🎯",
+          "19": "Travel 🧳",
+          "101": "Beloved 💗",
+          "102": "Family 💗"
+        }
+      }
+    }
+  ],
+  "items": [
+    {
+      "id": "8970969560",
+      "name": "Costco Membership",
+      "group": {
+        "id": "new_group7744",
+        "title": "Accounts"
+      },
+      "state": "active",
+      "created_at": "2025-04-21T18:02:46Z",
+      "updated_at": "2025-05-05T11:21:09Z",
+      "creator": {
+        "id": "70356209",
+        "name": "Owner Cow Group",
+        "email": "owner@mycow.io"
+      },
+      "column_values": {
+        "fin_status": "Scheduled",
+        "fin_next_payable_date": "2025-05-05",
+        "fin_next_payment_usd": "200",
+        "billing_interval": "One-Time",
+        "fin_priority": "Bare Minimum❗️",
+        "fin_urgency": "Somewhat Urgent",
+        "fin_category": "Palaypu Family 💗",
+        "fin_account_owner_group": "Palaypu Family",
+        "fin_account_type": "Uncategorized",
+        "done": false
+      }
+    },
+    {
+      "id": "8652375307",
+      "name": "Chase Suites Cedar Storage",
+      "group": {
+        "id": "new_group7744",
+        "title": "Accounts"
+      },
+      "state": "active",
+      "created_at": "2025-03-08T20:43:09Z",
+      "updated_at": "2025-05-05T11:17:43Z",
+      "creator": {
+        "id": "70356209",
+        "name": "Owner Cow Group",
+        "email": "owner@mycow.io"
+      },
+      "column_values": {
+        "fin_status": "Scheduled",
+        "fin_next_payable_date": "2025-05-05",
+        "fin_next_payment_usd": "400",
+        "fin_total_balance_usd": "400",
+        "billing_interval": "Monthly",
+        "fin_priority": "Bare Minimum❗️",
+        "fin_urgency": "Very Urgent",
+        "fin_category": "Palaypu Family 💗",
+        "fin_account_owner_group": "Palaypu Family",
+        "fin_account_type": "Expense Account",
+        "done": false
+      }
+    },
+    {
+      "id": "8583858065",
+      "name": "Likki Student Loan",
+      "group": {
+        "id": "new_group7744",
+        "title": "Accounts"
+      },
+      "state": "active",
+      "created_at": "2025-02-27T15:40:11Z",
+      "updated_at": "2025-05-05T11:17:40Z",
+      "creator": {
+        "id": "70356209",
+        "name": "Owner Cow Group",
+        "email": "owner@mycow.io"
+      },
+      "column_values": {
+        "fin_status": "Scheduled",
+        "fin_next_payable_date": "2025-05-05",
+        "fin_next_payment_usd": "450",
+        "fin_total_balance_usd": "300",
+        "fin_next_payment_inr": "26100",
+        "billing_interval": "Monthly",
+        "fin_priority": "Bare Minimum❗️",
+        "fin_urgency": "Very Urgent",
+        "fin_category": "Palaypu Family 💗",
+        "fin_sub_category": "Financing, Legal, Taxes, and Public Health & Vibrance 🧑‍⚖️",
+        "fin_account_owner_group": "Palaypu Family",
+        "fin_account_type": "Expense Account",
+        "fin_sub_category_2": "Student Loan",
+        "fin_primary_account_owner": "Likhitha Palaypu",
+        "fin_responsible_person": "Likhitha Palaypu",
+        "fin_likkis_category": "Financing, Legal, Taxes, and Public Health & Vibrance 🧑‍⚖️",
+        "fin_likkis_sub_category": "Responsible Payments",
+        "done": false
+      }
+    },
+    {
+      "id": "8583858090",
+      "name": "Likki StateIRS Tax Debt",
+      "group": {
+        "id": "new_group7744",
+        "title": "Accounts"
+      },
+      "state": "active",
+      "created_at": "2025-02-27T15:40:11Z",
+      "updated_at": "2025-05-05T11:17:36Z",
+      "creator": {
+        "id": "70356209",
+        "name": "Owner Cow Group",
+        "email": "owner@mycow.io"
+      },
+      "column_values": {
+        "fin_status": "Scheduled",
+        "fin_next_payable_date": "2025-05-05",
+        "fin_next_payment_usd": "450",
+        "fin_total_balance_usd": "300",
+        "fin_next_payment_inr": "26100",
+        "billing_interval": "Monthly",
+        "fin_priority": "Bare Minimum❗️",
+        "fin_urgency": "Very Urgent",
+        "fin_category": "Palaypu Family 💗",
+        "fin_sub_category": "Financing, Legal, Taxes, and Public Health & Vibrance 🧑‍⚖️",
+        "fin_account_owner_group": "Palaypu Family",
+        "fin_account_type": "Expense Account",
+        "fin_sub_category_2": "Taxes",
+        "fin_primary_account_owner": "Likhitha Palaypu",
+        "fin_responsible_person": "Likhitha Palaypu",
+        "fin_likkis_category": "Financing, Legal, Taxes, and Public Health & Vibrance 🧑‍⚖️",
+        "fin_likkis_sub_category": "Responsible Payments",
+        "done": false
+      }
+    },
+    {
+      "id": "8582178678",
+      "name": "Google Workspace",
+      "group": {
+        "id": "new_group7744",
+        "title": "Accounts"
+      },
+      "state": "active",
+      "created_at": "2025-02-27T12:38:30Z",
+      "updated_at": "2025-05-05T11:00:53Z",
+      "creator": {
+        "id": "70356209",
+        "name": "Owner Cow Group",
+        "email": "owner@mycow.io"
+      },
+      "column_values": {
+        "fin_status": "Scheduled",
+        "fin_next_payable_date": "2025-05-08",
+        "fin_next_payment_usd": "2612.95",
+        "fin_payable_period": "2025-01-01 - 2025-04-30",
+        "fin_total_balance_usd": "3348.47",
+        "fin_next_payment_inr": "141886.56",
+        "billing_interval": "One-Time",
+        "fin_priority": "Bare Minimum❗️",
+        "fin_urgency": "Very Urgent",
+        "has_doc": true,
+        "fin_category": "FCLT 💻",
+        "fin_sub_category": "FCLT 💻",
+        "fin_account_owner_group": "MyCow Group",
+        "fin_account_type": "Expense Account",
+        "fin_primary_account_owner": "Interups Inc",
+        "done": false
+      }
+    },
+    {
+      "id": "8583819069",
+      "name": "California House",
+      "group": {
+        "id": "new_group7744",
+        "title": "Accounts"
+      },
+      "state": "active",
+      "created_at": "2025-02-27T15:35:51Z",
+      "updated_at": "2025-04-21T20:12:38Z",
+      "creator": {
+        "id": "70356209",
+        "name": "Owner Cow Group",
+        "email": "owner@mycow.io"
+      },
+      "column_values": {
+        "fin_status": "Not Budgeted",
+        "fin_next_payment_usd": "12000000",
+        "fin_total_balance_usd": "0",
+        "billing_interval": "One-Time",
+        "fin_priority": "Luxury",
+        "fin_urgency": "Unecessary",
+        "fin_category": "FCLT 🏢",
+        "fin_sub_category": "Cash 💵",
+        "fin_account_type": "Expense Account",
+        "done": false
+      }
+    },
+    {
+      "id": "8582213009",
+      "name": "Hyderabad Office Deposit",
+      "group": {
+        "id": "new_group7744",
+        "title": "Accounts"
+      },
+      "state": "active",
+      "created_at": "2025-02-27T12:44:05Z",
+      "updated_at": "2025-04-21T19:42:22Z",
+      "creator": {
+        "id": "70356209",
+        "name": "Owner Cow Group",
+        "email": "owner@mycow.io"
+      },
+      "column_values": {
+        "fin_status": "Budgeted",
+        "fin_next_payable_date": "2025-05-01",
+        "fin_next_payment_usd": "240000",
+        "fin_total_balance_usd": "240000",
+        "fin_next_payment_inr": "20880000",
+        "billing_interval": "One-Time",
+        "fin_priority": "Target",
+        "fin_urgency": "Somewhat Urgent",
+        "fin_category": "FCLT 🏢",
+        "fin_sub_category": "FCLT 🏢",
+        "fin_account_owner_group": "MyCow Group",
+        "fin_account_type": "Expense Account",
+        "done": false
+      }
+    },
+    {
+      "id": "8582364406",
+      "name": "Rushikonda Property",
+      "group": {
+        "id": "new_group7744",
+        "title": "Accounts"
+      },
+      "state": "active",
+      "created_at": "2025-02-27T13:05:55Z",
+      "updated_at": "2025-04-21T19:42:22Z",
+      "creator": {
+        "id": "70356209",
+        "name": "Owner Cow Group",
+        "email": "owner@mycow.io"
+      },
+      "column_values": {
+        "fin_status": "Negotiations",
+        "fin_next_payment_usd": "67500000",
+        "fin_total_balance_usd": "67500000",
+        "fin_next_payment_inr": "5872500000",
+        "billing_interval": "One-Time",
+        "fin_priority": "Ideal",
+        "fin_urgency": "Very Urgent",
+        "fin_category": "SALE 🎯",
+        "fin_sub_category": "SALE 🎯",
+        "fin_account_owner_group": "MyCow Group",
+        "fin_account_type": "Income Account",
+        "fin_primary_account_owner": "My Global SQFT Inc",
+        "done": false
+      }
+    },
+    {
+      "id": "8582639862",
+      "name": "T-mobile",
+      "group": {
+        "id": "new_group7744",
+        "title": "Accounts"
+      },
+      "state": "active",
+      "created_at": "2025-02-27T13:45:17Z",
+      "updated_at": "2025-05-05T11:00:42Z",
+      "creator": {
+        "id": "70356209",
+        "name": "Owner Cow Group",
+        "email": "owner@mycow.io"
+      },
+      "column_values": {
+        "fin_status": "Scheduled",
+        "fin_next_payable_date": "2025-05-11",
+        "fin_next_payment_usd": "116",
+        "fin_total_balance_usd": "1900",
+        "fin_next_payment_inr": "104400",
+        "billing_interval": "Weekly",
+        "fin_priority": "Bare Minimum❗️",
+        "fin_urgency": "Very Urgent",
+        "has_doc": true,
+        "fin_category": "Palaypu Family 💗",
+        "fin_sub_category": "Household 🧹",
+        "fin_account_owner_group": "Palaypu Family",
+        "fin_account_type": "Expense Account",
+        "fin_sub_category_2": "Palaypu Family",
+        "fin_primary_account_owner": "Palaypu Family",
+        "fin_responsible_person": "Likhitha Palaypu",
+        "done": false
+      }
+    },
+    {
+      "id": "8972517957",
+      "name": "Banking Relationships & Account Cleanup & Recordkeeping",
+      "group": {
+        "id": "new_group7744",
+        "title": "Accounts"
+      },
+      "state": "active",
+      "created_at": "2025-04-21T20:43:30Z",
+      "updated_at": "2025-04-21T20:45:13Z",
+      "creator": {
+        "id": "70356209",
+        "name": "Owner Cow Group",
+        "email": "owner@mycow.io"
+      },
+      "column_values": {
+        "fin_status": "Budgeted",
+        "fin_next_payable_date": "2025-03-07",
+        "fin_next_payment_usd": "5000",
+        "fin_total_balance_usd": "5000",
+        "fin_next_payment_inr": "435000",
+        "billing_interval": "One-Time",
+        "fin_priority": "Lower Target",
+        "fin_urgency": "Urgent",
+        "fin_category": "Palaypu Family 💗",
+        "fin_sub_category": "Subscriptions 📱",
+        "fin_account_owner_group": "Palaypu Family",
+        "fin_account_type": "Expense Account",
+        "fin_sub_category_2": "Tools",
+        "fin_primary_account_owner": "Likhitha Palaypu",
+        "fin_responsible_person": "Likhitha Palaypu",
+        "fin_likkis_category": "Financing, Legal, Taxes, and Public Health & Vibrance 🧑‍⚖️",
+        "fin_likkis_sub_category": "Responsible Payments",
+        "done": false
+      }
+    }
+  ],
+  "summary": {
+    "total_items": 179,
+    "total_groups": 1,
+    "total_columns": 30,
+    "data_export_timestamp": "2025-09-26T02:05:14.033Z",
+    "board_permissions": "everyone",
+    "note": "This export includes the first 10 items with full column data. All 179 items are available in the board with similar structure and data fields including financial status, payment amounts, dates, categories, priorities, and account ownership details."
+  }
+}

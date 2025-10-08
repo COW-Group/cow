@@ -7,7 +7,7 @@ import {
   MoreHorizontal
 } from 'lucide-react';
 import { BoardItem, PersonAssignment, StatusLabel } from '../../types/board.types';
-import { Popover } from '@headlessui/react';
+// import { Popover } from '@headlessui/react';
 
 interface ItemRowProps {
   item: BoardItem;

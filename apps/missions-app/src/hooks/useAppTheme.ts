@@ -1,7 +1,16 @@
-import { useTheme } from '../../../../libs/shared-ui/src/themes/theme-provider';
+import { useTheme } from '../components/theme/ThemeProvider';
 
 export const useAppTheme = () => {
-  const { theme, themeName, toggleTheme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
+
+  // Derive theme name from theme state
+  const themeName = theme === 'system'
+    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+    : theme;
+
+  const toggleTheme = () => {
+    setTheme(themeName === 'dark' ? 'light' : 'dark');
+  };
 
   // Generate theme-aware CSS classes
   const classes = {

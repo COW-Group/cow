@@ -2,6 +2,9 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 
+// Import demo data setup utility (makes it available in browser console)
+import './utils/setup-demo-data';
+
 // Global error handler for third-party DOM manipulation errors
 const suppressThirdPartyDOMErrors = () => {
   // More comprehensive promise rejection handling

@@ -1,6 +1,7 @@
 import { Workspace, Folder, WorkspaceBoard, WorkspaceMember, WorkspaceDashboard, WorkspaceDoc, WorkspaceForm, WorkspaceApp } from '../types/workspace.types';
 import { boardService } from './board.service';
 import { COWBoard } from '../types/board.types';
+import { supabaseWorkspaceService } from './supabase-workspace.service';
 
 // Utility function to generate unique IDs
 function generateId(): string {
@@ -12,8 +13,36 @@ export class WorkspaceService {
   private workspaceMembers: Map<string, WorkspaceMember[]> = new Map();
 
   constructor() {
-    // Initialize with a default Main workspace
-    this.createDefaultWorkspace();
+    // Initialize with Supabase data
+    this.loadWorkspacesFromSupabase();
+  }
+
+  /**
+   * Load workspaces from Supabase
+   */
+  async loadWorkspacesFromSupabase(): Promise<void> {
+    try {
+      console.log('🔄 Loading workspaces from Supabase...');
+      const supabaseWorkspaces = await supabaseWorkspaceService.loadWorkspaces();
+
+      // Clear existing workspaces
+      this.workspaces.clear();
+
+      // Add Supabase workspaces
+      supabaseWorkspaces.forEach(workspace => {
+        this.workspaces.set(workspace.id, workspace);
+        console.log(`✅ Loaded workspace: ${workspace.name}`);
+      });
+
+      // If no workspaces loaded, create default
+      if (supabaseWorkspaces.length === 0) {
+        console.log('⚠️ No workspaces found in Supabase, creating default...');
+        this.createDefaultWorkspace();
+      }
+    } catch (error) {
+      console.error('❌ Failed to load workspaces from Supabase:', error);
+      this.createDefaultWorkspace();
+    }
   }
 
   /**

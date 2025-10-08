@@ -1,0 +1,18 @@
+{
+  "migration_timestamp": "2025-09-27T02:23:14.114Z",
+  "source": "Monday.com MyCow Group",
+  "target": "Supabase",
+  "data_processed": {
+    "users": 4,
+    "workspaces": 20,
+    "boards": 7,
+    "total_items": 19
+  },
+  "sql_file": "migration.sql",
+  "next_steps": [
+    "1. Review migration.sql file",
+    "2. Run SQL in Supabase dashboard",
+    "3. Verify data in tables",
+    "4. Test application with migrated data"
+  ]
+}

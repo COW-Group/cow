@@ -80,27 +80,31 @@ export const EditableCell: React.FC<EditableCellProps> = ({
 
     switch (column.type) {
       case 'text':
-        return <span className="text-gray-900">{value}</span>;
+        return <span className="text-white">{value}</span>;
 
       case 'status':
         const statusOption = column.options?.find(opt => opt.id === value);
         if (statusOption) {
           return (
-            <span
-              className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium text-white cursor-pointer hover:opacity-80"
+            <div
+              className="flex items-center justify-center h-full -mx-4 -my-1 px-4 py-3 text-sm font-medium text-white cursor-pointer hover:opacity-90 transition-opacity"
               style={{ backgroundColor: statusOption.color }}
             >
               {statusOption.label}
-            </span>
+            </div>
           );
         }
-        return <span className="text-gray-900">{value}</span>;
+        return (
+          <div className="flex items-center justify-center h-full -mx-4 -my-1 px-4 py-3 bg-gray-100 text-gray-700 cursor-pointer hover:bg-gray-200 transition-colors">
+            <span className="text-sm font-medium">Not set</span>
+          </div>
+        );
 
       case 'person':
         const person = people.find(p => p.id === value);
         if (person) {
           return (
-            <div className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 rounded px-1 py-1">
+            <div className="flex items-center space-x-2 cursor-pointer hover:bg-white/10 backdrop-blur-sm rounded px-1 py-1 transition-all">
               <div
                 className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-medium"
                 style={{ backgroundColor: person.color }}
@@ -112,9 +116,9 @@ export const EditableCell: React.FC<EditableCellProps> = ({
           );
         }
         return (
-          <div className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 rounded px-1 py-1 text-gray-400">
-            <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-400 text-xs">?</span>
+          <div className="flex items-center space-x-2 cursor-pointer hover:bg-white/10 backdrop-blur-sm rounded px-1 py-1 text-gray-400 transition-all">
+            <div className="w-6 h-6 rounded-full bg-gray-500/30 backdrop-blur-sm border border-gray-400/20 flex items-center justify-center">
+              <span className="text-gray-300 text-xs">?</span>
             </div>
             <span className="text-sm">Unassigned</span>
           </div>
@@ -124,21 +128,21 @@ export const EditableCell: React.FC<EditableCellProps> = ({
         if (value) {
           const date = new Date(value);
           return (
-            <div className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 rounded px-1 py-1">
-              <Calendar className="w-4 h-4 text-gray-400" />
-              <span className="text-gray-900 text-sm">{date.toLocaleDateString()}</span>
+            <div className="flex items-center space-x-2 cursor-pointer hover:bg-white/10 backdrop-blur-sm rounded px-1 py-1 transition-all">
+              <Calendar className="w-4 h-4 text-gray-300" />
+              <span className="text-white text-sm">{date.toLocaleDateString()}</span>
             </div>
           );
         }
         return (
-          <div className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 rounded px-1 py-1 text-gray-400">
+          <div className="flex items-center space-x-2 cursor-pointer hover:bg-white/10 backdrop-blur-sm rounded px-1 py-1 text-gray-400 transition-all">
             <Calendar className="w-4 h-4" />
             <span className="text-sm">No date</span>
           </div>
         );
 
       default:
-        return <span className="text-gray-900">{value}</span>;
+        return <span className="text-white">{value}</span>;
     }
   };
 
@@ -176,7 +180,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
           <div ref={dropdownRef} className="relative">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="w-full px-2 py-1 border border-blue-500 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 flex items-center justify-between bg-white"
+              className="w-full px-2 py-1 border border-blue-500 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 flex items-center justify-between backdrop-blur-xl bg-black/20"
             >
               <span className="truncate">
                 {column.type === 'status'
@@ -190,7 +194,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
             </button>
 
             {showDropdown && (
-              <div className="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-y-auto">
+              <div className="absolute z-50 w-full mt-1 backdrop-blur-xl bg-black/20 border border-white/20 rounded-md shadow-2xl shadow-black/10 max-h-60 overflow-y-auto">
                 {column.type === 'status' && column.options?.map((option) => (
                   <button
                     key={option.id}
@@ -198,7 +202,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
                       setEditValue(option.id);
                       handleSave();
                     }}
-                    className="w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center space-x-2"
+                    className="w-full px-3 py-2 text-left hover:bg-white/10 flex items-center space-x-2 text-white"
                   >
                     <div
                       className="w-3 h-3 rounded-full"
@@ -215,7 +219,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
                         setEditValue('');
                         handleSave();
                       }}
-                      className="w-full px-3 py-2 text-left hover:bg-gray-50 text-gray-500"
+                      className="w-full px-3 py-2 text-left hover:bg-white/10 text-gray-300"
                     >
                       Unassigned
                     </button>
@@ -226,7 +230,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
                           setEditValue(person.id);
                           handleSave();
                         }}
-                        className="w-full px-3 py-2 text-left hover:bg-gray-50 flex items-center space-x-2"
+                        className="w-full px-3 py-2 text-left hover:bg-white/10 flex items-center space-x-2 text-white"
                       >
                         <div
                           className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-medium"
@@ -261,7 +265,11 @@ export const EditableCell: React.FC<EditableCellProps> = ({
 
   return (
     <div
-      className="min-h-[2.5rem] flex items-center cursor-pointer hover:bg-blue-50 rounded px-1 relative"
+      className={`min-h-[2.5rem] flex items-center cursor-pointer relative transition-all ${
+        column.type === 'status'
+          ? 'w-full'
+          : 'hover:bg-white/10 backdrop-blur-sm rounded px-1'
+      }`}
       onClick={() => {
         if (!isEditing && !showDropdown) {
           setIsEditing(true);

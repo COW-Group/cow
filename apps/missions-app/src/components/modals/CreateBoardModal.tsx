@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
+import React, { useState, useEffect } from 'react';
 import { X, Share } from 'lucide-react';
-import { Fragment } from 'react';
 import { useForm } from 'react-hook-form';
 import { CreateBoardRequest, PrivacyType, ManagementType } from '../../types/board.types';
 
@@ -49,11 +47,11 @@ const managementOptions = [
 
 export function CreateBoardModal({ isOpen, onClose, onSubmit }: CreateBoardModalProps) {
   const [showCustomInput, setShowCustomInput] = useState(false);
-  
-  const { 
-    register, 
-    handleSubmit, 
-    watch, 
+
+  const {
+    register,
+    handleSubmit,
+    watch,
     reset,
     formState: { errors }
   } = useForm<FormData>({
@@ -66,7 +64,7 @@ export function CreateBoardModal({ isOpen, onClose, onSubmit }: CreateBoardModal
 
   const watchedManagementType = watch('managementType');
 
-  React.useEffect(() => {
+  useEffect(() => {
     setShowCustomInput(watchedManagementType === 'custom');
   }, [watchedManagementType]);
 
@@ -90,46 +88,35 @@ export function CreateBoardModal({ isOpen, onClose, onSubmit }: CreateBoardModal
     onClose();
   };
 
-  return (
-    <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={handleClose}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0 bg-black bg-opacity-50" />
-        </Transition.Child>
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      handleClose();
+    }
+  };
 
-        <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 text-center">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <Dialog.Panel className="w-full max-w-md md:max-w-lg transform overflow-hidden rounded-lg bg-white dark:bg-gray-900 p-6 text-left align-middle shadow-xl transition-all">
-                <div className="flex items-center justify-between mb-6">
-                  <Dialog.Title className="text-lg font-bold text-gray-900 dark:text-white">
-                    Create board
-                  </Dialog.Title>
-                  <button
-                    type="button"
-                    className="text-gray-400 hover:text-gray-300 p-1"
-                    onClick={handleClose}
-                    aria-label="Close modal"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300"
+        onClick={handleBackdropClick}
+      />
+
+      <div className="relative w-full max-w-md md:max-w-lg transform overflow-hidden rounded-lg bg-white dark:bg-gray-900 p-6 text-left align-middle shadow-xl transition-all animate-in fade-in-0 zoom-in-95 duration-300">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+            Create board
+          </h2>
+          <button
+            type="button"
+            className="text-gray-400 hover:text-gray-300 p-1"
+            onClick={handleClose}
+            aria-label="Close modal"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
 
                 <form onSubmit={handleSubmit(onFormSubmit)} className="space-y-6">
                   {/* Board Name */}
@@ -239,11 +226,7 @@ export function CreateBoardModal({ isOpen, onClose, onSubmit }: CreateBoardModal
                     </button>
                   </div>
                 </form>
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
-        </div>
-      </Dialog>
-    </Transition>
+              </div>
+            </div>
   );
 }

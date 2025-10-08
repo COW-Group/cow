@@ -82,11 +82,18 @@ export interface Database {
           color: string | null
           completed: boolean
           created_at: string
+          description: string | null
           duration: number
           ending_ritual: string | null
+          frequency: string | null
+          habit_group: string | null
+          habit_notes: Json | null
+          habit_units: Json | null
+          habit_skipped: Json | null
           history: Json | null
           icon: string | null
           id: string
+          isbuildhabit: boolean | null
           label: string
           locked: boolean
           mantra: string | null
@@ -108,11 +115,18 @@ export interface Database {
           color?: string | null
           completed?: boolean
           created_at?: string
+          description?: string | null
           duration?: number
           ending_ritual?: string | null
+          frequency?: string | null
+          habit_group?: string | null
+          habit_notes?: Json | null
+          habit_units?: Json | null
+          habit_skipped?: Json | null
           history?: Json | null
           icon?: string | null
           id?: string
+          isbuildhabit?: boolean | null
           label: string
           locked?: boolean
           mantra?: string | null
@@ -134,11 +148,18 @@ export interface Database {
           color?: string | null
           completed?: boolean
           created_at?: string
+          description?: string | null
           duration?: number
           ending_ritual?: string | null
+          frequency?: string | null
+          habit_group?: string | null
+          habit_notes?: Json | null
+          habit_units?: Json | null
+          habit_skipped?: Json | null
           history?: Json | null
           icon?: string | null
           id?: string
+          isbuildhabit?: boolean | null
           label?: string
           locked?: boolean
           mantra?: string | null
@@ -1519,12 +1540,14 @@ export interface AppSettings {
   showHeaderFocus: boolean
   showHeaderEmotional: boolean
   showHeaderHealth: boolean
+  showHeaderHabits: boolean
   showHeaderVision: boolean
   showHeaderWealth: boolean
   showHeaderSocial: boolean
   showHeaderProjects: boolean
   showHeaderSales: boolean
   showHeaderMarketplace: boolean
+  showHeaderTimeline: boolean
 }
 
 export interface EmotionEntry {

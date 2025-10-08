@@ -1,0 +1,188 @@
+{
+  "workspace": {
+    "id": "8999031",
+    "name": "MyCow Group",
+    "description": "Everything C.O.W."
+  },
+  "documents_summary": {
+    "total_documents": 9,
+    "public_documents": 6,
+    "private_documents": 3,
+    "documents_with_content": 6,
+    "empty_documents": 3
+  },
+  "documents": [
+    {
+      "id": "19724916",
+      "object_id": "8198393735",
+      "name": "Welcome to MyCow Group",
+      "doc_kind": "private",
+      "created_at": "2025-01-09",
+      "created_by": "Owner Cow Group",
+      "url": "https://mycow-io.monday.com/docs/8198393735",
+      "workspace_id": "8999031",
+      "doc_folder_id": "16665346",
+      "doc_folder_name": "Archive",
+      "content_type": "mission_vision_goals",
+      "word_count": 5847,
+      "has_content": true,
+      "key_topics": [
+        "Mission and Vision",
+        "2025 Q1 Goals",
+        "Departmental Strategy",
+        "Tokenized Assets",
+        "60,000 Sales Agents Target",
+        "Work Breakdown Structure"
+      ]
+    },
+    {
+      "id": "19810233",
+      "object_id": "8216593791",
+      "name": "STR Goals",
+      "doc_kind": "public",
+      "created_at": "2025-01-11",
+      "created_by": "Owner Cow Group",
+      "url": "https://mycow-io.monday.com/docs/8216593791",
+      "workspace_id": "8999031",
+      "doc_folder_id": "16144224",
+      "doc_folder_name": "STR",
+      "content_type": "strategy_planning",
+      "word_count": 2234,
+      "has_content": true,
+      "key_topics": [
+        "STROPS Department Functions",
+        "Business Mapping & Agile Positioning",
+        "Project Management",
+        "Risk Monitoring & Mitigation",
+        "KPIs and Performance Tracking"
+      ]
+    },
+    {
+      "id": "21589200",
+      "object_id": "8576548155",
+      "name": "Gold Vertical Operations",
+      "doc_kind": "public",
+      "created_at": "2025-02-26",
+      "created_by": "Owner Cow Group",
+      "url": "https://mycow-io.monday.com/docs/8576548155",
+      "workspace_id": "8999031",
+      "doc_folder_id": "16610323",
+      "doc_folder_name": "Gold Vertical Operations",
+      "content_type": "empty",
+      "word_count": 0,
+      "has_content": false
+    },
+    {
+      "id": "21802475",
+      "object_id": "8621516838",
+      "name": "Welcome to MyCow Group!: Work Management System",
+      "doc_kind": "public",
+      "created_at": "2025-03-04",
+      "created_by": "Owner Cow Group",
+      "url": "https://mycow-io.monday.com/docs/8621516838",
+      "workspace_id": "8999031",
+      "doc_folder_id": "16117849",
+      "doc_folder_name": "🐮 MyCow Group",
+      "content_type": "onboarding_guide",
+      "word_count": 5847,
+      "has_content": true,
+      "key_topics": [
+        "Work Management System",
+        "Company Mission and Vision",
+        "Q1 2025 Goals",
+        "Departmental Structure"
+      ]
+    },
+    {
+      "id": "21876098",
+      "object_id": "8636312800",
+      "name": "Communications, Marketing, Sales, and Customer Service",
+      "doc_kind": "public",
+      "created_at": "2025-03-06",
+      "created_by": "Owner Cow Group",
+      "url": "https://mycow-io.monday.com/docs/8636312800",
+      "workspace_id": "8999031",
+      "doc_folder_id": "16144254",
+      "doc_folder_name": "SALE",
+      "content_type": "empty",
+      "word_count": 0,
+      "has_content": false
+    },
+    {
+      "id": "21965751",
+      "object_id": "8652420849",
+      "name": "Daily Cash Report",
+      "doc_kind": "private",
+      "created_at": "2025-03-08",
+      "created_by": "Owner Cow Group",
+      "url": "https://mycow-io.monday.com/docs/8652420849",
+      "workspace_id": "8999031",
+      "doc_folder_id": "16144251",
+      "doc_folder_name": "FIN",
+      "content_type": "financial_dashboard",
+      "word_count": 47,
+      "has_content": true,
+      "key_topics": [
+        "Cash Flow Summary",
+        "Outstanding Payments",
+        "Upcoming Payments"
+      ]
+    },
+    {
+      "id": "23614037",
+      "object_id": "8969084285",
+      "name": "How to Manage Accounts",
+      "doc_kind": "private",
+      "created_at": "2025-04-21",
+      "created_by": "Owner Cow Group",
+      "url": "https://mycow-io.monday.com/docs/8969084285",
+      "workspace_id": "8999031",
+      "doc_folder_id": "16144251",
+      "doc_folder_name": "FIN",
+      "content_type": "financial_procedures",
+      "word_count": 38,
+      "has_content": true,
+      "key_topics": [
+        "Account Management Structure",
+        "Payment Categories",
+        "Balance Tracking"
+      ]
+    },
+    {
+      "id": "23856118",
+      "object_id": "9013612329",
+      "name": "Brand Strategy",
+      "doc_kind": "public",
+      "created_at": "2025-04-27",
+      "created_by": "Owner Cow Group",
+      "url": "https://mycow-io.monday.com/docs/9013612329",
+      "workspace_id": "8999031",
+      "doc_folder_id": "17110522",
+      "doc_folder_name": "Brand",
+      "content_type": "empty",
+      "word_count": 0,
+      "has_content": false
+    },
+    {
+      "id": "30348342",
+      "object_id": "18029433206",
+      "name": "MCP getting started",
+      "doc_kind": "public",
+      "created_at": "2025-09-23",
+      "created_by": "Owner Cow Group",
+      "url": "https://mycow-io.monday.com/docs/18029433206",
+      "workspace_id": "8999031",
+      "doc_folder_id": null,
+      "doc_folder_name": "Root Level",
+      "content_type": "technical_documentation",
+      "word_count": 456,
+      "has_content": true,
+      "key_topics": [
+        "MCP Setup",
+        "AI Integration",
+        "OAuth Authentication",
+        "API Access"
+      ]
+    }
+  ]
+}

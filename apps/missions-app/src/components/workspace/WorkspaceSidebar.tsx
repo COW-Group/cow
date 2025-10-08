@@ -118,19 +118,27 @@ export function WorkspaceSidebar({
 
   useEffect(() => {
     const loadWorkspaceData = async () => {
-      // Sync with COW boards first
+      // Load workspaces from Supabase first
+      await workspaceService.loadWorkspacesFromSupabase();
+
+      // Then sync with COW boards
       await workspaceService.syncWithCOWBoards();
-      
+
       // Load workspaces
       const allWorkspaces = workspaceService.getAllWorkspaces();
       setWorkspaces(allWorkspaces);
 
-      // Set current workspace
-      const current = currentWorkspaceId 
+      // Set current workspace - prefer emoji workspace or use first available
+      const current = currentWorkspaceId
         ? allWorkspaces.find(w => w.id === currentWorkspaceId) || allWorkspaces[0]
-        : allWorkspaces[0];
+        : allWorkspaces.find(w => w.name.includes('🐮')) || allWorkspaces[0];
       
       setCurrentWorkspace(current);
+
+      // Update current workspace ID in parent component
+      if (current && onWorkspaceChange) {
+        onWorkspaceChange(current.id);
+      }
 
       // Load starred boards
       setStarredBoards(workspaceService.getStarredBoards());
@@ -159,7 +167,7 @@ export function WorkspaceSidebar({
   };
 
   const handleBoardClick = (board: WorkspaceBoard) => {
-    navigate(`/boards/${board.id}`);
+    navigate(`/app/boards/${board.id}`);
     onBoardSelect?.(board.id);
   };
 
@@ -210,7 +218,7 @@ export function WorkspaceSidebar({
           const newBoard = await workspaceService.createBoard(data);
           if (newBoard) {
             // Navigate to the board
-            navigate(`/boards/${newBoard.id}`);
+            navigate(`/app/boards/${newBoard.id}`);
           }
           break;
         }

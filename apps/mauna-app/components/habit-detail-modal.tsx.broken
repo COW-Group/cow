@@ -1,0 +1,555 @@
+"use client"
+
+import React, { useState, useEffect } from "react"
+import { X, ChevronLeft, ChevronRight, Edit2, Calendar as CalendarIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
+
+interface HabitItem {
+  id: string
+  label: string
+  description: string
+  color: string
+  time: string
+  frequency: string
+  isBuildHabit: boolean
+  habitGroup?: string
+  history?: string[]
+  notes?: { [date: string]: string }
+  units?: { [date: string]: number }
+  skipped?: { [date: string]: boolean }
+  children?: HabitItem[]
+}
+
+interface HabitDetailModalProps {
+  habit: HabitItem
+  allHabits: HabitItem[]
+  onClose: () => void
+  onNext?: () => void
+  onPrevious?: () => void
+  onUpdate: (habitId: string, updates: Partial<HabitItem>) => Promise<void>
+}
+
+const colorPairs: {
+  [key: string]: { light: { r: number; g: number; b: number }; dark: { r: number; g: number; b: number } }
+} = {
+  "#FF8C00": { light: { r: 255, g: 220, b: 120 }, dark: { r: 255, g: 69, b: 0 } },
+  "#00B7EB": { light: { r: 135, g: 206, b: 255 }, dark: { r: 0, g: 100, b: 255 } },
+  "#FF4040": { light: { r: 255, g: 160, b: 180 }, dark: { r: 220, g: 20, b: 60 } },
+  "#00CD00": { light: { r: 144, g: 255, b: 144 }, dark: { r: 50, g: 205, b: 50 } },
+  "#9B30FF": { light: { r: 221, g: 160, b: 255 }, dark: { r: 138, g: 43, b: 226 } },
+  "#FFD700": { light: { r: 255, g: 255, b: 150 }, dark: { r: 255, g: 215, b: 0 } },
+  "#00CED1": { light: { r: 175, g: 255, b: 255 }, dark: { r: 0, g: 206, b: 209 } },
+  "#808080": { light: { r: 220, g: 220, b: 220 }, dark: { r: 128, g: 128, b: 128 } },
+}
+
+const getColorWithSaturation = (habitColor: string, habit: HabitItem, targetDate: string) => {
+  const isCompleted = habit.history?.includes(targetDate)
+  if (!isCompleted) {
+    return { backgroundColor: "rgba(255, 255, 255, 0.08)" }
+  }
+
+  const colorPair = colorPairs[habitColor] || colorPairs["#808080"]
+  const completionDates = (habit.history || []).sort()
+  const targetIndex = completionDates.indexOf(targetDate)
+
+  if (targetIndex === -1) return { backgroundColor: "rgba(255, 255, 255, 0.08)" }
+
+  let streakStart = targetIndex
+  let streakEnd = targetIndex
+
+  for (let i = targetIndex - 1; i >= 0; i--) {
+    const currentDate = new Date(completionDates[i])
+    const nextDate = new Date(completionDates[i + 1])
+    const dayDiff = (nextDate.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24)
+    if (dayDiff === 1) {
+      streakStart = i
+    } else {
+      break
+    }
+  }
+
+  for (let i = targetIndex + 1; i < completionDates.length; i++) {
+    const currentDate = new Date(completionDates[i])
+    const prevDate = new Date(completionDates[i - 1])
+    const dayDiff = (currentDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24)
+    if (dayDiff === 1) {
+      streakEnd = i
+    } else {
+      break
+    }
+  }
+
+  const streakLength = streakEnd - streakStart + 1
+  const positionInStreak = targetIndex - streakStart + 1
+  const baseProgress = positionInStreak / Math.max(streakLength, 10)
+
+  let progress: number
+  if (baseProgress <= 0.5) {
+    progress = Math.sqrt(baseProgress * 2) * 0.5
+  } else {
+    const remaining = (baseProgress - 0.5) * 2
+    progress = 0.5 + remaining * remaining * 0.5
+  }
+
+  progress = Math.max(0.2, Math.min(0.95, progress))
+
+  const r = Math.round(colorPair.light.r + (colorPair.dark.r - colorPair.light.r) * progress)
+  const g = Math.round(colorPair.light.g + (colorPair.dark.g - colorPair.light.g) * progress)
+  const b = Math.round(colorPair.light.b + (colorPair.dark.b - colorPair.light.b) * progress)
+
+  return { backgroundColor: `rgb(${r}, ${g}, ${b})` }
+}
+
+const calculateCurrentStreak = (history: string[]) => {
+  if (!history || history.length === 0) return 0
+
+  const sortedHistory = [...history].sort((a, b) => new Date(b).getTime() - new Date(a).getTime())
+  const today = new Date().toISOString().split("T")[0]
+  const yesterday = new Date()
+  yesterday.setDate(yesterday.getDate() - 1)
+  const yesterdayStr = yesterday.toISOString().split("T")[0]
+
+  if (sortedHistory[0] !== today && sortedHistory[0] !== yesterdayStr) {
+    return 0
+  }
+
+  let streak = 0
+  for (let i = 0; i < sortedHistory.length; i++) {
+    const expectedDate = new Date()
+    expectedDate.setDate(expectedDate.getDate() - i)
+    const expectedDateStr = expectedDate.toISOString().split("T")[0]
+
+    if (sortedHistory[i] === expectedDateStr) {
+      streak++
+    } else {
+      break
+    }
+  }
+
+  return streak
+}
+
+const calculateLongestStreak = (history: string[]) => {
+  if (!history || history.length === 0) return 0
+
+  const sortedHistory = [...history].sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
+  let longestStreak = 1
+  let currentStreak = 1
+
+  for (let i = 1; i < sortedHistory.length; i++) {
+    const prevDate = new Date(sortedHistory[i - 1])
+    const currDate = new Date(sortedHistory[i])
+    const dayDiff = (currDate.getTime() - prevDate.getTime()) / (1000 * 60 * 60 * 24)
+
+    if (dayDiff === 1) {
+      currentStreak++
+      longestStreak = Math.max(longestStreak, currentStreak)
+    } else if (dayDiff > 1) {
+      currentStreak = 1
+    }
+  }
+
+  return longestStreak
+}
+
+export function HabitDetailModal({
+  habit,
+  allHabits,
+  onClose,
+  onNext,
+  onPrevious,
+  onUpdate,
+}: HabitDetailModalProps) {
+  const [activeTab, setActiveTab] = useState<"overview" | "calendar" | "journal">("overview")
+  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split("T")[0])
+  const [journalNote, setJournalNote] = useState("")
+  const [isEditingJournal, setIsEditingJournal] = useState(false)
+  const [units, setUnits] = useState(0)
+  const [isEditingHabit, setIsEditingHabit] = useState(false)
+  const [editLabel, setEditLabel] = useState(habit.label)
+  const [editDescription, setEditDescription] = useState(habit.description || "")
+  const [editColor, setEditColor] = useState(habit.color)
+
+  const currentStreak = calculateCurrentStreak(habit.history || [])
+  const longestStreak = calculateLongestStreak(habit.history || [])
+  const totalCount = habit.history?.length || 0
+
+  useEffect(() => {
+    setJournalNote(habit.notes?.[selectedDate] || "")
+    setUnits(habit.units?.[selectedDate] || 0)
+  }, [selectedDate, habit.notes, habit.units])
+
+  const handleSaveNote = async () => {
+    const updatedNotes = { ...(habit.notes || {}), [selectedDate]: journalNote }
+    const updatedUnits = { ...(habit.units || {}), [selectedDate]: units }
+    await onUpdate(habit.id, { notes: updatedNotes, units: updatedUnits })
+    setIsEditingJournal(false)
+  }
+
+  const handleToggleCompletion = async () => {
+    const updatedHistory = [...(habit.history || [])]
+    const isCompleted = updatedHistory.includes(selectedDate)
+
+    if (isCompleted) {
+      const index = updatedHistory.indexOf(selectedDate)
+      updatedHistory.splice(index, 1)
+    } else {
+      updatedHistory.push(selectedDate)
+    }
+
+    await onUpdate(habit.id, { history: updatedHistory })
+  }
+
+  const handleSaveHabitEdit = async () => {
+    await onUpdate(habit.id, {
+      label: editLabel,
+      description: editDescription,
+      color: editColor,
+    })
+    setIsEditingHabit(false)
+  }
+
+  const generateMonthDates = () => {
+    const today = new Date()
+    const year = today.getFullYear()
+    const month = today.getMonth()
+    const firstDay = new Date(year, month, 1)
+    const lastDay = new Date(year, month + 1, 0)
+    const dates = []
+
+    for (let d = new Date(firstDay); d <= lastDay; d.setDate(d.getDate() + 1)) {
+      dates.push(new Date(d).toISOString().split("T")[0])
+    }
+
+    return dates
+  }
+
+  const monthDates = generateMonthDates()
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft" && onPrevious) {
+        onPrevious()
+      } else if (e.key === "ArrowRight" && onNext) {
+        onNext()
+      } else if (e.key === "Escape") {
+        onClose()
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [onPrevious, onNext, onClose])
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm overflow-hidden">
+      {onPrevious && (
+        <button
+          onClick={onPrevious}
+          className="absolute left-2 sm:left-8 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+        >
+          <ChevronLeft className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+        </button>
+      )}
+
+      {onNext && (
+        <button
+          onClick={onNext}
+          className="absolute right-2 sm:right-8 top-1/2 -translate-y-1/2 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+        >
+          <ChevronRight className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
+        </button>
+      )}
+
+      <div className="h-full w-full sm:h-auto sm:w-auto sm:absolute sm:inset-4 sm:m-auto sm:max-w-6xl sm:max-h-[calc(100vh-2rem)] flex items-center justify-center">
+        <div className="w-full h-full bg-gray-900/95 backdrop-blur-xl sm:rounded-3xl flex flex-col overflow-hidden" style={{ maxHeight: "100%" }}>
+          <div className="flex-shrink-0 flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-white/10">
+            <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
+              <button
+                onClick={isEditingHabit ? () => setIsEditingHabit(false) : onClose}
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors flex-shrink-0"
+              >
+                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-cream-25" />
+              </button>
+              <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                <div className="w-1 h-8 sm:h-12 rounded-full flex-shrink-0" style={{ backgroundColor: habit.color }} />
+                <div className="min-w-0 flex-1">
+                  <h2 className="text-lg sm:text-xl font-semibold text-cream-25 truncate">
+                    {isEditingHabit ? "Edit Habit" : habit.label}
+                  </h2>
+                  <p className="text-xs sm:text-sm text-cream-25/60 truncate">{habit.habitGroup}</p>
+                </div>
+              </div>
+            </div>
+
+            {!isEditingHabit && (
+              <button
+                onClick={() => setIsEditingHabit(true)}
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors flex-shrink-0"
+              >
+                <Edit2 className="w-4 h-4 sm:w-5 sm:h-5 text-cream-25" />
+              </button>
+            )}
+          </div>
+
+          {!isEditingHabit && (
+            <div className="flex-shrink-0 flex gap-1 px-4 sm:px-6 py-2 sm:py-3 border-b border-white/10">
+              <button
+                onClick={() => setActiveTab("overview")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  activeTab === "overview" ? "bg-white/15 text-cream-25" : "text-cream-25/60 hover:bg-white/5"
+                }`}
+              >
+                Overview
+              </button>
+              <button
+                onClick={() => setActiveTab("calendar")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  activeTab === "calendar" ? "bg-white/15 text-cream-25" : "text-cream-25/60 hover:bg-white/5"
+                }`}
+              >
+                Calendar
+              </button>
+              <button
+                onClick={() => setActiveTab("journal")}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  activeTab === "journal" ? "bg-white/15 text-cream-25" : "text-cream-25/60 hover:bg-white/5"
+                }`}
+              >
+                Journal
+              </button>
+            </div>
+          )}
+
+          <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 sm:px-6 py-4 sm:py-6" style={{ flex: "1 1 0%" }}>
+            {isEditingHabit ? (
+              <div className="space-y-4 sm:space-y-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-cream-25">Habit Name</label>
+                  <input
+                    type="text"
+                    value={editLabel}
+                    onChange={(e) => setEditLabel(e.target.value)}
+                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-cream-25 placeholder:text-cream-25/40 focus:outline-none focus:border-white/20 transition-colors"
+                    placeholder="Enter habit name"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-cream-25">Description</label>
+                  <Textarea
+                    value={editDescription}
+                    onChange={(e) => setEditDescription(e.target.value)}
+                    className="min-h-[100px] bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none"
+                    placeholder="Enter habit description"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-cream-25">Color</label>
+                  <div className="grid grid-cols-4 gap-2 sm:gap-3">
+                    {Object.keys(colorPairs).map((color) => (
+                      <button
+                        key={color}
+                        onClick={() => setEditColor(color)}
+                        className={`w-full aspect-square rounded-lg transition-all ${
+                          editColor === color ? "ring-2 ring-white ring-offset-2 ring-offset-gray-900 scale-110" : "hover:scale-105"
+                        }`}
+                        style={{ backgroundColor: color }}
+                      />
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-4">
+                  <Button
+                    onClick={handleSaveHabitEdit}
+                    className="w-full py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl"
+                    style={{ backgroundColor: "#FF4040", color: "white" }}
+                  >
+                    Save Changes
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <>
+            {activeTab === "overview" && (
+              <div className="space-y-4 sm:space-y-6">
+                <div className="grid grid-cols-3 gap-3 sm:gap-4">
+                  <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10">
+                    <div className="text-xs sm:text-sm text-cream-25/60 uppercase tracking-wide mb-1 sm:mb-2">Current</div>
+                    <div className="text-2xl sm:text-4xl font-bold text-cream-25">{currentStreak}</div>
+                    <div className="text-[10px] sm:text-xs text-cream-25/50 mt-0.5 sm:mt-1">days</div>
+                  </div>
+                  <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10">
+                    <div className="text-xs sm:text-sm text-cream-25/60 uppercase tracking-wide mb-1 sm:mb-2">Longest</div>
+                    <div className="text-2xl sm:text-4xl font-bold text-cream-25">{longestStreak}</div>
+                    <div className="text-[10px] sm:text-xs text-cream-25/50 mt-0.5 sm:mt-1">days</div>
+                  </div>
+                  <div className="p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-white/5 border border-white/10">
+                    <div className="text-xs sm:text-sm text-cream-25/60 uppercase tracking-wide mb-1 sm:mb-2">Total</div>
+                    <div className="text-2xl sm:text-4xl font-bold text-cream-25">{totalCount}</div>
+                    <div className="text-[10px] sm:text-xs text-cream-25/50 mt-0.5 sm:mt-1">times</div>
+                  </div>
+                </div>
+
+                <div className="space-y-2 sm:space-y-3">
+                  <h3 className="text-base sm:text-lg font-semibold text-cream-25">Recent Activity</h3>
+                  <div className="flex gap-1.5 sm:gap-2 overflow-x-auto pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
+                    {Array.from({ length: 30 }, (_, i) => {
+                      const date = new Date()
+                      date.setDate(date.getDate() - (29 - i))
+                      const dateStr = date.toISOString().split("T")[0]
+                      const style = getColorWithSaturation(habit.color, habit, dateStr)
+                      const isCompleted = habit.history?.includes(dateStr)
+
+                      return (
+                        <div key={dateStr} className="flex flex-col items-center gap-1 flex-shrink-0">
+                          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center" style={style}>
+                            {isCompleted && <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-white rounded-full" />}
+                          </div>
+                          <div className="text-[9px] sm:text-[10px] text-cream-25/50">{date.getDate()}</div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {habit.description && (
+                  <div className="space-y-2">
+                    <h3 className="text-base sm:text-lg font-semibold text-cream-25">Description</h3>
+                    <p className="text-sm sm:text-base text-cream-25/80">{habit.description}</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === "calendar" && (
+              <div className="space-y-4 sm:space-y-6">
+                <div className="grid grid-cols-7 gap-1">
+                  {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => (
+                    <div key={i} className="text-center text-xs text-cream-25/60 font-semibold py-2">
+                      {day}
+                    </div>
+                  ))}
+                  {monthDates.map((dateStr) => {
+                    const date = new Date(dateStr)
+                    const style = getColorWithSaturation(habit.color, habit, dateStr)
+                    const isCompleted = habit.history?.includes(dateStr)
+                    const isToday = dateStr === new Date().toISOString().split("T")[0]
+
+                    return (
+                      <button
+                        key={dateStr}
+                        onClick={async () => {
+                          const updatedHistory = [...(habit.history || [])]
+                          if (isCompleted) {
+                            const index = updatedHistory.indexOf(dateStr)
+                            updatedHistory.splice(index, 1)
+                          } else {
+                            updatedHistory.push(dateStr)
+                          }
+                          await onUpdate(habit.id, { history: updatedHistory })
+                        }}
+                        className="aspect-square rounded-md flex flex-col items-center justify-center relative hover:opacity-80 transition-all border border-white/5"
+                        style={style}
+                      >
+                        <span className={`text-sm font-medium ${isToday ? 'text-white font-bold' : 'text-white/90'}`}>
+                          {date.getDate()}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+
+            {activeTab === "journal" && (
+              <div className="h-full flex flex-col">
+                {/* Date selector */}
+                <div className="flex items-center justify-between mb-4 sm:mb-6 flex-shrink-0">
+                  <div className="flex items-center gap-2 text-xs sm:text-sm text-cream-25/60">
+                    <CalendarIcon className="w-4 h-4" />
+                    {new Date(selectedDate).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                  </div>
+                </div>
+
+                {/* Units display */}
+                <div className="mb-4 sm:mb-6 flex-shrink-0">
+                  <div className="flex items-baseline gap-2">
+                    <input
+                      type="number"
+                      value={units}
+                      onChange={(e) => setUnits(parseInt(e.target.value) || 0)}
+                      className="w-16 sm:w-20 bg-transparent border-b border-white/20 text-2xl sm:text-3xl font-semibold text-cream-25 focus:outline-none focus:border-white/40 transition-colors"
+                    />
+                    <span className="text-sm sm:text-base text-cream-25/50">units, e.g. steps</span>
+                  </div>
+                </div>
+
+                {/* Completion block and description container */}
+                {!isEditingJournal ? (
+                  <div className="flex gap-3 sm:gap-4 mb-4 sm:mb-6 flex-shrink-0">
+                    {/* Left square block - click to mark complete */}
+                    <button
+                      onClick={handleToggleCompletion}
+                      className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex-shrink-0 transition-all duration-200 hover:opacity-80 border border-white/10"
+                      style={{
+                        backgroundColor: habit.history?.includes(selectedDate)
+                          ? habit.color
+                          : "rgba(255, 255, 255, 0.08)",
+                      }}
+                    />
+
+                    {/* Right container - click to open editor */}
+                    <button
+                      onClick={() => setIsEditingJournal(true)}
+                      className="flex-1 p-4 sm:p-5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/8 transition-all text-left"
+                    >
+                      <p className="text-sm sm:text-base text-cream-25/70">
+                        {habit.description || "Tap to add a journal entry"}
+                      </p>
+                      {journalNote && (
+                        <p className="text-xs sm:text-sm text-cream-25/50 mt-2 line-clamp-2">
+                          {journalNote}
+                        </p>
+                      )}
+                    </button>
+                  </div>
+                ) : (
+                  /* Full-width editor when editing */
+                  <div className="flex-1 flex flex-col mb-4 sm:mb-6 min-h-0">
+                    <Textarea
+                      value={journalNote}
+                      onChange={(e) => setJournalNote(e.target.value)}
+                      placeholder="Write your thoughts, reflections, or notes about this habit..."
+                      className="flex-1 bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none min-h-[200px] sm:min-h-[300px]"
+                      autoFocus
+                    />
+                  </div>
+                )}
+
+                {/* Save button */}
+                <div className="mt-auto flex-shrink-0">
+                  <Button
+                    onClick={handleSaveNote}
+                    className="w-full py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl transition-all hover:scale-[1.02]"
+                    style={{
+                      backgroundColor: "#FF4040",
+                      color: "white",
+                    }}
+                  >
+                    Save
+                  </Button>
+                </div>
+              </div>
+            )}
+            </>
+          )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}

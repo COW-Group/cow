@@ -11,7 +11,7 @@ import { useMaunAppsStore } from '../../store/maun-apps.store';
 import { VantaBackground } from '../background/VantaBackground';
 
 export function RootLayout() {
-  const [currentWorkspaceId, setCurrentWorkspaceId] = useState<string>('workspace-main');
+  const [currentWorkspaceId, setCurrentWorkspaceId] = useState<string>('');
   const { activeModal, modalData, closeModal } = useAppStore();
   const { activeApp } = useMaunAppsStore();
 

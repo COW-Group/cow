@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 const path = require('path');
 
 module.exports = (env, argv) => {
@@ -23,6 +24,20 @@ module.exports = (env, argv) => {
         '@/types': path.resolve(__dirname, 'src/types'),
         '@/store': path.resolve(__dirname, 'src/store'),
         '@/services': path.resolve(__dirname, 'src/services'),
+      },
+      fallback: {
+        "process": require.resolve("process/browser.js"),
+        "buffer": require.resolve("buffer"),
+        "crypto": require.resolve("crypto-browserify"),
+        "stream": require.resolve("stream-browserify"),
+        "assert": require.resolve("assert"),
+        "http": require.resolve("stream-http"),
+        "https": require.resolve("https-browserify"),
+        "os": require.resolve("os-browserify"),
+        "url": require.resolve("url"),
+        "fs": false,
+        "net": false,
+        "tls": false,
       },
     },
     module: {
@@ -66,6 +81,12 @@ module.exports = (env, argv) => {
       new HtmlWebpackPlugin({
         template: './src/index.html',
         title: 'Missions - Project Management',
+      }),
+      new webpack.DefinePlugin({
+        'process.env': JSON.stringify(process.env),
+      }),
+      new webpack.ProvidePlugin({
+        process: 'process/browser.js',
       }),
     ],
     devServer: {

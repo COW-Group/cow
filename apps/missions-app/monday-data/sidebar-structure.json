@@ -1,0 +1,452 @@
+{
+  "workspace": {
+    "id": "8999031",
+    "name": "MyCow Group",
+    "description": "Everything C.O.W.",
+    "kind": "open",
+    "created_at": "2024-12-02T07:05:44Z",
+    "state": "active",
+    "is_default_workspace": true,
+    "owners_subscribers": [
+      {
+        "id": "69163321",
+        "name": "Likhitha Palaypu",
+        "email": "likhitha@gold.mydhan.io"
+      }
+    ]
+  },
+  "folders": [
+    {
+      "id": "16117849",
+      "name": "🐮 MyCow Group",
+      "boards": [
+        {
+          "id": "8621516838",
+          "name": "Welcome to MyCow Group!: Work Management System"
+        },
+        {
+          "id": "8198396724",
+          "name": "Q1: The Moo-vement Begins"
+        }
+      ],
+      "docs": [
+        {
+          "id": "21802475",
+          "name": "Welcome to MyCow Group!: Work Management System"
+        }
+      ]
+    },
+    {
+      "id": "16144213",
+      "name": "LAUNCH",
+      "boards": [
+        {
+          "id": "8216551685",
+          "name": "LAUNCH"
+        },
+        {
+          "id": "8216552132",
+          "name": "Stablecoin Execution Committee"
+        }
+      ],
+      "docs": []
+    },
+    {
+      "id": "16144224",
+      "name": "STR",
+      "boards": [
+        {
+          "id": "8216589425",
+          "name": "STR"
+        },
+        {
+          "id": "8176970350",
+          "name": "Competitive Environment: Assessment & Awareness"
+        },
+        {
+          "id": "8216593791",
+          "name": "STR Goals"
+        }
+      ],
+      "docs": [
+        {
+          "id": "19810233",
+          "name": "STR Goals"
+        }
+      ]
+    },
+    {
+      "id": "16144225",
+      "name": "RED",
+      "boards": [
+        {
+          "id": "8216596608",
+          "name": "RED"
+        }
+      ],
+      "docs": []
+    },
+    {
+      "id": "16144226",
+      "name": "LEG",
+      "boards": [
+        {
+          "id": "8179826687",
+          "name": "Legal & Compliance Budget"
+        },
+        {
+          "id": "8216597128",
+          "name": "LEG"
+        }
+      ],
+      "docs": []
+    },
+    {
+      "id": "16144251",
+      "name": "FIN",
+      "boards": [
+        {
+          "id": "8582178538",
+          "name": "All Group Book of Accounts"
+        },
+        {
+          "id": "8652420849",
+          "name": "Daily Cash Report"
+        },
+        {
+          "id": "8652238406",
+          "name": "FIN Direct Reports"
+        },
+        {
+          "id": "8969084285",
+          "name": "How to Manage Accounts"
+        }
+      ],
+      "docs": [
+        {
+          "id": "21965751",
+          "name": "Daily Cash Report"
+        },
+        {
+          "id": "23614037",
+          "name": "How to Manage Accounts"
+        }
+      ]
+    },
+    {
+      "id": "16144253",
+      "name": "TECH",
+      "boards": [
+        {
+          "id": "8216604056",
+          "name": "TECH"
+        }
+      ],
+      "docs": []
+    },
+    {
+      "id": "16144254",
+      "name": "SALE",
+      "boards": [
+        {
+          "id": "8216604883",
+          "name": "SALE"
+        },
+        {
+          "id": "8656999962",
+          "name": "Sales Agent Onboarding Form"
+        },
+        {
+          "id": "8636312800",
+          "name": "Communications, Marketing, Sales, and Customer Service"
+        },
+        {
+          "id": "8667532917",
+          "name": "New Form"
+        },
+        {
+          "id": "8922966829",
+          "name": "Distributor form"
+        },
+        {
+          "id": "8966896339",
+          "name": "Webinar form"
+        },
+        {
+          "id": "7959810618",
+          "name": "Accounts"
+        },
+        {
+          "id": "7959810620",
+          "name": "Leads"
+        },
+        {
+          "id": "7959810623",
+          "name": "Deals"
+        },
+        {
+          "id": "7959810613",
+          "name": "Participant Contacts"
+        }
+      ],
+      "docs": [
+        {
+          "id": "21876098",
+          "name": "Communications, Marketing, Sales, and Customer Service"
+        }
+      ]
+    },
+    {
+      "id": "16144256",
+      "name": "IR",
+      "boards": [
+        {
+          "id": "8216607972",
+          "name": "IR"
+        }
+      ],
+      "docs": []
+    },
+    {
+      "id": "16144257",
+      "name": "POPS",
+      "boards": [
+        {
+          "id": "8619452763",
+          "name": "Staff Wishlist"
+        },
+        {
+          "id": "8216616138",
+          "name": "POPS"
+        }
+      ],
+      "docs": []
+    },
+    {
+      "id": "16144258",
+      "name": "OPS",
+      "boards": [
+        {
+          "id": "8216625294",
+          "name": "OPS"
+        }
+      ],
+      "docs": []
+    },
+    {
+      "id": "16144260",
+      "name": "FCLT",
+      "boards": [
+        {
+          "id": "8176964072",
+          "name": "Competitive Environment: Assessment & Awareness"
+        },
+        {
+          "id": "8216629642",
+          "name": "FCLT"
+        }
+      ],
+      "docs": []
+    },
+    {
+      "id": "16610323",
+      "name": "Gold Vertical Operations",
+      "boards": [
+        {
+          "id": "8576548155",
+          "name": "Gold Vertical Operations"
+        },
+        {
+          "id": "8576556285",
+          "name": "Gold Vertical OPS"
+        }
+      ],
+      "docs": [
+        {
+          "id": "21589200",
+          "name": "Gold Vertical Operations"
+        }
+      ]
+    },
+    {
+      "id": "16663160",
+      "name": "Templates",
+      "boards": [
+        {
+          "id": "8619801670",
+          "name": "Token Legal & Compliance Template"
+        },
+        {
+          "id": "8619735831",
+          "name": "Company Legal & Compliance Template"
+        }
+      ],
+      "docs": []
+    },
+    {
+      "id": "16663554",
+      "name": "Templates",
+      "boards": [],
+      "docs": []
+    },
+    {
+      "id": "16665346",
+      "name": "Archive",
+      "boards": [
+        {
+          "id": "8198393735",
+          "name": "Welcome to MyCow Group"
+        }
+      ],
+      "docs": [
+        {
+          "id": "19724916",
+          "name": "Welcome to MyCow Group"
+        }
+      ]
+    },
+    {
+      "id": "16683261",
+      "name": "COMMS",
+      "boards": [
+        {
+          "id": "8636699366",
+          "name": "Stakeholders"
+        }
+      ],
+      "docs": []
+    },
+    {
+      "id": "16684982",
+      "name": "Calendars",
+      "boards": [
+        {
+          "id": "8652046445",
+          "name": "Akshaya Kosuri's Tasks"
+        },
+        {
+          "id": "8661363098",
+          "name": "Laxmi Prasad's Tasks 📆"
+        },
+        {
+          "id": "8795283390",
+          "name": "Preetham Chinthakindi's Tasks"
+        }
+      ],
+      "docs": []
+    },
+    {
+      "id": "16708085",
+      "name": "TECH",
+      "boards": [
+        {
+          "id": "8657149881",
+          "name": "JIRA SYNC - TASKS"
+        },
+        {
+          "id": "8658929070",
+          "name": "JIRA SYNC - GOALS"
+        }
+      ],
+      "docs": []
+    },
+    {
+      "id": "17110522",
+      "name": "Brand",
+      "boards": [
+        {
+          "id": "9013612329",
+          "name": "Brand Strategy"
+        }
+      ],
+      "docs": [
+        {
+          "id": "23856118",
+          "name": "Brand Strategy"
+        }
+      ]
+    }
+  ],
+  "root_items": {
+    "boards": [
+      {
+        "id": "18029433206",
+        "name": "MCP getting started"
+      },
+      {
+        "id": "8619501819",
+        "name": "Subitems of Staff Wishlist"
+      },
+      {
+        "id": "8656910436",
+        "name": "Subitems of Akshaya Kosuri's Tasks"
+      },
+      {
+        "id": "8652099834",
+        "name": "Subitems of All Group Book of Accounts"
+      },
+      {
+        "id": "8619736071",
+        "name": "Subitems of Company Legal & Compliance Template"
+      },
+      {
+        "id": "8619078082",
+        "name": "Subitems of LEG"
+      },
+      {
+        "id": "8661363225",
+        "name": "Subitems of Laxmi Prasad's Tasks 📆"
+      },
+      {
+        "id": "8667904147",
+        "name": "Subitems of New Form"
+      },
+      {
+        "id": "8793886867",
+        "name": "Subitems of SALE"
+      },
+      {
+        "id": "8795283449",
+        "name": "Subitems of Preetham Chinthakindi's Tasks"
+      },
+      {
+        "id": "8923076187",
+        "name": "Subitems of Distributor form"
+      },
+      {
+        "id": "9013626022",
+        "name": "Subitems of STR"
+      },
+      {
+        "id": "7959810714",
+        "name": "Subitems of Deals"
+      },
+      {
+        "id": "7996839102",
+        "name": "Quotes & Invoices"
+      },
+      {
+        "id": "8005194336",
+        "name": "Subitems of Leads"
+      },
+      {
+        "id": "8216536133",
+        "name": "Subitems of Participant Contacts"
+      },
+      {
+        "id": "8576349384",
+        "name": "Subitems of Q1: The Moo-vement Begins"
+      },
+      {
+        "id": "8576529862",
+        "name": "Subitems of OPS"
+      }
+    ],
+    "docs": [
+      {
+        "id": "30348342",
+        "name": "MCP getting started"
+      }
+    ]
+  }
+}

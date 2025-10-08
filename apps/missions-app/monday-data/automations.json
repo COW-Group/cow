@@ -1,0 +1,35 @@
+{
+  "workspace_info": {
+    "workspace_id": "8999031",
+    "workspace_name": "MyCow Group",
+    "description": "Everything C.O.W."
+  },
+  "automation_access_status": {
+    "api_availability": "UNAVAILABLE",
+    "explanation": "Monday.com automation rules are not accessible through the public GraphQL API. Automation triggers, conditions, and actions are part of Monday's internal automation engine and are not exposed via API endpoints.",
+    "data_collection_method": "Manual review required through Monday.com web interface"
+  },
+  "available_data": {
+    "total_boards": 61,
+    "total_folders": 20,
+    "total_docs": 9,
+    "board_activity_available": true,
+    "trigger_events_access": "UNAUTHORIZED",
+    "block_events_access": "UNAUTHORIZED"
+  },
+  "automations": [],
+  "integrations": [],
+  "workflows": [],
+  "access_methods": [
+    "Use Monday.com's web interface to view automations in each board",
+    "Check if Monday.com provides automation data through their webhooks",
+    "Contact Monday.com support for enterprise API access to automation data",
+    "Use Monday.com's native automation center within the platform"
+  ],
+  "migration_notes": [
+    "Automations will need to be recreated manually in the target system",
+    "Document existing automation logic during manual review",
+    "Consider implementing similar automation rules in Supabase using triggers or custom logic",
+    "Review each board's 'Automate' section before migration to capture automation requirements"
+  ]
+}

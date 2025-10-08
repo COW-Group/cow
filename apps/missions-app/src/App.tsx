@@ -1,6 +1,6 @@
 import { BrowserRouter as Router } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ThemeProvider } from '../../../libs/shared-ui/src/themes/theme-provider';
+import { ThemeProvider } from './components/theme/ThemeProvider';
 import { ThemeStyler } from './components/theme/ThemeStyler';
 import { RouterSetup } from './components/routing/RouterSetup';
 import './styles.css';

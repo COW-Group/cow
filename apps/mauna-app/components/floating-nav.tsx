@@ -18,6 +18,8 @@ import {
   Music,
   Settings,
   Menu,
+  Repeat,
+  Clock,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -84,6 +86,8 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
     showHeaderProjects: true,
     showHeaderSales: true,
     showHeaderMarketplace: true,
+    showHeaderHabits: true,
+    showHeaderTimeline: true,
   }
 
   // Use passed settings or defaults
@@ -94,12 +98,14 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
     { icon: Brain, label: "Focus", path: "/focus", settingKey: "showHeaderFocus" },
     { icon: Heart, label: "Emotional", path: "/emotional", settingKey: "showHeaderEmotional" },
     { icon: HeartPulse, label: "Health", path: "/health", settingKey: "showHeaderHealth" },
+    { icon: Repeat, label: "Habits", path: "/habits", settingKey: "showHeaderHabits" },
     { icon: Eye, label: "Vision", path: "/vision", settingKey: "showHeaderVision" },
     { icon: DollarSign, label: "Wealth", path: "/wealth", settingKey: "showHeaderWealth" },
     { icon: Users, label: "Social", path: "/social", settingKey: "showHeaderSocial" },
     { icon: Briefcase, label: "Projects", path: "/missions", settingKey: "showHeaderProjects" },
     { icon: TrendingUp, label: "Sales", path: "/sales", settingKey: "showHeaderSales" },
     { icon: ShoppingCart, label: "Marketplace", path: "/marketplace", settingKey: "showHeaderMarketplace" },
+    { icon: Clock, label: "Timeline", path: "/timeline", settingKey: "showHeaderTimeline" },
   ] as const
 
   // Filter menu items based on settings

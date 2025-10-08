@@ -1,0 +1,333 @@
+{
+  "board": {
+    "id": "8198396724",
+    "name": "Q1: The Moo-vement Begins",
+    "description": null,
+    "state": "active",
+    "board_kind": "public",
+    "workspace_id": "8999031"
+  },
+  "groups": [
+    {
+      "id": "group_mknqvcc2",
+      "title": "🌟 Key Q1 Missions – High-Level Objectives",
+      "color": "#ff007f",
+      "position": "65408.0"
+    },
+    {
+      "id": "topics",
+      "title": "Group Title",
+      "color": "#579bfc",
+      "position": "65536"
+    },
+    {
+      "id": "group_title",
+      "title": "1: Streamlining",
+      "color": "#a25ddc",
+      "position": "98304"
+    },
+    {
+      "id": "group_mknhvbq7",
+      "title": "2: Tightening the Reins; Perfecting Processes",
+      "color": "#037f4c",
+      "position": "163840.0"
+    },
+    {
+      "id": "group_mknh6fbj",
+      "title": "3: 60,000 Performance Agents",
+      "color": "#579bfc",
+      "position": "229376.0"
+    },
+    {
+      "id": "group_mknhhbce",
+      "title": "4: Web Wonders: MyCow's Digital Revolution Begins!",
+      "color": "#9d50dd",
+      "position": "294912.0"
+    }
+  ],
+  "columns": [
+    {
+      "id": "name",
+      "title": "Name",
+      "type": "name",
+      "description": null,
+      "settings_str": "{}",
+      "archived": false
+    },
+    {
+      "id": "subtasks_mknhxezf",
+      "title": "Subitems",
+      "type": "subtasks",
+      "description": null,
+      "settings_str": "{\"displayType\":\"BOARD_INLINE\",\"itemTypeName\":\"column.subtasks.title\",\"allowMultipleItems\":true,\"boardIds\":[8576349384]}",
+      "archived": false
+    },
+    {
+      "id": "timerange_mknhfwep",
+      "title": "Timeline",
+      "type": "timeline",
+      "description": null,
+      "settings_str": "{\"hide_footer\":false,\"show_set_as_milestone\":false}",
+      "archived": false
+    },
+    {
+      "id": "numeric_mknhctax",
+      "title": "Phase",
+      "type": "numbers",
+      "description": null,
+      "settings_str": "{}",
+      "archived": false
+    },
+    {
+      "id": "text_mknhmjy2",
+      "title": "Q1 Company Goal",
+      "type": "text",
+      "description": null,
+      "settings_str": "{}",
+      "archived": false
+    },
+    {
+      "id": "text_mknhenez",
+      "title": "Assignee",
+      "type": "text",
+      "description": null,
+      "settings_str": "{}",
+      "archived": false
+    },
+    {
+      "id": "color_mknhgrbk",
+      "title": "Priority",
+      "type": "status",
+      "description": "",
+      "settings_str": "{\"done_colors\":[1],\"color_mapping\":{\"0\":19,\"19\":0},\"labels\":{\"0\":\"🔥 Chairman's Priorities\",\"7\":\"Low\",\"10\":\"Critical ⚠️️\",\"109\":\"Medium\",\"110\":\"High\"},\"labels_positions_v2\":{\"0\":5,\"5\":4,\"7\":3,\"10\":0,\"109\":2,\"110\":1},\"labels_colors\":{\"0\":{\"color\":\"#ff6d3b\",\"border\":\"#e05828\",\"var_name\":\"dark-orange\"},\"7\":{\"color\":\"#579bfc\",\"border\":\"#4387e8\",\"var_name\":\"bright-blue\"},\"10\":{\"color\":\"#333333\",\"border\":\"#000\",\"var_name\":\"soft-black\"},\"109\":{\"color\":\"#5559df\",\"border\":\"#5559df\",\"var_name\":\"indigo\"},\"110\":{\"color\":\"#401694\",\"border\":\"#401694\",\"var_name\":\"dark_indigo\"}}}",
+      "archived": false
+    }
+  ],
+  "items": [
+    {
+      "id": "8622199798",
+      "name": "✅ Streamlining for Success",
+      "state": "active",
+      "created_at": "2025-03-04T23:49:42Z",
+      "updated_at": "2025-03-04T23:54:26Z",
+      "creator_id": "70356209",
+      "group": {
+        "id": "group_mknqvcc2",
+        "title": "🌟 Key Q1 Missions – High-Level Objectives"
+      },
+      "column_values": {
+        "subitems": [],
+        "timeline": {
+          "from": "2025-01-01T00:00:00+00:00",
+          "to": "2025-03-31T00:00:00+00:00",
+          "text": "2025-01-01 - 2025-03-31"
+        },
+        "phase": null,
+        "q1_company_goal": "",
+        "assignee": "",
+        "priority": null
+      }
+    },
+    {
+      "id": "8622199807",
+      "name": "✅ Tightening the Reins",
+      "state": "active",
+      "created_at": "2025-03-04T23:49:42Z",
+      "updated_at": "2025-03-04T23:54:26Z",
+      "creator_id": "70356209",
+      "group": {
+        "id": "group_mknqvcc2",
+        "title": "🌟 Key Q1 Missions – High-Level Objectives"
+      },
+      "column_values": {
+        "subitems": [],
+        "timeline": {
+          "from": "2025-01-01T00:00:00+00:00",
+          "to": "2025-03-31T00:00:00+00:00",
+          "text": "2025-01-01 - 2025-03-31"
+        },
+        "phase": null,
+        "q1_company_goal": "",
+        "assignee": "",
+        "priority": null
+      }
+    },
+    {
+      "id": "8622199816",
+      "name": "✅ Scaling the Herd",
+      "state": "active",
+      "created_at": "2025-03-04T23:49:43Z",
+      "updated_at": "2025-03-04T23:54:26Z",
+      "creator_id": "70356209",
+      "group": {
+        "id": "group_mknqvcc2",
+        "title": "🌟 Key Q1 Missions – High-Level Objectives"
+      },
+      "column_values": {
+        "subitems": [],
+        "timeline": {
+          "from": "2025-01-01T00:00:00+00:00",
+          "to": "2025-03-31T00:00:00+00:00",
+          "text": "2025-01-01 - 2025-03-31"
+        },
+        "phase": null,
+        "q1_company_goal": "",
+        "assignee": "",
+        "priority": null
+      }
+    },
+    {
+      "id": "8622199823",
+      "name": "✅ Digital Dominance",
+      "state": "active",
+      "created_at": "2025-03-04T23:49:43Z",
+      "updated_at": "2025-03-04T23:54:26Z",
+      "creator_id": "70356209",
+      "group": {
+        "id": "group_mknqvcc2",
+        "title": "🌟 Key Q1 Missions – High-Level Objectives"
+      },
+      "column_values": {
+        "subitems": [],
+        "timeline": {
+          "from": "2025-01-01T00:00:00+00:00",
+          "to": "2025-03-31T00:00:00+00:00",
+          "text": "2025-01-01 - 2025-03-31"
+        },
+        "phase": null,
+        "q1_company_goal": "",
+        "assignee": "",
+        "priority": null
+      }
+    },
+    {
+      "id": "8179497112",
+      "name": "Finalize and Implement Sales Process Flows; Pre-Launch Materials",
+      "state": "active",
+      "created_at": "2025-01-07T13:58:32Z",
+      "updated_at": "2025-01-07T14:46:03Z",
+      "creator_id": "70356209",
+      "group": {
+        "id": "topics",
+        "title": "Group Title"
+      },
+      "column_values": {
+        "subitems": [],
+        "timeline": {
+          "from": "2025-01-08T00:00:00+00:00",
+          "to": "2025-01-14T00:00:00+00:00",
+          "text": "2025-01-08 - 2025-01-14"
+        },
+        "phase": 1,
+        "q1_company_goal": "1: Streamlining",
+        "assignee": "",
+        "priority": null
+      }
+    },
+    {
+      "id": "8179497128",
+      "name": "Strategic Resource Allocation",
+      "state": "active",
+      "created_at": "2025-01-07T13:58:32Z",
+      "updated_at": "2025-01-08T20:51:06Z",
+      "creator_id": "70356209",
+      "group": {
+        "id": "topics",
+        "title": "Group Title"
+      },
+      "column_values": {
+        "subitems": [],
+        "timeline": {
+          "from": "2025-01-08T00:00:00+00:00",
+          "to": "2025-01-26T00:00:00+00:00",
+          "text": "2025-01-08 - 2025-01-26"
+        },
+        "phase": 2,
+        "q1_company_goal": "1: Streamlining",
+        "assignee": "",
+        "priority": null
+      }
+    },
+    {
+      "id": "8195659043",
+      "name": "STR: Internal Risk & Capabilities: Assessment & Mitigation Strategies (copy)",
+      "state": "active",
+      "created_at": "2025-01-08T20:54:06Z",
+      "updated_at": "2025-01-08T20:57:01Z",
+      "creator_id": "70356209",
+      "group": {
+        "id": "topics",
+        "title": "Group Title"
+      },
+      "column_values": {
+        "subitems": [],
+        "timeline": {
+          "from": "2024-12-30T00:00:00+00:00",
+          "to": "2025-01-07T00:00:00+00:00",
+          "text": "2024-12-30 - 2025-01-07"
+        },
+        "phase": null,
+        "q1_company_goal": "1: Streamlining",
+        "assignee": "Likhitha Palaypu",
+        "priority": null
+      }
+    },
+    {
+      "id": "8179497170",
+      "name": "Final Sales Push and Review",
+      "state": "active",
+      "created_at": "2025-01-07T13:58:33Z",
+      "updated_at": "2025-01-08T20:56:33Z",
+      "creator_id": "70356209",
+      "group": {
+        "id": "group_mknh6fbj",
+        "title": "3: 60,000 Performance Agents"
+      },
+      "column_values": {
+        "subitems": [],
+        "timeline": {
+          "from": "2025-01-12T00:00:00+00:00",
+          "to": "2025-01-14T00:00:00+00:00",
+          "text": "2025-01-12 - 2025-01-14"
+        },
+        "phase": 2,
+        "q1_company_goal": "2: 60,000 Performance Agents",
+        "assignee": "",
+        "priority": null
+      }
+    },
+    {
+      "id": "8179602757",
+      "name": "Technology and System Integration; Website Updates",
+      "state": "active",
+      "created_at": "2025-01-07T14:08:49Z",
+      "updated_at": "2025-01-08T20:56:46Z",
+      "creator_id": "70356209",
+      "group": {
+        "id": "group_mknhhbce",
+        "title": "4: Web Wonders: MyCow's Digital Revolution Begins!"
+      },
+      "column_values": {
+        "subitems": [],
+        "timeline": {
+          "from": "2025-01-22T00:00:00+00:00",
+          "to": "2025-01-28T00:00:00+00:00",
+          "text": "2025-01-22 - 2025-01-28"
+        },
+        "phase": 4,
+        "q1_company_goal": "4: Web Wonders",
+        "assignee": "",
+        "priority": null
+      }
+    }
+  ],
+  "summary": {
+    "total_items": 26,
+    "total_groups": 6,
+    "total_columns": 7,
+    "items_with_timelines": 12,
+    "items_with_assignments": 3,
+    "items_with_phases": 8,
+    "active_items": 26
+  }
+}

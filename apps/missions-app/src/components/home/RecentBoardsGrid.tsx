@@ -48,7 +48,7 @@ export function RecentBoardsGrid({ boards }: RecentBoardsGridProps) {
             {boards.slice(0, 6).map((board) => (
               <Link
                 key={board.id}
-                to={`/boards/${board.slug}`}
+                to={`/app/boards/${board.slug}`}
                 className="block bg-gray-50 dark:bg-gray-800 rounded-lg p-4 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
               >
                 <div className="flex items-start justify-between mb-3">
@@ -94,11 +94,11 @@ export function RecentBoardsGrid({ boards }: RecentBoardsGridProps) {
             ))}
           </div>
 
-          <Link 
-            to="/boards"
+          <Link
+            to="/app/my-office"
             className="text-sm text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors"
           >
-            Show all boards
+            Go to My Office
           </Link>
         </>
       )}

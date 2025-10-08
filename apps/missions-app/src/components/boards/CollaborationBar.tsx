@@ -9,7 +9,7 @@ import {
   ChevronRight,
   UserPlus
 } from 'lucide-react';
-import { Popover } from '@headlessui/react';
+// import { Popover } from '@headlessui/react';
 
 interface CollaborationBarProps {
   onInvite?: () => void;

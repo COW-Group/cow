@@ -1,0 +1,72 @@
+{
+  "workspace_analysis": {
+    "workspace_id": "8999031",
+    "workspace_name": "MyCow Group",
+    "description": "Everything C.O.W.",
+    "dashboards_found": 0,
+    "dashboards": [],
+    "summary": "No dashboards are currently configured in this workspace"
+  },
+  "workspace_structure": {
+    "total_folders": 20,
+    "total_boards": 61,
+    "total_docs": 9,
+    "board_types": {
+      "regular_boards": 37,
+      "document_boards": 9,
+      "sub_items_boards": 15
+    },
+    "privacy_distribution": {
+      "public_boards": 48,
+      "private_boards": 13
+    }
+  },
+  "alternative_data_visualization_options": {
+    "widgets_available": "Yes - Monday.com supports various widget types for data visualization",
+    "supported_widget_types": [
+      "CHART",
+      "NUMBER",
+      "BATTERY"
+    ],
+    "recommendation": "Consider creating dashboards with widgets to visualize data from your 61 boards"
+  },
+  "available_boards_for_dashboard_creation": {
+    "high_value_boards": [
+      {
+        "id": "8652420849",
+        "name": "Daily Cash Report",
+        "type": "document",
+        "privacy": "private",
+        "folder": "FIN"
+      },
+      {
+        "id": "8582178538",
+        "name": "All Group Book of Accounts",
+        "type": "board",
+        "privacy": "private",
+        "folder": "FIN"
+      },
+      {
+        "id": "7959810623",
+        "name": "Deals",
+        "type": "board",
+        "privacy": "public",
+        "folder": "SALE"
+      },
+      {
+        "id": "7959810620",
+        "name": "Leads",
+        "type": "board",
+        "privacy": "public",
+        "folder": "SALE"
+      },
+      {
+        "id": "8636699366",
+        "name": "Stakeholders",
+        "type": "board",
+        "privacy": "private",
+        "folder": "COMMS"
+      }
+    ]
+  }
+}

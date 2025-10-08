@@ -4,7 +4,7 @@ import {
   Star,
   Plus
 } from 'lucide-react';
-import { Popover } from '@headlessui/react';
+// import { Popover } from '@headlessui/react';
 import { EnhancedBoard, BoardGroup, BoardItem } from '../../types/board.types';
 import { CollaborationBar } from './CollaborationBar';
 import { BoardToolbar } from './BoardToolbar';
@@ -216,7 +216,7 @@ export function EnhancedBoardView({
                 {board.name}
               </h1>
               
-              <Popover className="relative">
+              {/* <Popover className="relative">
                 <Popover.Button className="text-gray-400 hover:text-teal-500 transition-colors">
                   <ChevronDown className="h-4 w-4" />
                 </Popover.Button>
@@ -238,7 +238,10 @@ export function EnhancedBoardView({
                     ))}
                   </div>
                 </Popover.Panel>
-              </Popover>
+              </Popover> */}
+              <button className="text-gray-400 hover:text-teal-500 transition-colors">
+                <ChevronDown className="h-4 w-4" />
+              </button>
             </div>
 
             <button className="text-gray-400 hover:text-yellow-500 transition-colors">

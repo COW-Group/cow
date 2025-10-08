@@ -21,7 +21,10 @@ function MissionsHeroBackground() {
           await new Promise<void>((resolve, reject) => {
             const script = document.createElement("script");
             script.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js";
-            script.onload = () => resolve();
+            script.onload = () => {
+              console.log("Three.js loaded successfully.");
+              resolve();
+            };
             script.onerror = () => reject(new Error("Failed to load Three.js"));
             document.head.appendChild(script);
           });
@@ -32,7 +35,10 @@ function MissionsHeroBackground() {
           await new Promise<void>((resolve, reject) => {
             const script = document.createElement("script");
             script.src = "https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js";
-            script.onload = () => resolve();
+            script.onload = () => {
+              console.log("Vanta.js loaded successfully.");
+              resolve();
+            };
             script.onerror = () => reject(new Error("Failed to load Vanta.js"));
             document.head.appendChild(script);
           });
@@ -59,8 +65,10 @@ function MissionsHeroBackground() {
             minWidth: 200.0,
             ...settings
           });
+          console.log("Vanta.js CLOUDS effect initialized with mission settings:", settings);
         }
       } catch (error) {
+        console.warn("Vanta.js failed to load, using fallback:", error);
         if (mounted) {
           setFallback(true);
         }
@@ -74,6 +82,7 @@ function MissionsHeroBackground() {
       if (vantaRef.current?.destroy) {
         try {
           vantaRef.current.destroy();
+          console.log("Vanta effect destroyed.");
         } catch (error) {
           console.warn("Error destroying Vanta effect:", error);
         }
@@ -194,7 +203,7 @@ export function LandingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen text-gray-900">
       {/* Navigation - Liquid Glass Style */}
       <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
         <div

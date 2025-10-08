@@ -9,7 +9,7 @@ import { LatestBoard } from '../../pages/LatestBoard';
 import { Goals } from '../../pages/Goals';
 import { Portfolios } from '../../pages/Portfolios';
 import { Reports } from '../../pages/Reports';
-import { BoardManagement } from '../../pages/BoardManagement';
+// import { BoardManagement } from '../../pages/BoardManagement';
 import { MissionsDashboard } from '../../pages/MissionsDashboard';
 import { MissionPage } from '../../pages/MissionPage';
 import { BoardPage } from '../../pages/BoardPage';
@@ -18,6 +18,7 @@ import { AgentsPage } from '../../pages/AgentsPage';
 import { Settings } from '../../pages/Settings';
 import { HelpCenter } from '../../pages/HelpCenter';
 import { BoardDemo } from '../../pages/BoardDemo';
+import MigrationDashboard from '../migration/MigrationDashboard';
 
 
 export function RouterSetup() {
@@ -41,7 +42,7 @@ export function RouterSetup() {
 
         {/* Individual Board routes - accessed from sidebar only */}
         <Route path="boards/:boardId" element={<BoardPage />} />
-        <Route path="board-management" element={<BoardManagement />} />
+        {/* <Route path="board-management" element={<BoardManagement />} /> */}
 
         {/* Insights routes */}
         <Route path="insights/*" element={<InsightsPage />} />
@@ -52,6 +53,9 @@ export function RouterSetup() {
 
         {/* Main Board Interface - Monday.com Style */}
         <Route path="board" element={<BoardDemo />} />
+
+        {/* Migration Dashboard */}
+        <Route path="migration" element={<MigrationDashboard />} />
 
         {/* Other pages */}
         <Route path="goals" element={<Goals />} />

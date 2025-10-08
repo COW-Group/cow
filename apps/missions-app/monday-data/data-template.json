@@ -1,0 +1,8 @@
+{
+  "instruction": "Replace this file with actual data from Claude MCP responses",
+  "example_queries": [
+    "Show me all workspaces I have access to on Monday.com",
+    "List all boards in my MyCow Group workspace",
+    "Show me detailed board data for [board-name]"
+  ]
+}

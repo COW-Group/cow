@@ -8,7 +8,7 @@ import {
   ChevronDown,
   MoreHorizontal
 } from 'lucide-react';
-import { Popover } from '@headlessui/react';
+// import { Popover } from '@headlessui/react';
 
 interface BoardToolbarProps {
   onNewItem?: (type: string) => void;

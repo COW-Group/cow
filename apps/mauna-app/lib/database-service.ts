@@ -1611,6 +1611,73 @@ async deleteStep(id: string, userId: string): Promise<void> {
     }
   }
 
+  async createOrUpdateJournalEntryFromSource(
+    userId: string,
+    sourceType: 'step' | 'habit',
+    sourceId: string,
+    title: string,
+    journalContent: string | null | undefined,
+    cbtNotes: string | null | undefined,
+    sourceDate?: string
+  ): Promise<{ data: JournalEntry | null; error: any }> {
+    try {
+      // Skip if both content fields are empty
+      if (!journalContent && !cbtNotes) {
+        return { data: null, error: null }
+      }
+
+      // Check if entry already exists for this source
+      const { data: existingEntries, error: fetchError } = await this.supabase
+        .from("journal")
+        .select("id")
+        .eq("user_id", userId)
+        .eq("sourceType", sourceType)
+        .eq("sourceId", sourceId)
+        .eq("sourceDate", sourceDate || null)
+
+      if (fetchError) {
+        console.error("Error checking existing journal entry:", fetchError)
+        return { data: null, error: fetchError }
+      }
+
+      const entryData = {
+        user_id: userId,
+        title,
+        entry: journalContent || null,
+        cbtNotes: cbtNotes || null,
+        type: sourceType,
+        sourceType,
+        sourceId,
+        sourceDate: sourceDate || null,
+        category: sourceType === 'step' ? 'Timeline' : 'Habits',
+      }
+
+      if (existingEntries && existingEntries.length > 0) {
+        // Update existing entry
+        const { data, error } = await this.supabase
+          .from("journal")
+          .update(entryData)
+          .eq("id", existingEntries[0].id)
+          .select()
+          .single()
+
+        return { data: data as JournalEntry, error }
+      } else {
+        // Create new entry
+        const { data, error } = await this.supabase
+          .from("journal")
+          .insert(entryData)
+          .select()
+          .single()
+
+        return { data: data as JournalEntry, error }
+      }
+    } catch (err: any) {
+      console.error("Error in createOrUpdateJournalEntryFromSource:", err)
+      return { data: null, error: err }
+    }
+  }
+
   async fetchEmotions(userId: string): Promise<Emotion[]> {
     const { data, error } = await this.supabase
       .from("emotions")

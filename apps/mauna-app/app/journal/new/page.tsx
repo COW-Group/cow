@@ -7,11 +7,13 @@ import { AuthService } from "@/lib/auth-service"
 import { databaseService } from "@/lib/database-service"
 import type { JournalEntry, Range } from "@/lib/types"
 import { toast } from "sonner"
-import { Loader2Icon } from "lucide-react"
+import { Loader2Icon, BookTemplate, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { JournalTemplatesSelector, type JournalTemplate } from "@/components/journal-templates"
+import { Badge } from "@/components/ui/badge"
 
 export default function NewJournalEntryPage() {
   const router = useRouter()
@@ -27,6 +29,10 @@ export default function NewJournalEntryPage() {
   const [visionBoardSections, setVisionBoardSections] = useState<Range[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showTemplateSelector, setShowTemplateSelector] = useState(false)
+  const [selectedTemplate, setSelectedTemplate] = useState<JournalTemplate | null>(null)
+  const [mood, setMood] = useState<string | null>(null)
+  const [tagInput, setTagInput] = useState("")
 
   const loadVisionBoardSections = useCallback(async () => {
     if (!currentUser?.id) return
@@ -39,6 +45,58 @@ export default function NewJournalEntryPage() {
       toast.error("Failed to load vision board data.")
     }
   }, [currentUser?.id])
+
+  const handleTemplateSelect = useCallback((template: JournalTemplate) => {
+    // Format current date
+    const today = new Date()
+    const formattedDate = today.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    })
+
+    // Replace {date} placeholder with formatted date
+    const populatedContent = template.content.replace(/{date}/g, formattedDate)
+
+    // Set title if empty
+    if (!title.trim()) {
+      setTitle(template.name)
+    }
+
+    // Populate entry with template content
+    setEntry(populatedContent)
+
+    // Apply template tags
+    if (template.tags && template.tags.length > 0) {
+      setTags(template.tags)
+    }
+
+    // Apply template mood
+    if (template.mood) {
+      setMood(template.mood)
+      setType(template.mood)
+    }
+
+    // Store selected template
+    setSelectedTemplate(template)
+
+    // Close modal
+    setShowTemplateSelector(false)
+
+    toast.success(`Template "${template.name}" applied!`)
+  }, [title])
+
+  const handleAddTag = useCallback(() => {
+    if (tagInput.trim() && !tags.includes(tagInput.trim())) {
+      setTags([...tags, tagInput.trim()])
+      setTagInput("")
+    }
+  }, [tagInput, tags])
+
+  const handleRemoveTag = useCallback((tagToRemove: string) => {
+    setTags(tags.filter(tag => tag !== tagToRemove))
+  }, [tags])
 
   useEffect(() => {
     if (!authLoading && currentUser?.id) {
@@ -98,6 +156,69 @@ export default function NewJournalEntryPage() {
       <main className="container mx-auto p-4 sm:p-6 max-w-full flex-1 overflow-hidden">
         <h1 className="text-4xl font-bold mb-6 text-center">New Journal Entry</h1>
         <form onSubmit={handleSubmit} className="space-y-4 max-w-2xl mx-auto">
+          {/* Template Selection Button */}
+          <div className="flex items-center justify-between gap-4">
+            <Button
+              type="button"
+              onClick={() => setShowTemplateSelector(true)}
+              variant="outline"
+              className="text-cream-25 border-cream-25/50 hover:bg-cream-25/10"
+            >
+              <BookTemplate className="h-4 w-4 mr-2" />
+              {selectedTemplate ? "Change Template" : "Choose Template"}
+            </Button>
+            {selectedTemplate && (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-cream-25/70">Using:</span>
+                <Badge
+                  style={{
+                    backgroundColor: selectedTemplate.bgColor,
+                    borderColor: selectedTemplate.color,
+                    color: selectedTemplate.color,
+                  }}
+                  className="border"
+                >
+                  {selectedTemplate.name}
+                </Badge>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedTemplate(null)
+                    setEntry("")
+                    setTags([])
+                    setMood(null)
+                    setType(null)
+                  }}
+                  className="h-6 w-6 p-0 text-cream-25/50 hover:text-cream-25"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            )}
+          </div>
+
+          {/* Template Prompts */}
+          {selectedTemplate && selectedTemplate.prompts && selectedTemplate.prompts.length > 0 && (
+            <div
+              className="p-4 rounded-lg border"
+              style={{
+                backgroundColor: selectedTemplate.bgColor,
+                borderColor: `${selectedTemplate.color}33`,
+              }}
+            >
+              <h3 className="text-sm font-medium text-cream-25 mb-2">Reflection Prompts:</h3>
+              <ul className="space-y-1">
+                {selectedTemplate.prompts.map((prompt, index) => (
+                  <li key={index} className="text-sm text-cream-25/70">
+                    • {prompt}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <div>
             <label htmlFor="title" className="block text-sm font-medium">Title</label>
             <Input
@@ -113,10 +234,74 @@ export default function NewJournalEntryPage() {
               id="entry"
               value={entry}
               onChange={(e) => setEntry(e.target.value)}
-              className="mt-1 text-cream-25 bg-cream-25/10 border-cream-25/50"
-              rows={5}
+              className="mt-1 text-cream-25 bg-cream-25/10 border-cream-25/50 min-h-[300px]"
+              rows={12}
             />
           </div>
+
+          {/* Mood Selector */}
+          <div>
+            <label htmlFor="mood" className="block text-sm font-medium mb-2">Mood</label>
+            <Select value={mood || ""} onValueChange={(value) => { setMood(value); setType(value); }}>
+              <SelectTrigger className="mt-1 text-cream-25 bg-cream-25/10 border-cream-25/50">
+                <SelectValue placeholder="How are you feeling?" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="amazing">☀️ Amazing</SelectItem>
+                <SelectItem value="happy">😊 Happy</SelectItem>
+                <SelectItem value="content">❤️ Content</SelectItem>
+                <SelectItem value="neutral">😐 Neutral</SelectItem>
+                <SelectItem value="anxious">⚡ Anxious</SelectItem>
+                <SelectItem value="sad">☁️ Sad</SelectItem>
+                <SelectItem value="upset">😞 Upset</SelectItem>
+                <SelectItem value="tired">🌙 Tired</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Tags */}
+          <div>
+            <label htmlFor="tags" className="block text-sm font-medium mb-2">Tags</label>
+            <div className="flex gap-2 mb-2">
+              <Input
+                id="tags"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault()
+                    handleAddTag()
+                  }
+                }}
+                placeholder="Add a tag..."
+                className="flex-1 text-cream-25 bg-cream-25/10 border-cream-25/50"
+              />
+              <Button
+                type="button"
+                onClick={handleAddTag}
+                variant="outline"
+                className="text-cream-25 border-cream-25/50 hover:bg-cream-25/10"
+              >
+                Add
+              </Button>
+            </div>
+            {tags.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <Badge
+                    key={tag}
+                    variant="secondary"
+                    className="bg-cream-25/20 text-cream-25 cursor-pointer hover:bg-cream-25/30"
+                    onClick={() => handleRemoveTag(tag)}
+                  >
+                    {tag}
+                    <X className="h-3 w-3 ml-1" />
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+
           <div>
             <label htmlFor="category" className="block text-sm font-medium">Category</label>
             <Select value={category} onValueChange={setCategory}>
@@ -222,6 +407,14 @@ export default function NewJournalEntryPage() {
           </Button>
         </form>
       </main>
+
+      {/* Template Selector Modal */}
+      {showTemplateSelector && (
+        <JournalTemplatesSelector
+          onSelect={handleTemplateSelect}
+          onClose={() => setShowTemplateSelector(false)}
+        />
+      )}
     </div>
   )
 }

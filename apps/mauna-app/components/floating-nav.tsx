@@ -209,11 +209,11 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
             <div
               className="absolute top-full mt-3 left-1/2 transform -translate-x-1/2 w-[calc(100vw-2rem)] max-w-80 min-w-72 z-[100] animate-in slide-in-from-top-2 duration-300"
               style={{
-                background: 'rgba(255, 255, 255, 0.08)',
+                background: 'rgba(255, 255, 255, 0.20)',
                 backdropFilter: 'blur(60px) saturate(200%)',
                 borderRadius: '20px',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 20px 40px rgba(0, 0, 0, 0.1), 0 8px 24px rgba(0, 0, 0, 0.06)'
+                border: '1px solid rgba(255, 255, 255, 0.25)',
+                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 0, 0, 0.1)'
               }}
             >
               {/* Dropdown Header */}
@@ -253,16 +253,16 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
                       }}
                       className="flex flex-col items-center gap-2 h-auto p-3 rounded-xl transition-all duration-300 border-0 touch-manipulation group"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.04)',
+                        background: 'rgba(255, 255, 255, 0.12)',
                         backdropFilter: 'blur(10px) saturate(150%)',
-                        border: '1px solid rgba(255, 255, 255, 0.08)'
+                        border: '1px solid rgba(255, 255, 255, 0.20)'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)'
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.20)'
                         e.currentTarget.style.transform = 'scale(1.02)'
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)'
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)'
                         e.currentTarget.style.transform = 'scale(1)'
                       }}
                     >
@@ -270,7 +270,7 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
                       <div
                         className="p-2 rounded-lg transition-all duration-200"
                         style={{
-                          background: 'rgba(255, 255, 255, 0.1)',
+                          background: 'rgba(255, 255, 255, 0.18)',
                           backdropFilter: 'blur(5px)'
                         }}
                       >

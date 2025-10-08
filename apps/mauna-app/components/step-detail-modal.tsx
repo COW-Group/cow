@@ -1,7 +1,13 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { X, Clock, Palette, Trash2, Copy, CheckCircle2, Circle } from "lucide-react"
+import {
+  X, Clock, Palette, Trash2, Copy, CheckCircle2, Circle, Inbox,
+  Briefcase, Coffee, Book, Code, Dumbbell, Heart, Zap, Target,
+  Music, Palette as PaletteIcon, Camera, Video, ShoppingCart, Home,
+  Car, Plane, Mail, DollarSign, Gift, Hammer, Puzzle, BarChart,
+  Mic, Phone, Users, Star, Sun, Moon, Cloud, Umbrella
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 
@@ -18,6 +24,8 @@ interface StepItem {
   id: string
   label: string
   description: string
+  journalContent?: string
+  cbtNotes?: string
   color: string
   scheduledTime: string
   duration: number
@@ -37,6 +45,7 @@ interface StepDetailModalProps {
   onDelete?: (stepId: string) => Promise<void>
   onDuplicate?: (stepId: string) => Promise<void>
   onToggleBreath?: (stepId: string, breathId: string, completed: boolean) => Promise<void>
+  onMoveToInbox?: (stepId: string) => Promise<void>
 }
 
 const colorOptions = [
@@ -50,6 +59,41 @@ const colorOptions = [
   "#808080", // Gray
 ]
 
+const iconOptions = [
+  { name: "Briefcase", icon: Briefcase },
+  { name: "Coffee", icon: Coffee },
+  { name: "Book", icon: Book },
+  { name: "Code", icon: Code },
+  { name: "Dumbbell", icon: Dumbbell },
+  { name: "Heart", icon: Heart },
+  { name: "Zap", icon: Zap },
+  { name: "Target", icon: Target },
+  { name: "Music", icon: Music },
+  { name: "Palette", icon: PaletteIcon },
+  { name: "Camera", icon: Camera },
+  { name: "Video", icon: Video },
+  { name: "ShoppingCart", icon: ShoppingCart },
+  { name: "Home", icon: Home },
+  { name: "Car", icon: Car },
+  { name: "Plane", icon: Plane },
+  { name: "Mail", icon: Mail },
+  { name: "DollarSign", icon: DollarSign },
+  { name: "Gift", icon: Gift },
+  { name: "Hammer", icon: Hammer },
+  { name: "Puzzle", icon: Puzzle },
+  { name: "BarChart", icon: BarChart },
+  { name: "Mic", icon: Mic },
+  { name: "Phone", icon: Phone },
+  { name: "Users", icon: Users },
+  { name: "Star", icon: Star },
+  { name: "Sun", icon: Sun },
+  { name: "Moon", icon: Moon },
+  { name: "Cloud", icon: Cloud },
+  { name: "Umbrella", icon: Umbrella },
+  { name: "CheckCircle2", icon: CheckCircle2 },
+  { name: "Clock", icon: Clock },
+]
+
 const frequencyOptions = [
   { value: "Every day!", label: "Every day" },
   { value: "Monday, Tuesday, Wednesday, Thursday, Friday", label: "Weekdays" },
@@ -59,6 +103,33 @@ const frequencyOptions = [
 
 const dayOptions = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
+// Scrollbar styles
+const scrollbarStyles = `
+  .step-modal-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .step-modal-scroll::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+  }
+
+  .step-modal-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+  }
+
+  .step-modal-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  /* Firefox */
+  .step-modal-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) rgba(255, 255, 255, 0.05);
+  }
+`
+
 export function StepDetailModal({
   step,
   onClose,
@@ -66,16 +137,31 @@ export function StepDetailModal({
   onDelete,
   onDuplicate,
   onToggleBreath,
+  onMoveToInbox,
 }: StepDetailModalProps) {
   const [editLabel, setEditLabel] = useState(step.label)
   const [editDescription, setEditDescription] = useState(step.description || "")
+  const [editJournalContent, setEditJournalContent] = useState(step.journalContent || "")
+  const [editCbtNotes, setEditCbtNotes] = useState(step.cbtNotes || "")
   const [editColor, setEditColor] = useState(step.color)
+  const [editIcon, setEditIcon] = useState(step.icon || "Briefcase")
   const [editScheduledTime, setEditScheduledTime] = useState(step.scheduledTime)
   const [editDuration, setEditDuration] = useState(step.duration)
   const [editFrequency, setEditFrequency] = useState(step.frequency || "Every day!")
   const [selectedDays, setSelectedDays] = useState<string[]>([])
   const [isCustomFrequency, setIsCustomFrequency] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+
+  // Inject scrollbar styles
+  useEffect(() => {
+    const styleId = 'step-modal-scrollbar-styles'
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style')
+      style.id = styleId
+      style.textContent = scrollbarStyles
+      document.head.appendChild(style)
+    }
+  }, [])
 
   useEffect(() => {
     // Parse frequency into selected days for custom mode
@@ -107,7 +193,10 @@ export function StepDetailModal({
       await onUpdate(step.id, {
         label: editLabel,
         description: editDescription,
+        journalContent: editJournalContent,
+        cbtNotes: editCbtNotes,
         color: editColor,
+        icon: editIcon,
         scheduledTime: editScheduledTime,
         duration: editDuration,
         frequency: editFrequency,
@@ -135,6 +224,19 @@ export function StepDetailModal({
     if (!onDuplicate) return
     await onDuplicate(step.id)
     onClose()
+  }
+
+  const handleMoveToInbox = async () => {
+    if (!onMoveToInbox) return
+
+    const confirmMove = window.confirm(
+      `Move "${step.label}" to inbox? This will remove its scheduled time.`
+    )
+
+    if (confirmMove) {
+      await onMoveToInbox(step.id)
+      onClose()
+    }
   }
 
   const handleComplete = async () => {
@@ -215,7 +317,7 @@ export function StepDetailModal({
           </div>
 
           {/* Content */}
-          <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6">
+          <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6 step-modal-scroll">
             <div className="space-y-4 sm:space-y-5">
               {/* Step Name */}
               <div className="space-y-2">
@@ -235,8 +337,31 @@ export function StepDetailModal({
                 <Textarea
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
-                  className="min-h-[100px] bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none focus:border-white/30"
+                  className="min-h-[80px] bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none focus:border-white/30"
                   placeholder="Enter step description"
+                />
+              </div>
+
+              {/* Journal Content */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-cream-25">Journal Entry</label>
+                <Textarea
+                  value={editJournalContent}
+                  onChange={(e) => setEditJournalContent(e.target.value)}
+                  className="h-[100px] bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none focus:border-white/30"
+                  placeholder="Write your thoughts, reflections, or notes about this step..."
+                />
+              </div>
+
+              {/* CBT Notes */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-cream-25">CBT Notes</label>
+                <p className="text-xs text-cream-25/60">Situation / Event → Automatic Thoughts or Emotions in Body → Worldview / History / Origins of Emotion or Thoughts → Sit → Constructive Response → Outcome</p>
+                <Textarea
+                  value={editCbtNotes}
+                  onChange={(e) => setEditCbtNotes(e.target.value)}
+                  className="h-[100px] bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none focus:border-white/30"
+                  placeholder="Enter your CBT notes here..."
                 />
               </div>
 
@@ -292,6 +417,29 @@ export function StepDetailModal({
                       }}
                     />
                   ))}
+                </div>
+              </div>
+
+              {/* Icon */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-cream-25">Icon</label>
+                <div className="grid grid-cols-8 gap-2">
+                  {iconOptions.map((iconOption) => {
+                    const IconComponent = iconOption.icon
+                    return (
+                      <button
+                        key={iconOption.name}
+                        onClick={() => setEditIcon(iconOption.name)}
+                        className={`w-full aspect-square rounded-xl transition-all hover:scale-110 flex items-center justify-center ${
+                          editIcon === iconOption.name
+                            ? "ring-2 ring-white ring-offset-2 ring-offset-gray-900 scale-105 bg-white/15"
+                            : "bg-white/5 hover:bg-white/10"
+                        }`}
+                      >
+                        <IconComponent className="w-5 h-5 text-cream-25" />
+                      </button>
+                    )
+                  })}
                 </div>
               </div>
 
@@ -433,7 +581,23 @@ export function StepDetailModal({
             </div>
 
             {/* Secondary Actions */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
+              {onMoveToInbox && (
+                <Button
+                  onClick={handleMoveToInbox}
+                  disabled={isSaving}
+                  className="py-2.5 text-sm font-medium rounded-xl border-2 hover:bg-white/5 transition-all"
+                  style={{
+                    backgroundColor: "transparent",
+                    color: "rgba(249, 250, 251, 0.7)",
+                    borderColor: "rgba(255, 255, 255, 0.2)"
+                  }}
+                >
+                  <Inbox className="w-4 h-4 mr-2" />
+                  To Inbox
+                </Button>
+              )}
+
               {onDuplicate && (
                 <Button
                   onClick={handleDuplicate}

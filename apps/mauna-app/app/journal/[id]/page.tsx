@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation"
 import { ArrowLeft, Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { JournalLinkedItems } from "@/components/journal-linked-items"
 
 interface JournalEntryPageProps {
   params: Promise<{ id: string }>
@@ -28,43 +29,43 @@ export default function JournalEntryPage({ params }: JournalEntryPageProps) {
   const [selectedItem, setSelectedItem] = useState<{ id: string; title: string } | null>(null)
   const { toast } = useToast()
 
-const loadEntry = useCallback(
-  async (userId: string, entryId: string) => {
-    setIsLoading(true)
-    try {
-      console.log("Supabase: Loading entry for user:", userId, "with id:", entryId)
-      const { data, error } = await databaseService.getJournalEntryById(userId, entryId)
-      console.log("Supabase: getJournalEntryById response (raw):", { data: typeof data === "string" ? data : JSON.stringify(data, null, 2), error })
-      if (error) throw error
-      if (!data) {
-        toast({ title: "Error", description: "Journal entry not found.", variant: "destructive" })
-        router.push("/journal")
-        return
-      }
-      // Parse the data if it's a string, otherwise use as is
-      let parsedData
+  const loadEntry = useCallback(
+    async (userId: string, entryId: string) => {
+      setIsLoading(true)
       try {
-        parsedData = typeof data === "string" ? JSON.parse(data) : data
-        console.log("Supabase: Parsed data:", JSON.stringify(parsedData, null, 2))
-      } catch (parseError) {
-        console.error("Supabase: Failed to parse data:", parseError, "Raw data:", data)
-        throw new Error("Invalid data format from Supabase")
+        console.log("Supabase: Loading entry for user:", userId, "with id:", entryId)
+        const { data, error } = await databaseService.getJournalEntryById(userId, entryId)
+        console.log("Supabase: getJournalEntryById response (raw):", { data: typeof data === "string" ? data : JSON.stringify(data, null, 2), error })
+        if (error) throw error
+        if (!data) {
+          toast({ title: "Error", description: "Journal entry not found.", variant: "destructive" })
+          router.push("/journal")
+          return
+        }
+        // Parse the data if it's a string, otherwise use as is
+        let parsedData
+        try {
+          parsedData = typeof data === "string" ? JSON.parse(data) : data
+          console.log("Supabase: Parsed data:", JSON.stringify(parsedData, null, 2))
+        } catch (parseError) {
+          console.error("Supabase: Failed to parse data:", parseError, "Raw data:", data)
+          throw new Error("Invalid data format from Supabase")
+        }
+        setEntry(parsedData)
+        if (parsedData.visionBoardLevel && parsedData.visionBoardItemId && parsedData.visionBoardItemTitle) {
+          setSelectedLevel(parsedData.visionBoardLevel)
+          setSelectedItem({ id: parsedData.visionBoardItemId, title: parsedData.visionBoardItemTitle })
+        }
+      } catch (error: any) {
+        console.error("Error loading journal entry:", error)
+        toast({ title: "Error", description: `Failed to load entry: ${error.message}`, variant: "destructive" })
+        router.push("/journal")
+      } finally {
+        setIsLoading(false)
       }
-      setEntry(parsedData)
-      if (parsedData.visionBoardLevel && parsedData.visionBoardItemId && parsedData.visionBoardItemTitle) {
-        setSelectedLevel(parsedData.visionBoardLevel)
-        setSelectedItem({ id: parsedData.visionBoardItemId, title: parsedData.visionBoardItemTitle })
-      }
-    } catch (error: any) {
-      console.error("Error loading journal entry:", error)
-      toast({ title: "Error", description: `Failed to load entry: ${error.message}`, variant: "destructive" })
-      router.push("/journal")
-    } finally {
-      setIsLoading(false)
-    }
-  },
-  [toast, router],
-)
+    },
+    [toast, router],
+  )
 
   const loadVisionBoardSections = useCallback(async () => {
     if (!currentUser?.id) return
@@ -177,7 +178,7 @@ const loadEntry = useCallback(
   }
 
   return (
-    <div className="container mx-auto p-4 sm:p-6 max-w-4xl flex-1">
+    <div className="container mx-auto p-4 sm:p-6 max-w-6xl flex-1">
       <div className="flex items-center gap-4 mb-6">
         <Button
           variant="ghost"
@@ -190,7 +191,11 @@ const loadEntry = useCallback(
         </Button>
         <h1 className="zen-heading text-3xl font-light text-vibrant-blue">Edit Journal Entry</h1>
       </div>
-      <div className="mb-6 flex flex-col gap-4">
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main Content */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="flex flex-col gap-4">
         <Select value={selectedLevel} onValueChange={(value) => {
           setSelectedLevel(value)
           setSearchTerm("")
@@ -234,16 +239,31 @@ const loadEntry = useCallback(
             ))}
           </div>
         )}
+          </div>
+          <JournalEntryForm
+            initialData={entry}
+            onSave={(data) => handleSaveEntry(data)}
+            onCancel={() => router.push("/journal")}
+            visionBoardItems={visionBoardSections}
+            visionBoardLevel={selectedLevel}
+            visionBoardItemId={selectedItem?.id}
+            visionBoardItemTitle={selectedItem?.title}
+          />
+        </div>
+
+        {/* Sidebar - Linked Items */}
+        <div className="lg:col-span-1">
+          <JournalLinkedItems
+            userId={currentUser.id}
+            entryDate={entry.created_at}
+            sourceType={entry.sourceType}
+            sourceId={entry.sourceId}
+            visionBoardItemId={entry.visionboarditemid}
+            visionBoardItemTitle={entry.visionboarditemtitle}
+            visionBoardLevel={entry.visionboardlevel}
+          />
+        </div>
       </div>
-      <JournalEntryForm
-        initialData={entry}
-        onSave={(data) => handleSaveEntry(data)}
-        onCancel={() => router.push("/journal")}
-        visionBoardItems={visionBoardSections}
-        visionBoardLevel={selectedLevel}
-        visionBoardItemId={selectedItem?.id}
-        visionBoardItemTitle={selectedItem?.title}
-      />
     </div>
   )
 }

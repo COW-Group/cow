@@ -18,6 +18,7 @@ interface HabitItem {
   lengthId?: string | null
   history?: string[]
   notes?: { [date: string]: string }
+  cbtNotes?: { [date: string]: string }
   units?: { [date: string]: number }
   skipped?: { [date: string]: boolean }
   children?: HabitItem[]
@@ -29,6 +30,7 @@ interface HabitDetailModalProps {
   onClose: () => void
   onNext?: () => void
   onPrevious?: () => void
+  onNavigateToIndex?: (index: number) => void
   onUpdate: (habitId: string, updates: Partial<HabitItem>) => Promise<void>
   onDelete?: (habitId: string) => Promise<void>
 }
@@ -206,18 +208,28 @@ const calculateLongestStreak = (history: string[], skipped?: { [date: string]: b
   return longestStreak
 }
 
+// Helper function to get local date string in YYYY-MM-DD format
+const getLocalDateString = (date: Date = new Date()): string => {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 export function HabitDetailModal({
   habit,
   allHabits,
   onClose,
   onNext,
   onPrevious,
+  onNavigateToIndex,
   onUpdate,
   onDelete,
 }: HabitDetailModalProps) {
   const [activeTab, setActiveTab] = useState<"overview" | "calendar" | "journal">("overview")
-  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split("T")[0])
+  const [selectedDate, setSelectedDate] = useState<string>(getLocalDateString())
   const [journalNote, setJournalNote] = useState("")
+  const [cbtNote, setCbtNote] = useState("")
   const [isEditingJournal, setIsEditingJournal] = useState(false)
   const [units, setUnits] = useState(0)
   const [isEditingHabit, setIsEditingHabit] = useState(false)
@@ -230,6 +242,7 @@ export function HabitDetailModal({
   const [selectedTerrainId, setSelectedTerrainId] = useState<string>("")
   const [selectedLengthId, setSelectedLengthId] = useState<string>("")
   const calendarScrollRef = React.useRef<HTMLDivElement>(null)
+  const journalScrollRef = React.useRef<HTMLDivElement>(null)
 
   // Get vision data for hierarchy selectors
   const { ranges, lengths } = useVisionData()
@@ -243,6 +256,9 @@ export function HabitDetailModal({
   const currentStreak = calculateCurrentStreak(habit.history || [], habit.skipped)
   const longestStreak = calculateLongestStreak(habit.history || [], habit.skipped)
   const totalCount = habit.history?.length || 0
+
+  // Calculate current index for segmented progress bar
+  const currentIndex = allHabits.findIndex(h => h.id === habit.id)
 
   // Initialize hierarchy from habit's lengthId
   useEffect(() => {
@@ -270,18 +286,25 @@ export function HabitDetailModal({
 
   // Reset selectedDate to current date when modal opens with a new habit
   useEffect(() => {
-    setSelectedDate(new Date().toISOString().split("T")[0])
+    setSelectedDate(getLocalDateString())
   }, [habit.id])
 
   useEffect(() => {
     setJournalNote(habit.notes?.[selectedDate] || "")
+    setCbtNote(habit.cbtNotes?.[selectedDate] || "")
     setUnits(habit.units?.[selectedDate] || 0)
-  }, [selectedDate, habit.notes, habit.units])
+  }, [selectedDate, habit.notes, habit.cbtNotes, habit.units])
 
   const handleSaveNote = async () => {
     const updatedNotes = { ...(habit.notes || {}), [selectedDate]: journalNote }
+    const updatedCbtNotes = { ...(habit.cbtNotes || {}), [selectedDate]: cbtNote }
     const updatedUnits = { ...(habit.units || {}), [selectedDate]: units }
-    await onUpdate(habit.id, { notes: updatedNotes, units: updatedUnits })
+    await onUpdate(habit.id, {
+      notes: updatedNotes,
+      cbtNotes: updatedCbtNotes,
+      units: updatedUnits,
+      _journalSync: { date: selectedDate, journalContent: journalNote, cbtNotes: cbtNote } as any
+    })
     setIsEditingJournal(false)
   }
 
@@ -389,6 +412,17 @@ export function HabitDetailModal({
     }
   }, [activeTab])
 
+  // Scroll to top when journal tab becomes active
+  useEffect(() => {
+    if (activeTab === "journal" && journalScrollRef.current && !isEditingJournal) {
+      setTimeout(() => {
+        if (journalScrollRef.current) {
+          journalScrollRef.current.scrollTop = 0
+        }
+      }, 50)
+    }
+  }, [activeTab, isEditingJournal])
+
   return (
     <div className="fixed inset-0 z-[10000] bg-black/80 backdrop-blur-sm overflow-hidden">
       {onPrevious && (
@@ -411,6 +445,31 @@ export function HabitDetailModal({
 
       <div className="h-full w-full sm:h-auto sm:w-auto sm:absolute sm:inset-4 sm:m-auto sm:max-w-6xl sm:max-h-[calc(100vh-2rem)] flex items-center justify-center">
         <div className="w-full h-full bg-gray-900/95 backdrop-blur-xl sm:rounded-3xl flex flex-col overflow-hidden" style={{ maxHeight: "100%" }}>
+          {/* Segmented Progress Bar - Instagram Stories Style */}
+          {!isEditingHabit && allHabits.length > 0 && (
+            <div className="flex-shrink-0 px-4 pt-3 pb-3">
+              <div className="flex gap-1.5 w-full">
+                {allHabits.map((h, index) => {
+                  const isActive = index === currentIndex
+                  return (
+                    <div
+                      key={h.id}
+                      onClick={() => onNavigateToIndex?.(index)}
+                      className="h-[3px] rounded-full transition-all duration-200 cursor-pointer hover:scale-y-125 hover:h-[4px]"
+                      style={{
+                        flex: 1,
+                        minWidth: '8px',
+                        backgroundColor: isActive ? h.color : 'rgba(255, 255, 255, 0.25)',
+                        opacity: isActive ? 1 : 0.6,
+                      }}
+                      aria-label={`Navigate to ${h.label}`}
+                    />
+                  )
+                })}
+              </div>
+            </div>
+          )}
+
           <div className="flex-shrink-0 flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-white/10">
             <div className="flex items-center gap-2 sm:gap-4 flex-1 min-w-0">
               <button
@@ -469,97 +528,7 @@ export function HabitDetailModal({
             </div>
           )}
 
-          {/* Instagram-Story-Style Habit Navigation Tracker */}
-          {!isEditingHabit && (
-            <div className="flex-shrink-0 px-4 sm:px-6 py-3 border-b border-white/5">
-              <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-1 -mx-2 px-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-                {allHabits.map((h, index) => {
-                  const isActive = h.id === habit.id
-                  const habitStreak = calculateCurrentStreak(h.history || [], h.skipped)
-                  const habitTotal = h.history?.length || 0
-
-                  return (
-                    <button
-                      key={h.id}
-                      onClick={() => {
-                        // Find the index and navigate
-                        const currentIndex = allHabits.findIndex(hab => hab.id === habit.id)
-                        const targetIndex = index
-                        const diff = targetIndex - currentIndex
-
-                        if (diff > 0) {
-                          // Navigate forward
-                          for (let i = 0; i < diff; i++) {
-                            onNext?.()
-                          }
-                        } else if (diff < 0) {
-                          // Navigate backward
-                          for (let i = 0; i < Math.abs(diff); i++) {
-                            onPrevious?.()
-                          }
-                        }
-                      }}
-                      className={`flex-shrink-0 flex flex-col items-center gap-1.5 transition-all duration-300 ${
-                        isActive ? 'scale-110' : 'opacity-60 hover:opacity-100'
-                      }`}
-                    >
-                      {/* Circular Avatar with Ring */}
-                      <div className="relative">
-                        {/* Progress Ring */}
-                        <svg className="w-12 h-12 sm:w-14 sm:h-14 -rotate-90" viewBox="0 0 100 100">
-                          {/* Background circle */}
-                          <circle
-                            cx="50"
-                            cy="50"
-                            r="45"
-                            fill="none"
-                            stroke="rgba(255, 255, 255, 0.1)"
-                            strokeWidth="3"
-                          />
-                          {/* Progress circle */}
-                          <circle
-                            cx="50"
-                            cy="50"
-                            r="45"
-                            fill="none"
-                            stroke={h.color}
-                            strokeWidth={isActive ? "4" : "3"}
-                            strokeLinecap="round"
-                            strokeDasharray={`${(habitTotal > 0 ? Math.min(habitStreak / 30, 1) : 0) * 283} 283`}
-                            className="transition-all duration-500"
-                            style={{
-                              filter: isActive ? `drop-shadow(0 0 4px ${h.color})` : 'none'
-                            }}
-                          />
-                        </svg>
-
-                        {/* Inner Circle with Color */}
-                        <div
-                          className={`absolute inset-0 m-2 rounded-full flex items-center justify-center text-xs font-bold text-white transition-all duration-300`}
-                          style={{
-                            backgroundColor: h.color,
-                            opacity: isActive ? 1 : 0.8,
-                            boxShadow: isActive ? `0 4px 12px ${h.color}60` : 'none'
-                          }}
-                        >
-                          {habitStreak > 0 ? habitStreak : h.label.charAt(0).toUpperCase()}
-                        </div>
-                      </div>
-
-                      {/* Habit Name */}
-                      <span className={`text-[10px] sm:text-xs font-medium transition-colors max-w-[60px] truncate ${
-                        isActive ? 'text-cream-25' : 'text-cream-25/60'
-                      }`}>
-                        {h.label}
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-          )}
-
-          <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 sm:px-6 py-4 sm:py-6" style={{ flex: "1 1 0%" }}>
+          <div className={`flex-1 overflow-y-auto overflow-x-hidden px-4 sm:px-6 ${activeTab === "journal" && !isEditingJournal ? "" : "py-4 sm:py-6"}`} style={{ flex: "1 1 0%" }}>
             {isEditingHabit ? (
               <div className="space-y-4 sm:space-y-6">
                 <div className="space-y-2">
@@ -1118,7 +1087,7 @@ export function HabitDetailModal({
                 )}
 
                 {activeTab === "journal" && (
-                  <div className="h-full flex flex-col">
+                  <div className="flex flex-col h-full">
                     {isEditingJournal ? (
                       <>
                         <div className="flex items-center justify-between mb-4 flex-shrink-0">
@@ -1179,14 +1148,31 @@ export function HabitDetailModal({
                           </div>
                         </div>
 
-                        <div className="flex-1 flex flex-col mb-4 min-h-0">
-                          <Textarea
-                            value={journalNote}
-                            onChange={(e) => setJournalNote(e.target.value)}
-                            placeholder="Write your thoughts, reflections, or notes about this habit..."
-                            className="flex-1 bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none min-h-[200px]"
-                            autoFocus
-                          />
+                        <div className="flex-1 flex flex-col mb-4 min-h-0 space-y-3 overflow-y-auto pr-2" style={{
+                          scrollbarWidth: 'thin',
+                          scrollbarColor: 'rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1)'
+                        }}>
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-cream-25">Journal Entry</label>
+                            <Textarea
+                              value={journalNote}
+                              onChange={(e) => setJournalNote(e.target.value)}
+                              placeholder="Write your thoughts, reflections, or notes about this habit..."
+                              className="bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none h-[120px]"
+                              autoFocus
+                            />
+                          </div>
+
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-cream-25">CBT Notes</label>
+                            <p className="text-xs text-cream-25/60">Situation / Event → Automatic Thoughts or Emotions in Body → Worldview / History / Origins of Emotion or Thoughts → Sit → Constructive Response → Outcome</p>
+                            <Textarea
+                              value={cbtNote}
+                              onChange={(e) => setCbtNote(e.target.value)}
+                              placeholder="Enter your CBT notes here..."
+                              className="bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none h-[120px]"
+                            />
+                          </div>
                         </div>
 
                         <div className="mt-auto flex-shrink-0">
@@ -1203,15 +1189,17 @@ export function HabitDetailModal({
                         </div>
                       </>
                     ) : (
-                      <div className="flex-1 flex flex-col overflow-hidden">
-                        <div className="flex-1 overflow-y-auto space-y-3">
+                      <div ref={journalScrollRef} className="space-y-3 overflow-y-auto flex-1 py-4 sm:py-6" style={{ scrollPaddingTop: 0 }}>
                           {Array.from({ length: 30 }, (_, i) => {
                             const date = new Date()
                             date.setDate(date.getDate() - i)
-                            const dateStr = date.toISOString().split("T")[0]
+                            const dateStr = getLocalDateString(date)
+                            const today = getLocalDateString()
+                            const isToday = dateStr === today
                             const isCompleted = habit.history?.includes(dateStr)
                             const isSkipped = habit.skipped?.[dateStr]
                             const hasNote = habit.notes?.[dateStr]
+                            const hasCbtNote = habit.cbtNotes?.[dateStr]
                             const dateUnits = habit.units?.[dateStr] || 0
                             const colorData = getColorWithSaturation(habit.color, habit, dateStr)
 
@@ -1266,11 +1254,15 @@ export function HabitDetailModal({
                                     setSelectedDate(dateStr)
                                     setIsEditingJournal(true)
                                   }}
-                                  className="flex-1 p-4 sm:p-5 rounded-lg bg-white/5 border border-white/10 hover:bg-white/8 transition-all text-left"
+                                  className={`flex-1 p-4 sm:p-5 rounded-lg transition-all text-left ${
+                                    isToday
+                                      ? 'bg-white/10 border-2 border-white/30 hover:bg-white/12'
+                                      : 'bg-white/5 border border-white/10 hover:bg-white/8'
+                                  }`}
                                 >
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className="text-sm font-medium text-cream-25">
-                                      {new Date(dateStr).toLocaleDateString("en-US", {
+                                    <span className={`text-sm font-medium ${isToday ? 'text-white font-bold' : 'text-cream-25'}`}>
+                                      {date.toLocaleDateString("en-US", {
                                         weekday: "short",
                                         month: "short",
                                         day: "numeric"
@@ -1282,19 +1274,25 @@ export function HabitDetailModal({
                                       </span>
                                     )}
                                   </div>
-                                  <p className="text-sm sm:text-base text-cream-25/70">
-                                    {habit.description || "Tap to add a journal entry"}
-                                  </p>
+                                  {!hasNote && !hasCbtNote && (
+                                    <p className="text-sm sm:text-base text-cream-25/70">
+                                      Tap to add a journal entry
+                                    </p>
+                                  )}
                                   {hasNote && (
-                                    <p className="text-xs sm:text-sm text-cream-25/50 mt-2 line-clamp-2">
+                                    <p className="text-xs sm:text-sm text-cream-25/50 line-clamp-2">
                                       {hasNote}
+                                    </p>
+                                  )}
+                                  {hasCbtNote && (
+                                    <p className="text-xs sm:text-sm text-cream-25/50 line-clamp-2 mt-2">
+                                      {hasCbtNote}
                                     </p>
                                   )}
                                 </button>
                               </div>
                             )
                           })}
-                        </div>
                       </div>
                     )}
                   </div>

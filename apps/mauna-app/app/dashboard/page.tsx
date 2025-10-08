@@ -9,7 +9,7 @@ import type { TaskList, AppSettings } from "@/lib/types"
 import { FloatingNav } from "@/components/floating-nav"
 import { TaskListManager } from "@/components/task-list-manager"
 import { getTimeOfDayGreeting } from "@/lib/utils"
-import { Play, Calendar } from "lucide-react"
+import { Play, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 
@@ -218,18 +218,13 @@ export default function DashboardPage() {
               border: '1px solid rgba(255, 255, 255, 0.04)',
               boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 6px 18px rgba(0, 0, 0, 0.03)',
             }}
-            onClick={() => {
-              toast({
-                title: "Calendar Integration",
-                description: "Connect your calendar to view and manage events seamlessly from your dashboard.",
-              })
-            }}
+            onClick={() => router.push("/timeline")}
           >
             <div className="flex items-center space-x-3">
-              <Calendar className="h-5 w-5 text-cream-25" />
+              <Clock className="h-5 w-5 text-cream-25" />
               <div className="flex flex-col items-start">
                 <span className="font-inter font-light tracking-wide">
-                  Calendar
+                  Timeline
                 </span>
               </div>
             </div>

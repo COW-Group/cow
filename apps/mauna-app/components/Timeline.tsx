@@ -4,7 +4,13 @@ import React, { useContext, useState, useEffect } from "react"
 import { TimelineContext } from "./TimelineWrapper"
 import { StepDetailModal } from "./step-detail-modal"
 import { AddStepModal } from "./add-step-modal"
-import { Loader2Icon, ChevronLeft, ChevronRight, Circle, CheckCircle2, Zap, Plus } from "lucide-react"
+import {
+  Loader2Icon, ChevronLeft, ChevronRight, Circle, CheckCircle2, Zap, Plus, X,
+  Briefcase, Coffee, Book, Code, Dumbbell, Heart, Target,
+  Music, Palette as PaletteIcon, Camera, Video, ShoppingCart, Home,
+  Car, Plane, Mail, DollarSign, Gift, Hammer, Puzzle, BarChart,
+  Mic, Phone, Users, Star, Sun, Moon, Cloud, Umbrella, Clock
+} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { format, addDays, startOfWeek, addWeeks, isSameDay } from "date-fns"
 import { databaseService } from "@/lib/database-service"
@@ -24,6 +30,14 @@ const scrollbarStyles = `
   }
 `
 
+// Icon map for timeline items
+const iconMap: Record<string, any> = {
+  Briefcase, Coffee, Book, Code, Dumbbell, Heart, Zap, Target,
+  Music, Palette: PaletteIcon, Camera, Video, ShoppingCart, Home,
+  Car, Plane, Mail, DollarSign, Gift, Hammer, Puzzle, BarChart,
+  Mic, Phone, Users, Star, Sun, Moon, Cloud, Umbrella, CheckCircle2, Clock
+}
+
 export function Timeline({ currentDate }: { currentDate: Date }) {
   const { items, loading, error, selectedDate, setSelectedDate, updateItem, refreshTimeline } = useContext(TimelineContext)
   const { user } = useAuth(AuthService)
@@ -31,8 +45,39 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
   const [weekStart, setWeekStart] = useState(startOfWeek(currentDate, { weekStartsOn: 0 }))
   const [selectedStep, setSelectedStep] = useState<any>(null)
   const [isAddStepModalOpen, setIsAddStepModalOpen] = useState(false)
+  const [isInboxOpen, setIsInboxOpen] = useState(false)
+  const [inboxItems, setInboxItems] = useState<any[]>([])
 
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
+
+  // Fetch inbox items (unscheduled tasks)
+  useEffect(() => {
+    if (user?.id && isInboxOpen) {
+      fetchInboxItems()
+    }
+  }, [user, isInboxOpen])
+
+  const fetchInboxItems = async () => {
+    if (!user?.id) return
+
+    try {
+      const { data, error } = await databaseService.supabase
+        .from("steps")
+        .select("*")
+        .eq("user_id", user.id)
+        .is("habit_notes->_scheduled_time", null)
+        .order("created_at", { ascending: false })
+
+      if (error) {
+        console.error("Error fetching inbox items:", error)
+        toast({ title: "Error", description: "Failed to load inbox items.", variant: "destructive" })
+      } else {
+        setInboxItems(data || [])
+      }
+    } catch (err) {
+      console.error("Unexpected error fetching inbox:", err)
+    }
+  }
 
   // Inject custom scrollbar styles
   useEffect(() => {
@@ -64,6 +109,22 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
 
   const handleStepUpdate = async (stepId: string, updates: any) => {
     await updateItem(stepId, updates)
+
+    // Sync journal content to journal table if present
+    if (user?.id && (updates.journalContent || updates.cbtNotes)) {
+      const step = items.find(item => item.id === stepId)
+      if (step) {
+        await databaseService.createOrUpdateJournalEntryFromSource(
+          user.id,
+          'step',
+          stepId,
+          updates.label || step.label,
+          updates.journalContent,
+          updates.cbtNotes
+        )
+      }
+    }
+
     await refreshTimeline()
   }
 
@@ -122,6 +183,47 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
       }
     } catch (err) {
       toast({ title: "Error", description: "Unexpected error duplicating step.", variant: "destructive" })
+    }
+  }
+
+  const handleMoveToInbox = async (stepId: string) => {
+    if (!user?.id) return
+
+    try {
+      // Fetch the current step to get its habit_notes
+      const { data: currentStep, error: fetchError } = await databaseService.supabase
+        .from("steps")
+        .select("habit_notes")
+        .eq("id", stepId)
+        .eq("user_id", user.id)
+        .single()
+
+      if (fetchError || !currentStep) {
+        toast({ title: "Error", description: "Failed to move step to inbox.", variant: "destructive" })
+        return
+      }
+
+      // Update habit_notes to remove scheduled time
+      const updatedHabitNotes = {
+        ...(currentStep.habit_notes || {}),
+        _scheduled_time: null,
+      }
+
+      const { error: updateError } = await databaseService.supabase
+        .from("steps")
+        .update({ habit_notes: updatedHabitNotes })
+        .eq("id", stepId)
+        .eq("user_id", user.id)
+
+      if (updateError) {
+        toast({ title: "Error", description: "Failed to move step to inbox.", variant: "destructive" })
+      } else {
+        toast({ title: "Moved to Inbox", description: "Step moved to inbox successfully." })
+        await refreshTimeline()
+        await fetchInboxItems() // Refresh inbox items
+      }
+    } catch (err) {
+      toast({ title: "Error", description: "Unexpected error moving step to inbox.", variant: "destructive" })
     }
   }
 
@@ -322,6 +424,7 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
           <Button
             variant="ghost"
             className="px-4 py-2 rounded-lg text-cream-25 hover:bg-white/10 flex items-center gap-2"
+            onClick={() => setIsInboxOpen(true)}
           >
             <svg
               className="w-5 h-5"
@@ -428,8 +531,8 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
         </div>
 
         {/* Timeline Track with Vertical Scrolling */}
-        <div className="flex-1 relative overflow-y-auto timeline-scroll">
-          <div className="relative" style={{ minHeight: `${(timelineRangeMinutes / 60) * 96}px` }}>
+        <div className="flex-1 relative overflow-y-auto timeline-scroll" style={{ maxHeight: 'calc(100vh - 300px)' }}>
+          <div className="relative pb-32" style={{ minHeight: `${(timelineRangeMinutes / 60) * 96 + 200}px` }}>
             {/* Time labels on the left */}
             <div className="absolute left-0 top-0 w-16 flex flex-col">
               {timeSlots.map((slot) => (
@@ -446,100 +549,117 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
             />
 
             {/* Timeline items positioned at their scheduled times */}
-            {items.map((item, index) => {
-              const itemStartMinutes = timeToMinutes(item.scheduledTime)
-              const itemEndMinutes = itemStartMinutes + item.duration
-              const topPosition = ((itemStartMinutes - timelineBounds.start) / 60) * 96
-              const height = (item.duration / 60) * 96
+            {(() => {
+              // Detect overlapping items and group them
+              const itemsWithPosition = items.map((item, index) => {
+                const itemStartMinutes = timeToMinutes(item.scheduledTime)
+                const itemEndMinutes = itemStartMinutes + item.duration
+                const topPosition = ((itemStartMinutes - timelineBounds.start) / 60) * 96
+                const height = (item.duration / 60) * 96
 
-              return (
-                <div
-                  key={item.id}
-                  className="absolute left-20"
-                  style={{
-                    top: `${topPosition}px`,
-                    width: 'calc(100% - 80px)',
-                  }}
-                >
-                  <div className="flex items-start gap-4">
-                    {/* Circular bubble icon */}
+                // Find overlapping items
+                const overlaps = items.filter((other, otherIndex) => {
+                  if (other.id === item.id) return false
+                  const otherStart = timeToMinutes(other.scheduledTime)
+                  const otherEnd = otherStart + other.duration
+                  return (itemStartMinutes < otherEnd && itemEndMinutes > otherStart)
+                })
+
+                return { item, itemStartMinutes, itemEndMinutes, topPosition, height, overlaps, index }
+              })
+
+              return itemsWithPosition.map(({ item, itemStartMinutes, itemEndMinutes, topPosition, height, overlaps, index }) => {
+                const hasOverlaps = overlaps.length > 0
+                // Calculate horizontal offset for overlapping items
+                const overlapOffset = hasOverlaps ? (index % 2) * 45 : 0
+                const itemWidth = hasOverlaps ? 'calc(45% - 40px)' : 'calc(70% - 40px)'
+
+                return (
+                  <div
+                    key={item.id}
+                    className="absolute left-20 cursor-pointer flex items-start gap-3"
+                    style={{
+                      top: `${topPosition}px`,
+                      width: itemWidth,
+                      height: `${height}px`,
+                      marginLeft: `${overlapOffset}%`,
+                    }}
+                    onClick={() => setSelectedStep(item)}
+                  >
+                    {/* Colored pill - vertical bar like Structured */}
                     <div
-                      className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center cursor-pointer transition-transform hover:scale-110 relative z-10"
+                      className="flex-shrink-0 relative overflow-hidden transition-all duration-200"
                       style={{
+                        width: '60px',
+                        height: '100%',
                         backgroundColor: item.color,
-                        boxShadow: `0 4px 16px ${item.color}60`,
-                      }}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        setSelectedStep(item)
+                        boxShadow: `0 4px 16px ${item.color}40`,
+                        borderRadius: hasOverlaps ? '16px' : '24px',
                       }}
                     >
-                      <span className="text-white font-bold text-lg">
-                        {item.label.charAt(0).toUpperCase()}
-                      </span>
+                      {/* Icon embedded in colored pill */}
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                          {(() => {
+                            const IconComponent = item.icon ? iconMap[item.icon] : Briefcase
+                            return IconComponent ? <IconComponent className="w-6 h-6 text-white" /> : <Briefcase className="w-6 h-6 text-white" />
+                          })()}
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Item content */}
-                    <div
-                      className="flex-1 cursor-pointer"
-                      onClick={() => setSelectedStep(item)}
-                    >
-                      {/* Time range with duration */}
-                      <div className="text-xs text-cream-25/60 font-inter mb-1">
-                        {item.scheduledTime} - {minutesToTime(itemEndMinutes)} ({item.duration} min)
-                      </div>
-
-                      {/* Task name - bold and prominent */}
-                      <div className="text-base font-semibold text-cream-25 mb-1 leading-tight">
-                        {item.label}
-                      </div>
-
-                      {/* Breaths/subtasks completion with icon */}
-                      {item.breaths && item.breaths.length > 0 && (
-                        <div className="flex items-center gap-1.5 text-xs text-cream-25/50 font-inter mt-2">
-                          <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                          </svg>
-                          <span>
-                            {item.breaths.filter(b => b.completed).length}/{item.breaths.length}
-                          </span>
+                    {/* Task content - next to the pill */}
+                    <div className="flex-1 min-w-0 flex items-start gap-3 py-2">
+                      <div className="flex-1 min-w-0">
+                        {/* Time range and duration - above task name */}
+                        <div className="text-xs text-cream-25/60 font-inter mb-0.5">
+                          {item.scheduledTime}–{minutesToTime(itemEndMinutes)} ({item.duration} min) {item.frequency && `⟳`}
                         </div>
-                      )}
 
-                      {/* Type badge */}
-                      <div className="flex items-center gap-2 mt-2">
-                        <span
-                          className="text-xs px-2 py-0.5 rounded-full font-medium"
-                          style={{
-                            backgroundColor: `${item.color}20`,
-                            color: item.color,
-                          }}
-                        >
-                          {item.type === 'habit' ? 'Habit' : 'Activity'}
-                        </span>
-                        {item.frequency && (
-                          <span className="text-xs text-cream-25/40 font-inter">
-                            {item.frequency}
-                          </span>
+                        {/* Task name - bold text */}
+                        <div className="text-base font-semibold text-cream-25 leading-tight mb-2">
+                          {item.label}
+                        </div>
+
+                        {/* Breaths/subtasks completion */}
+                        {item.breaths && item.breaths.length > 0 && (
+                          <div className="flex items-center gap-1.5 text-xs text-cream-25/60 font-inter">
+                            <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                            </svg>
+                            <span>
+                              {item.breaths.filter(b => b.completed).length}/{item.breaths.length}
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Overlapping indicator */}
+                        {hasOverlaps && (
+                          <div className="text-xs text-cyan-400 font-inter mt-1">
+                            Tasks are overlapping
+                          </div>
                         )}
                       </div>
-                    </div>
 
-                    {/* Completion circle on the right */}
-                    <button
-                      onClick={(e) => toggleCompletion(e, item.id, item.isCompleted)}
-                      className="flex-shrink-0 transition-transform hover:scale-110"
-                    >
-                      {item.isCompleted ? (
-                        <CheckCircle2 className="h-6 w-6 text-green-400" />
-                      ) : (
-                        <Circle className="h-6 w-6 text-cream-25/30 hover:text-cream-25/60 transition-colors" />
-                      )}
-                    </button>
+                      {/* Completion circle on the right */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleCompletion(e, item.id, item.isCompleted)
+                        }}
+                        className="flex-shrink-0 transition-transform hover:scale-110"
+                      >
+                        {item.isCompleted ? (
+                          <CheckCircle2 className="h-6 w-6 text-green-400" strokeWidth={2.5} />
+                        ) : (
+                          <Circle className="h-6 w-6 text-cream-25/40 hover:text-cream-25/60 transition-colors" strokeWidth={2} />
+                        )}
+                      </button>
+                    </div>
                   </div>
-                </div>
-              )
-            })}
+                )
+              })
+            })()}
           </div>
         </div>
       </div>
@@ -562,6 +682,7 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
           onDelete={handleStepDelete}
           onDuplicate={handleStepDuplicate}
           onToggleBreath={handleToggleBreath}
+          onMoveToInbox={handleMoveToInbox}
         />
       )}
 
@@ -572,6 +693,178 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
         onSave={handleCreateStep}
         selectedDate={selectedDate}
       />
+
+      {/* Inbox Slide-Over Panel */}
+      {isInboxOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998] transition-opacity duration-300"
+            onClick={() => setIsInboxOpen(false)}
+          />
+
+          {/* Slide-Over Panel */}
+          <div
+            className="fixed left-0 top-0 bottom-0 w-full sm:w-96 bg-gray-900/95 backdrop-blur-xl shadow-2xl z-[9999] overflow-hidden flex flex-col transition-transform duration-300 ease-out"
+            style={{
+              animation: 'slideInFromLeft 0.3s ease-out',
+            }}
+          >
+            {/* Inbox Header */}
+            <div className="flex-shrink-0 flex items-center justify-between px-6 py-4 border-b border-white/10">
+              <div className="flex items-center gap-3">
+                <svg
+                  className="w-6 h-6 text-cream-25"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                  />
+                </svg>
+                <h2 className="text-xl font-semibold text-cream-25">Inbox</h2>
+              </div>
+              <button
+                onClick={() => setIsInboxOpen(false)}
+                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-cream-25" />
+              </button>
+            </div>
+
+            {/* Inbox Content */}
+            <div className="flex-1 overflow-y-auto px-6 py-4">
+              {inboxItems.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+                  <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4">
+                    <svg
+                      className="w-8 h-8 text-cream-25/40"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <p className="text-cream-25/60 font-inter text-sm">Your inbox is empty</p>
+                  <p className="text-cream-25/40 font-inter text-xs mt-1">Unscheduled tasks will appear here</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {inboxItems.map((item) => (
+                    <div
+                      key={item.id}
+                      onClick={() => {
+                        // Convert inbox item to display format
+                        const displayItem = {
+                          id: item.id,
+                          label: item.label,
+                          description: item.description || "",
+                          color: item.color,
+                          scheduledTime: item.habit_notes?._scheduled_time || "",
+                          duration: item.duration,
+                          type: item.isbuildhabit ? "habit" : "activity",
+                          isCompleted: item.completed || false,
+                          frequency: item.frequency,
+                          breaths: [], // Would need to fetch separately if needed
+                        }
+                        setSelectedStep(displayItem)
+                        setIsInboxOpen(false)
+                      }}
+                      className="p-4 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all cursor-pointer"
+                    >
+                      <div className="flex items-start gap-3">
+                        {/* Color Indicator */}
+                        <div
+                          className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center"
+                          style={{
+                            backgroundColor: item.color,
+                            boxShadow: `0 4px 12px ${item.color}40`,
+                          }}
+                        >
+                          <span className="text-white font-bold text-sm">
+                            {item.label.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-base font-semibold text-cream-25 mb-1 truncate">
+                            {item.label}
+                          </h3>
+                          {item.description && (
+                            <p className="text-sm text-cream-25/60 line-clamp-2 mb-2">
+                              {item.description}
+                            </p>
+                          )}
+                          <div className="flex items-center gap-2">
+                            {item.duration && (
+                              <span className="text-xs text-cream-25/50 font-inter">
+                                {item.duration} min
+                              </span>
+                            )}
+                            <span
+                              className="text-xs px-2 py-0.5 rounded-full font-medium"
+                              style={{
+                                backgroundColor: `${item.color}30`,
+                                color: item.color,
+                              }}
+                            >
+                              {item.isbuildhabit ? "Habit" : "Activity"}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Completion Status */}
+                        {item.completed ? (
+                          <CheckCircle2 className="flex-shrink-0 w-5 h-5 text-green-400" />
+                        ) : (
+                          <Circle className="flex-shrink-0 w-5 h-5 text-cream-25/40" />
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Footer - Add Task to Inbox Button */}
+            <div className="flex-shrink-0 px-6 py-4 border-t border-white/10">
+              <Button
+                onClick={() => {
+                  setIsInboxOpen(false)
+                  setIsAddStepModalOpen(true)
+                }}
+                className="w-full py-3 rounded-xl bg-white/10 hover:bg-white/15 text-cream-25 font-medium transition-all"
+              >
+                <Plus className="w-5 h-5 mr-2" />
+                Add Task to Inbox
+              </Button>
+            </div>
+          </div>
+
+          {/* CSS for slide-in animation */}
+          <style jsx>{`
+            @keyframes slideInFromLeft {
+              from {
+                transform: translateX(-100%);
+              }
+              to {
+                transform: translateX(0);
+              }
+            }
+          `}</style>
+        </>
+      )}
     </div>
   )
 }

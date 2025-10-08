@@ -1408,7 +1408,12 @@ export interface JournalEntry {
   userId: string
   title: string | null
   entry: string | null
+  cbtNotes?: string | null
   category: string | null
+  type?: 'step' | 'habit' | 'general' | null
+  sourceType?: 'step' | 'habit' | null
+  sourceId?: string | null
+  sourceDate?: string | null
   visionboardlevel: string | null
   visionboarditemid: string | null
   visionboarditemtitle: string | null

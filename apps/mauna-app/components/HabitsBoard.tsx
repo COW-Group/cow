@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Plus, X, ChevronLeft, ChevronDown, ChevronRight, Edit2, Loader2Icon, Check, LayoutGrid, LayoutList, SlidersHorizontal, Circle, Menu, Bell, Palette, GripVertical, Clock } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import { databaseService } from "@/lib/database-service"
 import {
   DndContext,
   closestCenter,
@@ -40,6 +41,7 @@ interface HabitItem {
   lengthId?: string | null
   history?: string[]
   notes?: { [date: string]: string }
+  cbtNotes?: { [date: string]: string }
   units?: { [date: string]: number }
   skipped?: { [date: string]: boolean }
   children?: HabitItem[]
@@ -1020,7 +1022,7 @@ const calculateGroupStats = (habits: HabitItem[], calendarDates: any[]) => {
 }
 
 export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date }) => {
-  const { categories, loading, error, refreshHabits, addHabit, updateHabit, deleteHabit } = useContext(HabitsContext)
+  const { categories, loading, error, userId, refreshHabits, addHabit, updateHabit, deleteHabit } = useContext(HabitsContext)
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null)
   const [selectedHabit, setSelectedHabit] = useState<HabitItem | null>(null)
   const [showAddHabit, setShowAddHabit] = useState(false)
@@ -1040,6 +1042,8 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
   const [selectedMetric, setSelectedMetric] = useState<'streak' | 'count' | 'rate'>('streak')
   const [localCategories, setLocalCategories] = useState(categories)
   const [categoryOrder, setCategoryOrder] = useState<string[]>([])
+  const [calendarDates, setCalendarDates] = useState(() => generateCalendarDates(14))
+  const [currentDateKey, setCurrentDateKey] = useState(() => new Date().toDateString())
 
   // Board items for individual habit positioning
   type BoardItem =
@@ -1139,7 +1143,24 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
     }
   }, [categories])
 
-  const calendarDates = generateCalendarDates(14)
+  // Update calendar dates when the day changes
+  useEffect(() => {
+    const checkDateChange = () => {
+      const newDateKey = new Date().toDateString()
+      if (newDateKey !== currentDateKey) {
+        setCurrentDateKey(newDateKey)
+        setCalendarDates(generateCalendarDates(14))
+      }
+    }
+
+    // Check every minute
+    const interval = setInterval(checkDateChange, 60000)
+
+    // Also check immediately
+    checkDateChange()
+
+    return () => clearInterval(interval)
+  }, [currentDateKey])
 
   const filteredCategories = selectedGroup
     ? localCategories.filter((cat) => cat.id === selectedGroup)
@@ -1220,7 +1241,7 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
 
   const handleNextHabit = () => {
     if (!selectedHabit) return
-    const allHabits = filteredCategories.flatMap(cat => cat.habits)
+    const allHabits = categories.flatMap(cat => cat.habits)
     const currentIndex = allHabits.findIndex(h => h.id === selectedHabit.id)
     const nextIndex = (currentIndex + 1) % allHabits.length
     setSelectedHabit(allHabits[nextIndex])
@@ -1228,10 +1249,17 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
 
   const handlePreviousHabit = () => {
     if (!selectedHabit) return
-    const allHabits = filteredCategories.flatMap(cat => cat.habits)
+    const allHabits = categories.flatMap(cat => cat.habits)
     const currentIndex = allHabits.findIndex(h => h.id === selectedHabit.id)
     const prevIndex = currentIndex === 0 ? allHabits.length - 1 : currentIndex - 1
     setSelectedHabit(allHabits[prevIndex])
+  }
+
+  const handleNavigateToIndex = (index: number) => {
+    const allHabits = categories.flatMap(cat => cat.habits)
+    if (index >= 0 && index < allHabits.length) {
+      setSelectedHabit(allHabits[index])
+    }
   }
 
   const handleDragEnd = async (event: DragEndEvent, categoryId: string) => {
@@ -1988,11 +2016,31 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
       {selectedHabit && (
         <HabitDetailModal
           habit={selectedHabit}
-          allHabits={filteredCategories.flatMap(cat => cat.habits)}
+          allHabits={categories.flatMap(cat => cat.habits)}
           onClose={() => setSelectedHabit(null)}
           onNext={handleNextHabit}
           onPrevious={handlePreviousHabit}
-          onUpdate={async (habitId, updates) => {
+          onNavigateToIndex={handleNavigateToIndex}
+          onUpdate={async (habitId, updates: any) => {
+            // Check if we need to sync journal entry
+            if (userId && updates._journalSync) {
+              const { date, journalContent, cbtNotes } = updates._journalSync
+              const habit = selectedHabit
+              if (habit) {
+                await databaseService.createOrUpdateJournalEntryFromSource(
+                  userId,
+                  'habit',
+                  habitId,
+                  habit.label,
+                  journalContent,
+                  cbtNotes,
+                  date
+                )
+              }
+              // Remove the temporary sync property before saving
+              delete updates._journalSync
+            }
+
             await updateHabit(habitId, updates)
             // Update selectedHabit with the new data
             setSelectedHabit(prev => prev ? { ...prev, ...updates } : null)

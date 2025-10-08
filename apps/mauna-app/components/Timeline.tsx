@@ -110,9 +110,9 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
   const energyLevel = calculateEnergyLevel()
 
   return (
-    <div className="w-full h-full flex flex-col">
+    <div className="w-full h-full flex flex-col overflow-hidden">
       {/* Header with Month/Year and Week Navigation */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-between mb-6 flex-shrink-0">
         <h2 className="text-2xl sm:text-3xl font-lora font-extralight text-cream-25 tracking-wider">
           {format(selectedDate, 'MMMM')} <span className="text-cream-25/60">{format(selectedDate, 'yyyy')}</span>
         </h2>
@@ -137,7 +137,7 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
       </div>
 
       {/* Week Day Selector */}
-      <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+      <div className="flex gap-2 mb-6 overflow-x-auto pb-2 flex-shrink-0 scrollbar-thin scrollbar-thumb-cream-25/20 scrollbar-track-transparent">
         {weekDays.map((day) => {
           const isSelected = isSameDay(day, selectedDate)
           const dayOfWeek = format(day, 'EEE')
@@ -175,7 +175,7 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
       </div>
 
       {/* Timeline Content */}
-      <div className="flex-1 flex gap-6">
+      <div className="flex-1 flex gap-6 overflow-y-auto scrollbar-thin scrollbar-thumb-cream-25/20 scrollbar-track-transparent pr-2">
         {/* Energy Level Sidebar */}
         <div className="flex-shrink-0 w-20 flex flex-col items-center">
           <div

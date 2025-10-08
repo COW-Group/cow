@@ -6,6 +6,16 @@ import { AuthService } from "@/lib/auth-service"
 import { useToast } from "@/hooks/use-toast"
 import { Loader2Icon } from "lucide-react"
 
+interface Breath {
+  id: string
+  name: string
+  completed: boolean
+  isRunning: boolean
+  timeEstimationSeconds: number
+  position: number
+  emotionId?: string | null
+}
+
 interface TimelineItem {
   id: string
   label: string
@@ -19,6 +29,7 @@ interface TimelineItem {
   frequency?: string
   isBuildHabit?: boolean
   history?: string[]
+  breaths?: Breath[]
 }
 
 interface TimelineContextType {
@@ -66,10 +77,32 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
       setError(null)
       console.log("[TimelineWrapper.loadTimelineItems] Fetching steps for timeline")
 
-      // Fetch all steps (both habits and activities)
+      // Fetch all steps (both habits and activities) with their breaths
       const { data, error } = await databaseService.supabase
         .from("steps")
-        .select("id, label, description, color, duration, frequency, isbuildhabit, history, tag, habit_notes, icon, completed")
+        .select(`
+          id,
+          label,
+          description,
+          color,
+          duration,
+          frequency,
+          isbuildhabit,
+          history,
+          tag,
+          habit_notes,
+          icon,
+          completed,
+          breaths (
+            id,
+            name,
+            completed,
+            is_running,
+            time_estimation_seconds,
+            position,
+            emotion_id
+          )
+        `)
         .eq("user_id", user.id)
         .order("created_at", { ascending: true })
 
@@ -92,6 +125,19 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
           const habitNotes = step.habit_notes || {}
           const scheduledTime = habitNotes._scheduled_time || "08:00"
 
+          // Map breaths
+          const breaths: Breath[] = (step.breaths || [])
+            .map((breath: any) => ({
+              id: breath.id,
+              name: breath.name,
+              completed: breath.completed || false,
+              isRunning: breath.is_running || false,
+              timeEstimationSeconds: breath.time_estimation_seconds || 0,
+              position: breath.position || 0,
+              emotionId: breath.emotion_id || null,
+            }))
+            .sort((a: Breath, b: Breath) => a.position - b.position)
+
           return {
             id: step.id,
             label: step.label,
@@ -105,6 +151,7 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
             frequency: step.frequency || null,
             isBuildHabit: step.isbuildhabit ?? null,
             history: step.history || [],
+            breaths: breaths,
           }
         })
         // Sort by scheduled time

@@ -1,10 +1,27 @@
 "use client"
 
-import React, { useContext, useState } from "react"
+import React, { useContext, useState, useEffect } from "react"
 import { TimelineContext } from "./TimelineWrapper"
 import { Loader2Icon, ChevronLeft, ChevronRight, Zap, Circle, CheckCircle2, Coffee, Sun, Moon, Utensils } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { format, addDays, subDays, startOfWeek, addWeeks, isSameDay } from "date-fns"
+
+// Custom scrollbar styles
+const scrollbarStyles = `
+  .timeline-scroll::-webkit-scrollbar {
+    width: 6px;
+  }
+  .timeline-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .timeline-scroll::-webkit-scrollbar-thumb {
+    background: rgba(249, 250, 251, 0.08);
+    border-radius: 3px;
+  }
+  .timeline-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(249, 250, 251, 0.15);
+  }
+`
 
 const TIME_SLOTS = Array.from({ length: 24 }, (_, i) => {
   const hour = i.toString().padStart(2, '0')
@@ -24,6 +41,23 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
   const [weekStart, setWeekStart] = useState(startOfWeek(currentDate, { weekStartsOn: 0 }))
 
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
+
+  // Inject custom scrollbar styles
+  useEffect(() => {
+    const styleId = 'timeline-scrollbar-styles'
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style')
+      style.id = styleId
+      style.textContent = scrollbarStyles
+      document.head.appendChild(style)
+    }
+    return () => {
+      const existingStyle = document.getElementById(styleId)
+      if (existingStyle) {
+        existingStyle.remove()
+      }
+    }
+  }, [])
 
   const handlePrevWeek = () => {
     setWeekStart(addWeeks(weekStart, -1))
@@ -175,7 +209,10 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
       </div>
 
       {/* Timeline Content */}
-      <div className="flex-1 flex gap-6 overflow-y-auto scrollbar-thin scrollbar-thumb-cream-25/20 scrollbar-track-transparent pr-2">
+      <div className="flex-1 flex gap-6 overflow-y-auto timeline-scroll pr-2" style={{
+        scrollbarWidth: 'thin',
+        scrollbarColor: 'rgba(249, 250, 251, 0.08) transparent'
+      }}>
         {/* Energy Level Sidebar */}
         <div className="flex-shrink-0 w-20 flex flex-col items-center">
           <div
@@ -311,6 +348,57 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
                               }}
                             />
                           </div>
+                        </div>
+                      )}
+
+                      {/* Breaths / Subtasks */}
+                      {item.breaths && item.breaths.length > 0 && (
+                        <div className="mt-4 ml-2 space-y-2 border-l-2 pl-3" style={{ borderColor: `${item.color}40` }}>
+                          {item.breaths.map((breath, breathIndex) => {
+                            const breathMinutes = Math.ceil(breath.timeEstimationSeconds / 60)
+                            return (
+                              <div
+                                key={breath.id}
+                                className="flex items-center gap-2 p-2 rounded-lg transition-all duration-200 hover:bg-white/5"
+                              >
+                                <div
+                                  className="flex-shrink-0 w-4 h-4 rounded border-2 flex items-center justify-center cursor-pointer transition-all"
+                                  style={{
+                                    borderColor: breath.completed ? item.color : 'rgba(249, 250, 251, 0.3)',
+                                    backgroundColor: breath.completed ? item.color : 'transparent',
+                                  }}
+                                >
+                                  {breath.completed && (
+                                    <svg
+                                      className="w-3 h-3 text-white"
+                                      fill="none"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth="2"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                    >
+                                      <path d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                  )}
+                                </div>
+                                <div className="flex-1 flex items-center justify-between">
+                                  <span
+                                    className="text-sm font-inter"
+                                    style={{
+                                      color: breath.completed ? 'rgba(249, 250, 251, 0.5)' : 'rgba(249, 250, 251, 0.8)',
+                                      textDecoration: breath.completed ? 'line-through' : 'none',
+                                    }}
+                                  >
+                                    {breath.name}
+                                  </span>
+                                  <span className="text-xs text-cream-25/40 font-inter">
+                                    {breathMinutes}m
+                                  </span>
+                                </div>
+                              </div>
+                            )
+                          })}
                         </div>
                       )}
                     </div>

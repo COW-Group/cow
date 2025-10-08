@@ -1301,30 +1301,58 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
       }
     }
 
-    // Case 2: Grouped habit dragged outside its category - ungroup it
-    if (activeItem?.type === 'grouped-habit') {
-      const category = categories.find(cat => cat.id === activeItem.categoryId)
-      const habit = category?.habits.find(h => h.id === activeItem.id)
+    // Case 2: Ungrouped habit dropped onto a grouped habit - join that group
+    if (activeItem?.type === 'ungrouped-habit' && overItem?.type === 'grouped-habit') {
+      const targetCategory = categories.find(cat => cat.id === overItem.categoryId)
+      const habit = categories.find(cat => cat.id === 'uncategorized')?.habits.find(h => h.id === activeItem.id)
 
-      // Check if dropped outside the category
-      const droppedOnOwnCategory = overItem?.type === 'category' && overItem.id === activeItem.categoryId
-      const droppedOnOwnGroupMember = overItem?.type === 'grouped-habit' && overItem.categoryId === activeItem.categoryId
-
-      if (!droppedOnOwnCategory && !droppedOnOwnGroupMember && habit) {
-        // Ungroup the habit
-        await updateHabit(habit.id, { habitGroup: null })
-        toast({ title: "Habit Ungrouped", description: `"${habit.label}" removed from "${category?.name}"` })
+      if (habit && targetCategory) {
+        await updateHabit(habit.id, { habitGroup: targetCategory.name })
+        toast({ title: "Habit Grouped", description: `"${habit.label}" joined "${targetCategory.name}"` })
         return
       }
+    }
 
-      // Check if dropped onto a different category - re-group it
-      if (overItem?.type === 'category' && overItem.id !== activeItem.categoryId) {
-        const newCategory = categories.find(cat => cat.id === overItem.id)
-        if (habit && newCategory) {
-          await updateHabit(habit.id, { habitGroup: newCategory.name })
-          toast({ title: "Habit Moved", description: `"${habit.label}" moved to "${newCategory.name}"` })
-          return
+    // Case 3: Grouped habit being moved
+    if (activeItem?.type === 'grouped-habit') {
+      const sourceCategory = categories.find(cat => cat.id === activeItem.categoryId)
+      const habit = sourceCategory?.habits.find(h => h.id === activeItem.id)
+
+      if (!habit) return
+
+      // Case 3a: Dropped onto a category header
+      if (overItem?.type === 'category') {
+        // If it's a different category, switch groups
+        if (overItem.id !== activeItem.categoryId) {
+          const targetCategory = categories.find(cat => cat.id === overItem.id)
+          if (targetCategory) {
+            await updateHabit(habit.id, { habitGroup: targetCategory.name })
+            toast({ title: "Habit Moved", description: `"${habit.label}" moved to "${targetCategory.name}"` })
+            return
+          }
         }
+        // If same category, just reorder (fall through)
+      }
+
+      // Case 3b: Dropped onto a grouped habit
+      if (overItem?.type === 'grouped-habit') {
+        // If it's from a different category, switch groups
+        if (overItem.categoryId !== activeItem.categoryId) {
+          const targetCategory = categories.find(cat => cat.id === overItem.categoryId)
+          if (targetCategory) {
+            await updateHabit(habit.id, { habitGroup: targetCategory.name })
+            toast({ title: "Habit Moved", description: `"${habit.label}" moved to "${targetCategory.name}"` })
+            return
+          }
+        }
+        // If same category, just reorder (fall through)
+      }
+
+      // Case 3c: Dropped onto an ungrouped habit - ungroup it
+      if (overItem?.type === 'ungrouped-habit') {
+        await updateHabit(habit.id, { habitGroup: null })
+        toast({ title: "Habit Ungrouped", description: `"${habit.label}" removed from "${sourceCategory?.name}"` })
+        return
       }
     }
 

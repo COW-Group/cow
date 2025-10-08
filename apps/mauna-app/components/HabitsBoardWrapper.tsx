@@ -4,6 +4,7 @@ import { databaseService } from "@/lib/database-service"
 import { useAuth } from "@/hooks/use-auth"
 import { AuthService } from "@/lib/auth-service"
 import { useToast } from "@/hooks/use-toast"
+import { Loader2Icon } from "lucide-react"
 
 interface HabitItem {
   id: string
@@ -13,8 +14,11 @@ interface HabitItem {
   time: string
   frequency: string
   isBuildHabit: boolean
+  habitGroup?: string
   history?: string[]
-  notes?: { date: string; text: string }[]
+  notes?: { [date: string]: string }
+  units?: { [date: string]: number }
+  skipped?: { [date: string]: boolean }
   children?: HabitItem[]
 }
 
@@ -47,7 +51,7 @@ export const HabitsContext = createContext<HabitsContextType>({
   addHabit: async () => {},
 })
 
-export const HabitsBoardWrapper = ({ currentMonth }: { currentMonth: Date }) => {
+export const HabitsBoardWrapper = ({ currentMonth = new Date() }: { currentMonth?: Date } = {}) => {
   const { user, authLoading } = useAuth(AuthService)
   const { toast } = useToast()
   const [categories, setCategories] = useState<Category[]>([])
@@ -69,9 +73,10 @@ export const HabitsBoardWrapper = ({ currentMonth }: { currentMonth: Date }) => 
       console.log("[HabitsBoardWrapper.loadHabits] Executing Supabase query for steps with tag='habit'")
       const { data, error } = await databaseService.supabase
         .from("steps")
-        .select("id, label, description, color, duration, frequency, isbuildhabit, history, tag")
+        .select("id, label, description, color, duration, frequency, isbuildhabit, history, tag, habit_group, habit_notes, habit_units, habit_skipped")
         .eq("user_id", user.id)
         .eq("tag", "habit")
+        .order("habit_group", { ascending: true, nullsFirst: false })
         .order("created_at", { ascending: true })
       console.log("[HabitsBoardWrapper.loadHabits] Supabase query response:", { data, error })
       if (error) {
@@ -82,26 +87,52 @@ export const HabitsBoardWrapper = ({ currentMonth }: { currentMonth: Date }) => 
         return
       }
       console.log("[HabitsBoardWrapper.loadHabits] Raw steps data:", JSON.stringify(data, null, 2))
-      const habits: HabitItem[] = data.map((step: any) => ({
-        id: step.id,
-        label: step.label,
-        description: step.description || "No description",
-        color: step.color || "#FFD700",
-        time: step.duration ? `${step.duration} min` : "00:00",
-        frequency: step.frequency || "Every day!",
-        isBuildHabit: step.isbuildhabit ?? true,
-        history: step.history || [],
-        notes: [],
-        children: [],
+
+      // Map habits with new fields
+      const habits: HabitItem[] = data.map((step: any) => {
+        const habitNotes = step.habit_notes || {}
+        const scheduledTime = habitNotes._scheduled_time || "08:00"
+
+        // Remove _scheduled_time from notes to keep it clean
+        const { _scheduled_time, ...cleanNotes } = habitNotes
+
+        return {
+          id: step.id,
+          label: step.label,
+          description: step.description || "No description",
+          color: step.color || "#FFD700",
+          time: scheduledTime,
+          frequency: step.frequency || "Every day!",
+          isBuildHabit: step.isbuildhabit ?? true,
+          habitGroup: step.habit_group || "Uncategorized",
+          history: step.history || [],
+          notes: cleanNotes,
+          units: step.habit_units || {},
+          skipped: step.habit_skipped || {},
+          children: [],
+        }
+      })
+
+      // Group habits by habit_group
+      const groupedHabits: { [key: string]: HabitItem[] } = {}
+      habits.forEach((habit) => {
+        const groupName = habit.habitGroup || "Uncategorized"
+        if (!groupedHabits[groupName]) {
+          groupedHabits[groupName] = []
+        }
+        groupedHabits[groupName].push(habit)
+      })
+
+      // Convert to categories array
+      const categories: Category[] = Object.entries(groupedHabits).map(([groupName, groupHabits]) => ({
+        id: `group-${groupName.toLowerCase().replace(/\s+/g, "-")}`,
+        name: groupName,
+        color: groupHabits[0]?.color || "#FFD700",
+        habits: groupHabits,
       }))
-      const category: Category = {
-        id: "steps-cat",
-        name: "Steps",
-        color: "#FFD700",
-        habits,
-      }
-      console.log("[HabitsBoardWrapper.loadHabits] Processed categories:", JSON.stringify([category], null, 2))
-      setCategories([category])
+
+      console.log("[HabitsBoardWrapper.loadHabits] Processed categories:", JSON.stringify(categories, null, 2))
+      setCategories(categories)
       setLoading(false)
     } catch (err: any) {
       console.error("[HabitsBoardWrapper.loadHabits] Unexpected error fetching habits:", err)
@@ -128,25 +159,37 @@ export const HabitsBoardWrapper = ({ currentMonth }: { currentMonth: Date }) => 
       return
     }
     console.log("[HabitsBoardWrapper.addHabit] Creating habit:", habit)
-    await databaseService.createStep(user.id, {
-      label: habit.label,
-      description: habit.description,
-      color: habit.color,
-      duration: parseInt(habit.time.split(" ")[0]) || 15,
-      frequency: habit.frequency,
-      isBuildHabit: habit.isBuildHabit,
-      tag: "habit",
-      taskListId: null,
-      position: categories.flatMap((cat) => cat.habits).length,
-    })
-      .then(() => {
-        refreshHabits()
-        toast({ title: "Habit Added", description: `"${habit.label}" was successfully added.` })
+
+    const { data, error } = await databaseService.supabase
+      .from("steps")
+      .insert({
+        user_id: user.id,
+        label: habit.label,
+        description: habit.description,
+        color: habit.color,
+        duration: 15,
+        frequency: habit.frequency,
+        isbuildhabit: habit.isBuildHabit,
+        habit_group: habit.habitGroup || "Uncategorized",
+        history: [],
+        habit_notes: { _scheduled_time: habit.time || "08:00" },
+        habit_units: {},
+        habit_skipped: {},
+        tag: "habit",
+        task_list_id: null,
+        position: categories.flatMap((cat) => cat.habits).length,
+        completed: false,
+        locked: false,
       })
-      .catch((err) => {
-        console.error("[HabitsBoardWrapper.addHabit] Error adding habit:", err)
-        toast({ title: "Error", description: "Failed to add habit.", variant: "destructive" })
-      })
+      .select()
+
+    if (error) {
+      console.error("[HabitsBoardWrapper.addHabit] Error adding habit:", error)
+      toast({ title: "Error", description: "Failed to add habit.", variant: "destructive" })
+    } else {
+      refreshHabits()
+      toast({ title: "Habit Added", description: `"${habit.label}" was successfully added.` })
+    }
   }, [user?.id, categories, refreshHabits, toast])
 
   const updateHabit = useCallback(async (habitId: string, updates: Partial<HabitItem>) => {
@@ -156,23 +199,51 @@ export const HabitsBoardWrapper = ({ currentMonth }: { currentMonth: Date }) => 
       return
     }
     console.log("[HabitsBoardWrapper.updateHabit] Updating habit:", { habitId, updates })
+
+    // First, get the current habit to merge notes properly
+    const { data: currentHabit } = await databaseService.supabase
+      .from("steps")
+      .select("habit_notes")
+      .eq("id", habitId)
+      .eq("user_id", user.id)
+      .single()
+
+    const currentNotes = currentHabit?.habit_notes || {}
+
     const dbUpdates: Record<string, any> = {}
     if (updates.history !== undefined) dbUpdates.history = updates.history
     if (updates.label !== undefined) dbUpdates.label = updates.label
     if (updates.description !== undefined) dbUpdates.description = updates.description
     if (updates.color !== undefined) dbUpdates.color = updates.color
-    if (updates.time !== undefined) dbUpdates.duration = parseInt(updates.time.split(" ")[0]) || 15
     if (updates.frequency !== undefined) dbUpdates.frequency = updates.frequency
     if (updates.isBuildHabit !== undefined) dbUpdates.isbuildhabit = updates.isBuildHabit
-    await databaseService.updateStep(habitId, user.id, dbUpdates)
-      .then(() => {
-        refreshHabits()
-        toast({ title: "Habit Updated", description: "Habit was successfully updated." })
-      })
-      .catch((err) => {
-        console.error("[HabitsBoardWrapper.updateHabit] Error updating habit:", err)
-        toast({ title: "Error", description: "Failed to update habit.", variant: "destructive" })
-      })
+    if (updates.habitGroup !== undefined) dbUpdates.habit_group = updates.habitGroup
+    if (updates.units !== undefined) dbUpdates.habit_units = updates.units
+    if (updates.skipped !== undefined) dbUpdates.habit_skipped = updates.skipped
+
+    // Handle time update - merge with existing notes
+    if (updates.time !== undefined) {
+      dbUpdates.habit_notes = { ...currentNotes, _scheduled_time: updates.time }
+    }
+
+    // Handle notes update - merge with scheduled time
+    if (updates.notes !== undefined) {
+      dbUpdates.habit_notes = { ...updates.notes, _scheduled_time: currentNotes._scheduled_time || "08:00" }
+    }
+
+    const { error } = await databaseService.supabase
+      .from("steps")
+      .update(dbUpdates)
+      .eq("id", habitId)
+      .eq("user_id", user.id)
+
+    if (error) {
+      console.error("[HabitsBoardWrapper.updateHabit] Error updating habit:", error)
+      toast({ title: "Error", description: "Failed to update habit.", variant: "destructive" })
+    } else {
+      refreshHabits()
+      toast({ title: "Habit Updated", description: "Habit was successfully updated." })
+    }
   }, [user?.id, refreshHabits, toast])
 
   const deleteHabit = useCallback(async (habitId: string) => {

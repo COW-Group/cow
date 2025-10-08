@@ -1758,13 +1758,41 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
           {/* Daily Totals with Metric Selector */}
           {filteredCategories.length > 0 && (
             <div className="sticky bottom-0 z-10 flex bg-gray-900 border-t border-white/10">
+              {/* Quick Actions Spacer for Daily Totals */}
+              {showQuickActions && (
+                <div className="flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] sticky left-0 bg-gray-900 z-30 border-r border-white/10 flex items-center justify-center">
+                  <Button
+                    onClick={() => setShowAddHabit(true)}
+                    className="mx-auto rounded-xl px-3 sm:px-5 py-2 sm:py-3 text-white text-sm"
+                    style={{
+                      background: 'rgba(76, 175, 80, 0.9)',
+                      backdropFilter: 'blur(20px)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                    }}
+                  >
+                    <Plus className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                    new habit
+                  </Button>
+                </div>
+              )}
+
               {/* Label Column */}
               <div
-                className={`flex-shrink-0 px-4 py-3 sticky left-0 bg-gray-900 border-r border-white/10 z-30 flex items-center ${
-                  showQuickActions ? 'w-[calc(240px+8rem)] sm:w-[calc(280px+10rem)] md:w-[calc(320px+10rem)]' : 'w-48 sm:w-64'
+                className={`flex-shrink-0 px-4 py-3 sticky bg-gray-900 border-r border-white/10 z-30 flex items-center justify-between gap-2 ${
+                  showQuickActions ? 'left-[240px] sm:left-[280px] md:left-[320px] w-32 sm:w-40' : 'left-0 w-48 sm:w-64'
                 }`}
               >
                 <span className="text-sm font-medium text-cream-25 uppercase tracking-wide">DAILY TOTAL</span>
+                {!showQuickActions && (
+                  <Button
+                    onClick={() => setShowAddHabit(true)}
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 px-2 text-cream-25 hover:bg-white/10"
+                  >
+                    <Plus className="w-4 h-4" />
+                  </Button>
+                )}
               </div>
 
               {/* Daily Total Counts */}

@@ -810,7 +810,7 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
       time: newHabitTime || "08:00",
       frequency: "Everyday",
       isBuildHabit: true,
-      habitGroup: newHabitGroup || "Uncategorized",
+      habitGroup: newHabitGroup || null,
       history: [],
       notes: {},
       units: {},
@@ -914,8 +914,8 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
   // Auto expand/collapse groups based on compact view toggle
   useEffect(() => {
     if (isCompactView) {
-      // Collapse all groups in compact view
-      setExpandedGroups(new Set())
+      // Collapse all groups in compact view (but keep uncategorized always visible)
+      setExpandedGroups(new Set(['uncategorized']))
     } else {
       // Expand all groups in detailed view
       setExpandedGroups(new Set(categories.map(cat => cat.id)))
@@ -1182,25 +1182,27 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
             filteredCategories.map((category) => {
               const isExpanded = expandedGroups.has(category.id)
               const groupStats = calculateGroupStats(category.habits, calendarDates)
+              const isUncategorized = category.id === 'uncategorized'
 
               return (
-                <div key={category.id} className="border-b border-white/5">
-                  {/* Group Row */}
-                  <div
-                    className="flex items-stretch hover:bg-white/5 cursor-pointer transition-colors"
-                    onClick={() => toggleGroup(category.id)}
-                  >
-                    {/* Quick Actions Spacer for Group Row */}
-                    {showQuickActions && (
-                      <div className="flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] sticky left-0 bg-gray-900 z-20" />
-                    )}
-
-                    {/* Group Label */}
+                <div key={category.id} className={isUncategorized ? '' : 'border-b border-white/5'}>
+                  {/* Group Row - skip for uncategorized */}
+                  {!isUncategorized && (
                     <div
-                      className={`flex-shrink-0 px-4 py-3 sticky bg-gray-900 border-r border-white/10 z-10 flex items-center gap-2 ${
-                        showQuickActions ? 'left-[240px] sm:left-[280px] md:left-[320px] w-32 sm:w-40' : 'left-0 w-48 sm:w-64'
-                      }`}
+                      className="flex items-stretch hover:bg-white/5 cursor-pointer transition-colors"
+                      onClick={() => toggleGroup(category.id)}
                     >
+                      {/* Quick Actions Spacer for Group Row */}
+                      {showQuickActions && (
+                        <div className="flex-shrink-0 w-[240px] sm:w-[280px] md:w-[320px] sticky left-0 bg-gray-900 z-20" />
+                      )}
+
+                      {/* Group Label */}
+                      <div
+                        className={`flex-shrink-0 px-4 py-3 sticky bg-gray-900 border-r border-white/10 z-10 flex items-center gap-2 ${
+                          showQuickActions ? 'left-[240px] sm:left-[280px] md:w-[320px] w-32 sm:w-40' : 'left-0 w-48 sm:w-64'
+                        }`}
+                      >
                       {isExpanded ? (
                         <ChevronDown className="w-4 h-4 text-cream-25" />
                       ) : (
@@ -1241,9 +1243,10 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
                       </div>
                     </div>
                   </div>
+                  )}
 
-                  {/* Expanded Habits - DnD Enabled */}
-                  {isExpanded && (
+                  {/* Habits - always shown for uncategorized, conditionally for grouped */}
+                  {(isUncategorized || isExpanded) && (
                     <DndContext
                       sensors={sensors}
                       collisionDetection={closestCenter}

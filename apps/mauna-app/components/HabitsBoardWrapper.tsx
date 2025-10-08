@@ -104,7 +104,7 @@ export const HabitsBoardWrapper = ({ currentMonth = new Date() }: { currentMonth
           time: scheduledTime,
           frequency: step.frequency || "Every day!",
           isBuildHabit: step.isbuildhabit ?? true,
-          habitGroup: step.habit_group || "Uncategorized",
+          habitGroup: step.habit_group || null,
           history: step.history || [],
           notes: cleanNotes,
           units: step.habit_units || {},
@@ -113,23 +113,39 @@ export const HabitsBoardWrapper = ({ currentMonth = new Date() }: { currentMonth
         }
       })
 
-      // Group habits by habit_group
+      // Separate uncategorized habits from grouped habits
+      const uncategorizedHabits: HabitItem[] = []
       const groupedHabits: { [key: string]: HabitItem[] } = {}
+
       habits.forEach((habit) => {
-        const groupName = habit.habitGroup || "Uncategorized"
-        if (!groupedHabits[groupName]) {
-          groupedHabits[groupName] = []
+        if (!habit.habitGroup) {
+          uncategorizedHabits.push(habit)
+        } else {
+          const groupName = habit.habitGroup
+          if (!groupedHabits[groupName]) {
+            groupedHabits[groupName] = []
+          }
+          groupedHabits[groupName].push(habit)
         }
-        groupedHabits[groupName].push(habit)
       })
 
-      // Convert to categories array
+      // Convert grouped habits to categories array
       const categories: Category[] = Object.entries(groupedHabits).map(([groupName, groupHabits]) => ({
         id: `group-${groupName.toLowerCase().replace(/\s+/g, "-")}`,
         name: groupName,
         color: groupHabits[0]?.color || "#FFD700",
         habits: groupHabits,
       }))
+
+      // Add uncategorized habits as a special category at the beginning
+      if (uncategorizedHabits.length > 0) {
+        categories.unshift({
+          id: 'uncategorized',
+          name: '',
+          color: '#FFD700',
+          habits: uncategorizedHabits,
+        })
+      }
 
       console.log("[HabitsBoardWrapper.loadHabits] Processed categories:", JSON.stringify(categories, null, 2))
       setCategories(categories)
@@ -160,7 +176,7 @@ export const HabitsBoardWrapper = ({ currentMonth = new Date() }: { currentMonth
     }
     console.log("[HabitsBoardWrapper.addHabit] Creating habit:", habit)
 
-    const { data, error } = await databaseService.supabase
+    const { data, error} = await databaseService.supabase
       .from("steps")
       .insert({
         user_id: user.id,
@@ -170,7 +186,7 @@ export const HabitsBoardWrapper = ({ currentMonth = new Date() }: { currentMonth
         duration: 15,
         frequency: habit.frequency,
         isbuildhabit: habit.isBuildHabit,
-        habit_group: habit.habitGroup || "Uncategorized",
+        habit_group: habit.habitGroup || null,
         history: [],
         habit_notes: { _scheduled_time: habit.time || "08:00" },
         habit_units: {},

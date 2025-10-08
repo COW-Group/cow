@@ -65,7 +65,7 @@ export const HabitsBoardWrapper = ({ currentMonth = new Date() }: { currentMonth
   const loadHabits = useCallback(async () => {
     console.log("[HabitsBoardWrapper.loadHabits] Starting loadHabits with userId:", user?.id, "authLoading:", authLoading)
     if (!user?.id || authLoading) {
-      console.log("[HabitsBoardWrapper.loadHabits] Raw Supabase data:", JSON.stringify(data, null, 2), "Error:", error)
+      console.log("[HabitsBoardWrapper.loadHabits] Skipping - no user or still loading")
       setLoading(false)
       return
     }

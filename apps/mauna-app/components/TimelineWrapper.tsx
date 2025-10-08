@@ -13,7 +13,6 @@ interface Breath {
   isRunning: boolean
   timeEstimationSeconds: number
   position: number
-  emotionId?: string | null
 }
 
 interface TimelineItem {
@@ -99,8 +98,7 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
             completed,
             is_running,
             time_estimation_seconds,
-            position,
-            emotion_id
+            position
           )
         `)
         .eq("user_id", user.id)
@@ -134,7 +132,6 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
               isRunning: breath.is_running || false,
               timeEstimationSeconds: breath.time_estimation_seconds || 0,
               position: breath.position || 0,
-              emotionId: breath.emotion_id || null,
             }))
             .sort((a: Breath, b: Breath) => a.position - b.position)
 

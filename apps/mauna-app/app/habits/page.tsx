@@ -9,7 +9,6 @@ import { FloatingNav } from "@/components/floating-nav"
 import { Button } from "@/components/ui/button"
 import { Loader2Icon, Calendar } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
-import { VisionDataProvider } from "@/lib/vision-data-provider"
 import type { AppSettings } from "@/lib/types"
 
 export default function HabitsPage() {
@@ -156,9 +155,7 @@ export default function HabitsPage() {
                 }}
               >
                 <CardContent className="p-4 sm:p-6">
-                  <VisionDataProvider>
-                    <HabitsBoardWrapper />
-                  </VisionDataProvider>
+                  <HabitsBoardWrapper />
                 </CardContent>
               </Card>
             </div>

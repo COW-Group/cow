@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/use-auth"
 import { AuthService } from "@/lib/auth-service"
 import { useToast } from "@/hooks/use-toast"
 import { Loader2Icon } from "lucide-react"
+import { VisionDataProvider } from "@/lib/vision-data-provider"
 
 interface HabitItem {
   id: string
@@ -312,7 +313,9 @@ export const HabitsBoardWrapper = ({ currentMonth = new Date() }: { currentMonth
 
   return (
     <HabitsContext.Provider value={contextValue}>
-      <HabitsBoard currentMonth={currentMonth} />
+      <VisionDataProvider userId={user.id} databaseService={databaseService}>
+        <HabitsBoard currentMonth={currentMonth} />
+      </VisionDataProvider>
     </HabitsContext.Provider>
   )
 }

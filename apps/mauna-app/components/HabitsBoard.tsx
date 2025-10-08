@@ -15,6 +15,9 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
+  DragOverEvent,
+  useDroppable,
+  over as Over,
 } from '@dnd-kit/core'
 import {
   arrayMove,
@@ -883,6 +886,11 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
   const [selectedMetric, setSelectedMetric] = useState<'streak' | 'count' | 'rate'>('streak')
   const [localCategories, setLocalCategories] = useState(categories)
   const [categoryOrder, setCategoryOrder] = useState<string[]>([])
+
+  // Board items for individual habit positioning
+  type BoardItem = { type: 'ungrouped-habit', id: string } | { type: 'category', id: string }
+  const [boardItems, setBoardItems] = useState<BoardItem[]>([])
+
   const { toast } = useToast()
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
@@ -894,42 +902,65 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
     })
   )
 
-  // Load category order from localStorage on mount
+  // Load board items order from localStorage on mount
   useEffect(() => {
-    const savedOrder = localStorage.getItem('habitsCategoryOrder')
-    if (savedOrder) {
+    const savedItems = localStorage.getItem('habitsBoardItems')
+    if (savedItems) {
       try {
-        setCategoryOrder(JSON.parse(savedOrder))
+        setBoardItems(JSON.parse(savedItems))
       } catch (e) {
-        console.error('Failed to parse category order:', e)
+        console.error('Failed to parse board items:', e)
       }
     }
   }, [])
 
-  // Update local categories when categories change, applying saved order
+  // Build board items from categories
   useEffect(() => {
-    if (categoryOrder.length > 0) {
-      // Sort categories based on saved order
-      const orderedCategories = [...categories].sort((a, b) => {
-        const aIndex = categoryOrder.indexOf(a.id)
-        const bIndex = categoryOrder.indexOf(b.id)
+    const newBoardItems: BoardItem[] = []
+    const uncategorizedCategory = categories.find(cat => cat.id === 'uncategorized')
+    const groupedCategories = categories.filter(cat => cat.id !== 'uncategorized')
 
-        // If both are in the order, sort by their index
-        if (aIndex !== -1 && bIndex !== -1) {
-          return aIndex - bIndex
+    // If we have saved board items, try to preserve the order
+    if (boardItems.length > 0) {
+      // Start with saved items that still exist
+      const validItems = boardItems.filter(item => {
+        if (item.type === 'ungrouped-habit') {
+          return uncategorizedCategory?.habits.some(h => h.id === item.id)
+        } else {
+          return groupedCategories.some(cat => cat.id === item.id)
         }
-        // If only a is in the order, it comes first
-        if (aIndex !== -1) return -1
-        // If only b is in the order, it comes first
-        if (bIndex !== -1) return 1
-        // Neither in order, maintain original order
-        return 0
       })
-      setLocalCategories(orderedCategories)
+
+      // Add new ungrouped habits that aren't in the saved order
+      uncategorizedCategory?.habits.forEach(habit => {
+        if (!validItems.some(item => item.type === 'ungrouped-habit' && item.id === habit.id)) {
+          validItems.push({ type: 'ungrouped-habit', id: habit.id })
+        }
+      })
+
+      // Add new categories that aren't in the saved order
+      groupedCategories.forEach(cat => {
+        if (!validItems.some(item => item.type === 'category' && item.id === cat.id)) {
+          validItems.push({ type: 'category', id: cat.id })
+        }
+      })
+
+      setBoardItems(validItems)
     } else {
-      setLocalCategories(categories)
+      // No saved order, build from scratch
+      // Add ungrouped habits first
+      uncategorizedCategory?.habits.forEach(habit => {
+        newBoardItems.push({ type: 'ungrouped-habit', id: habit.id })
+      })
+
+      // Add grouped categories
+      groupedCategories.forEach(cat => {
+        newBoardItems.push({ type: 'category', id: cat.id })
+      })
+
+      setBoardItems(newBoardItems)
     }
-  }, [categories, categoryOrder])
+  }, [categories])
 
   const calendarDates = generateCalendarDates(14)
 
@@ -1057,28 +1088,43 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
     toast({ title: "Habit Reordered", description: "Habit order updated successfully" })
   }
 
-  const handleCategoryDragEnd = (event: DragEndEvent) => {
+  const handleBoardItemDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event
 
     if (!over || active.id === over.id) {
       return
     }
 
-    setLocalCategories((categories) => {
-      const oldIndex = categories.findIndex((cat) => cat.id === active.id)
-      const newIndex = categories.findIndex((cat) => cat.id === over.id)
+    // Check if this is an ungrouped habit being dropped into a category
+    const activeItem = boardItems.find(item => item.id === active.id)
+    const overItem = boardItems.find(item => item.id === over.id)
 
-      const reorderedCategories = arrayMove(categories, oldIndex, newIndex)
+    if (activeItem?.type === 'ungrouped-habit' && overItem?.type === 'category') {
+      // Ungrouped habit dropped onto a category - assign it to that group
+      const category = categories.find(cat => cat.id === overItem.id)
+      const habit = categories.find(cat => cat.id === 'uncategorized')?.habits.find(h => h.id === activeItem.id)
+
+      if (habit && category) {
+        await updateHabit(habit.id, { habitGroup: category.name })
+        toast({ title: "Habit Grouped", description: `"${habit.label}" moved to "${category.name}"` })
+        return
+      }
+    }
+
+    // Otherwise, just reorder board items
+    setBoardItems((items) => {
+      const oldIndex = items.findIndex((item) => item.id === active.id)
+      const newIndex = items.findIndex((item) => item.id === over.id)
+
+      const reorderedItems = arrayMove(items, oldIndex, newIndex)
 
       // Save the new order to localStorage
-      const newOrder = reorderedCategories.map(cat => cat.id)
-      localStorage.setItem('habitsCategoryOrder', JSON.stringify(newOrder))
-      setCategoryOrder(newOrder)
+      localStorage.setItem('habitsBoardItems', JSON.stringify(reorderedItems))
 
-      return reorderedCategories
+      return reorderedItems
     })
 
-    toast({ title: "Categories Reordered", description: "Category order updated successfully" })
+    toast({ title: "Items Reordered", description: "Order updated successfully" })
   }
 
   // Scroll to today on mount
@@ -1351,7 +1397,7 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
           </div>
 
           {/* Habits List */}
-          {filteredCategories.length === 0 ? (
+          {boardItems.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-cream-25/60 text-lg">No habits yet. Create your first habit!</p>
             </div>
@@ -1359,67 +1405,100 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
-              onDragEnd={handleCategoryDragEnd}
+              onDragEnd={handleBoardItemDragEnd}
             >
               <SortableContext
-                items={filteredCategories.map(cat => cat.id)}
+                items={boardItems.map(item => item.id)}
                 strategy={verticalListSortingStrategy}
               >
-                {filteredCategories.map((category) => {
-                  const isExpanded = expandedGroups.has(category.id)
-                  const groupStats = calculateGroupStats(category.habits, calendarDates)
-                  const isUncategorized = category.id === 'uncategorized'
+                {boardItems.map((boardItem) => {
+                  if (boardItem.type === 'ungrouped-habit') {
+                    // Render individual ungrouped habit
+                    const habit = categories.find(cat => cat.id === 'uncategorized')?.habits.find(h => h.id === boardItem.id)
+                    if (!habit) return null
 
-                  return (
-                    <SortableCategory
-                      key={category.id}
-                      category={category}
-                      isExpanded={isExpanded}
-                      isUncategorized={isUncategorized}
-                      groupStats={groupStats}
-                      calendarDates={calendarDates}
-                      showQuickActions={showQuickActions}
-                      toggleGroup={toggleGroup}
-                    >
-                      {/* Habits - always shown for uncategorized, conditionally for grouped */}
-                      {(isUncategorized || isExpanded) && (
-                        <DndContext
-                          sensors={sensors}
-                          collisionDetection={closestCenter}
-                          onDragEnd={(event) => handleDragEnd(event, category.id)}
-                        >
-                          <SortableContext
-                            items={category.habits.map(h => h.id)}
-                            strategy={verticalListSortingStrategy}
+                    return (
+                      <SortableHabitRow
+                        key={habit.id}
+                        habit={habit}
+                        calendarDates={calendarDates}
+                        showQuickActions={showQuickActions}
+                        showColorPicker={showColorPicker}
+                        setShowColorPicker={setShowColorPicker}
+                        showTimePicker={showTimePicker}
+                        setShowTimePicker={setShowTimePicker}
+                        selectedTime={selectedTime}
+                        setSelectedTime={setSelectedTime}
+                        selectedMetric={selectedMetric}
+                        handleHabitClick={handleHabitClick}
+                        handleMarkComplete={handleMarkComplete}
+                        handleUpdateHabit={updateHabit}
+                        calculateCurrentStreak={calculateCurrentStreak}
+                        calculateLongestStreak={calculateLongestStreak}
+                        getColorWithSaturation={getColorWithSaturation}
+                        colorOptions={colorOptions}
+                        toast={toast}
+                      />
+                    )
+                  } else {
+                    // Render grouped category
+                    const category = categories.find(cat => cat.id === boardItem.id)
+                    if (!category) return null
+
+                    const isExpanded = expandedGroups.has(category.id)
+                    const groupStats = calculateGroupStats(category.habits, calendarDates)
+
+                    return (
+                      <SortableCategory
+                        key={category.id}
+                        category={category}
+                        isExpanded={isExpanded}
+                        isUncategorized={false}
+                        groupStats={groupStats}
+                        calendarDates={calendarDates}
+                        showQuickActions={showQuickActions}
+                        toggleGroup={toggleGroup}
+                      >
+                        {/* Habits within category */}
+                        {isExpanded && (
+                          <DndContext
+                            sensors={sensors}
+                            collisionDetection={closestCenter}
+                            onDragEnd={(event) => handleDragEnd(event, category.id)}
                           >
-                            {category.habits.map((habit) => (
-                              <SortableHabitRow
-                                key={habit.id}
-                                habit={habit}
-                                calendarDates={calendarDates}
-                                showQuickActions={showQuickActions}
-                                showColorPicker={showColorPicker}
-                                setShowColorPicker={setShowColorPicker}
-                                showTimePicker={showTimePicker}
-                                setShowTimePicker={setShowTimePicker}
-                                selectedTime={selectedTime}
-                                setSelectedTime={setSelectedTime}
-                                selectedMetric={selectedMetric}
-                                handleHabitClick={handleHabitClick}
-                                handleMarkComplete={handleMarkComplete}
-                                handleUpdateHabit={updateHabit}
-                                calculateCurrentStreak={calculateCurrentStreak}
-                                calculateLongestStreak={calculateLongestStreak}
-                                getColorWithSaturation={getColorWithSaturation}
-                                colorOptions={colorOptions}
-                                toast={toast}
-                              />
-                            ))}
-                          </SortableContext>
-                        </DndContext>
-                      )}
-                    </SortableCategory>
-                  )
+                            <SortableContext
+                              items={category.habits.map(h => h.id)}
+                              strategy={verticalListSortingStrategy}
+                            >
+                              {category.habits.map((habit) => (
+                                <SortableHabitRow
+                                  key={habit.id}
+                                  habit={habit}
+                                  calendarDates={calendarDates}
+                                  showQuickActions={showQuickActions}
+                                  showColorPicker={showColorPicker}
+                                  setShowColorPicker={setShowColorPicker}
+                                  showTimePicker={showTimePicker}
+                                  setShowTimePicker={setShowTimePicker}
+                                  selectedTime={selectedTime}
+                                  setSelectedTime={setSelectedTime}
+                                  selectedMetric={selectedMetric}
+                                  handleHabitClick={handleHabitClick}
+                                  handleMarkComplete={handleMarkComplete}
+                                  handleUpdateHabit={updateHabit}
+                                  calculateCurrentStreak={calculateCurrentStreak}
+                                  calculateLongestStreak={calculateLongestStreak}
+                                  getColorWithSaturation={getColorWithSaturation}
+                                  colorOptions={colorOptions}
+                                  toast={toast}
+                                />
+                              ))}
+                            </SortableContext>
+                          </DndContext>
+                        )}
+                      </SortableCategory>
+                    )
+                  }
                 })}
               </SortableContext>
             </DndContext>

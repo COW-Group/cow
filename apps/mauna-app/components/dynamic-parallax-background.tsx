@@ -49,21 +49,17 @@ export default function DynamicParallaxBackground() {
     const updateBackground = () => {
       console.log("[updateBackground] Running background update logic.")
 
-      // Check if running in browser
-      if (typeof window === 'undefined') {
-        console.log("[updateBackground] Not in browser environment, skipping")
-        return
-      }
-
       // Check if user has manually selected a background
       const userSelectedBackground = localStorage.getItem('userSelectedBackground')
       const userSelectedDate = localStorage.getItem('userSelectedBackgroundDate')
       const currentDateString = new Date().toDateString()
 
+      console.log("[updateBackground] User selection check:", { userSelectedBackground, userSelectedDate, currentDateString })
+
       // If user selected a background today, use it instead of automatic selection
       if (userSelectedBackground && userSelectedDate === currentDateString) {
-        setCurrentBackground(userSelectedBackground)
         console.log("[updateBackground] Using user-selected background:", userSelectedBackground)
+        setCurrentBackground(userSelectedBackground)
         return
       }
 
@@ -77,6 +73,8 @@ export default function DynamicParallaxBackground() {
       const now = new Date()
       const hour = now.getHours()
       const category = getTimeCategory(hour)
+
+      console.log("[updateBackground] Time-based selection:", { hour, category, imagesAvailable: imageCategories[category]?.length })
 
       if (category === "night") {
         const storedNightImage = localStorage.getItem("lastSelectedNightImage")

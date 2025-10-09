@@ -329,22 +329,23 @@ export default function NewJournalEntryPage() {
     <div className="min-h-screen bg-gradient-to-br from-deep-blue to-dark-purple text-cream-25 p-4">
       <div className="h-16 sm:h-20"></div>
       <main className="container mx-auto p-4 sm:p-6 max-w-full flex-1">
-        <h1 className="text-4xl font-bold mb-6 text-center">New Journal Entry</h1>
-        <form onSubmit={handleSubmit} className="space-y-4 max-w-2xl mx-auto">
+        <div className="max-w-2xl mx-auto bg-black/60 backdrop-blur-md rounded-2xl p-6 sm:p-8 border border-white/10">
+          <h1 className="text-4xl font-bold mb-6 text-center text-white">New Journal Entry</h1>
+          <form onSubmit={handleSubmit} className="space-y-4">
           {/* Template Selection Button */}
           <div className="flex items-center justify-between gap-4">
             <Button
               type="button"
               onClick={() => setShowTemplateSelector(true)}
               variant="outline"
-              className="text-cream-25 border-cream-25/50 hover:bg-cream-25/10"
+              className="text-white border-white/50 hover:bg-white/10"
             >
               <BookTemplate className="h-4 w-4 mr-2" />
               {selectedTemplate ? "Change Template" : "Choose Template"}
             </Button>
             {selectedTemplate && (
               <div className="flex items-center gap-2">
-                <span className="text-sm text-cream-25/70">Using:</span>
+                <span className="text-sm text-white/90">Using:</span>
                 <Badge
                   style={{
                     backgroundColor: selectedTemplate.color,
@@ -365,7 +366,7 @@ export default function NewJournalEntryPage() {
                     setMood(null)
                     setType(null)
                   }}
-                  className="h-6 w-6 p-0 text-cream-25/50 hover:text-cream-25"
+                  className="h-6 w-6 p-0 text-white/60 hover:text-white"
                 >
                   <X className="h-4 w-4" />
                 </Button>
@@ -378,14 +379,14 @@ export default function NewJournalEntryPage() {
             <div
               className="p-4 rounded-lg border"
               style={{
-                backgroundColor: `${selectedTemplate.color}20`,
+                backgroundColor: `${selectedTemplate.color}30`,
                 borderColor: selectedTemplate.color,
               }}
             >
-              <h3 className="text-sm font-medium text-cream-25 mb-2">Reflection Prompts:</h3>
+              <h3 className="text-sm font-medium text-white mb-2">Reflection Prompts:</h3>
               <ul className="space-y-1">
                 {selectedTemplate.prompts.map((prompt, index) => (
-                  <li key={index} className="text-sm text-cream-25">
+                  <li key={index} className="text-sm text-white/90">
                     • {prompt}
                   </li>
                 ))}
@@ -394,16 +395,16 @@ export default function NewJournalEntryPage() {
           )}
 
           <div>
-            <label htmlFor="title" className="block text-sm font-medium">Title</label>
+            <label htmlFor="title" className="block text-sm font-medium text-white mb-2">Title</label>
             <Input
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="mt-1 text-cream-25 bg-cream-25/30 border-cream-25/50"
+              className="mt-1 text-white bg-white/10 border-white/30 placeholder:text-white/50"
             />
           </div>
           <div>
-            <label htmlFor="entry" className="block text-sm font-medium mb-2">Entry</label>
+            <label htmlFor="entry" className="block text-sm font-medium text-white mb-2">Entry</label>
             <MarkdownEditor
               value={entry}
               onChange={setEntry}
@@ -414,9 +415,9 @@ export default function NewJournalEntryPage() {
 
           {/* Mood Selector */}
           <div>
-            <label htmlFor="mood" className="block text-sm font-medium mb-2">Mood</label>
+            <label htmlFor="mood" className="block text-sm font-medium text-white mb-2">Mood</label>
             <Select value={mood || ""} onValueChange={(value) => { setMood(value); setType(value); }}>
-              <SelectTrigger className="mt-1 text-cream-25 bg-cream-25/30 border-cream-25/50">
+              <SelectTrigger className="mt-1 text-white bg-white/10 border-white/30">
                 <SelectValue placeholder="How are you feeling?" />
               </SelectTrigger>
               <SelectContent>
@@ -434,7 +435,7 @@ export default function NewJournalEntryPage() {
 
           {/* Tags */}
           <div>
-            <label htmlFor="tags" className="block text-sm font-medium mb-2">Tags</label>
+            <label htmlFor="tags" className="block text-sm font-medium text-white mb-2">Tags</label>
 
             {/* Selected Tags Display */}
             {tags.length > 0 && (
@@ -443,7 +444,7 @@ export default function NewJournalEntryPage() {
                   <Badge
                     key={tag}
                     variant="secondary"
-                    className="bg-cream-25/20 text-cream-25 cursor-pointer hover:bg-cream-25/30"
+                    className="bg-white/20 text-white cursor-pointer hover:bg-white/30"
                     onClick={() => handleRemoveTag(tag)}
                   >
                     {tag}
@@ -455,7 +456,7 @@ export default function NewJournalEntryPage() {
 
             {/* Quick Tags Selector */}
             <div className="mb-3">
-              <h4 className="text-xs font-medium text-cream-25/70 mb-2">Quick Tags</h4>
+              <h4 className="text-xs font-medium text-white/80 mb-2">Quick Tags</h4>
               <QuickTagsSelector selectedTags={tags} onTagToggle={handleTagToggle} />
             </div>
 
@@ -472,13 +473,13 @@ export default function NewJournalEntryPage() {
                   }
                 }}
                 placeholder="Add custom tag..."
-                className="flex-1 text-cream-25 bg-cream-25/30 border-cream-25/50"
+                className="flex-1 text-white bg-white/10 border-white/30 placeholder:text-white/50"
               />
               <Button
                 type="button"
                 onClick={handleAddTag}
                 variant="outline"
-                className="text-cream-25 border-cream-25/50 hover:bg-cream-25/10"
+                className="text-white border-white/50 hover:bg-white/10"
               >
                 Add
               </Button>
@@ -486,20 +487,20 @@ export default function NewJournalEntryPage() {
 
             {/* Full Tag Categories - Collapsible */}
             <details className="group">
-              <summary className="cursor-pointer text-xs text-cream-25/70 hover:text-cream-25 mb-2 list-none flex items-center gap-2">
+              <summary className="cursor-pointer text-xs text-white/80 hover:text-white mb-2 list-none flex items-center gap-2">
                 <span className="group-open:rotate-90 transition-transform">▶</span>
                 Browse all tag categories
               </summary>
-              <div className="mt-3 p-4 rounded-lg bg-cream-25/15 border border-cream-25/20 max-h-[400px] overflow-y-auto">
+              <div className="mt-3 p-4 rounded-lg bg-white/5 border border-white/20 max-h-[400px] overflow-y-auto">
                 <TagCategoriesSelector selectedTags={tags} onTagToggle={handleTagToggle} />
               </div>
             </details>
           </div>
 
           <div>
-            <label htmlFor="category" className="block text-sm font-medium">Category</label>
+            <label htmlFor="category" className="block text-sm font-medium text-white mb-2">Category</label>
             <Select value={category} onValueChange={setCategory}>
-              <SelectTrigger className="mt-1 text-cream-25 bg-cream-25/30 border-cream-25/50">
+              <SelectTrigger className="mt-1 text-white bg-white/10 border-white/30">
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
@@ -510,7 +511,7 @@ export default function NewJournalEntryPage() {
             </Select>
           </div>
           <div>
-            <label htmlFor="visionBoardLevel" className="block text-sm font-medium">Vision Board Level</label>
+            <label htmlFor="visionBoardLevel" className="block text-sm font-medium text-white mb-2">Vision Board Level</label>
             <Select
               value={visionBoardLevel || ""}
               onValueChange={(value) => {
@@ -519,7 +520,7 @@ export default function NewJournalEntryPage() {
                 setVisionBoardItemTitle(null)
               }}
             >
-              <SelectTrigger className="mt-1 text-cream-25 bg-cream-25/30 border-cream-25/50">
+              <SelectTrigger className="mt-1 text-white bg-white/10 border-white/30">
                 <SelectValue placeholder="Select vision board level" />
               </SelectTrigger>
               <SelectContent>
@@ -533,7 +534,7 @@ export default function NewJournalEntryPage() {
           </div>
           {visionBoardLevel && (
             <div>
-              <label htmlFor="visionBoardItem" className="block text-sm font-medium">Vision Board Item</label>
+              <label htmlFor="visionBoardItem" className="block text-sm font-medium text-white mb-2">Vision Board Item</label>
               <Select
                 value={visionBoardItemId || ""}
                 onValueChange={(value) => {
@@ -560,7 +561,7 @@ export default function NewJournalEntryPage() {
                   setVisionBoardItemTitle(selectedItem?.name || null)
                 }}
               >
-                <SelectTrigger className="mt-1 text-cream-25 bg-cream-25/30 border-cream-25/50">
+                <SelectTrigger className="mt-1 text-white bg-white/10 border-white/30">
                   <SelectValue placeholder="Select vision board item" />
                 </SelectTrigger>
                 <SelectContent>
@@ -595,11 +596,12 @@ export default function NewJournalEntryPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="text-cream-25 border-cream-25/50 hover:bg-cream-25/10"
+            className="w-full bg-white/20 text-white border-white/40 hover:bg-white/30 disabled:opacity-50"
           >
             {loading ? <Loader2Icon className="h-5 w-5 animate-spin" /> : "Create Entry"}
           </Button>
         </form>
+        </div>
       </main>
 
       {/* Template Selector Modal */}

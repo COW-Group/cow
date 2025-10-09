@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useAuth } from "@/hooks/use-auth"
 import { AuthService } from "@/lib/auth-service"
 import { databaseService } from "@/lib/database-service"
@@ -12,11 +12,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { JournalTemplatesSelector, type JournalTemplate } from "@/components/journal-templates"
+import { JournalTemplatesSelector, type JournalTemplate, JOURNAL_TEMPLATES } from "@/components/journal-templates"
 import { Badge } from "@/components/ui/badge"
 
 export default function NewJournalEntryPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const { user: currentUser, loading: authLoading } = useAuth(AuthService)
   const [title, setTitle] = useState("")
   const [entry, setEntry] = useState("")
@@ -98,14 +99,178 @@ export default function NewJournalEntryPage() {
     setTags(tags.filter(tag => tag !== tagToRemove))
   }, [tags])
 
+  const loadHabitsProgress = useCallback(async () => {
+    if (!currentUser?.id) return
+
+    try {
+      const today = new Date()
+      const dateStr = today.toISOString().split("T")[0]
+      const formattedDate = today.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      })
+
+      // Fetch all habits
+      const { data: habitsData } = await databaseService.supabase
+        .from("steps")
+        .select("id, label, color, history, habit_notes, habit_units")
+        .eq("user_id", currentUser.id)
+        .eq("tag", "habit")
+
+      if (!habitsData) return
+
+      // Filter habits completed today
+      const completedToday = habitsData.filter((habit: any) =>
+        habit.history?.includes(dateStr)
+      )
+
+      // Build habit progress content
+      let habitContent = `# Habit Progress - ${formattedDate}\n\n`
+
+      if (completedToday.length > 0) {
+        habitContent += `## Habits Completed Today\n`
+        completedToday.forEach((habit: any) => {
+          habitContent += `- [x] ${habit.label}`
+
+          // Add units if available
+          const units = habit.habit_units?.[dateStr]
+          if (units) {
+            habitContent += ` (${units} units)`
+          }
+
+          // Add notes if available
+          const notes = habit.habit_notes?.[dateStr]
+          if (notes && notes !== habit.habit_notes?._scheduled_time) {
+            habitContent += `\n  Note: ${notes}`
+          }
+
+          habitContent += `\n`
+        })
+        habitContent += `\n`
+      } else {
+        habitContent += `## Habits Completed Today\n- No habits completed yet today\n\n`
+      }
+
+      habitContent += `## What Helped Me Succeed\n-\n\n`
+      habitContent += `## Obstacles Overcome\n-\n\n`
+      habitContent += `## Tomorrow's Habit Strategy\n`
+
+      // Find and apply habit progress template
+      const habitTemplate = JOURNAL_TEMPLATES.find(t => t.id === "habit-progress")
+      if (habitTemplate) {
+        setSelectedTemplate(habitTemplate)
+        setTags(habitTemplate.tags || ["habits", "progress"])
+        setMood(habitTemplate.mood || "content")
+        setType(habitTemplate.mood || "content")
+      }
+
+      setTitle(`Habit Progress - ${formattedDate}`)
+      setEntry(habitContent)
+      toast.success(`Loaded progress for ${completedToday.length} habits completed today!`)
+    } catch (error) {
+      console.error("Error loading habits progress:", error)
+      toast.error("Failed to load habits progress")
+    }
+  }, [currentUser?.id])
+
+  const loadEmotionalProcessing = useCallback(async (emotionId: string) => {
+    if (!currentUser?.id) return
+
+    try {
+      const { data: emotionData } = await databaseService.supabase
+        .from("emotion_entries")
+        .select("*")
+        .eq("id", emotionId)
+        .eq("user_id", currentUser.id)
+        .single()
+
+      if (!emotionData) {
+        toast.error("Emotion not found")
+        return
+      }
+
+      const today = new Date()
+      const formattedDate = today.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+      })
+
+      // Build emotional processing content
+      let emotionContent = `# Emotional Processing - ${formattedDate}\n\n`
+
+      emotionContent += `## What I'm Feeling\n`
+      emotionContent += `Primary emotion: ${emotionData.emotion_name || "Not specified"}\n`
+      emotionContent += `Intensity (1-10): ${emotionData.intensity || "Not specified"}\n\n`
+
+      emotionContent += `## The Situation\n`
+      emotionContent += `What happened: ${emotionData.trigger_event || ""}\n\n`
+
+      if (emotionData.trigger_context) {
+        emotionContent += `Context: ${emotionData.trigger_context}\n\n`
+      }
+
+      emotionContent += `## My Thoughts\n`
+      if (emotionData.trigger_worldview) {
+        emotionContent += `Automatic thoughts: ${emotionData.trigger_worldview}\n\n`
+      } else {
+        emotionContent += `Automatic thoughts:\n\n`
+      }
+
+      emotionContent += `## Physical Experience\n`
+      emotionContent += `${emotionData.physical_sensations || ""}\n\n`
+
+      if (emotionData.notes) {
+        emotionContent += `## Reflection\n`
+        emotionContent += `${emotionData.notes}\n\n`
+      }
+
+      if (emotionData.response) {
+        emotionContent += `## My Response\n`
+        emotionContent += `${emotionData.response}\n\n`
+      }
+
+      emotionContent += `## Self-Compassion\n`
+
+      // Find and apply emotional processing template
+      const emotionTemplate = JOURNAL_TEMPLATES.find(t => t.id === "emotional-processing")
+      if (emotionTemplate) {
+        setSelectedTemplate(emotionTemplate)
+        setTags(emotionTemplate.tags || ["emotions", "cbt", "mental-health"])
+        setMood(emotionTemplate.mood || "neutral")
+        setType(emotionTemplate.mood || "neutral")
+      }
+
+      setTitle(`Emotional Processing - ${emotionData.emotion_name || "Reflection"}`)
+      setEntry(emotionContent)
+      toast.success("Loaded emotional processing data!")
+    } catch (error) {
+      console.error("Error loading emotional processing:", error)
+      toast.error("Failed to load emotional processing")
+    }
+  }, [currentUser?.id])
+
   useEffect(() => {
     if (!authLoading && currentUser?.id) {
       loadVisionBoardSections()
+
+      // Check if coming from habits or emotional page
+      const source = searchParams.get("source")
+      const emotionId = searchParams.get("emotionId")
+
+      if (source === "habits") {
+        loadHabitsProgress()
+      } else if (source === "emotional" && emotionId) {
+        loadEmotionalProcessing(emotionId)
+      }
     } else if (!authLoading && !currentUser?.id) {
       setError("Please sign in to create a journal entry.")
       router.push("/auth/signin")
     }
-  }, [authLoading, currentUser?.id, loadVisionBoardSections, router])
+  }, [authLoading, currentUser?.id, loadVisionBoardSections, searchParams, loadHabitsProgress, loadEmotionalProcessing, router])
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {

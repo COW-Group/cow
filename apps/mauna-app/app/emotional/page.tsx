@@ -423,16 +423,29 @@ export default function EmotionalPage() {
                 messengers with wisdom to share.
               </p>
             </div>
-            {/* Repositioned Log button with glassmorphic background */}
-            <Button
-              onClick={() => setIsLogSheetOpen(true)}
-              className="flex items-center gap-2 mt-4 mx-auto text-cream-25
-                         bg-white/10 dark:bg-black/10 backdrop-blur-md rounded-lg border border-white/20 dark:border-black/20
-                         px-4 py-2 hover:bg-white/20 dark:hover:bg-black/20"
-            >
-              <BookOpen className="w-4 h-4" />
-              Log
-            </Button>
+            {/* Action buttons with glassmorphic background */}
+            <div className="flex items-center justify-center gap-3 mt-4">
+              {currentEmotion && (
+                <Button
+                  onClick={() => router.push(`/journal/new?source=emotional&emotionId=${currentEmotion.id}`)}
+                  className="flex items-center gap-2 text-cream-25
+                             bg-white/10 dark:bg-black/10 backdrop-blur-md rounded-lg border border-white/20 dark:border-black/20
+                             px-4 py-2 hover:bg-white/20 dark:hover:bg-black/20"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  Journal Reflection
+                </Button>
+              )}
+              <Button
+                onClick={() => setIsLogSheetOpen(true)}
+                className="flex items-center gap-2 text-cream-25
+                           bg-white/10 dark:bg-black/10 backdrop-blur-md rounded-lg border border-white/20 dark:border-black/20
+                           px-4 py-2 hover:bg-white/20 dark:hover:bg-black/20"
+              >
+                <BookOpen className="w-4 h-4" />
+                Log
+              </Button>
+            </div>
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">

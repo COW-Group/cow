@@ -7,7 +7,7 @@ import { AuthService } from "@/lib/auth-service"
 import { HabitsBoardWrapper } from "@/components/HabitsBoardWrapper"
 import { FloatingNav } from "@/components/floating-nav"
 import { Button } from "@/components/ui/button"
-import { Loader2Icon, Calendar } from "lucide-react"
+import { Loader2Icon, Calendar, BookOpen } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import type { AppSettings } from "@/lib/types"
 
@@ -123,21 +123,37 @@ export default function HabitsPage() {
                 Habits
               </h1>
 
-              {/* Toggle Button */}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setShowHabitsBoard(!showHabitsBoard)}
-                className="h-10 w-10 rounded-xl text-cream-25 hover:bg-white/20 transition-all duration-300"
-                style={{
-                  background: showHabitsBoard ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.08)',
-                  backdropFilter: 'blur(40px) saturate(200%)',
-                  border: '1px solid rgba(255, 255, 255, 0.12)',
-                }}
-                title="Toggle Habits Board"
-              >
-                <Calendar className="h-5 w-5" />
-              </Button>
+              {/* Action Buttons */}
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  onClick={() => router.push('/journal/new?source=habits')}
+                  className="h-10 px-4 rounded-xl text-cream-25 hover:bg-white/20 transition-all duration-300"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    backdropFilter: 'blur(40px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                  }}
+                  title="Create Journal Reflection"
+                >
+                  <BookOpen className="h-5 w-5 mr-2" />
+                  <span className="hidden sm:inline">Journal Reflection</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowHabitsBoard(!showHabitsBoard)}
+                  className="h-10 w-10 rounded-xl text-cream-25 hover:bg-white/20 transition-all duration-300"
+                  style={{
+                    background: showHabitsBoard ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.08)',
+                    backdropFilter: 'blur(40px) saturate(200%)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                  }}
+                  title="Toggle Habits Board"
+                >
+                  <Calendar className="h-5 w-5" />
+                </Button>
+              </div>
             </div>
           </div>
 

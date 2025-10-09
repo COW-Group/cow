@@ -6,12 +6,12 @@
 @layer base {
   html {
     height: 100%;
-    background: #000; /* Black background to prevent blue areas */
+    background: transparent; /* Transparent to show parallax background */
   }
 
   body {
     min-height: 100%;
-    background: #000; /* Black background to match notch area */
+    background: transparent; /* Transparent to show parallax background */
     color: hsl(var(--foreground));
     overflow-y: auto; /* Allow vertical scrolling */
     overflow-x: hidden; /* Prevent horizontal scrolling */

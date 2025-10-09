@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { JournalTemplatesSelector, type JournalTemplate, JOURNAL_TEMPLATES } from "@/components/journal-templates"
 import { Badge } from "@/components/ui/badge"
 import { TagCategoriesSelector, QuickTagsSelector } from "@/components/tag-categories"
+import { MarkdownEditor } from "@/components/markdown-editor"
 
 export default function NewJournalEntryPage() {
   const router = useRouter()
@@ -403,13 +404,12 @@ export default function NewJournalEntryPage() {
             />
           </div>
           <div>
-            <label htmlFor="entry" className="block text-sm font-medium">Entry</label>
-            <Textarea
-              id="entry"
+            <label htmlFor="entry" className="block text-sm font-medium mb-2">Entry</label>
+            <MarkdownEditor
               value={entry}
-              onChange={(e) => setEntry(e.target.value)}
-              className="mt-1 text-cream-25 bg-cream-25/10 border-cream-25/50 min-h-[300px]"
-              rows={12}
+              onChange={setEntry}
+              placeholder="Start writing your journal entry... Use markdown for formatting!"
+              minRows={12}
             />
           </div>
 

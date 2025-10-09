@@ -1,0 +1,178 @@
+# Phase 3 - Future Journal Features
+## Mauna App Enhancement Ideas
+
+Last Updated: 2025-10-09
+
+---
+
+## 2. Journal Analytics Dashboard (app/journal/analytics/page.tsx)
+Priority: HIGH
+Complexity: Medium-High
+
+Features:
+- Mood trends over time (line/bar chart visualization)
+- Most-used tags word cloud
+- Writing frequency heatmap (calendar view like GitHub contributions)
+- Entry length trends (average words per day/week)
+- Habit correlation analysis (which habits correlate with positive moods)
+- Vision board progress tracking via journal mentions
+- Weekly/monthly summary statistics
+
+Tech Requirements:
+- Chart library (recharts or chart.js)
+- Data aggregation queries
+- Date range calculations
+- Statistical analysis functions
+
+Estimated Time: 3-4 days
+
+---
+
+## 3. Enhanced Entry Detail with Sidebar (app/journal/[id]/page.tsx)
+Priority: MEDIUM
+Complexity: Low
+
+Features:
+- Complete linked items sidebar integration (component already exists)
+- Add "Similar Entries" section based on tags/mood similarity
+- Add quick navigation arrows between entries (prev/next by date)
+- Add "View related entries" links
+- Timeline view of entry's linked items
+
+Tech Requirements:
+- Fix previous JSX syntax issue
+- Similarity algorithm for tag matching
+- Navigation state management
+
+Estimated Time: 1 day
+
+---
+
+## 4. Export & Backup (components/journal-export.tsx)
+Priority: MEDIUM
+Complexity: Medium
+
+Features:
+- Export single entry to PDF
+- Export date range to PDF
+- Export to Markdown format (.md files)
+- Backup all entries to JSON
+- Print-friendly layouts
+- Include images/attachments in exports
+- Email export functionality
+
+Tech Requirements:
+- PDF generation library (jsPDF, react-pdf, or html2pdf)
+- File download handling
+- Markdown formatting utilities
+- Print CSS media queries
+
+Estimated Time: 2-3 days
+
+---
+
+## 5. Journal Streaks & Gamification (components/journal-streaks.tsx)
+Priority: LOW-MEDIUM
+Complexity: Low-Medium
+
+Features:
+- Track daily journaling streaks
+- Current streak display on dashboard
+- Longest streak record
+- Milestone celebrations (7, 30, 100, 365 days)
+- Writing goals (words per day/week targets)
+- Achievement badges system
+- Progress notifications
+- Monthly challenges
+
+Tech Requirements:
+- Streak calculation algorithm
+- Local storage for temporary data
+- Animation library for celebrations
+- Badge icon set
+
+Estimated Time: 2 days
+
+---
+
+## Optional Advanced Features
+
+### A. Voice-to-Text Journaling
+Priority: LOW
+Complexity: HIGH
+- Mobile-friendly voice recording
+- Speech-to-text API integration (Web Speech API or cloud service)
+- Real-time transcription
+- Edit/correct transcribed text
+- Multi-language support
+
+### B. Image Attachments
+Priority: MEDIUM
+Complexity: MEDIUM
+- Upload images to entries
+- Image storage (Supabase Storage)
+- Image gallery view
+- Thumbnail generation
+- Image captions/descriptions
+
+### C. Daily Journal Prompts & Reminders
+Priority: MEDIUM
+Complexity: LOW-MEDIUM
+- Rotating daily prompts based on template types
+- Customizable reminder times
+- Push notifications (if PWA)
+- Email reminders
+- Smart prompts based on user patterns
+
+### D. Privacy Levels per Entry
+Priority: LOW
+Complexity: LOW
+- Public/Private/Locked entry statuses
+- Password-protected sensitive entries
+- Hide from search/analytics options
+- Archive vs Delete distinction
+
+### E. AI Sentiment Analysis
+Priority: LOW
+Complexity: HIGH
+- Sentiment detection (positive/negative/neutral)
+- Emotion classification
+- Topic extraction
+- Writing style insights
+- Requires: OpenAI API or local sentiment model
+
+### F. Collaboration Features
+Priority: LOW
+Complexity: HIGH
+- Shared journals (therapist, partner, coach)
+- Comments on entries
+- Real-time collaboration
+- Permission management
+
+---
+
+## Implementation Priority Order
+1. ✅ Advanced Search & Filtering - IMPLEMENTED
+2. ✅ Rich Text with Markdown - IMPLEMENTED
+3. Enhanced Entry Detail with Sidebar - Quick win
+4. Journal Analytics Dashboard - High value
+5. Export & Backup - User data safety
+6. Streaks & Gamification - User engagement
+7. Optional features as needed
+
+---
+
+## Technical Debt to Address
+- Journal detail page JSX syntax issue (from Phase 2)
+- Optimize large journal entry lists (virtualization)
+- Add loading skeletons for better UX
+- Implement proper error boundaries
+- Add offline support (PWA features)
+
+---
+
+## Notes
+- All features should maintain the zen/minimalist aesthetic
+- Performance is critical for search with large datasets
+- Mobile responsiveness must be maintained
+- Accessibility (a11y) standards should be followed

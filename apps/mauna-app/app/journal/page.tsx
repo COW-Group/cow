@@ -34,6 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { JournalFilters as JournalFiltersComponent, type JournalFilters } from "@/components/journal-filters"
 
 // Mood configurations with colors
 const MOODS = {
@@ -61,9 +62,15 @@ export default function JournalPage() {
   const [viewMode, setViewMode] = useState<"calendar" | "timeline">("timeline")
 
   // Filter & search state
-  const [searchQuery, setSearchQuery] = useState("")
-  const [selectedMoodFilter, setSelectedMoodFilter] = useState<string>("all")
-  const [selectedTagFilter, setSelectedTagFilter] = useState<string>("all")
+  const [filters, setFilters] = useState<JournalFilters>({
+    searchText: "",
+    moods: [],
+    tags: [],
+    dateFrom: undefined,
+    dateTo: undefined,
+    category: "all",
+    templateType: "all"
+  })
 
   // App settings for FloatingNav
   const [appSettings, setAppSettings] = useState<AppSettings>({
@@ -202,21 +209,36 @@ export default function JournalPage() {
   const filteredEntries = useMemo(() => {
     return journalEntries.filter(entry => {
       // Search filter
-      const matchesSearch = searchQuery === "" ||
-        (entry.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-         entry.entry?.toLowerCase().includes(searchQuery.toLowerCase()))
+      const matchesSearch = filters.searchText === "" ||
+        (entry.title?.toLowerCase().includes(filters.searchText.toLowerCase()) ||
+         entry.entry?.toLowerCase().includes(filters.searchText.toLowerCase()))
 
-      // Mood filter
+      // Mood filter (multiple moods)
       const entryMood = getEntryMood(entry)
-      const matchesMood = selectedMoodFilter === "all" || entryMood === selectedMoodFilter
+      const matchesMood = filters.moods.length === 0 ||
+        (entryMood && filters.moods.includes(entryMood))
 
-      // Tag filter
-      const matchesTag = selectedTagFilter === "all" ||
-        entry.tags?.includes(selectedTagFilter)
+      // Tag filter (multiple tags)
+      const matchesTag = filters.tags.length === 0 ||
+        filters.tags.some(tag => entry.tags?.includes(tag))
 
-      return matchesSearch && matchesMood && matchesTag
+      // Date range filter
+      const entryDate = new Date(entry.created_at)
+      const matchesDateFrom = !filters.dateFrom || entryDate >= filters.dateFrom
+      const matchesDateTo = !filters.dateTo || entryDate <= filters.dateTo
+
+      // Category filter (if entry has category field in future)
+      const matchesCategory = filters.category === "all"
+      // For now, all entries are considered "all" category
+
+      // Template type filter (if entry has templateType field)
+      const matchesTemplateType = filters.templateType === "all" ||
+        entry.templateType === filters.templateType
+
+      return matchesSearch && matchesMood && matchesTag &&
+             matchesDateFrom && matchesDateTo && matchesCategory && matchesTemplateType
     })
-  }, [journalEntries, searchQuery, selectedMoodFilter, selectedTagFilter])
+  }, [journalEntries, filters])
 
   // Group entries by date for calendar view
   const entriesByDate = useMemo(() => {
@@ -325,13 +347,17 @@ export default function JournalPage() {
     )
   }
 
+  const hasActiveFilters = filters.searchText || filters.moods.length > 0 ||
+    filters.tags.length > 0 || filters.dateFrom || filters.dateTo ||
+    filters.category !== "all" || filters.templateType !== "all"
+
   const TimelineView = () => (
     <div className="space-y-4">
       {filteredEntries.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-cream-25/70 text-lg">No journal entries found.</p>
           <p className="text-cream-25/50 text-sm mt-2">
-            {searchQuery || selectedMoodFilter !== "all" || selectedTagFilter !== "all"
+            {hasActiveFilters
               ? "Try adjusting your filters."
               : "Create your first entry to get started!"}
           </p>
@@ -353,7 +379,7 @@ export default function JournalPage() {
           <div className="text-center py-12">
             <p className="text-cream-25/70 text-lg">No journal entries found.</p>
             <p className="text-cream-25/50 text-sm mt-2">
-              {searchQuery || selectedMoodFilter !== "all" || selectedTagFilter !== "all"
+              {hasActiveFilters
                 ? "Try adjusting your filters."
                 : "Create your first entry to get started!"}
             </p>
@@ -443,55 +469,12 @@ export default function JournalPage() {
               </div>
             </div>
 
-            {/* Search and Filters */}
-            <div className="flex flex-col sm:flex-row gap-3">
-              {/* Search */}
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-cream-25/50" />
-                <Input
-                  type="text"
-                  placeholder="Search entries..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 h-11 rounded-xl bg-white/10 border-white/20 text-cream-25 placeholder:text-cream-25/50"
-                />
-              </div>
-
-              {/* Mood Filter */}
-              <Select value={selectedMoodFilter} onValueChange={setSelectedMoodFilter}>
-                <SelectTrigger className="w-full sm:w-[180px] h-11 rounded-xl bg-white/10 border-white/20 text-cream-25">
-                  <Smile className="w-4 h-4 mr-2" />
-                  <SelectValue placeholder="Filter by mood" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All moods</SelectItem>
-                  {Object.entries(MOODS).map(([key, { label, icon: Icon, color }]) => (
-                    <SelectItem key={key} value={key}>
-                      <div className="flex items-center gap-2">
-                        <Icon className="w-4 h-4" style={{ color }} />
-                        {label}
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              {/* Tag Filter */}
-              {allTags.length > 0 && (
-                <Select value={selectedTagFilter} onValueChange={setSelectedTagFilter}>
-                  <SelectTrigger className="w-full sm:w-[180px] h-11 rounded-xl bg-white/10 border-white/20 text-cream-25">
-                    <Filter className="w-4 h-4 mr-2" />
-                    <SelectValue placeholder="Filter by tag" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All tags</SelectItem>
-                    {allTags.map(tag => (
-                      <SelectItem key={tag} value={tag}>{tag}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            </div>
+            {/* Advanced Search and Filters */}
+            <JournalFiltersComponent
+              filters={filters}
+              onChange={setFilters}
+              availableTags={allTags}
+            />
           </div>
 
           {/* Journal Content */}

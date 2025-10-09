@@ -41,7 +41,10 @@ const getTimeCategory = (hour: number): TimeCategory => {
 }
 
 export default function DynamicParallaxBackground() {
-  const [currentBackground, setCurrentBackground] = useState<string | null>(null)
+  // Set a default background immediately to avoid black screen
+  const [currentBackground, setCurrentBackground] = useState<string | null>(
+    "/images/nature-backdrops/sunset/bruno-aguirre-CLmYbo-btDs-unsplash.jpg"
+  )
 
   useEffect(() => {
     console.log("[useEffect] DynamicParallaxBackground component mounted or updated.")

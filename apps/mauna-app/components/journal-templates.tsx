@@ -353,9 +353,10 @@ export function JournalTemplatesSelector({ onSelect, onClose }: JournalTemplates
                       key={template.id}
                       className="cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-xl border-0"
                       style={{
-                        background: template.bgColor,
+                        background: `linear-gradient(135deg, ${template.color}25, ${template.color}10)`,
                         backdropFilter: 'blur(40px) saturate(200%)',
-                        border: `1px solid ${template.color}33`,
+                        border: `1px solid ${template.color}80`,
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
                       }}
                       onClick={() => onSelect(template)}
                     >
@@ -363,13 +364,13 @@ export function JournalTemplatesSelector({ onSelect, onClose }: JournalTemplates
                         <div className="flex items-start gap-3 mb-2">
                           <div
                             className="p-2 rounded-lg"
-                            style={{ backgroundColor: `${template.color}33` }}
+                            style={{ backgroundColor: `${template.color}50` }}
                           >
-                            <Icon className="w-5 h-5" style={{ color: template.color }} />
+                            <Icon className="w-5 h-5" style={{ color: '#ffffff' }} />
                           </div>
                           <div className="flex-1">
-                            <h4 className="text-cream-25 font-medium mb-1">{template.name}</h4>
-                            <p className="text-cream-25/60 text-sm">{template.description}</p>
+                            <h4 className="text-white font-medium mb-1">{template.name}</h4>
+                            <p className="text-white/80 text-sm">{template.description}</p>
                           </div>
                         </div>
                         {template.tags && template.tags.length > 0 && (
@@ -377,7 +378,7 @@ export function JournalTemplatesSelector({ onSelect, onClose }: JournalTemplates
                             {template.tags.slice(0, 3).map(tag => (
                               <span
                                 key={tag}
-                                className="px-2 py-0.5 text-xs rounded-full bg-white/10 text-cream-25/70"
+                                className="px-2 py-0.5 text-xs rounded-full bg-white/20 text-white/90"
                               >
                                 {tag}
                               </span>

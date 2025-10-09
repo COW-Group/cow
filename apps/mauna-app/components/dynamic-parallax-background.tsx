@@ -49,6 +49,12 @@ export default function DynamicParallaxBackground() {
     const updateBackground = () => {
       console.log("[updateBackground] Running background update logic.")
 
+      // Check if running in browser
+      if (typeof window === 'undefined') {
+        console.log("[updateBackground] Not in browser environment, skipping")
+        return
+      }
+
       // Check if user has manually selected a background
       const userSelectedBackground = localStorage.getItem('userSelectedBackground')
       const userSelectedDate = localStorage.getItem('userSelectedBackgroundDate')

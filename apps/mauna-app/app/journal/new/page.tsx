@@ -347,11 +347,10 @@ export default function NewJournalEntryPage() {
                 <span className="text-sm text-cream-25/70">Using:</span>
                 <Badge
                   style={{
-                    backgroundColor: selectedTemplate.bgColor,
+                    backgroundColor: selectedTemplate.color,
                     borderColor: selectedTemplate.color,
-                    color: selectedTemplate.color,
                   }}
-                  className="border"
+                  className="border text-white"
                 >
                   {selectedTemplate.name}
                 </Badge>
@@ -379,14 +378,14 @@ export default function NewJournalEntryPage() {
             <div
               className="p-4 rounded-lg border"
               style={{
-                backgroundColor: selectedTemplate.bgColor,
-                borderColor: `${selectedTemplate.color}33`,
+                backgroundColor: `${selectedTemplate.color}20`,
+                borderColor: selectedTemplate.color,
               }}
             >
               <h3 className="text-sm font-medium text-cream-25 mb-2">Reflection Prompts:</h3>
               <ul className="space-y-1">
                 {selectedTemplate.prompts.map((prompt, index) => (
-                  <li key={index} className="text-sm text-cream-25/70">
+                  <li key={index} className="text-sm text-cream-25">
                     • {prompt}
                   </li>
                 ))}

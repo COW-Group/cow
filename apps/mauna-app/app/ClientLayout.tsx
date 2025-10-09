@@ -102,8 +102,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <DynamicParallaxBackground />
         <div
           className={cn(
-            "flex min-h-screen flex-col bg-transparent font-sans antialiased",
-            isMobile ? "overflow-y-auto" : "overflow-hidden",
+            "flex min-h-screen flex-col bg-transparent font-sans antialiased overflow-y-auto",
           )}
         >
           {!isDashboardPage && !isFocusPage && !isHabitsPage && (

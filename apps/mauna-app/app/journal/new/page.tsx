@@ -328,7 +328,7 @@ export default function NewJournalEntryPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-deep-blue to-dark-purple text-cream-25 p-4">
       <div className="h-16 sm:h-20"></div>
-      <main className="container mx-auto p-4 sm:p-6 max-w-full flex-1 overflow-hidden">
+      <main className="container mx-auto p-4 sm:p-6 max-w-full flex-1">
         <h1 className="text-4xl font-bold mb-6 text-center">New Journal Entry</h1>
         <form onSubmit={handleSubmit} className="space-y-4 max-w-2xl mx-auto">
           {/* Template Selection Button */}

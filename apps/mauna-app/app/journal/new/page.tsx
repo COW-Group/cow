@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { JournalTemplatesSelector, type JournalTemplate, JOURNAL_TEMPLATES } from "@/components/journal-templates"
 import { Badge } from "@/components/ui/badge"
+import { TagCategoriesSelector, QuickTagsSelector } from "@/components/tag-categories"
 
 export default function NewJournalEntryPage() {
   const router = useRouter()
@@ -97,6 +98,14 @@ export default function NewJournalEntryPage() {
 
   const handleRemoveTag = useCallback((tagToRemove: string) => {
     setTags(tags.filter(tag => tag !== tagToRemove))
+  }, [tags])
+
+  const handleTagToggle = useCallback((tag: string) => {
+    if (tags.includes(tag)) {
+      setTags(tags.filter(t => t !== tag))
+    } else {
+      setTags([...tags, tag])
+    }
   }, [tags])
 
   const loadHabitsProgress = useCallback(async () => {
@@ -427,31 +436,10 @@ export default function NewJournalEntryPage() {
           {/* Tags */}
           <div>
             <label htmlFor="tags" className="block text-sm font-medium mb-2">Tags</label>
-            <div className="flex gap-2 mb-2">
-              <Input
-                id="tags"
-                value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault()
-                    handleAddTag()
-                  }
-                }}
-                placeholder="Add a tag..."
-                className="flex-1 text-cream-25 bg-cream-25/10 border-cream-25/50"
-              />
-              <Button
-                type="button"
-                onClick={handleAddTag}
-                variant="outline"
-                className="text-cream-25 border-cream-25/50 hover:bg-cream-25/10"
-              >
-                Add
-              </Button>
-            </div>
+
+            {/* Selected Tags Display */}
             {tags.length > 0 && (
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2 mb-3">
                 {tags.map((tag) => (
                   <Badge
                     key={tag}
@@ -465,6 +453,48 @@ export default function NewJournalEntryPage() {
                 ))}
               </div>
             )}
+
+            {/* Quick Tags Selector */}
+            <div className="mb-3">
+              <h4 className="text-xs font-medium text-cream-25/70 mb-2">Quick Tags</h4>
+              <QuickTagsSelector selectedTags={tags} onTagToggle={handleTagToggle} />
+            </div>
+
+            {/* Custom Tag Input */}
+            <div className="flex gap-2 mb-3">
+              <Input
+                id="tags"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault()
+                    handleAddTag()
+                  }
+                }}
+                placeholder="Add custom tag..."
+                className="flex-1 text-cream-25 bg-cream-25/10 border-cream-25/50"
+              />
+              <Button
+                type="button"
+                onClick={handleAddTag}
+                variant="outline"
+                className="text-cream-25 border-cream-25/50 hover:bg-cream-25/10"
+              >
+                Add
+              </Button>
+            </div>
+
+            {/* Full Tag Categories - Collapsible */}
+            <details className="group">
+              <summary className="cursor-pointer text-xs text-cream-25/70 hover:text-cream-25 mb-2 list-none flex items-center gap-2">
+                <span className="group-open:rotate-90 transition-transform">▶</span>
+                Browse all tag categories
+              </summary>
+              <div className="mt-3 p-4 rounded-lg bg-cream-25/5 border border-cream-25/10 max-h-[400px] overflow-y-auto">
+                <TagCategoriesSelector selectedTags={tags} onTagToggle={handleTagToggle} />
+              </div>
+            </details>
           </div>
 
           <div>

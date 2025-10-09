@@ -104,7 +104,7 @@ export function MarkdownEditor({
     <div className={`space-y-2 ${className}`}>
       <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as "write" | "preview")}>
         <div className="flex items-center justify-between mb-2">
-          <TabsList className="bg-cream-25/10">
+          <TabsList className="bg-cream-25/20">
             <TabsTrigger value="write" className="gap-2">
               <Edit className="h-4 w-4" />
               Write
@@ -118,7 +118,7 @@ export function MarkdownEditor({
 
         <TabsContent value="write" className="mt-0 space-y-2">
           {/* Toolbar */}
-          <div className="flex flex-wrap gap-1 p-2 rounded-lg bg-cream-25/5 border border-cream-25/10">
+          <div className="flex flex-wrap gap-1 p-2 rounded-lg bg-cream-25/15 border border-cream-25/20">
             {toolbarButtons.map((button, index) => {
               const Icon = button.icon
               return (
@@ -144,7 +144,7 @@ export function MarkdownEditor({
             onChange={(e) => onChange(e.target.value)}
             placeholder={placeholder}
             minRows={minRows}
-            className="w-full px-4 py-3 rounded-lg bg-cream-25/10 border border-cream-25/20 text-cream-25 placeholder:text-cream-25/50 focus:outline-none focus:ring-2 focus:ring-vibrant-blue/50 resize-none font-inter"
+            className="w-full px-4 py-3 rounded-lg bg-cream-25/30 border border-cream-25/30 text-cream-25 placeholder:text-cream-25/50 focus:outline-none focus:ring-2 focus:ring-vibrant-blue/50 resize-none font-inter"
             style={{
               lineHeight: "1.6",
               fontSize: "15px"
@@ -154,7 +154,7 @@ export function MarkdownEditor({
           {/* Markdown Help */}
           <details className="text-xs text-cream-25/60">
             <summary className="cursor-pointer hover:text-cream-25">Markdown Cheatsheet</summary>
-            <div className="mt-2 p-3 rounded-lg bg-cream-25/5 space-y-1 font-mono">
+            <div className="mt-2 p-3 rounded-lg bg-cream-25/15 space-y-1 font-mono">
               <div><strong>**bold**</strong> or <strong>__bold__</strong></div>
               <div><em>*italic*</em> or <em>_italic_</em></div>
               <div># Heading 1</div>
@@ -171,7 +171,7 @@ export function MarkdownEditor({
         </TabsContent>
 
         <TabsContent value="preview" className="mt-0">
-          <div className="min-h-[300px] p-4 rounded-lg bg-cream-25/5 border border-cream-25/10">
+          <div className="min-h-[300px] p-4 rounded-lg bg-cream-25/15 border border-cream-25/20">
             {value ? (
               <div className="prose prose-invert prose-cream-25 max-w-none">
                 <ReactMarkdown

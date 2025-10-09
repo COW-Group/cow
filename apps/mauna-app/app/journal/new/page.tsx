@@ -400,7 +400,7 @@ export default function NewJournalEntryPage() {
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="mt-1 text-cream-25 bg-cream-25/10 border-cream-25/50"
+              className="mt-1 text-cream-25 bg-cream-25/30 border-cream-25/50"
             />
           </div>
           <div>
@@ -417,7 +417,7 @@ export default function NewJournalEntryPage() {
           <div>
             <label htmlFor="mood" className="block text-sm font-medium mb-2">Mood</label>
             <Select value={mood || ""} onValueChange={(value) => { setMood(value); setType(value); }}>
-              <SelectTrigger className="mt-1 text-cream-25 bg-cream-25/10 border-cream-25/50">
+              <SelectTrigger className="mt-1 text-cream-25 bg-cream-25/30 border-cream-25/50">
                 <SelectValue placeholder="How are you feeling?" />
               </SelectTrigger>
               <SelectContent>
@@ -473,7 +473,7 @@ export default function NewJournalEntryPage() {
                   }
                 }}
                 placeholder="Add custom tag..."
-                className="flex-1 text-cream-25 bg-cream-25/10 border-cream-25/50"
+                className="flex-1 text-cream-25 bg-cream-25/30 border-cream-25/50"
               />
               <Button
                 type="button"
@@ -491,7 +491,7 @@ export default function NewJournalEntryPage() {
                 <span className="group-open:rotate-90 transition-transform">▶</span>
                 Browse all tag categories
               </summary>
-              <div className="mt-3 p-4 rounded-lg bg-cream-25/5 border border-cream-25/10 max-h-[400px] overflow-y-auto">
+              <div className="mt-3 p-4 rounded-lg bg-cream-25/15 border border-cream-25/20 max-h-[400px] overflow-y-auto">
                 <TagCategoriesSelector selectedTags={tags} onTagToggle={handleTagToggle} />
               </div>
             </details>
@@ -500,7 +500,7 @@ export default function NewJournalEntryPage() {
           <div>
             <label htmlFor="category" className="block text-sm font-medium">Category</label>
             <Select value={category} onValueChange={setCategory}>
-              <SelectTrigger className="mt-1 text-cream-25 bg-cream-25/10 border-cream-25/50">
+              <SelectTrigger className="mt-1 text-cream-25 bg-cream-25/30 border-cream-25/50">
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
@@ -520,7 +520,7 @@ export default function NewJournalEntryPage() {
                 setVisionBoardItemTitle(null)
               }}
             >
-              <SelectTrigger className="mt-1 text-cream-25 bg-cream-25/10 border-cream-25/50">
+              <SelectTrigger className="mt-1 text-cream-25 bg-cream-25/30 border-cream-25/50">
                 <SelectValue placeholder="Select vision board level" />
               </SelectTrigger>
               <SelectContent>
@@ -561,7 +561,7 @@ export default function NewJournalEntryPage() {
                   setVisionBoardItemTitle(selectedItem?.name || null)
                 }}
               >
-                <SelectTrigger className="mt-1 text-cream-25 bg-cream-25/10 border-cream-25/50">
+                <SelectTrigger className="mt-1 text-cream-25 bg-cream-25/30 border-cream-25/50">
                   <SelectValue placeholder="Select vision board item" />
                 </SelectTrigger>
                 <SelectContent>

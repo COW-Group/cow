@@ -10,16 +10,13 @@
   }
 
   body {
-    height: 100%;
+    min-height: 100%;
     background: #000; /* Black background to match notch area */
     color: hsl(var(--foreground));
-    overflow: hidden; /* Prevent all scrolling */
-    overscroll-behavior: none; /* Prevent iOS bounce */
-    -webkit-overflow-scrolling: auto;
-    position: fixed; /* Lock position */
-    width: 100%;
-    top: 0;
-    left: 0;
+    overflow-y: auto; /* Allow vertical scrolling */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    overscroll-behavior-y: contain; /* Prevent iOS bounce but allow scrolling */
+    -webkit-overflow-scrolling: touch;
     @apply font-inter;
   }
 

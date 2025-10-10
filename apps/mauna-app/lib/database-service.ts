@@ -1422,7 +1422,7 @@ async deleteStep(id: string, userId: string): Promise<void> {
       })
       const { data, error } = await this.supabase
         .from("journal")
-        .select("id, user_id, title, entry, category, visionboardlevel, visionboarditemid, visionboarditemtitle, tags, created_at, updated_at, is_archived, is_favorite, type")
+        .select("id, user_id, title, entry, cbtNotes, category, visionboardlevel, visionboarditemid, visionboarditemtitle, tags, created_at, updated_at, is_archived, is_favorite, type, sourceType, sourceId, sourceDate")
         .eq("user_id", userId)
         .order("created_at", { ascending: false })
       if (error) {
@@ -1626,7 +1626,122 @@ async deleteStep(id: string, userId: string): Promise<void> {
         return { data: null, error: null }
       }
 
-      // Check if entry already exists for this source
+      // For habits, store individual entry AND create/update daily compilation
+      if (sourceType === 'habit' && sourceDate) {
+        // 1. Store/update individual habit entry (for data integrity)
+        const { data: existingIndividual, error: fetchIndividualError } = await this.supabase
+          .from("journal")
+          .select("id")
+          .eq("user_id", userId)
+          .eq("sourceType", sourceType)
+          .eq("sourceId", sourceId)
+          .eq("sourceDate", sourceDate)
+
+        if (fetchIndividualError) {
+          console.error("Error checking existing individual habit entry:", fetchIndividualError)
+          return { data: null, error: fetchIndividualError }
+        }
+
+        const individualData = {
+          user_id: userId,
+          title,
+          entry: journalContent || null,
+          cbtNotes: cbtNotes || null,
+          type: sourceType,
+          sourceType,
+          sourceId,
+          sourceDate,
+          category: 'Habits',
+        }
+
+        if (existingIndividual && existingIndividual.length > 0) {
+          await this.supabase
+            .from("journal")
+            .update(individualData)
+            .eq("id", existingIndividual[0].id)
+        } else {
+          await this.supabase
+            .from("journal")
+            .insert(individualData)
+        }
+
+        // 2. Fetch ALL habit entries for this date to compile
+        const { data: allHabitEntries, error: fetchAllError } = await this.supabase
+          .from("journal")
+          .select("title, entry, cbtNotes, sourceId")
+          .eq("user_id", userId)
+          .eq("sourceType", 'habit')
+          .eq("sourceDate", sourceDate)
+          .neq("sourceId", 'daily_compilation')
+
+        if (fetchAllError) {
+          console.error("Error fetching habit entries for compilation:", fetchAllError)
+          return { data: null, error: fetchAllError }
+        }
+
+        // 3. Compile all habit notes into one entry
+        let compiledEntry = ""
+        let compiledCbtNotes = ""
+
+        if (allHabitEntries && allHabitEntries.length > 0) {
+          allHabitEntries.forEach((entry, index) => {
+            if (entry.entry) {
+              compiledEntry += `**${entry.title}**\n${entry.entry}\n\n`
+            }
+            if (entry.cbtNotes) {
+              compiledCbtNotes += `**${entry.title} - CBT Notes**\n${entry.cbtNotes}\n\n`
+            }
+          })
+        }
+
+        // 4. Create/update daily compilation entry
+        const { data: existingCompilation, error: fetchCompilationError } = await this.supabase
+          .from("journal")
+          .select("id")
+          .eq("user_id", userId)
+          .eq("sourceType", 'habit')
+          .eq("sourceId", 'daily_compilation')
+          .eq("sourceDate", sourceDate)
+
+        if (fetchCompilationError) {
+          console.error("Error checking existing compilation:", fetchCompilationError)
+          return { data: null, error: fetchCompilationError }
+        }
+
+        const compilationData = {
+          user_id: userId,
+          title: `Daily Habits - ${new Date(sourceDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`,
+          entry: compiledEntry.trim() || null,
+          cbtNotes: compiledCbtNotes.trim() || null,
+          type: 'habit',
+          sourceType: 'habit',
+          sourceId: 'daily_compilation',
+          sourceDate,
+          category: 'Habits',
+          tags: ['habits', 'daily-compilation']
+        }
+
+        if (existingCompilation && existingCompilation.length > 0) {
+          const { data, error } = await this.supabase
+            .from("journal")
+            .update(compilationData)
+            .eq("id", existingCompilation[0].id)
+            .select()
+            .single()
+
+          return { data: data as JournalEntry, error }
+        } else {
+          const { data, error } = await this.supabase
+            .from("journal")
+            .insert(compilationData)
+            .select()
+            .single()
+
+          return { data: data as JournalEntry, error }
+        }
+      }
+
+      // For non-habit sources (like 'step'), use original logic
       const { data: existingEntries, error: fetchError } = await this.supabase
         .from("journal")
         .select("id")
@@ -1653,7 +1768,6 @@ async deleteStep(id: string, userId: string): Promise<void> {
       }
 
       if (existingEntries && existingEntries.length > 0) {
-        // Update existing entry
         const { data, error } = await this.supabase
           .from("journal")
           .update(entryData)
@@ -1663,7 +1777,6 @@ async deleteStep(id: string, userId: string): Promise<void> {
 
         return { data: data as JournalEntry, error }
       } else {
-        // Create new entry
         const { data, error } = await this.supabase
           .from("journal")
           .insert(entryData)

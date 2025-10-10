@@ -209,11 +209,11 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
             <div
               className="absolute top-full mt-3 left-1/2 transform -translate-x-1/2 w-[calc(100vw-2rem)] max-w-80 min-w-72 z-[100] animate-in slide-in-from-top-2 duration-300"
               style={{
-                background: 'rgba(255, 255, 255, 0.20)',
-                backdropFilter: 'blur(60px) saturate(200%)',
+                background: 'rgba(255, 255, 255, 0.35)',
+                backdropFilter: 'blur(80px) saturate(220%)',
                 borderRadius: '20px',
-                border: '1px solid rgba(255, 255, 255, 0.25)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 0, 0, 0.1)'
+                border: '1px solid rgba(255, 255, 255, 0.35)',
+                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 20px 40px rgba(0, 0, 0, 0.2), 0 8px 24px rgba(0, 0, 0, 0.15)'
               }}
             >
               {/* Dropdown Header */}
@@ -222,8 +222,8 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
                   <h3
                     className="text-sm font-medium font-inter"
                     style={{
-                      color: 'rgba(255, 255, 255, 0.9)',
-                      textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
+                      color: 'rgba(255, 255, 255, 0.95)',
+                      textShadow: '0 1px 3px rgba(0, 0, 0, 0.2)'
                     }}
                   >
                     Navigation
@@ -253,16 +253,16 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
                       }}
                       className="flex flex-col items-center gap-2 h-auto p-3 rounded-xl transition-all duration-300 border-0 touch-manipulation group"
                       style={{
-                        background: 'rgba(255, 255, 255, 0.12)',
-                        backdropFilter: 'blur(10px) saturate(150%)',
-                        border: '1px solid rgba(255, 255, 255, 0.20)'
+                        background: 'rgba(255, 255, 255, 0.18)',
+                        backdropFilter: 'blur(15px) saturate(160%)',
+                        border: '1px solid rgba(255, 255, 255, 0.25)'
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.20)'
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.28)'
                         e.currentTarget.style.transform = 'scale(1.02)'
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)'
+                        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.18)'
                         e.currentTarget.style.transform = 'scale(1)'
                       }}
                     >
@@ -270,13 +270,13 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
                       <div
                         className="p-2 rounded-lg transition-all duration-200"
                         style={{
-                          background: 'rgba(255, 255, 255, 0.18)',
-                          backdropFilter: 'blur(5px)'
+                          background: 'rgba(255, 255, 255, 0.22)',
+                          backdropFilter: 'blur(8px)'
                         }}
                       >
                         <item.icon
                           className="h-4 w-4 transition-all duration-200"
-                          style={{ color: 'rgba(255, 255, 255, 0.9)' }}
+                          style={{ color: 'rgba(255, 255, 255, 0.95)' }}
                         />
                       </div>
 
@@ -284,8 +284,8 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
                       <span
                         className="text-xs font-medium text-center leading-tight font-inter"
                         style={{
-                          color: 'rgba(255, 255, 255, 0.85)',
-                          textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
+                          color: 'rgba(255, 255, 255, 0.92)',
+                          textShadow: '0 1px 3px rgba(0, 0, 0, 0.2)'
                         }}
                       >
                         {item.label}

@@ -533,28 +533,28 @@ export function DashboardMenu({
         )
       case "dashboard-elements":
         return (
-          <div className="space-y-8">
+          <div className="space-y-6 md:space-y-8">
             <Card className="glassmorphism rounded-3xl shadow-xl border-0 overflow-hidden">
-              <CardHeader className="pb-6">
-                <CardTitle className="flex items-center gap-3 font-lora zen-heading text-xl">
-                  <div className="w-10 h-10 rounded-2xl glassmorphism flex items-center justify-center">
-                    <Folders className="h-5 w-5 text-moss-600" />
+              <CardHeader className="pb-5 md:pb-6 px-5 md:px-6 pt-5 md:pt-6">
+                <CardTitle className="flex items-center gap-2.5 md:gap-3 font-lora zen-heading text-lg md:text-xl">
+                  <div className="w-9 h-9 md:w-10 md:h-10 rounded-2xl glassmorphism flex items-center justify-center flex-shrink-0">
+                    <Folders className="h-4 w-4 md:h-5 md:w-5 text-moss-600" />
                   </div>
                   Dashboard Elements
                 </CardTitle>
-                <CardDescription className="font-inter text-base">Choose what appears on your main dashboard display for a personalized experience.</CardDescription>
+                <CardDescription className="font-inter text-sm md:text-base mt-2 leading-relaxed">Choose what appears on your main dashboard display for a personalized experience.</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6 pt-0">
-                <div className="grid gap-4">
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-sage-50/30 to-transparent dark:from-sage-900/20 hover:from-sage-50/40 dark:hover:from-sage-900/30 transition-all duration-300">
-                    <div className="space-y-1 flex-1">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-sage-600"></div>
-                        <Label htmlFor="show-weather" className="font-inter font-medium">
+              <CardContent className="space-y-5 md:space-y-6 pt-0 px-5 md:px-6 pb-6">
+                <div className="grid gap-4 md:gap-4">
+                  <div className="flex items-center justify-between p-4 md:p-4 rounded-2xl bg-gradient-to-r from-sage-50/30 to-transparent dark:from-sage-900/20 hover:from-sage-50/40 dark:hover:from-sage-900/30 active:from-sage-50/50 transition-all duration-300 touch-manipulation min-h-[80px] md:min-h-[auto]">
+                    <div className="space-y-1.5 flex-1 pr-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-2 h-2 rounded-full bg-sage-600 flex-shrink-0"></div>
+                        <Label htmlFor="show-weather" className="font-inter font-medium text-base md:text-base cursor-pointer">
                           Weather Widget
                         </Label>
                       </div>
-                      <p className="text-sm text-muted-foreground font-inter ml-4">
+                      <p className="text-sm md:text-sm text-muted-foreground font-inter ml-[18px] leading-relaxed">
                         Display your local weather information on the dashboard
                       </p>
                     </div>
@@ -562,19 +562,19 @@ export function DashboardMenu({
                       id="show-weather"
                       checked={currentSettings.showWeather || false}
                       onCheckedChange={(val) => handleSettingChange("showWeather", val)}
-                      className="ml-4"
+                      className="ml-3 flex-shrink-0 scale-125 md:scale-100"
                     />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-soft-gold/20 to-transparent dark:from-soft-gold/10 hover:from-soft-gold/30 dark:hover:from-soft-gold/15 transition-all duration-300">
-                    <div className="space-y-1 flex-1">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-soft-gold"></div>
-                        <Label htmlFor="show-greeting" className="font-inter font-medium">
+                  <div className="flex items-center justify-between p-4 md:p-4 rounded-2xl bg-gradient-to-r from-soft-gold/20 to-transparent dark:from-soft-gold/10 hover:from-soft-gold/30 dark:hover:from-soft-gold/15 active:from-soft-gold/40 transition-all duration-300 touch-manipulation min-h-[80px] md:min-h-[auto]">
+                    <div className="space-y-1.5 flex-1 pr-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-2 h-2 rounded-full bg-soft-gold flex-shrink-0"></div>
+                        <Label htmlFor="show-greeting" className="font-inter font-medium text-base md:text-base cursor-pointer">
                           Personal Greeting
                         </Label>
                       </div>
-                      <p className="text-sm text-muted-foreground font-inter ml-4">
+                      <p className="text-sm md:text-sm text-muted-foreground font-inter ml-[18px] leading-relaxed">
                         Show personalized greeting message in the center
                       </p>
                     </div>
@@ -582,19 +582,19 @@ export function DashboardMenu({
                       id="show-greeting"
                       checked={currentSettings.showGreeting || false}
                       onCheckedChange={(val) => handleSettingChange("showGreeting", val)}
-                      className="ml-4"
+                      className="ml-3 flex-shrink-0 scale-125 md:scale-100"
                     />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-moss-50/30 to-transparent dark:from-moss-900/20 hover:from-moss-50/40 dark:hover:from-moss-900/30 transition-all duration-300">
-                    <div className="space-y-1 flex-1">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-moss-600"></div>
-                        <Label htmlFor="show-mantra" className="font-inter font-medium">
+                  <div className="flex items-center justify-between p-4 md:p-4 rounded-2xl bg-gradient-to-r from-moss-50/30 to-transparent dark:from-moss-900/20 hover:from-moss-50/40 dark:hover:from-moss-900/30 active:from-moss-50/50 transition-all duration-300 touch-manipulation min-h-[80px] md:min-h-[auto]">
+                    <div className="space-y-1.5 flex-1 pr-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-2 h-2 rounded-full bg-moss-600 flex-shrink-0"></div>
+                        <Label htmlFor="show-mantra" className="font-inter font-medium text-base md:text-base cursor-pointer">
                           Daily Mantra
                         </Label>
                       </div>
-                      <p className="text-sm text-muted-foreground font-inter ml-4">
+                      <p className="text-sm md:text-sm text-muted-foreground font-inter ml-[18px] leading-relaxed">
                         Display motivational phrases to build positive mental habits
                       </p>
                     </div>
@@ -602,19 +602,19 @@ export function DashboardMenu({
                       id="show-mantra"
                       checked={currentSettings.showMantra || false}
                       onCheckedChange={(val) => handleSettingChange("showMantra", val)}
-                      className="ml-4"
+                      className="ml-3 flex-shrink-0 scale-125 md:scale-100"
                     />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-logo-blue/10 to-transparent dark:from-logo-blue/5 hover:from-logo-blue/15 dark:hover:from-logo-blue/10 transition-all duration-300">
-                    <div className="space-y-1 flex-1">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-logo-blue"></div>
-                        <Label htmlFor="show-tasks" className="font-inter font-medium">
+                  <div className="flex items-center justify-between p-4 md:p-4 rounded-2xl bg-gradient-to-r from-logo-blue/10 to-transparent dark:from-logo-blue/5 hover:from-logo-blue/15 dark:hover:from-logo-blue/10 active:from-logo-blue/20 transition-all duration-300 touch-manipulation min-h-[80px] md:min-h-[auto]">
+                    <div className="space-y-1.5 flex-1 pr-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-2 h-2 rounded-full bg-logo-blue flex-shrink-0"></div>
+                        <Label htmlFor="show-tasks" className="font-inter font-medium text-base md:text-base cursor-pointer">
                           Task Overview
                         </Label>
                       </div>
-                      <p className="text-sm text-muted-foreground font-inter ml-4">
+                      <p className="text-sm md:text-sm text-muted-foreground font-inter ml-[18px] leading-relaxed">
                         Show your active tasks and progress directly on dashboard
                       </p>
                     </div>
@@ -622,19 +622,19 @@ export function DashboardMenu({
                       id="show-tasks"
                       checked={currentSettings.showTasks || false}
                       onCheckedChange={(val) => handleSettingChange("showTasks", val)}
-                      className="ml-4"
+                      className="ml-3 flex-shrink-0 scale-125 md:scale-100"
                     />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-emerald-50/30 to-transparent dark:from-emerald-900/20 hover:from-emerald-50/40 dark:hover:from-emerald-900/30 transition-all duration-300">
-                    <div className="space-y-1 flex-1">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-emerald-600"></div>
-                        <Label htmlFor="show-quotes" className="font-inter font-medium">
+                  <div className="flex items-center justify-between p-4 md:p-4 rounded-2xl bg-gradient-to-r from-emerald-50/30 to-transparent dark:from-emerald-900/20 hover:from-emerald-50/40 dark:hover:from-emerald-900/30 active:from-emerald-50/50 transition-all duration-300 touch-manipulation min-h-[80px] md:min-h-[auto]">
+                    <div className="space-y-1.5 flex-1 pr-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-2 h-2 rounded-full bg-emerald-600 flex-shrink-0"></div>
+                        <Label htmlFor="show-quotes" className="font-inter font-medium text-base md:text-base cursor-pointer">
                           Inspirational Quotes
                         </Label>
                       </div>
-                      <p className="text-sm text-muted-foreground font-inter ml-4">
+                      <p className="text-sm md:text-sm text-muted-foreground font-inter ml-[18px] leading-relaxed">
                         Display daily inspirational quotes at the bottom of dashboard
                       </p>
                     </div>
@@ -642,7 +642,7 @@ export function DashboardMenu({
                       id="show-quotes"
                       checked={currentSettings.showQuotes || false}
                       onCheckedChange={(val) => handleSettingChange("showQuotes", val)}
-                      className="ml-4"
+                      className="ml-3 flex-shrink-0 scale-125 md:scale-100"
                     />
                   </div>
                 </div>
@@ -1017,16 +1017,19 @@ export function DashboardMenu({
 
         {/* Enhanced Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden w-full h-full">
-          {/* Mobile Header - Visible only on mobile */}
-          <div className="md:hidden px-4 py-4 space-y-3 border-b flex-shrink-0" style={{
+          {/* Mobile Header - Visible only on mobile with safe area support */}
+          <div className="md:hidden px-5 py-5 space-y-4 border-b flex-shrink-0" style={{
             borderColor: 'rgba(255, 255, 255, 0.12)',
-            background: 'rgba(255, 255, 255, 0.04)'
+            background: 'rgba(255, 255, 255, 0.04)',
+            paddingTop: 'max(1.25rem, env(safe-area-inset-top))',
+            paddingLeft: 'max(1.25rem, env(safe-area-inset-left))',
+            paddingRight: 'max(1.25rem, env(safe-area-inset-right))'
           }}>
             {/* Main Title */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5">
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5 min-w-0 flex-1">
                 <div
-                  className="w-9 h-9 flex items-center justify-center rounded-xl"
+                  className="w-10 h-10 flex items-center justify-center rounded-xl flex-shrink-0"
                   style={{
                     background: 'rgba(255, 255, 255, 0.15)',
                     backdropFilter: 'blur(10px)',
@@ -1035,14 +1038,14 @@ export function DashboardMenu({
                 >
                   <Cog className="h-5 w-5" style={{ color: 'rgba(255, 255, 255, 0.95)' }} />
                 </div>
-                <h2 className="font-lora text-xl font-light tracking-wide" style={{ color: 'rgba(255, 255, 255, 0.95)' }}>
+                <h2 className="font-lora text-lg font-light tracking-wide truncate" style={{ color: 'rgba(255, 255, 255, 0.95)' }}>
                   Configuration
                 </h2>
               </div>
               <Button
                 variant="outline"
                 size="sm"
-                className="flex items-center gap-1.5 font-inter border-0 transition-all duration-300 rounded-xl px-3.5 py-2 touch-manipulation min-h-[44px]"
+                className="flex items-center gap-2 font-inter border-0 transition-all duration-300 rounded-xl px-4 py-2.5 touch-manipulation min-h-[44px] flex-shrink-0"
                 onClick={handleSignOut}
                 style={{
                   background: 'rgba(255, 255, 255, 0.1)',
@@ -1057,22 +1060,22 @@ export function DashboardMenu({
             </div>
 
             {/* User Info */}
-            <div className="flex items-center gap-2 px-0.5">
+            <div className="flex items-center gap-2.5 px-1">
               <UserCircle className="h-4 w-4 flex-shrink-0" style={{ color: 'rgba(255, 255, 255, 0.7)' }} />
-              <span className="font-inter text-sm" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+              <span className="font-inter text-sm font-medium" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
                 {userProfileName || "User"}
               </span>
             </div>
 
             {/* Category Selector with Label */}
-            <div className="space-y-2">
-              <label className="font-inter text-xs font-semibold uppercase tracking-wide px-0.5" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+            <div className="space-y-2.5">
+              <label className="font-inter text-xs font-bold uppercase tracking-wider px-1" style={{ color: 'rgba(255, 255, 255, 0.65)', letterSpacing: '0.1em' }}>
                 Select Category
               </label>
               <select
                 value={activeCategory}
                 onChange={(e) => setActiveCategory(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl font-inter text-sm font-medium touch-manipulation min-h-[48px] appearance-none"
+                className="w-full px-4 py-3.5 rounded-xl font-inter text-base font-medium touch-manipulation min-h-[52px] appearance-none"
                 style={{
                   background: 'rgba(255, 255, 255, 0.15)',
                   backdropFilter: 'blur(10px) saturate(150%)',
@@ -1136,16 +1139,17 @@ export function DashboardMenu({
 
           {/* Content Area with better scrolling */}
           <div
-            className="flex-1 overflow-y-auto px-4 py-5 md:px-8 md:py-6 overscroll-contain"
+            className="flex-1 overflow-y-auto px-5 py-6 md:px-8 md:py-6 overscroll-contain"
             style={{
               background: 'rgba(255, 255, 255, 0.02)',
               backdropFilter: 'blur(5px) saturate(100%)',
               WebkitOverflowScrolling: 'touch',
               scrollbarWidth: 'thin',
-              height: '100%'
+              height: '100%',
+              paddingBottom: 'max(2rem, env(safe-area-inset-bottom))'
             }}
           >
-            <div className="space-y-4 md:space-y-6 pb-8 md:pb-6">
+            <div className="space-y-5 md:space-y-6">
               {renderContent()}
             </div>
           </div>

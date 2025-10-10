@@ -26,6 +26,8 @@ import { Button } from "@/components/ui/button"
 import { SoundSelector } from "@/components/sound-selector"
 import { DashboardMenu } from "@/components/dashboard-menu"
 import type { AppSettings } from "@/lib/types"
+import { useAuth } from "@/hooks/use-auth"
+import { AuthService } from "@/lib/auth-service"
 
 interface FloatingNavProps {
   settings?: AppSettings
@@ -38,6 +40,7 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
   const [isDashboardMenuOpen, setIsDashboardMenuOpen] = useState(false)
   const [isDarkBackground, setIsDarkBackground] = useState(true) // Default to dark for better contrast
   const router = useRouter()
+  const { user, loading } = useAuth(AuthService)
 
   // Detect background brightness (simplified approach)
   useEffect(() => {
@@ -117,9 +120,17 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
 
   console.log(`FloatingNav: Showing ${menuItems.length} out of ${allMenuItems.length} menu items`)
 
-  const handleSignOut = () => {
-    // Mock sign out function
-    console.log("Sign out clicked")
+  const handleSignOut = async () => {
+    try {
+      const { error } = await AuthService.signOut()
+      if (error) {
+        console.error("Error signing out:", error)
+      } else {
+        router.push("/")
+      }
+    } catch (error) {
+      console.error("Unexpected error during sign out:", error)
+    }
   }
 
   const openTaskListManager = () => {
@@ -137,6 +148,10 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
     }
   }
 
+  // Extract user name from user data
+  const userProfileName = user?.user_metadata?.preferred_name ||
+                         user?.email?.split('@')[0] ||
+                         null
 
   // Dynamic color scheme based on background
   const textColor = isDarkBackground ? '#f9fafb' : '#1f2937' // gray-50 for dark bg, gray-800 for light bg
@@ -334,9 +349,9 @@ export function FloatingNav({ settings, onSettingsUpdate }: FloatingNavProps = {
         openTaskListManager={openTaskListManager}
         openVisionBoard={openVisionBoard}
         handleSignOut={handleSignOut}
-        currentUser={null}
-        userProfileName={null}
-        userId="mock-user-id"
+        currentUser={user}
+        userProfileName={userProfileName}
+        userId={user?.id || ""}
       />
     </nav>
   )

@@ -125,17 +125,22 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen relative flex flex-col items-center justify-center font-inter">
+    <div className="min-h-screen relative flex flex-col items-center justify-center font-inter" style={{
+      paddingTop: 'env(safe-area-inset-top)',
+      paddingBottom: 'env(safe-area-inset-bottom)',
+      paddingLeft: 'env(safe-area-inset-left)',
+      paddingRight: 'env(safe-area-inset-right)'
+    }}>
       <FloatingNav settings={appSettings} onSettingsUpdate={handleUpdateAppSettings} />
-      <main className="flex-1 flex flex-col items-center justify-center p-4 relative z-10">
+      <main className="flex-1 flex flex-col items-center justify-center px-5 py-6 md:p-4 relative z-10 w-full">
         {/* Central Content Container */}
-        <div className="flex flex-col items-center space-y-12">
+        <div className="flex flex-col items-center space-y-10 md:space-y-12 w-full">
           {/* Time Display Section */}
-          <div className="flex flex-col items-center space-y-8">
+          <div className="flex flex-col items-center space-y-6 md:space-y-8 w-full">
             {/* Primary Time Display */}
-            <div className="relative">
+            <div className="relative w-full flex justify-center">
               <div
-                className="text-[4rem] xs:text-[5rem] sm:text-[6rem] md:text-[7rem] lg:text-[8rem] font-inter font-extralight text-cream-25 leading-none"
+                className="text-[3.5rem] xs:text-[4rem] sm:text-[5rem] md:text-[6rem] lg:text-[7rem] xl:text-[8rem] font-inter font-extralight text-cream-25 leading-none"
                 style={{
                   fontFeatureSettings: '"tnum" 1, "lnum" 1',
                   fontWeight: '200',
@@ -148,13 +153,13 @@ export default function DashboardPage() {
             </div>
 
             {/* Date and Greeting Responsive Layout */}
-            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-8 text-center">
+            <div className="flex flex-col sm:flex-row items-center space-y-5 sm:space-y-0 sm:space-x-8 text-center w-full px-4 md:px-0">
               {/* Date */}
-              <div className="flex flex-col items-center">
-                <div className="text-xs sm:text-sm font-inter font-light text-cream-25/60 uppercase tracking-[0.2em] mb-1">
+              <div className="flex flex-col items-center min-w-0">
+                <div className="text-sm sm:text-sm font-inter font-light text-cream-25/60 uppercase tracking-[0.15em] mb-1.5">
                   {new Date().toLocaleDateString('en-US', { weekday: 'long' })}
                 </div>
-                <div className="text-base sm:text-lg font-inter font-normal text-cream-25/80 tracking-wide">
+                <div className="text-lg sm:text-lg md:text-xl font-inter font-normal text-cream-25/80 tracking-wide">
                   {new Date().toLocaleDateString('en-US', {
                     month: 'long',
                     day: 'numeric'
@@ -163,15 +168,15 @@ export default function DashboardPage() {
               </div>
 
               {/* Vertical/Horizontal Divider */}
-              <div className="hidden sm:block h-12 w-px bg-cream-25/20"></div>
-              <div className="sm:hidden w-16 h-px bg-cream-25/20"></div>
+              <div className="hidden sm:block h-12 w-px bg-cream-25/20 flex-shrink-0"></div>
+              <div className="sm:hidden w-20 h-px bg-cream-25/20"></div>
 
               {/* Greeting */}
-              <div className="flex flex-col items-center">
-                <div className="text-xs sm:text-sm font-inter font-light text-cream-25/60 uppercase tracking-[0.2em] mb-1">
+              <div className="flex flex-col items-center min-w-0">
+                <div className="text-sm sm:text-sm font-inter font-light text-cream-25/60 uppercase tracking-[0.15em] mb-1.5">
                   {greeting}
                 </div>
-                <div className="text-base sm:text-lg font-inter font-normal text-cream-25/80 tracking-wide">
+                <div className="text-lg sm:text-lg md:text-xl font-inter font-normal text-cream-25/80 tracking-wide">
                   {capitalizedUserName}
                 </div>
               </div>
@@ -179,11 +184,11 @@ export default function DashboardPage() {
           </div>
 
           {/* Action Cards - Responsive Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 md:gap-8 w-full max-w-3xl mt-6 sm:mt-8 px-4 sm:px-0">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 md:gap-8 w-full max-w-3xl px-4 sm:px-0">
           {/* Focus Button */}
           <Button
             variant="ghost"
-            className="group relative text-cream-25 text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-all duration-300 border-0 touch-manipulation"
+            className="group relative text-cream-25 text-lg sm:text-lg md:text-xl px-7 sm:px-8 py-5 sm:py-4 rounded-2xl transition-all duration-300 border-0 touch-manipulation min-h-[72px] sm:min-h-[auto]"
             style={{
               background: hasTasks
                 ? 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.02) 100%)'
@@ -195,11 +200,11 @@ export default function DashboardPage() {
             onClick={() => hasTasks && router.push("/focus")}
             disabled={!hasTasks}
           >
-            <div className="flex items-center space-x-3">
-              <Play className={`h-5 w-5 text-cream-25 transition-opacity duration-200 ${
+            <div className="flex items-center space-x-3.5">
+              <Play className={`h-6 w-6 sm:h-5 sm:w-5 text-cream-25 transition-opacity duration-200 flex-shrink-0 ${
                 !hasTasks ? 'opacity-40' : ''
               }`} />
-              <div className="flex flex-col items-start">
+              <div className="flex flex-col items-start min-w-0">
                 <span className={`font-inter font-light tracking-wide ${
                   !hasTasks ? 'opacity-60' : ''
                 } transition-opacity duration-200`}>
@@ -211,7 +216,7 @@ export default function DashboardPage() {
 
           <Button
             variant="ghost"
-            className="group relative text-cream-25 text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-4 rounded-2xl transition-all duration-300 border-0 touch-manipulation"
+            className="group relative text-cream-25 text-lg sm:text-lg md:text-xl px-7 sm:px-8 py-5 sm:py-4 rounded-2xl transition-all duration-300 border-0 touch-manipulation min-h-[72px] sm:min-h-[auto]"
             style={{
               background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.02) 100%)',
               backdropFilter: 'blur(40px) saturate(180%)',
@@ -220,9 +225,9 @@ export default function DashboardPage() {
             }}
             onClick={() => router.push("/timeline")}
           >
-            <div className="flex items-center space-x-3">
-              <Clock className="h-5 w-5 text-cream-25" />
-              <div className="flex flex-col items-start">
+            <div className="flex items-center space-x-3.5">
+              <Clock className="h-6 w-6 sm:h-5 sm:w-5 text-cream-25 flex-shrink-0" />
+              <div className="flex flex-col items-start min-w-0">
                 <span className="font-inter font-light tracking-wide">
                   Timeline
                 </span>

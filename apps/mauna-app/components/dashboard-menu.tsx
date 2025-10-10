@@ -921,6 +921,7 @@ export function DashboardMenu({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
+        hideCloseButton={isMobile}
         className="w-full h-full max-w-full max-h-full md:w-[90vw] md:max-w-[1200px] md:max-h-[95vh] md:h-auto overflow-hidden p-0 flex flex-col md:flex-row border-0 gap-0 md:rounded-2xl rounded-none"
         style={{
           background: 'rgba(255, 255, 255, 0.08)',
@@ -1046,7 +1047,10 @@ export function DashboardMenu({
                 variant="outline"
                 size="sm"
                 className="flex items-center gap-2 font-inter border-0 transition-all duration-300 rounded-xl px-4 py-2.5 touch-manipulation min-h-[44px] flex-shrink-0"
-                onClick={handleSignOut}
+                onClick={() => {
+                  handleSignOut()
+                  onClose()
+                }}
                 style={{
                   background: 'rgba(255, 255, 255, 0.1)',
                   backdropFilter: 'blur(10px) saturate(150%)',

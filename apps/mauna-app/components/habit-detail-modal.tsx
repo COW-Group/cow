@@ -443,8 +443,8 @@ export function HabitDetailModal({
         </button>
       )}
 
-      <div className="h-full w-full sm:h-auto sm:w-auto sm:absolute sm:inset-4 sm:m-auto sm:max-w-6xl sm:max-h-[calc(100vh-2rem)] flex items-center justify-center">
-        <div className="w-full h-full bg-gray-900/95 backdrop-blur-xl sm:rounded-3xl flex flex-col overflow-hidden" style={{ maxHeight: "100%" }}>
+      <div className="h-full w-full sm:h-auto sm:w-auto sm:absolute sm:inset-4 sm:m-auto sm:max-w-6xl sm:max-h-[calc(100vh-2rem)] flex items-stretch sm:items-center justify-center p-0 sm:p-4">
+        <div className="w-full h-full min-h-full bg-gray-900/95 backdrop-blur-xl rounded-none sm:rounded-3xl flex flex-col overflow-hidden" style={{ maxHeight: "100%" }}>
           {/* Segmented Progress Bar - Instagram Stories Style */}
           {!isEditingHabit && allHabits.length > 0 && (
             <div className="flex-shrink-0 px-4 pt-3 pb-3">
@@ -500,10 +500,10 @@ export function HabitDetailModal({
           </div>
 
           {!isEditingHabit && (
-            <div className="flex-shrink-0 flex gap-1 px-4 sm:px-6 py-2 sm:py-3 border-b border-white/10">
+            <div className="flex-shrink-0 flex gap-1 px-3 sm:px-6 py-2 sm:py-3 border-b border-white/10">
               <button
                 onClick={() => setActiveTab("overview")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex-1 sm:flex-initial px-3 sm:px-4 py-2.5 sm:py-2 rounded-lg text-sm font-medium transition-colors touch-manipulation min-h-[44px] sm:min-h-0 ${
                   activeTab === "overview" ? "bg-white/15 text-cream-25" : "text-cream-25/60 hover:bg-white/5"
                 }`}
               >
@@ -511,7 +511,7 @@ export function HabitDetailModal({
               </button>
               <button
                 onClick={() => setActiveTab("calendar")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex-1 sm:flex-initial px-3 sm:px-4 py-2.5 sm:py-2 rounded-lg text-sm font-medium transition-colors touch-manipulation min-h-[44px] sm:min-h-0 ${
                   activeTab === "calendar" ? "bg-white/15 text-cream-25" : "text-cream-25/60 hover:bg-white/5"
                 }`}
               >
@@ -519,7 +519,7 @@ export function HabitDetailModal({
               </button>
               <button
                 onClick={() => setActiveTab("journal")}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`flex-1 sm:flex-initial px-3 sm:px-4 py-2.5 sm:py-2 rounded-lg text-sm font-medium transition-colors touch-manipulation min-h-[44px] sm:min-h-0 ${
                   activeTab === "journal" ? "bg-white/15 text-cream-25" : "text-cream-25/60 hover:bg-white/5"
                 }`}
               >
@@ -1093,7 +1093,11 @@ export function HabitDetailModal({
                         <div className="flex items-center justify-between mb-4 flex-shrink-0">
                           <div className="flex items-center gap-2 text-xs sm:text-sm text-cream-25/60">
                             <CalendarIcon className="w-4 h-4" />
-                            {new Date(selectedDate).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                            {(() => {
+                              const [year, month, day] = selectedDate.split('-').map(Number)
+                              const localDate = new Date(year, month - 1, day)
+                              return localDate.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })
+                            })()}
                           </div>
                           <button
                             onClick={() => setIsEditingJournal(false)}
@@ -1190,12 +1194,25 @@ export function HabitDetailModal({
                       </>
                     ) : (
                       <div ref={journalScrollRef} className="space-y-3 overflow-y-auto flex-1 py-4 sm:py-6" style={{ scrollPaddingTop: 0 }}>
-                          {Array.from({ length: 30 }, (_, i) => {
-                            const date = new Date()
-                            date.setDate(date.getDate() - i)
-                            const dateStr = getLocalDateString(date)
-                            const today = getLocalDateString()
-                            const isToday = dateStr === today
+                          {(() => {
+                            // Calculate today and tomorrow once, outside the loop
+                            const todayStr = getLocalDateString()
+                            const tomorrowDate = new Date()
+                            tomorrowDate.setDate(tomorrowDate.getDate() + 1)
+                            const tomorrowStr = getLocalDateString(tomorrowDate)
+
+                            console.log('[HabitDetailModal Journal] Today:', todayStr, 'Tomorrow:', tomorrowStr)
+
+                            return Array.from({ length: 31 }, (_, i) => {
+                              const date = new Date()
+                              date.setDate(date.getDate() + 1 - i) // Start from tomorrow (+1), then today (0), then yesterday (-1), etc
+                              const dateStr = getLocalDateString(date)
+                              const isToday = dateStr === todayStr
+                              const isTomorrow = dateStr === tomorrowStr
+
+                              if (i < 3) {
+                                console.log(`[HabitDetailModal Journal] i=${i}, dateStr=${dateStr}, isToday=${isToday}, isTomorrow=${isTomorrow}`)
+                              }
                             const isCompleted = habit.history?.includes(dateStr)
                             const isSkipped = habit.skipped?.[dateStr]
                             const hasNote = habit.notes?.[dateStr]
@@ -1205,49 +1222,56 @@ export function HabitDetailModal({
 
                             return (
                               <div key={dateStr} className="flex gap-3 sm:gap-4">
-                                <button
-                                  type="button"
-                                  onClick={async (e) => {
-                                    e.preventDefault()
-                                    e.stopPropagation()
-                                    const updatedHistory = [...(habit.history || [])]
-                                    const updatedSkipped = { ...(habit.skipped || {}) }
+                                {!isTomorrow && (
+                                  <button
+                                    type="button"
+                                    onClick={async (e) => {
+                                      e.preventDefault()
+                                      e.stopPropagation()
+                                      const updatedHistory = [...(habit.history || [])]
+                                      const updatedSkipped = { ...(habit.skipped || {}) }
 
-                                    if (isCompleted) {
-                                      // Completed -> Skipped
-                                      const index = updatedHistory.indexOf(dateStr)
-                                      updatedHistory.splice(index, 1)
-                                      updatedSkipped[dateStr] = true
-                                    } else if (isSkipped) {
-                                      // Skipped -> Not completed
-                                      delete updatedSkipped[dateStr]
-                                    } else {
-                                      // Not completed -> Completed
-                                      updatedHistory.push(dateStr)
-                                      delete updatedSkipped[dateStr]
-                                    }
+                                      if (isCompleted) {
+                                        // Completed -> Skipped
+                                        const index = updatedHistory.indexOf(dateStr)
+                                        updatedHistory.splice(index, 1)
+                                        updatedSkipped[dateStr] = true
+                                      } else if (isSkipped) {
+                                        // Skipped -> Not completed
+                                        delete updatedSkipped[dateStr]
+                                      } else {
+                                        // Not completed -> Completed
+                                        updatedHistory.push(dateStr)
+                                        delete updatedSkipped[dateStr]
+                                      }
 
-                                    await onUpdate(habit.id, { history: updatedHistory, skipped: updatedSkipped })
-                                  }}
-                                  className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex-shrink-0 transition-all duration-200 hover:opacity-90 border border-white/10 relative overflow-hidden"
-                                  style={{ backgroundColor: colorData.backgroundColor }}
-                                >
-                                  {/* Diagonal fill for skipped */}
-                                  {isSkipped && (
-                                    <div
-                                      className="absolute inset-0"
-                                      style={{
-                                        backgroundImage: `linear-gradient(
-                                          to top right,
-                                          ${habit.color} 0%,
-                                          ${habit.color} 50%,
-                                          transparent 50%,
-                                          transparent 100%
-                                        )`,
-                                      }}
-                                    />
-                                  )}
-                                </button>
+                                      await onUpdate(habit.id, { history: updatedHistory, skipped: updatedSkipped })
+                                    }}
+                                    className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex-shrink-0 transition-all duration-200 hover:opacity-90 border border-white/10 relative overflow-hidden"
+                                    style={{ backgroundColor: colorData.backgroundColor }}
+                                  >
+                                    {/* Diagonal fill for skipped */}
+                                    {isSkipped && (
+                                      <div
+                                        className="absolute inset-0"
+                                        style={{
+                                          backgroundImage: `linear-gradient(
+                                            to top right,
+                                            ${habit.color} 0%,
+                                            ${habit.color} 50%,
+                                            transparent 50%,
+                                            transparent 100%
+                                          )`,
+                                        }}
+                                      />
+                                    )}
+                                  </button>
+                                )}
+                                {isTomorrow && (
+                                  <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex-shrink-0 border-2 border-dashed border-white/30 flex items-center justify-center bg-white/5">
+                                    <CalendarIcon className="w-5 h-5 text-cream-25/40" />
+                                  </div>
+                                )}
 
                                 <button
                                   onClick={() => {
@@ -1255,13 +1279,16 @@ export function HabitDetailModal({
                                     setIsEditingJournal(true)
                                   }}
                                   className={`flex-1 p-4 sm:p-5 rounded-lg transition-all text-left ${
-                                    isToday
+                                    isTomorrow
+                                      ? 'bg-white/5 border-2 border-dashed border-white/40 hover:bg-white/8 hover:border-white/50'
+                                      : isToday
                                       ? 'bg-white/10 border-2 border-white/30 hover:bg-white/12'
                                       : 'bg-white/5 border border-white/10 hover:bg-white/8'
                                   }`}
                                 >
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className={`text-sm font-medium ${isToday ? 'text-white font-bold' : 'text-cream-25'}`}>
+                                    <span className={`text-sm font-medium ${isTomorrow ? 'text-cream-25/80 flex items-center gap-2' : isToday ? 'text-white font-bold' : 'text-cream-25'}`}>
+                                      {isTomorrow && <span className="text-xs px-2 py-0.5 rounded-full bg-white/20 text-cream-25">Tomorrow</span>}
                                       {date.toLocaleDateString("en-US", {
                                         weekday: "short",
                                         month: "short",
@@ -1276,7 +1303,7 @@ export function HabitDetailModal({
                                   </div>
                                   {!hasNote && !hasCbtNote && (
                                     <p className="text-sm sm:text-base text-cream-25/70">
-                                      Tap to add a journal entry
+                                      {isTomorrow ? 'Tap to prep notes for tomorrow' : 'Tap to add a journal entry'}
                                     </p>
                                   )}
                                   {hasNote && (
@@ -1292,7 +1319,8 @@ export function HabitDetailModal({
                                 </button>
                               </div>
                             )
-                          })}
+                          })
+                        })()}
                       </div>
                     )}
                   </div>

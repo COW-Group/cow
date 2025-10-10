@@ -40,6 +40,7 @@ import type { AppSettings, User as UserType, UserProfile } from "@/lib/types"
 import { NavLinks } from "./nav-links"
 import { useToast } from "@/hooks/use-toast"
 import { AuthService } from "@/lib/auth-service"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 interface DashboardMenuProps {
   isOpen: boolean
@@ -67,6 +68,7 @@ export function DashboardMenu({
   userId,
 }: DashboardMenuProps) {
   const router = useRouter()
+  const isMobile = useIsMobile()
   const [activeCategory, setActiveCategory] = useState("floating-nav")
 
   // Background Images Data
@@ -288,46 +290,46 @@ export function DashboardMenu({
         return (
           <div className="space-y-8">
             <Card className="glassmorphism rounded-3xl shadow-xl border-0 overflow-hidden">
-              <CardHeader className="pb-6">
-                <CardTitle className="flex items-center gap-3 font-lora zen-heading text-xl">
-                  <div className="w-10 h-10 rounded-2xl glassmorphism flex items-center justify-center">
-                    <LayoutDashboard className="h-5 w-5 text-logo-blue" />
+              <CardHeader className="pb-4 md:pb-6">
+                <CardTitle className="flex items-center gap-2.5 md:gap-3 font-lora zen-heading text-lg md:text-xl">
+                  <div className="w-9 h-9 md:w-10 md:h-10 rounded-2xl glassmorphism flex items-center justify-center flex-shrink-0">
+                    <LayoutDashboard className="h-4 w-4 md:h-5 md:w-5 text-logo-blue" />
                   </div>
-                  Navigation Menu Pages
+                  <span>Navigation Menu Pages</span>
                 </CardTitle>
-                <CardDescription className="font-inter text-base">Control which pages appear in your floating navigation menu. Toggle pages on or off to customize your experience.</CardDescription>
+                <CardDescription className="font-inter text-sm md:text-base mt-2">Control which pages appear in your floating navigation menu. Toggle pages on or off to customize your experience.</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6 pt-0">
-                <div className="grid gap-4">
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-logo-blue/10 to-transparent dark:from-logo-blue/5 hover:from-logo-blue/15 dark:hover:from-logo-blue/10 transition-all duration-300">
-                    <div className="space-y-1 flex-1">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-logo-blue"></div>
-                        <Label htmlFor="show-focus-page" className="font-inter font-medium">
+              <CardContent className="space-y-3 md:space-y-4 pt-0">
+                <div className="grid gap-3 md:gap-4">
+                  <div className="flex items-center justify-between p-4 md:p-4 rounded-2xl bg-gradient-to-r from-logo-blue/10 to-transparent dark:from-logo-blue/5 hover:from-logo-blue/15 dark:hover:from-logo-blue/10 active:from-logo-blue/20 transition-all duration-300 touch-manipulation min-h-[72px] md:min-h-[auto]">
+                    <div className="space-y-1 flex-1 pr-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-2 h-2 rounded-full bg-logo-blue flex-shrink-0"></div>
+                        <Label htmlFor="show-focus-page" className="font-inter font-medium text-sm md:text-base cursor-pointer">
                           Focus Page
                         </Label>
                       </div>
-                      <p className="text-sm text-muted-foreground font-inter ml-4">
-                        Deep work and productivity tools for concentrated sessions
+                      <p className="text-xs md:text-sm text-muted-foreground font-inter ml-[18px]">
+                        Deep work and productivity tools
                       </p>
                     </div>
                     <Switch
                       id="show-focus-page"
                       checked={currentSettings.showHeaderFocus || false}
                       onCheckedChange={(val) => handleSettingChange("showHeaderFocus", val)}
-                      className="ml-4"
+                      className="ml-3 flex-shrink-0 scale-125 md:scale-100"
                     />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-emerald-50/30 to-transparent dark:from-emerald-900/20 hover:from-emerald-50/40 dark:hover:from-emerald-900/30 transition-all duration-300">
-                    <div className="space-y-1 flex-1">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-emerald-600"></div>
-                        <Label htmlFor="show-health-page" className="font-inter font-medium">
+                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-emerald-50/30 to-transparent dark:from-emerald-900/20 hover:from-emerald-50/40 dark:hover:from-emerald-900/30 active:from-emerald-50/50 transition-all duration-300 touch-manipulation min-h-[72px] md:min-h-[auto]">
+                    <div className="space-y-1 flex-1 pr-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-2 h-2 rounded-full bg-emerald-600 flex-shrink-0"></div>
+                        <Label htmlFor="show-health-page" className="font-inter font-medium text-sm md:text-base cursor-pointer">
                           Health Page
                         </Label>
                       </div>
-                      <p className="text-sm text-muted-foreground font-inter ml-4">
+                      <p className="text-xs md:text-sm text-muted-foreground font-inter ml-[18px]">
                         Health tracking, fitness goals, and wellness monitoring
                       </p>
                     </div>
@@ -335,19 +337,19 @@ export function DashboardMenu({
                       id="show-health-page"
                       checked={currentSettings.showHeaderHealth || false}
                       onCheckedChange={(val) => handleSettingChange("showHeaderHealth", val)}
-                      className="ml-4"
+                      className="ml-3 flex-shrink-0 scale-125 md:scale-100"
                     />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-sage-50/30 to-transparent dark:from-sage-900/20 hover:from-sage-50/40 dark:hover:from-sage-900/30 transition-all duration-300">
-                    <div className="space-y-1 flex-1">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-sage-600"></div>
-                        <Label htmlFor="show-emotional-page" className="font-inter font-medium">
+                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-sage-50/30 to-transparent dark:from-sage-900/20 hover:from-sage-50/40 dark:hover:from-sage-900/30 active:from-sage-50/50 transition-all duration-300 touch-manipulation min-h-[72px] md:min-h-[auto]">
+                    <div className="space-y-1 flex-1 pr-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-2 h-2 rounded-full bg-sage-600 flex-shrink-0"></div>
+                        <Label htmlFor="show-emotional-page" className="font-inter font-medium text-sm md:text-base cursor-pointer">
                           Emotional Page
                         </Label>
                       </div>
-                      <p className="text-sm text-muted-foreground font-inter ml-4">
+                      <p className="text-xs md:text-sm text-muted-foreground font-inter ml-[18px]">
                         Mood tracking, emotional intelligence, and mindfulness tools
                       </p>
                     </div>
@@ -355,19 +357,19 @@ export function DashboardMenu({
                       id="show-emotional-page"
                       checked={currentSettings.showHeaderEmotional || false}
                       onCheckedChange={(val) => handleSettingChange("showHeaderEmotional", val)}
-                      className="ml-4"
+                      className="ml-3 flex-shrink-0 scale-125 md:scale-100"
                     />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-soft-gold/20 to-transparent dark:from-soft-gold/10 hover:from-soft-gold/30 dark:hover:from-soft-gold/15 transition-all duration-300">
-                    <div className="space-y-1 flex-1">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-soft-gold"></div>
-                        <Label htmlFor="show-vision-page" className="font-inter font-medium">
+                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-soft-gold/20 to-transparent dark:from-soft-gold/10 hover:from-soft-gold/30 dark:hover:from-soft-gold/15 active:from-soft-gold/40 transition-all duration-300 touch-manipulation min-h-[72px] md:min-h-[auto]">
+                    <div className="space-y-1 flex-1 pr-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-2 h-2 rounded-full bg-soft-gold flex-shrink-0"></div>
+                        <Label htmlFor="show-vision-page" className="font-inter font-medium text-sm md:text-base cursor-pointer">
                           Vision Page
                         </Label>
                       </div>
-                      <p className="text-sm text-muted-foreground font-inter ml-4">
+                      <p className="text-xs md:text-sm text-muted-foreground font-inter ml-[18px]">
                         Goal visualization, vision boards, and future planning
                       </p>
                     </div>
@@ -375,19 +377,19 @@ export function DashboardMenu({
                       id="show-vision-page"
                       checked={currentSettings.showHeaderVision || false}
                       onCheckedChange={(val) => handleSettingChange("showHeaderVision", val)}
-                      className="ml-4"
+                      className="ml-3 flex-shrink-0 scale-125 md:scale-100"
                     />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-moss-50/30 to-transparent dark:from-moss-900/20 hover:from-moss-50/40 dark:hover:from-moss-900/30 transition-all duration-300">
-                    <div className="space-y-1 flex-1">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-moss-600"></div>
-                        <Label htmlFor="show-wealth-page" className="font-inter font-medium">
+                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-moss-50/30 to-transparent dark:from-moss-900/20 hover:from-moss-50/40 dark:hover:from-moss-900/30 active:from-moss-50/50 transition-all duration-300 touch-manipulation min-h-[72px] md:min-h-[auto]">
+                    <div className="space-y-1 flex-1 pr-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-2 h-2 rounded-full bg-moss-600 flex-shrink-0"></div>
+                        <Label htmlFor="show-wealth-page" className="font-inter font-medium text-sm md:text-base cursor-pointer">
                           Wealth Page
                         </Label>
                       </div>
-                      <p className="text-sm text-muted-foreground font-inter ml-4">
+                      <p className="text-xs md:text-sm text-muted-foreground font-inter ml-[18px]">
                         Financial tracking, investment tools, and wealth building
                       </p>
                     </div>
@@ -395,19 +397,19 @@ export function DashboardMenu({
                       id="show-wealth-page"
                       checked={currentSettings.showHeaderWealth || false}
                       onCheckedChange={(val) => handleSettingChange("showHeaderWealth", val)}
-                      className="ml-4"
+                      className="ml-3 flex-shrink-0 scale-125 md:scale-100"
                     />
                   </div>
 
-                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-purple-50/30 to-transparent dark:from-purple-900/20 hover:from-purple-50/40 dark:hover:from-purple-900/30 transition-all duration-300">
-                    <div className="space-y-1 flex-1">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-purple-600"></div>
-                        <Label htmlFor="show-social-page" className="font-inter font-medium">
+                  <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-r from-purple-50/30 to-transparent dark:from-purple-900/20 hover:from-purple-50/40 dark:hover:from-purple-900/30 active:from-purple-50/50 transition-all duration-300 touch-manipulation min-h-[72px] md:min-h-[auto]">
+                    <div className="space-y-1 flex-1 pr-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-2 h-2 rounded-full bg-purple-600 flex-shrink-0"></div>
+                        <Label htmlFor="show-social-page" className="font-inter font-medium text-sm md:text-base cursor-pointer">
                           Social Page
                         </Label>
                       </div>
-                      <p className="text-sm text-muted-foreground font-inter ml-4">
+                      <p className="text-xs md:text-sm text-muted-foreground font-inter ml-[18px]">
                         Social connections, relationship tracking, and community features
                       </p>
                     </div>
@@ -415,7 +417,7 @@ export function DashboardMenu({
                       id="show-social-page"
                       checked={currentSettings.showHeaderSocial || false}
                       onCheckedChange={(val) => handleSettingChange("showHeaderSocial", val)}
-                      className="ml-4"
+                      className="ml-3 flex-shrink-0 scale-125 md:scale-100"
                     />
                   </div>
                 </div>
@@ -696,15 +698,15 @@ export function DashboardMenu({
                       </p>
 
                       {/* Time of Day Selector */}
-                      <div className="ml-4 space-y-3">
-                        <div className="flex flex-wrap gap-2">
+                      <div className="ml-0 md:ml-4 space-y-4">
+                        <div className="flex flex-wrap gap-2 md:gap-2">
                           {Object.keys(backgroundImages).map((timeOfDay) => (
                             <Button
                               key={timeOfDay}
                               variant={selectedTimeOfDay === timeOfDay ? "default" : "outline"}
                               size="sm"
                               onClick={() => setSelectedTimeOfDay(timeOfDay)}
-                              className={`capitalize font-inter text-xs transition-all duration-200 ${
+                              className={`capitalize font-inter text-sm md:text-xs touch-manipulation transition-all duration-200 min-h-[40px] md:min-h-[36px] px-4 md:px-3 ${
                                 selectedTimeOfDay === timeOfDay
                                   ? "bg-logo-blue text-cream-25 shadow-md"
                                   : "glassmorphism border-0 text-ink-700 dark:text-cream-300 hover:bg-cream-25/20 dark:hover:bg-ink-800/30"
@@ -716,14 +718,14 @@ export function DashboardMenu({
                         </div>
 
                         {/* Background Image Grid */}
-                        <div className="grid grid-cols-2 gap-3 max-h-48 overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-cream-25/20">
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-3 max-h-[400px] md:max-h-[320px] overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-cream-25/20 pr-1">
                           {backgroundImages[selectedTimeOfDay as keyof typeof backgroundImages].map((image, index) => (
                             <div
                               key={index}
-                              className={`relative group cursor-pointer rounded-xl overflow-hidden transition-all duration-300 border-2 ${
+                              className={`relative group cursor-pointer rounded-2xl overflow-hidden transition-all duration-300 border-2 touch-manipulation ${
                                 currentBackground === image.path
-                                  ? "border-logo-blue shadow-lg scale-105"
-                                  : "border-cream-25/30 dark:border-ink-700/30 hover:border-logo-blue/50 hover:scale-102"
+                                  ? "border-logo-blue shadow-lg ring-2 ring-logo-blue/30"
+                                  : "border-cream-25/30 dark:border-ink-700/30 hover:border-logo-blue/50 active:scale-95"
                               }`}
                               onClick={() => handleBackgroundChange(image.path)}
                             >
@@ -732,17 +734,18 @@ export function DashboardMenu({
                                   src={image.path}
                                   alt={image.name}
                                   fill
-                                  sizes="(max-width: 400px) 180px, 180px"
-                                  className="object-cover transition-all duration-300 group-hover:scale-110"
+                                  sizes="(max-width: 768px) 45vw, 200px"
+                                  className="object-cover transition-all duration-300 group-hover:scale-105"
+                                  priority={index < 2}
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-ink-950/20 to-transparent">
                                   <div className="absolute bottom-2 left-2 right-2">
-                                    <p className="text-cream-25 text-xs font-inter truncate">{image.name}</p>
+                                    <p className="text-cream-25 text-xs md:text-[11px] font-inter font-medium truncate drop-shadow-lg">{image.name}</p>
                                   </div>
                                 </div>
                                 {currentBackground === image.path && (
-                                  <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-logo-blue flex items-center justify-center">
-                                    <div className="w-2 h-2 rounded-full bg-cream-25"></div>
+                                  <div className="absolute top-2 right-2 w-7 h-7 md:w-6 md:h-6 rounded-full bg-logo-blue flex items-center justify-center shadow-lg">
+                                    <div className="w-2.5 h-2.5 md:w-2 md:h-2 rounded-full bg-cream-25"></div>
                                   </div>
                                 )}
                               </div>
@@ -819,26 +822,28 @@ export function DashboardMenu({
         return (
           <div className="space-y-8">
             <Tabs defaultValue="profile" className="w-full">
-              <TabsList className="glassmorphism grid w-full grid-cols-5 rounded-3xl border-0 shadow-lg p-2 h-16">
-                <TabsTrigger value="profile" className="flex items-center gap-2 text-sm font-inter text-cream-25 hover:bg-cream-25/20 data-[state=active]:bg-cream-25/30 data-[state=active]:shadow-lg rounded-2xl transition-all duration-300 h-12">
-                  <UserCircle className="h-4 w-4" />
-                  <span className="hidden sm:inline">Profile</span>
+              <TabsList className="glassmorphism flex md:grid w-full md:grid-cols-5 rounded-3xl border-0 shadow-lg p-2.5 h-auto md:h-16 overflow-x-auto gap-2 md:gap-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-cream-25/20">
+                <TabsTrigger value="profile" className="flex items-center justify-center gap-2 text-sm md:text-sm font-inter text-cream-25 hover:bg-cream-25/20 data-[state=active]:bg-cream-25/30 data-[state=active]:shadow-lg rounded-2xl transition-all duration-300 h-11 md:h-12 min-w-[5rem] md:min-w-0 px-4 md:px-2 touch-manipulation">
+                  <UserCircle className="h-4 w-4 md:h-4 md:w-4 flex-shrink-0" />
+                  <span className="whitespace-nowrap font-medium">Profile</span>
                 </TabsTrigger>
-                <TabsTrigger value="password" className="flex items-center gap-2 text-sm font-inter text-cream-25 hover:bg-cream-25/20 data-[state=active]:bg-cream-25/30 data-[state=active]:shadow-lg rounded-2xl transition-all duration-300 h-12">
-                  <LockKeyhole className="h-4 w-4" />
-                  <span className="hidden sm:inline">Password</span>
+                <TabsTrigger value="password" className="flex items-center justify-center gap-2 text-sm md:text-sm font-inter text-cream-25 hover:bg-cream-25/20 data-[state=active]:bg-cream-25/30 data-[state=active]:shadow-lg rounded-2xl transition-all duration-300 h-11 md:h-12 min-w-[5rem] md:min-w-0 px-4 md:px-2 touch-manipulation">
+                  <LockKeyhole className="h-4 w-4 md:h-4 md:w-4 flex-shrink-0" />
+                  <span className="whitespace-nowrap font-medium hidden sm:inline">Password</span>
+                  <span className="whitespace-nowrap font-medium sm:hidden">Pass</span>
                 </TabsTrigger>
-                <TabsTrigger value="preferences" className="flex items-center gap-2 text-sm font-inter text-cream-25 hover:bg-cream-25/20 data-[state=active]:bg-cream-25/30 data-[state=active]:shadow-lg rounded-2xl transition-all duration-300 h-12">
-                  <Palette className="h-4 w-4" />
-                  <span className="hidden sm:inline">Theme</span>
+                <TabsTrigger value="preferences" className="flex items-center justify-center gap-2 text-sm md:text-sm font-inter text-cream-25 hover:bg-cream-25/20 data-[state=active]:bg-cream-25/30 data-[state=active]:shadow-lg rounded-2xl transition-all duration-300 h-11 md:h-12 min-w-[5rem] md:min-w-0 px-4 md:px-2 touch-manipulation">
+                  <Palette className="h-4 w-4 md:h-4 md:w-4 flex-shrink-0" />
+                  <span className="whitespace-nowrap font-medium">Theme</span>
                 </TabsTrigger>
-                <TabsTrigger value="audio_tasks" className="flex items-center gap-2 text-sm font-inter text-cream-25 hover:bg-cream-25/20 data-[state=active]:bg-cream-25/30 data-[state=active]:shadow-lg rounded-2xl transition-all duration-300 h-12">
-                  <Bell className="h-4 w-4" />
-                  <span className="hidden sm:inline">App</span>
+                <TabsTrigger value="audio_tasks" className="flex items-center justify-center gap-2 text-sm md:text-sm font-inter text-cream-25 hover:bg-cream-25/20 data-[state=active]:bg-cream-25/30 data-[state=active]:shadow-lg rounded-2xl transition-all duration-300 h-11 md:h-12 min-w-[5rem] md:min-w-0 px-4 md:px-2 touch-manipulation">
+                  <Bell className="h-4 w-4 md:h-4 md:w-4 flex-shrink-0" />
+                  <span className="whitespace-nowrap font-medium">App</span>
                 </TabsTrigger>
-                <TabsTrigger value="navigation" className="flex items-center gap-2 text-sm font-inter text-cream-25 hover:bg-cream-25/20 data-[state=active]:bg-cream-25/30 data-[state=active]:shadow-lg rounded-2xl transition-all duration-300 h-12">
-                  <Menu className="h-4 w-4" />
-                  <span className="hidden sm:inline">Navigation</span>
+                <TabsTrigger value="navigation" className="flex items-center justify-center gap-2 text-sm md:text-sm font-inter text-cream-25 hover:bg-cream-25/20 data-[state=active]:bg-cream-25/30 data-[state=active]:shadow-lg rounded-2xl transition-all duration-300 h-11 md:h-12 min-w-[5rem] md:min-w-0 px-4 md:px-2 touch-manipulation">
+                  <Menu className="h-4 w-4 md:h-4 md:w-4 flex-shrink-0" />
+                  <span className="whitespace-nowrap font-medium hidden sm:inline">Navigation</span>
+                  <span className="whitespace-nowrap font-medium sm:hidden">Nav</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -916,27 +921,27 @@ export function DashboardMenu({
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
-        className="sm:max-w-[1200px] max-h-[95vh] overflow-hidden p-0 flex border-0"
+        className="w-full h-full max-w-full max-h-full md:w-[90vw] md:max-w-[1200px] md:max-h-[95vh] md:h-auto overflow-hidden p-0 flex flex-col md:flex-row border-0 gap-0 md:rounded-2xl rounded-none"
         style={{
           background: 'rgba(255, 255, 255, 0.08)',
           backdropFilter: 'blur(40px) saturate(200%)',
-          borderRadius: '24px',
           border: '1px solid rgba(255, 255, 255, 0.12)',
           boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 20px 40px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.04)'
         }}
       >
         <DialogTitle className="sr-only">App Configuration</DialogTitle>
-        {/* Enhanced Left Sidebar Navigation */}
-        <div
-          className="w-72 p-8 flex flex-col justify-between border-r"
-          style={{
-            background: 'rgba(255, 255, 255, 0.06)',
-            backdropFilter: 'blur(20px) saturate(180%)',
-            borderRadius: '24px 0 0 24px',
-            border: 'none',
-            borderRight: '1px solid rgba(255, 255, 255, 0.08)'
-          }}
-        >
+        {/* Enhanced Left Sidebar Navigation - Only render on desktop */}
+        {!isMobile && (
+          <div
+            className="w-72 p-8 flex flex-col justify-between border-r"
+            style={{
+              background: 'rgba(255, 255, 255, 0.06)',
+              backdropFilter: 'blur(20px) saturate(180%)',
+              borderRadius: '16px 0 0 16px',
+              border: 'none',
+              borderRight: '1px solid rgba(255, 255, 255, 0.08)'
+            }}
+          >
           <div className="space-y-6">
             {/* Header Section */}
             <div className="text-center space-y-3">
@@ -1008,22 +1013,100 @@ export function DashboardMenu({
             </Button>
           </div>
         </div>
+        )}
 
         {/* Enhanced Main Content Area */}
-        <div className="flex-1 flex flex-col overflow-hidden">
+        <div className="flex-1 flex flex-col overflow-hidden w-full h-full">
+          {/* Mobile Header - Visible only on mobile */}
+          <div className="md:hidden px-4 py-4 space-y-3 border-b flex-shrink-0" style={{
+            borderColor: 'rgba(255, 255, 255, 0.12)',
+            background: 'rgba(255, 255, 255, 0.04)'
+          }}>
+            {/* Main Title */}
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div
+                  className="w-9 h-9 flex items-center justify-center rounded-xl"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.15)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)'
+                  }}
+                >
+                  <Cog className="h-5 w-5" style={{ color: 'rgba(255, 255, 255, 0.95)' }} />
+                </div>
+                <h2 className="font-lora text-xl font-light tracking-wide" style={{ color: 'rgba(255, 255, 255, 0.95)' }}>
+                  Configuration
+                </h2>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-1.5 font-inter border-0 transition-all duration-300 rounded-xl px-3.5 py-2 touch-manipulation min-h-[44px]"
+                onClick={handleSignOut}
+                style={{
+                  background: 'rgba(255, 255, 255, 0.1)',
+                  backdropFilter: 'blur(10px) saturate(150%)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  color: 'rgba(255, 255, 255, 0.9)'
+                }}
+              >
+                <LogOut className="h-4 w-4" />
+                <span className="text-sm font-medium">Sign Out</span>
+              </Button>
+            </div>
+
+            {/* User Info */}
+            <div className="flex items-center gap-2 px-0.5">
+              <UserCircle className="h-4 w-4 flex-shrink-0" style={{ color: 'rgba(255, 255, 255, 0.7)' }} />
+              <span className="font-inter text-sm" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                {userProfileName || "User"}
+              </span>
+            </div>
+
+            {/* Category Selector with Label */}
+            <div className="space-y-2">
+              <label className="font-inter text-xs font-semibold uppercase tracking-wide px-0.5" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+                Select Category
+              </label>
+              <select
+                value={activeCategory}
+                onChange={(e) => setActiveCategory(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl font-inter text-sm font-medium touch-manipulation min-h-[48px] appearance-none"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  backdropFilter: 'blur(10px) saturate(150%)',
+                  border: '1px solid rgba(255, 255, 255, 0.25)',
+                  color: 'rgba(255, 255, 255, 0.95)',
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='rgba(255,255,255,0.8)' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 1rem center',
+                  paddingRight: '2.5rem'
+                }}
+              >
+                <option value="floating-nav" style={{ background: '#1a1a1a', color: '#fff' }}>📱 Navigation Pages</option>
+                <option value="app-features" style={{ background: '#1a1a1a', color: '#fff' }}>✨ App Features</option>
+                <option value="dashboard-elements" style={{ background: '#1a1a1a', color: '#fff' }}>🎨 Dashboard Elements</option>
+                <option value="appearance" style={{ background: '#1a1a1a', color: '#fff' }}>🎭 Appearance</option>
+                <option value="notifications" style={{ background: '#1a1a1a', color: '#fff' }}>🔔 Notifications</option>
+                <option value="settings" style={{ background: '#1a1a1a', color: '#fff' }}>⚙️ Settings</option>
+              </select>
+            </div>
+          </div>
+
           {/* Dynamic Header based on active category */}
           <div
-            className="px-8 py-6"
+            className="px-5 py-4 md:px-8 md:py-6 hidden md:block"
             style={{
               background: 'rgba(255, 255, 255, 0.04)',
               backdropFilter: 'blur(10px) saturate(120%)',
-              borderRadius: '0 24px 0 0',
+              borderRadius: '0',
               borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
             }}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                {getCategoryIcon(activeCategory)}
+                <div>{getCategoryIcon(activeCategory)}</div>
                 <div>
                   <h3
                     className="font-lora zen-heading text-2xl capitalize font-extralight tracking-wider"
@@ -1053,13 +1136,16 @@ export function DashboardMenu({
 
           {/* Content Area with better scrolling */}
           <div
-            className="flex-1 overflow-y-auto px-8 py-6"
+            className="flex-1 overflow-y-auto px-4 py-5 md:px-8 md:py-6 overscroll-contain"
             style={{
               background: 'rgba(255, 255, 255, 0.02)',
-              backdropFilter: 'blur(5px) saturate(100%)'
+              backdropFilter: 'blur(5px) saturate(100%)',
+              WebkitOverflowScrolling: 'touch',
+              scrollbarWidth: 'thin',
+              height: '100%'
             }}
           >
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6 pb-8 md:pb-6">
               {renderContent()}
             </div>
           </div>

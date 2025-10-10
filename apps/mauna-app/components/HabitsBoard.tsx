@@ -813,6 +813,13 @@ const SortableHabitRow: React.FC<SortableHabitRowProps> = ({
           showQuickActions ? 'left-[240px] sm:left-[280px] md:left-[320px] w-32 sm:w-40' : 'left-0 w-48 sm:w-64'
         }`}
       >
+        {/* Color Indicator */}
+        <div
+          className="w-1 h-6 rounded-full flex-shrink-0"
+          style={{ backgroundColor: habit.color }}
+          title={`Color: ${colorOptions.find(c => c.value === habit.color)?.name || 'Custom'}`}
+        />
+
         {/* Habit Label */}
         <div
           className="flex-1 min-w-0 cursor-pointer"

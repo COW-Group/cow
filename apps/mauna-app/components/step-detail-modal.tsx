@@ -103,6 +103,7 @@ const frequencyOptions = [
   { value: "Every day!", label: "Every day" },
   { value: "Monday, Tuesday, Wednesday, Thursday, Friday", label: "Weekdays" },
   { value: "Saturday, Sunday", label: "Weekends" },
+  { value: "", label: "Once" },
   { value: "custom", label: "Custom" },
 ]
 

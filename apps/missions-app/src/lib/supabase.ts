@@ -1,18 +1,12 @@
-import { createClient } from '@supabase/supabase-js';
+/**
+ * Missions-app Supabase client
+ *
+ * Uses shared @cow/supabase-client package for consistent configuration
+ * across the monorepo. Database types are defined below for TypeScript support.
+ */
+import { supabase as sharedSupabase } from '@cow/supabase-client';
 
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL ||
-                   process.env.NEXT_PUBLIC_SUPABASE_URL ||
-                   'https://spnoztsuvgxrdmkeygdu.supabase.co';
-
-const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY ||
-                   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-                   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNwbm96dHN1dmd4cmRta2V5Z2R1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA0MDQ5NzEsImV4cCI6MjA2NTk4MDk3MX0.WIL49nW6pTtfoueVnKiPfNaHukVKzoo4nxSAfLemcOU';
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase environment variables. Please check your environment configuration.');
-}
-
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = sharedSupabase;
 
 // Database types for TypeScript
 export interface Database {

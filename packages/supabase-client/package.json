@@ -1,0 +1,21 @@
+{
+  "name": "@cow/supabase-client",
+  "version": "1.0.0",
+  "description": "Shared Supabase client for COW monorepo",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch"
+  },
+  "keywords": ["supabase", "client", "shared"],
+  "author": "COW Team",
+  "license": "MIT",
+  "peerDependencies": {
+    "@supabase/supabase-js": "^2.38.0"
+  },
+  "devDependencies": {
+    "@supabase/supabase-js": "^2.38.0",
+    "typescript": "^5.0.0"
+  }
+}

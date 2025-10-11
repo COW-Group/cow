@@ -83,7 +83,11 @@ module.exports = (env, argv) => {
         title: 'Missions - Project Management',
       }),
       new webpack.DefinePlugin({
-        'process.env': JSON.stringify(process.env),
+        'process.env.NODE_ENV': JSON.stringify(isProduction ? 'production' : 'development'),
+        'process.env.REACT_APP_SUPABASE_URL': JSON.stringify(process.env.REACT_APP_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL),
+        'process.env.REACT_APP_SUPABASE_ANON_KEY': JSON.stringify(process.env.REACT_APP_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
+        'process.env.NEXT_PUBLIC_SUPABASE_URL': JSON.stringify(process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.REACT_APP_SUPABASE_URL),
+        'process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY': JSON.stringify(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.REACT_APP_SUPABASE_ANON_KEY),
       }),
       new webpack.ProvidePlugin({
         process: 'process/browser.js',

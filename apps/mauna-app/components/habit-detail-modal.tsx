@@ -444,7 +444,7 @@ export function HabitDetailModal({
       )}
 
       <div className="h-full w-full sm:h-auto sm:w-auto sm:absolute sm:inset-4 sm:m-auto sm:max-w-6xl sm:max-h-[calc(100vh-2rem)] flex items-stretch sm:items-center justify-center p-0 sm:p-4">
-        <div className="w-full h-full min-h-full bg-gray-900/95 backdrop-blur-xl rounded-none sm:rounded-3xl flex flex-col overflow-hidden" style={{ maxHeight: "100%" }}>
+        <div className="w-full h-full min-h-screen sm:min-h-0 bg-gray-900/95 backdrop-blur-xl rounded-none sm:rounded-3xl flex flex-col overflow-hidden" style={{ maxHeight: "100%" }}>
           {/* Segmented Progress Bar - Instagram Stories Style */}
           {!isEditingHabit && allHabits.length > 0 && (
             <div className="flex-shrink-0 px-4 pt-3 pb-3">
@@ -528,7 +528,7 @@ export function HabitDetailModal({
             </div>
           )}
 
-          <div className={`flex-1 overflow-y-auto overflow-x-hidden px-4 sm:px-6 ${activeTab === "journal" && !isEditingJournal ? "" : "py-4 sm:py-6"}`} style={{ flex: "1 1 0%" }}>
+          <div className={`flex-1 overflow-y-auto overflow-x-hidden px-4 sm:px-6 ${activeTab === "journal" && !isEditingJournal ? "" : "py-4 sm:py-6"}`} style={{ flex: "1 1 0%", minHeight: "0" }}>
             {isEditingHabit ? (
               <div className="space-y-4 sm:space-y-6">
                 <div className="space-y-2">

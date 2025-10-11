@@ -315,7 +315,7 @@ export default function NewJournalEntryPage() {
       }
     },
     [currentUser?.id, title, entry, category, visionBoardLevel, visionBoardItemId, visionBoardItemTitle, tags, type, router]
-  )
+  );
 
   if (error) {
     return (

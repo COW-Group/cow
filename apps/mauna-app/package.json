@@ -9,6 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@cow/supabase-client": "*",
     "@ai-sdk/openai": "latest",
     "@dnd-kit/core": "latest",
     "@dnd-kit/modifiers": "latest",

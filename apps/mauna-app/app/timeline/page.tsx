@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation"
 import { useAuth } from "@/hooks/use-auth"
 import { AuthService } from "@/lib/auth-service"
 import { TimelineWrapper } from "@/components/TimelineWrapper"
-import { FloatingNav } from "@/components/floating-nav"
 import { VisionDataProvider } from "@/lib/vision-data-provider"
 import { databaseService } from "@/lib/database-service"
 import { Loader2Icon } from "lucide-react"
@@ -109,11 +108,11 @@ export default function TimelinePage() {
 
   return (
     <VisionDataProvider userId={user.id} databaseService={databaseService}>
-      <FloatingNav settings={appSettings} onSettingsUpdate={handleUpdateAppSettings} />
+      {/* FloatingNav removed from timeline page - using bottom nav instead */}
       <div className="min-h-screen relative flex flex-col font-inter">
-        <main className="flex-1 flex flex-col items-center justify-start p-4 pt-32 md:pt-36 sm:pt-28 relative z-10">
-          {/* Page Header */}
-          <div className="w-full max-w-7xl mb-6">
+        <main className="flex-1 flex flex-col items-center justify-start p-0 md:p-4 pt-0 md:pt-36 pb-0 md:pb-8 relative z-10">
+          {/* Page Header - Desktop only */}
+          <div className="hidden md:block w-full max-w-7xl mb-6">
             <div className="flex items-center justify-between">
               {/* Page Title */}
               <h1
@@ -129,22 +128,30 @@ export default function TimelinePage() {
             </div>
           </div>
 
-          {/* Timeline Content */}
-          <div className="w-full max-w-7xl flex-1">
-            <Card
-              className="w-full h-full overflow-y-auto border-0 shadow-xl"
-              style={{
-                background: 'rgba(255, 255, 255, 0.08)',
-                backdropFilter: 'blur(40px) saturate(200%)',
-                borderRadius: '24px',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 20px 40px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.04)'
-              }}
-            >
-              <CardContent className="p-4 sm:p-6">
-                <TimelineWrapper />
-              </CardContent>
-            </Card>
+          {/* Timeline Content - Full screen on mobile, card on desktop */}
+          <div className="w-full h-full md:max-w-7xl flex-1">
+            {/* Desktop: Liquid glass card */}
+            <div className="hidden md:block w-full h-full">
+              <Card
+                className="w-full h-full overflow-y-auto border-0 shadow-xl"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  backdropFilter: 'blur(40px) saturate(200%)',
+                  borderRadius: '24px',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 20px 40px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.04)'
+                }}
+              >
+                <CardContent className="p-4 sm:p-6">
+                  <TimelineWrapper />
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Mobile: Transparent full screen */}
+            <div className="md:hidden w-full h-full">
+              <TimelineWrapper />
+            </div>
           </div>
         </main>
       </div>

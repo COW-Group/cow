@@ -299,7 +299,7 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
         isbuildhabit: stepData.isbuildhabit || false,
         user_id: user.id,
         length_id: lengthId || null,
-        scheduled_date: scheduledDate || null, // Add scheduled date for activities
+        start_date: scheduledDate || null, // Start date for both habits and activities
         habit_notes: {
           _scheduled_time: scheduledTime,
           energyLevel: energyLevel,

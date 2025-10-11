@@ -9,6 +9,7 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  transpilePackages: ['@cow/supabase-client'],
 }
 
 export default nextConfig

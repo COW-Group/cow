@@ -337,8 +337,13 @@ const SortableCategory: React.FC<SortableCategoryProps> = ({
                     {/* Backdrop */}
                     <div
                       className="fixed inset-0"
-                      style={{ zIndex: 999998 }}
+                      style={{ zIndex: 999998, touchAction: 'auto' }}
                       onClick={(e) => {
+                        e.stopPropagation()
+                        setShowColorPicker(false)
+                        setColorPickerPosition(null)
+                      }}
+                      onTouchEnd={(e) => {
                         e.stopPropagation()
                         setShowColorPicker(false)
                         setColorPickerPosition(null)
@@ -357,6 +362,20 @@ const SortableCategory: React.FC<SortableCategoryProps> = ({
                         left: `${colorPickerPosition.left}px`,
                       }}
                     >
+                      {/* Close button for mobile */}
+                      <div className="flex items-center justify-between px-2 py-1 border-b border-white/10 sm:hidden">
+                        <span className="text-xs text-cream-25/60">Select Color</span>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setShowColorPicker(false)
+                            setColorPickerPosition(null)
+                          }}
+                          className="p-1 hover:bg-white/10 rounded transition-colors touch-manipulation"
+                        >
+                          <X className="w-4 h-4 text-cream-25" />
+                        </button>
+                      </div>
                       <div className="flex">
                         {colorOptions.map((color) => (
                           <button
@@ -369,7 +388,7 @@ const SortableCategory: React.FC<SortableCategoryProps> = ({
                               setShowColorPicker(false)
                               setColorPickerPosition(null)
                             }}
-                            className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center hover:opacity-80 transition-opacity relative"
+                            className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center hover:opacity-80 transition-opacity relative touch-manipulation"
                             style={{ backgroundColor: color.value }}
                             title={color.name}
                           >
@@ -617,8 +636,13 @@ const SortableHabitRow: React.FC<SortableHabitRowProps> = ({
                 {/* Backdrop */}
                 <div
                   className="fixed inset-0"
-                  style={{ zIndex: 999998 }}
+                  style={{ zIndex: 999998, touchAction: 'auto' }}
                   onClick={(e) => {
+                    e.stopPropagation()
+                    setShowColorPicker(null)
+                    setColorPickerPosition(null)
+                  }}
+                  onTouchEnd={(e) => {
                     e.stopPropagation()
                     setShowColorPicker(null)
                     setColorPickerPosition(null)
@@ -637,6 +661,20 @@ const SortableHabitRow: React.FC<SortableHabitRowProps> = ({
                     left: `${colorPickerPosition.left}px`,
                   }}
                 >
+                  {/* Close button for mobile */}
+                  <div className="flex items-center justify-between px-2 py-1 border-b border-white/10 sm:hidden">
+                    <span className="text-xs text-cream-25/60">Select Color</span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        setShowColorPicker(null)
+                        setColorPickerPosition(null)
+                      }}
+                      className="p-1 hover:bg-white/10 rounded transition-colors touch-manipulation"
+                    >
+                      <X className="w-4 h-4 text-cream-25" />
+                    </button>
+                  </div>
                   <div className="flex">
                     {colorOptions.map((color) => (
                       <button
@@ -647,7 +685,7 @@ const SortableHabitRow: React.FC<SortableHabitRowProps> = ({
                           setShowColorPicker(null)
                           setColorPickerPosition(null)
                         }}
-                        className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center hover:opacity-80 transition-opacity relative"
+                        className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center hover:opacity-80 transition-opacity relative touch-manipulation"
                         style={{ backgroundColor: color.value }}
                         title={color.name}
                       >
@@ -710,8 +748,12 @@ const SortableHabitRow: React.FC<SortableHabitRowProps> = ({
                 {/* Backdrop */}
                 <div
                   className="fixed inset-0 bg-black/70"
-                  style={{ zIndex: 999998 }}
+                  style={{ zIndex: 999998, touchAction: 'auto' }}
                   onClick={(e) => {
+                    e.stopPropagation()
+                    setShowTimePicker(null)
+                  }}
+                  onTouchEnd={(e) => {
                     e.stopPropagation()
                     setShowTimePicker(null)
                   }}
@@ -719,7 +761,7 @@ const SortableHabitRow: React.FC<SortableHabitRowProps> = ({
 
                 {/* Time Picker */}
                 <div
-                  className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl overflow-hidden"
+                  className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl overflow-hidden w-[90%] max-w-md"
                   style={{
                     zIndex: 999999,
                     background: 'rgba(20, 20, 20, 0.98)',
@@ -729,19 +771,33 @@ const SortableHabitRow: React.FC<SortableHabitRowProps> = ({
                   }}
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="p-6">
+                  <div className="p-4 sm:p-6">
+                    {/* Header with close button for mobile */}
+                    <div className="flex items-center justify-between mb-4 sm:hidden">
+                      <span className="text-sm text-cream-25/60">Select Time</span>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setShowTimePicker(null)
+                        }}
+                        className="p-1 hover:bg-white/10 rounded transition-colors touch-manipulation"
+                      >
+                        <X className="w-4 h-4 text-cream-25" />
+                      </button>
+                    </div>
+
                     {/* Time Selectors */}
-                    <div className="flex gap-4 mb-6">
+                    <div className="flex gap-2 sm:gap-4 mb-6">
                       {/* Hour Selector */}
-                      <div className="flex flex-col items-center">
-                        <div className="h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
+                      <div className="flex flex-col items-center flex-1">
+                        <div className="h-40 sm:h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent w-full">
                           {Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0')).map((hour) => (
                             <button
                               key={hour}
                               onClick={() => setSelectedTime({ ...selectedTime, hour })}
-                              className={`w-16 h-12 flex items-center justify-center text-lg font-mono transition-colors ${
+                              className={`w-full h-10 sm:h-12 flex items-center justify-center text-base sm:text-lg font-mono transition-colors touch-manipulation ${
                                 selectedTime.hour === hour
-                                  ? 'text-cream-25 font-semibold'
+                                  ? 'text-cream-25 font-semibold bg-white/10'
                                   : 'text-cream-25/40 hover:text-cream-25/70'
                               }`}
                             >
@@ -752,18 +808,18 @@ const SortableHabitRow: React.FC<SortableHabitRowProps> = ({
                       </div>
 
                       {/* Separator */}
-                      <div className="flex items-center text-2xl text-cream-25 font-mono">:</div>
+                      <div className="flex items-center text-xl sm:text-2xl text-cream-25 font-mono">:</div>
 
                       {/* Minute Selector */}
-                      <div className="flex flex-col items-center">
-                        <div className="h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent">
+                      <div className="flex flex-col items-center flex-1">
+                        <div className="h-40 sm:h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-white/20 scrollbar-track-transparent w-full">
                           {Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0')).map((minute) => (
                             <button
                               key={minute}
                               onClick={() => setSelectedTime({ ...selectedTime, minute })}
-                              className={`w-16 h-12 flex items-center justify-center text-lg font-mono transition-colors ${
+                              className={`w-full h-10 sm:h-12 flex items-center justify-center text-base sm:text-lg font-mono transition-colors touch-manipulation ${
                                 selectedTime.minute === minute
-                                  ? 'text-cream-25 font-semibold'
+                                  ? 'text-cream-25 font-semibold bg-white/10'
                                   : 'text-cream-25/40 hover:text-cream-25/70'
                               }`}
                             >
@@ -775,7 +831,7 @@ const SortableHabitRow: React.FC<SortableHabitRowProps> = ({
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="flex gap-4">
+                    <div className="flex gap-3 sm:gap-4">
                       <button
                         onClick={async (e) => {
                           e.stopPropagation()
@@ -784,7 +840,7 @@ const SortableHabitRow: React.FC<SortableHabitRowProps> = ({
                           setShowTimePicker(null)
                           toast({ title: "Time Updated", description: `Habit time set to ${newTime}` })
                         }}
-                        className="flex-1 px-4 py-2 rounded-lg text-blue-400 hover:bg-blue-400/10 transition-colors font-medium"
+                        className="flex-1 px-3 sm:px-4 py-2.5 sm:py-2 rounded-lg text-blue-400 hover:bg-blue-400/10 transition-colors font-medium text-sm sm:text-base touch-manipulation min-h-[44px] sm:min-h-0"
                       >
                         Ok
                       </button>
@@ -793,7 +849,7 @@ const SortableHabitRow: React.FC<SortableHabitRowProps> = ({
                           e.stopPropagation()
                           setShowTimePicker(null)
                         }}
-                        className="flex-1 px-4 py-2 rounded-lg text-cream-25/60 hover:bg-white/10 transition-colors font-medium"
+                        className="flex-1 px-3 sm:px-4 py-2.5 sm:py-2 rounded-lg text-cream-25/60 hover:bg-white/10 transition-colors font-medium text-sm sm:text-base touch-manipulation min-h-[44px] sm:min-h-0"
                       >
                         Cancel
                       </button>

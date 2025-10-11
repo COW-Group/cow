@@ -1,12 +1,9 @@
-import { createClient } from "@supabase/supabase-js"
+/**
+ * Mauna-app Supabase client
+ *
+ * Uses shared @cow/supabase-client package for consistent configuration
+ * across the monorepo.
+ */
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: true,
-  },
-})
+export { supabase, createSupabaseClient } from "@cow/supabase-client"
+export type { SupabaseClient, SupabaseConfig } from "@cow/supabase-client"

@@ -15,6 +15,8 @@ import {
   ShoppingCart,
   X,
   HeartPulse,
+  CheckSquare,
+  Clock,
 } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -70,6 +72,9 @@ export function Header({ isMenuOpen, onToggleMenu, settings }: HeaderProps) {
     showHeaderProjects: true,
     showHeaderSales: true,
     showHeaderMarketplace: true,
+    showHabitsMenu: true,
+    showHeaderHabits: true,
+    showHeaderTimeline: true,
   }
 
   const menuItems = [
@@ -77,12 +82,14 @@ export function Header({ isMenuOpen, onToggleMenu, settings }: HeaderProps) {
     { icon: Brain, label: "Focus", path: "/focus", settingKey: "showHeaderFocus" },
     { icon: Heart, label: "Emotional", path: "/emotional", settingKey: "showHeaderEmotional" },
     { icon: HeartPulse, label: "Health", path: "/health", settingKey: "showHeaderHealth" },
+    { icon: CheckSquare, label: "Habits", path: "/habits", settingKey: "showHeaderHabits" },
     { icon: Eye, label: "Vision", path: "/vision", settingKey: "showHeaderVision" },
     { icon: DollarSign, label: "Wealth", path: "/wealth", settingKey: "showHeaderWealth" },
     { icon: Users, label: "Social", path: "/social", settingKey: "showHeaderSocial" },
     { icon: Briefcase, label: "Projects", path: "/missions", settingKey: "showHeaderProjects" },
     { icon: TrendingUp, label: "Sales", path: "/sales", settingKey: "showHeaderSales" },
     { icon: ShoppingCart, label: "Marketplace", path: "/marketplace", settingKey: "showHeaderMarketplace" },
+    { icon: Clock, label: "Timeline", path: "/timeline", settingKey: "showHeaderTimeline" },
   ] as const
 
   if (isRootPage) {
@@ -113,39 +120,45 @@ export function Header({ isMenuOpen, onToggleMenu, settings }: HeaderProps) {
       {/* Three-dot menu below the top row, centered */}
       <div className="relative mt-2">
         {showDashboardMenu ? (
-          // Expanded menu (glassmorphic)
-          <div className="absolute left-1/2 -translate-x-1/2 top-0 flex items-center gap-2 p-2 rounded-full glassmorphism animate-in fade-in duration-300">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setShowDashboardMenu(false)}
-              className="h-10 w-10 rounded-full text-cream-25 hover:bg-white/20 dark:hover:bg-black/20"
-              aria-label="Close dashboard menu"
-            >
-              <X className="h-6 w-6" />
-            </Button>
-            {menuItems.map((item) => {
-              // Conditionally render based on effectiveSettings
-              const settingValue = effectiveSettings[item.settingKey as keyof AppSettings]
-              if (settingValue === false) {
-                return null
-              }
-              return (
-                <Button
-                  key={item.path}
-                  variant="ghost"
-                  size="icon"
-                  className="h-10 w-10 rounded-full text-cream-25 hover:bg-white/20 dark:hover:bg-black/20"
-                  onClick={() => {
-                    router.push(item.path)
-                    setShowDashboardMenu(false)
-                  }}
-                >
-                  {item.icon && <item.icon className="h-6 w-6" />}
-                  <span className="sr-only">{item.label}</span>
-                </Button>
-              )
-            })}
+          // Expanded menu (solid background dropdown) - DEBUG MODE
+          <div className="absolute left-1/2 -translate-x-1/2 top-0 w-64 rounded-2xl shadow-2xl animate-in fade-in duration-300 overflow-hidden" style={{ backgroundColor: '#1a1a1a', border: '4px solid red' }}>
+            <div className="p-3 border-b flex items-center justify-between" style={{ backgroundColor: '#7c3aed', borderBottomColor: 'red' }}>
+              <h3 className="text-sm font-semibold text-white">Navigation</h3>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowDashboardMenu(false)}
+                className="h-8 w-8 rounded-full text-white hover:bg-white/20"
+                aria-label="Close dashboard menu"
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </div>
+            <div className="py-2" style={{ backgroundColor: '#1a1a1a' }}>
+              {menuItems.map((item) => {
+                // Conditionally render based on effectiveSettings
+                const settingValue = effectiveSettings[item.settingKey as keyof AppSettings]
+                if (settingValue === false) {
+                  return null
+                }
+                return (
+                  <button
+                    key={item.path}
+                    onClick={() => {
+                      router.push(item.path)
+                      setShowDashboardMenu(false)
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 text-white transition-colors duration-200"
+                    style={{ backgroundColor: '#2a2a2a', border: '1px solid yellow' }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#3a3a3a'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#2a2a2a'}
+                  >
+                    {item.icon && <item.icon className="h-5 w-5 flex-shrink-0" />}
+                    <span className="text-sm font-medium">{item.label}</span>
+                  </button>
+                )
+              })}
+            </div>
           </div>
         ) : (
           // Collapsed menu (transparent background)

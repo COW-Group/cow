@@ -57,6 +57,8 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     showHeaderProjects: true,
     showHeaderSales: true,
     showHeaderMarketplace: true,
+    showHeaderHabits: true,
+    showHeaderTimeline: true,
   })
   const { user, signOut, loading } = useAuthContext()
   const { toast } = useToast()
@@ -65,6 +67,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const isDashboardPage = pathname === "/dashboard"
   const isFocusPage = pathname === "/focus"
   const isHabitsPage = pathname === "/habits"
+  const isTimelinePage = pathname === "/timeline"
 
   if (loading) {
     return (
@@ -105,7 +108,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             "flex min-h-screen flex-col bg-transparent font-sans antialiased overflow-y-auto",
           )}
         >
-          {!isDashboardPage && !isFocusPage && !isHabitsPage && (
+          {!isDashboardPage && !isFocusPage && !isHabitsPage && !isTimelinePage && (
             <>
               <Header isMenuOpen={isAppMenuOpen} onToggleMenu={toggleAppMenu} settings={appSettings} />
               <DashboardMenu

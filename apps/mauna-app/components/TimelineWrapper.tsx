@@ -21,7 +21,8 @@ interface TimelineItem {
   description: string
   color: string
   scheduledTime: string // HH:mm format
-  scheduledDate?: string // ISO date string for the scheduled date
+  startDate?: string // ISO date string - for habits (start date) and activities (scheduled date)
+  endDate?: string // ISO date string - for habits (optional end date)
   estimatedStartTime?: string | null // Full timestamp with date and time
   estimatedEndTime?: string | null // Full timestamp with date and time
   duration: number // in minutes
@@ -96,7 +97,8 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
           priority_letter,
           priority_rank,
           timezone,
-          scheduled_date,
+          start_date,
+          end_date,
           task_lists (
             id,
             name
@@ -131,8 +133,9 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
           const habitNotes = step.habit_notes || {}
           const scheduledTime = habitNotes._scheduled_time || "08:00"
 
-          // Get scheduled date from database (for activities)
-          const scheduledDate: string | undefined = step.scheduled_date || undefined
+          // Get start and end dates from database
+          const startDate: string | undefined = step.start_date || undefined
+          const endDate: string | undefined = step.end_date || undefined
           const estimatedStartTime = null
           const estimatedEndTime = null
 
@@ -160,7 +163,8 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
             description: step.description || "No description",
             color: step.color || "#FFD700",
             scheduledTime: scheduledTime,
-            scheduledDate: scheduledDate,
+            startDate: startDate,
+            endDate: endDate,
             estimatedStartTime: estimatedStartTime,
             estimatedEndTime: estimatedEndTime,
             duration: durationInMinutes,
@@ -184,11 +188,23 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
 
       // Filter items by selected date
       const timelineItems = allTimelineItems.filter((item) => {
-        // Habits show based on their frequency
+        const selectedDateStr = selectedDate.toISOString().split('T')[0]
+
+        // Habits show based on their frequency AND date range
         if (item.type === "habit") {
+          // Check if habit has started
+          if (item.startDate && selectedDateStr < item.startDate) {
+            return false // Habit hasn't started yet
+          }
+
+          // Check if habit has ended
+          if (item.endDate && selectedDateStr > item.endDate) {
+            return false // Habit has ended
+          }
+
           const frequency = item.frequency || "Every day!"
 
-          // If frequency is "Every day!", show on all days
+          // If frequency is "Every day!", show on all days (within date range)
           if (frequency === "Every day!") {
             return true
           }
@@ -203,14 +219,12 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
 
         // Activities only show on their specific scheduled date
         if (item.type === "activity") {
-          if (!item.scheduledDate) {
-            // One-time activities without a scheduled date are not shown
+          if (!item.startDate) {
+            // One-time activities without a start date are not shown
             return false
           }
           // Compare dates (YYYY-MM-DD)
-          const itemDate = item.scheduledDate
-          const selectedDateStr = selectedDate.toISOString().split('T')[0]
-          return itemDate === selectedDateStr
+          return item.startDate === selectedDateStr
         }
 
         return false
@@ -254,15 +268,19 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
     if (updates.frequency !== undefined) {
       dbUpdates.frequency = updates.frequency
 
-      // If changing to "Once" (empty string), set as activity and add scheduled_date
+      // If changing to "Once" (empty string), set as activity and add start_date
       if (updates.frequency === "") {
         dbUpdates.tag = "activity"
-        // Set scheduled_date to the currently selected date if not already set
-        dbUpdates.scheduled_date = selectedDate.toISOString().split('T')[0]
+        // Set start_date to the currently selected date if not already set
+        dbUpdates.start_date = selectedDate.toISOString().split('T')[0]
+        dbUpdates.end_date = null // Activities don't have end dates
       } else {
-        // If changing to a recurring frequency, set as habit and clear scheduled_date
+        // If changing to a recurring frequency, set as habit
         dbUpdates.tag = "habit"
-        dbUpdates.scheduled_date = null
+        // Set start_date to today if not already set (habits need start dates)
+        if (!updates.startDate) {
+          dbUpdates.start_date = new Date().toISOString().split('T')[0]
+        }
       }
     }
 

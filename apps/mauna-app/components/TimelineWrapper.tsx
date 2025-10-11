@@ -268,23 +268,32 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
 
     // Handle frequency update
     if (updates.frequency !== undefined) {
+      console.log("[updateItem] Frequency update:", updates.frequency)
       dbUpdates.frequency = updates.frequency
 
       // If changing to "Once" (empty string), set as activity and add start_date
       if (updates.frequency === "") {
+        console.log("[updateItem] Changing to Once - setting as activity")
         dbUpdates.tag = "activity"
-        // Set start_date to the currently selected date if not already set
-        dbUpdates.start_date = selectedDate.toISOString().split('T')[0]
+        // Set start_date to the currently selected date if not provided
+        if (!updates.startDate) {
+          dbUpdates.start_date = selectedDate.toISOString().split('T')[0]
+          console.log("[updateItem] Set start_date to:", dbUpdates.start_date)
+        }
         dbUpdates.end_date = null // Activities don't have end dates
       } else {
         // If changing to a recurring frequency, set as habit
+        console.log("[updateItem] Changing to recurring - setting as habit")
         dbUpdates.tag = "habit"
         // Set start_date to today if not already set (habits need start dates)
         if (!updates.startDate) {
           dbUpdates.start_date = new Date().toISOString().split('T')[0]
+          console.log("[updateItem] Set start_date to:", dbUpdates.start_date)
         }
       }
     }
+
+    console.log("[updateItem] Final dbUpdates:", dbUpdates)
 
     // Handle scheduled time update
     if (updates.scheduledTime !== undefined) {

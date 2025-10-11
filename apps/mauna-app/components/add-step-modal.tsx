@@ -152,10 +152,13 @@ export function AddStepModal({ isOpen, onClose, onSave, selectedDate }: AddStepM
   }
 
   const handleSave = async () => {
+    // Determine tag based on frequency: "Once" (empty string) = activity, otherwise habit
+    const isActivity = formData.frequency === ""
+
     const stepData = {
       label: formData.label,
       description: formData.description,
-      tag: formData.type,
+      tag: isActivity ? "activity" : "habit",
       color: formData.color,
       duration: formData.duration * 60000, // Convert to milliseconds
       frequency: formData.frequency,
@@ -167,8 +170,10 @@ export function AddStepModal({ isOpen, onClose, onSave, selectedDate }: AddStepM
       notes: formData.notes,
       breaths: formData.breaths,
       completed: false,
-      isbuildhabit: formData.type === "habit",
+      isbuildhabit: !isActivity,
     }
+
+    console.log("[AddStepModal] Creating step with frequency:", formData.frequency, "tag:", stepData.tag)
 
     await onSave(stepData)
     onClose()

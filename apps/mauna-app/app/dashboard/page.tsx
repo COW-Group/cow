@@ -168,7 +168,7 @@ export default function DashboardPage() {
             </div>
 
             {/* Date and Greeting Responsive Layout */}
-            <div className="flex flex-col sm:flex-row items-center space-y-5 sm:space-y-0 sm:space-x-8 md:space-x-10 text-center w-full px-4 md:px-0">
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-5 sm:space-y-0 sm:space-x-8 md:space-x-10 text-center w-full px-4 md:px-0">
               {/* Date */}
               <div className="flex flex-col items-center min-w-0">
                 <div className="text-sm md:text-sm lg:text-sm font-inter font-light text-cream-25/60 uppercase tracking-[0.15em] mb-1.5">

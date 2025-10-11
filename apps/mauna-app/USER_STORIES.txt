@@ -1,0 +1,1211 @@
+MAUNA APP - USER STORIES
+=========================
+
+Generated: October 9, 2025
+Revised: October 9, 2025 (AI Music Integration)
+Revised: October 9, 2025 (Psychosomatic Regulation & State Transition Audio)
+
+===============================================================================
+GENERAL / AUTHENTICATION
+===============================================================================
+
+US-001: User Registration
+As a user, I want to create an account with my email and password, so that I can access the app and save my personal data.
+
+US-002: User Login
+As a returning user, I want to log in with my credentials, so that I can access my personalized dashboard and data.
+
+US-003: Password Management
+As a user, I want to update my password, so that I can maintain account security.
+
+US-004: Profile Management
+As a user, I want to update my profile information (name, email), so that my account details are current.
+
+US-005: Sign Out
+As a user, I want to sign out of the app, so that I can protect my privacy when using shared devices.
+
+===============================================================================
+DASHBOARD & NAVIGATION
+===============================================================================
+
+US-006: Floating Navigation
+As a user, I want to access a floating navigation menu, so that I can quickly navigate between different sections of the app.
+
+US-007: Customizable Navigation
+As a user, I want to show/hide specific pages in my navigation menu, so that I only see features I actively use.
+
+US-008: Dashboard Customization
+As a user, I want to customize which widgets appear on my dashboard, so that I can focus on what's most important to me.
+
+US-009: Background Image Selection
+As a user, I want to choose from different nature backdrop images based on time of day, so that my app environment feels calming and personalized.
+
+US-010: Dark Mode
+As a user, I want to enable dark mode, so that I can reduce eye strain during evening use.
+
+US-011: Mobile-Responsive Interface
+As a mobile user, I want the app to be fully responsive on my iPhone, so that I can use all features comfortably on any device.
+
+US-012: Adaptive Dashboard Soundscape
+As a user, I want AI-generated ambient soundscapes on my dashboard that adapt second-by-second to my physiological state (detected stress, energy level, focus), so that the sonic environment continuously supports my optimal state from the moment I log in.
+
+===============================================================================
+PSYCHOSOMATIC REGULATION & STATE TRANSITION AUDIO
+===============================================================================
+
+US-013: Real-Time Psychosomatic Monitoring
+As a user, I want the app to continuously monitor my psychosomatic state (heart rate variability, breathing patterns, voice stress levels, typing cadence) through available sensors, so that audio can respond to my actual physiological condition in real-time.
+
+US-014: Heart Rate Variability Regulation
+As a user, I want AI-generated music that actively regulates my heart rate variability by using specific rhythms, frequencies, and pacing that guide my HRV toward optimal ranges, so that I achieve physiological coherence and reduced stress.
+
+US-015: Breathwork State Induction
+As a user, I want the audio system to induce specific states through guided breathwork patterns (energizing breath for focus, calming breath for relaxation, balanced breath for equilibrium), with music that synchronizes perfectly to each breathing phase, so that I can shift my state on command.
+
+US-016: State Detection and Classification
+As a user, I want the AI to automatically detect and classify my current psychosomatic state (anxious, stressed, fatigued, energized, focused, scattered, calm, agitated) based on multiple signals, so that audio interventions can be precisely targeted to my actual needs.
+
+US-017: Targeted State Transition Protocols
+As a user, I want to select a desired state transition (e.g., "anxious to calm," "fatigued to energized," "scattered to focused") and receive an AI-generated audio protocol that guides me through that specific transition step-by-step, so that I can reliably shift my state when needed.
+
+US-018: Gradual State Transition Audio
+As a user, I want state transition audio to work gradually and gently, shifting music characteristics (tempo, rhythm, harmony, volume) incrementally over time to guide my nervous system through the transition without shocking it, so that changes feel natural and sustainable.
+
+US-019: Crisis Intervention Soundscapes
+As a user, when the system detects acute stress or anxiety (rapid heart rate, erratic breathing, distressed voice patterns), I want immediate access to crisis-intervention audio that combines calming frequencies, guided breathing, and coaching prompts to bring me back to baseline, so that I have instant support in difficult moments.
+
+US-020: Polyvagal Theory Integration
+As a user, I want audio protocols based on polyvagal theory that specifically target my autonomic nervous system states (ventral vagal = safe and social, sympathetic = fight or flight, dorsal vagal = shutdown), with different soundscapes and coaching for each state, so that I can work with my nervous system's natural wisdom.
+
+US-021: Coherence-Building Audio Sessions
+As a user, I want dedicated audio sessions that build heart-brain coherence through synchronized breathing, heart-focused attention, and resonant frequencies, so that I can develop greater physiological and emotional resilience over time.
+
+US-022: Micromoment State Adjustments
+As a user, I want the audio to make continuous micro-adjustments second-by-second based on my real-time biofeedback (slightly slowing tempo if heart rate rises, adding calming frequencies if breathing becomes shallow), so that I receive constant, subtle support for optimal state maintenance.
+
+US-023: Circadian Rhythm Audio Optimization
+As a user, I want the audio system to align with my circadian rhythms, providing energizing frequencies and upbeat tempos in the morning, balanced soundscapes midday, and progressively calming audio in the evening, so that sound supports my natural biological cycles throughout the day.
+
+US-024: Ultradian Rhythm Support
+As a user, I want the audio to honor my ultradian rhythms (90-120 minute cycles of high and low energy), suggesting breaks and providing restorative soundscapes every 90 minutes, so that I work with my natural energy cycles rather than against them.
+
+US-025: Neuroplasticity Enhancement Audio
+As a user, I want access to audio designed to enhance neuroplasticity during learning or habit formation, using specific frequencies (theta waves for creativity, gamma waves for insight, alpha waves for relaxed learning), so that my brain is optimally primed for growth and change.
+
+US-026: Vagal Tone Strengthening
+As a user, I want regular audio exercises that strengthen vagal tone through extended exhale breathing, humming, and resonant frequencies, so that I build long-term capacity for stress regulation and emotional resilience.
+
+US-027: Interoceptive Awareness Training
+As a user, I want guided audio experiences that enhance my interoceptive awareness (ability to sense internal body signals) by directing attention to different body sensations while music mirrors those sensations sonically, so that I develop greater mind-body connection.
+
+US-028: Somatic Release Soundscapes
+As a user, I want audio specifically designed to support somatic release (releasing stored tension and trauma from the body), using frequencies and rhythms that encourage gentle shaking, movement, or emotional release, so that I can process and integrate stored stress.
+
+US-029: Flow State Induction Audio
+As a user, I want AI-generated music that induces and maintains flow states by matching the optimal arousal level for my current task, with tempo and complexity that keeps me engaged but not overwhelmed, so that I can access peak performance states reliably.
+
+US-030: Energy Level Regulation
+As a user, I want the audio to actively regulate my energy levels throughout the day, upregulating when I'm fatigued (through faster tempos, brighter timbres, energizing frequencies) and downregulating when I'm overstimulated (through slower tempos, darker timbres, calming frequencies), so that I maintain optimal energy balance.
+
+===============================================================================
+VISION IMPLEMENTATION STATE TRANSITIONS
+===============================================================================
+
+US-031: Vision State Journey Framework
+As a user, I want the audio system to support my complete vision implementation journey through distinct state transitions: Dreaming → Clarifying → Planning → Committing → Acting → Persisting → Achieving → Integrating → Evolving, with unique soundscapes for each phase, so that audio guides me through the entire process of manifesting my vision.
+
+US-032: Dreaming State Audio
+As a user in the Dreaming phase of vision implementation, I want expansive, imaginative audio with wide soundscapes and open harmonies that encourage big-picture thinking and possibility, so that I can access my full creative potential without limitation.
+
+US-033: Clarifying State Audio
+As a user in the Clarifying phase, I want focused, crystalline audio with clear tones and defined structures that help me refine and articulate my vision with precision, so that my goals become specific and actionable.
+
+US-034: Planning State Audio
+As a user in the Planning phase, I want structured, methodical audio with steady rhythms and organized patterns that support strategic thinking and sequencing, so that I can create realistic pathways to my goals.
+
+US-035: Committing State Audio
+As a user in the Committing phase, I want powerful, grounding audio with strong bass foundations and affirming tones that build confidence and resolve, so that I can make firm decisions and commit fully to my vision.
+
+US-036: Acting State Audio
+As a user in the Acting phase, I want energizing, motivating audio with driving rhythms and forward momentum that propel me into action, so that I move from planning to doing with confidence and energy.
+
+US-037: Persisting State Audio
+As a user in the Persisting phase when facing challenges, I want resilient, steady audio that provides endurance and determination through consistent rhythms and uplifting progressions, so that I maintain momentum even when progress is difficult.
+
+US-038: Achieving State Audio
+As a user in the Achieving phase when reaching milestones, I want celebratory, triumphant audio with soaring melodies and rich harmonies that honor my accomplishment, so that successes are emotionally and sonically rewarded.
+
+US-039: Integrating State Audio
+As a user in the Integrating phase after achievement, I want reflective, consolidating audio that helps me process what I've learned and integrate new capacities, so that growth becomes permanent rather than temporary.
+
+US-040: Evolving State Audio
+As a user in the Evolving phase when setting new visions, I want transformative audio that bridges the old and new, honoring what was while opening to what's next, so that I can transition to new cycles of growth.
+
+US-041: State Transition Coaching Audio
+As a user moving between vision implementation states, I want voice coaching integrated with music that explains what's happening in the transition, what to expect, and how to navigate it, so that I understand my journey and feel supported through changes.
+
+US-042: Resistance Detection and Support
+As a user, when the system detects resistance patterns (procrastination, avoidance, self-sabotage) through my behavior or biofeedback, I want compassionate coaching audio combined with music that addresses the specific fear or block, so that I can work through resistance with understanding rather than judgment.
+
+US-043: Motivation State Restoration
+As a user experiencing low motivation (detected through decreased activity, sluggish vitals, or self-reporting), I want audio protocols that systematically rebuild motivation through gradual energy building, vision reconnection, and dopamine-supporting frequencies, so that I can reignite my drive.
+
+US-044: Confidence-Building Audio Sequences
+As a user facing self-doubt before important actions, I want audio sequences that build confidence through anchoring techniques, affirmation integration, and empowering musical progressions, so that I can approach challenges from a place of strength.
+
+US-045: Vision-Reality Gap Bridging
+As a user experiencing the gap between current reality and vision, I want audio that holds both realities simultaneously (where I am and where I'm going) and gradually builds a bridge between them, so that the gap feels navigable rather than overwhelming.
+
+US-046: Cellular-Level Visualization Audio
+As a user visualizing my goals, I want audio designed to enhance visualization by engaging multiple sensory modalities through specific frequencies that stimulate visual cortex activity, so that my mental imagery becomes more vivid and impactful.
+
+US-047: Future-Self Connection Audio
+As a user, I want guided audio experiences that help me connect with my future self who has already achieved my vision, using temporal bridging techniques and identity-affirming soundscapes, so that I can embody the qualities needed for success.
+
+US-048: Present-Moment Grounding with Vision
+As a user, I want audio that keeps me grounded in present-moment action while maintaining connection to future vision, balancing "now" and "then" so that I don't get lost in either fantasy or mundane routine.
+
+===============================================================================
+COACHING AUDIO INTEGRATION
+===============================================================================
+
+US-049: AI Voice Coaching Personalization
+As a user, I want AI-generated voice coaching that adapts its tone, pacing, language, and approach based on my personality, current state, and what's most effective for me, so that coaching feels personally relevant and impactful.
+
+US-050: Contextual Micro-Coaching
+As a user, I want brief micro-coaching moments (10-30 seconds) integrated seamlessly into my music during specific situations (completing a habit, starting a focus session, experiencing stress), so that I receive timely guidance without disrupting my flow.
+
+US-051: Socratic Coaching Audio
+As a user, I want voice coaching that uses Socratic questioning to help me discover my own insights rather than being told what to do, with music that creates contemplative space for reflection, so that I develop self-directed wisdom.
+
+US-052: Compassionate Self-Talk Modeling
+As a user with harsh inner dialogue, I want coaching audio that models compassionate self-talk and gradually teaches me to internalize that voice, so that I develop a kinder internal narrative over time.
+
+US-053: Cognitive Reframing Audio Support
+As a user caught in negative thought patterns, I want coaching audio that guides me through cognitive reframing while music shifts from dissonant to harmonious in parallel with the reframe, so that I experience both mental and emotional shifts.
+
+US-054: Parts Work Integration Audio
+As a user with internal conflicts, I want coaching audio that helps me dialogue with different parts of myself (the critic, the protector, the visionary, the wounded child), giving each part a voice and facilitating integration, so that I can resolve internal conflicts and move forward unified.
+
+US-055: Somatic Coaching with Audio
+As a user, I want coaching that directs attention to body sensations and guides somatic processing while music mirrors or contains those sensations, so that I can work through emotions and stress somatically rather than just cognitively.
+
+US-056: Values Clarification Audio Sessions
+As a user, I want guided audio sessions that help me clarify my core values through reflective questions, contemplative music, and space for journaling, so that my vision and actions align with what truly matters to me.
+
+US-057: Decision-Making Audio Support
+As a user facing difficult decisions, I want audio protocols that guide me through structured decision-making processes (pros/cons, future pacing, somatic checking) while maintaining calm and clarity, so that I can make wise choices under pressure.
+
+US-058: Limiting Belief Transformation Audio
+As a user, I want audio experiences that identify limiting beliefs, explore their origins with compassion, and systematically transform them into empowering beliefs through repetition, evidence gathering, and somatic anchoring, so that I can reprogram unhelpful mental patterns.
+
+US-059: Habit Formation Audio Coaching
+As a user building new habits, I want coaching audio that understands habit formation science and provides appropriate support for each stage (cue recognition, craving management, routine execution, reward savoring), so that habits stick more effectively.
+
+US-060: Relapse Prevention Audio
+As a user who has broken a habit streak, I want compassionate coaching audio that helps me understand what happened, extract learning, rebuild motivation, and restart without shame, so that setbacks become opportunities for growth.
+
+US-061: Accountability Audio Check-ins
+As a user, I want scheduled audio check-ins (daily, weekly, monthly) that review my progress, celebrate wins, identify challenges, and reset intentions, so that I maintain accountability to my vision over time.
+
+US-062: Growth Mindset Audio Reinforcement
+As a user, I want audio experiences that continuously reinforce growth mindset principles (effort over talent, learning from failure, embracing challenges) through coaching and music that embodies these qualities, so that my mindset shifts fundamentally.
+
+===============================================================================
+STRATEGIC SILENCE & SOUND DESIGN
+===============================================================================
+
+US-063: Therapeutic Silence Integration
+As a user, I want the audio system to strategically use silence as a powerful intervention, creating spacious gaps in music or coaching that allow for processing, reflection, and integration, so that I experience the full power of intentional quiet.
+
+US-064: Silence as State Marker
+As a user, I want silence to mark important transitions (completing a major goal, finishing a deep meditation, ending a coaching session), creating a sonic "reset" that honors the moment and prepares me for what's next.
+
+US-065: Dynamic Silence-to-Sound Transitions
+As a user, I want carefully designed transitions from silence to sound and back, where music emerges from quiet or dissolves into it gradually, so that I experience the relationship between sound and silence as a continuum.
+
+US-066: Mindful Silence Sessions
+As a user, I want guided sessions that use mostly silence with occasional gentle sounds (bells, singing bowls, nature sounds) to deepen meditation and present-moment awareness, so that I can develop comfort and capacity for stillness.
+
+US-067: Negative Space in Music
+As a user, I want the AI to understand negative space in music composition, using rests and pauses as intentionally as notes, so that the music breathes and creates space for my own rhythm and reflection.
+
+US-068: Silence After Emotional Intensity
+As a user after experiencing emotional intensity (catharsis, breakthrough, release), I want the audio to provide silence or extremely minimal sound that allows me to rest in the aftermath without stimulation, so that integration happens naturally.
+
+US-069: Sound Layer Complexity Management
+As a user, I want precise control over the complexity of soundscapes (from single instrument to full orchestral layers), so that I can match the audio density to my current capacity and needs.
+
+US-070: Intentional Dissonance Resolution
+As a user, I want the audio to sometimes use dissonance intentionally and then resolve it, mirroring the process of working through challenges and finding resolution, so that I experience the full emotional arc of difficulty and resolution.
+
+US-071: Harmonic Progression as Metaphor
+As a user, I want musical harmonic progressions that metaphorically represent my journey (tension → release, question → answer, yearning → arrival), so that the structure of the music itself tells a transformational story.
+
+US-072: Timbral Therapy
+As a user, I want access to specific instrumental timbers chosen for their therapeutic qualities (crystal bowls for clarity, didgeridoo for grounding, strings for heart opening, flutes for lightness), so that sound quality itself becomes medicine.
+
+US-073: Binaural Beat Precision
+As a user, I want precisely calibrated binaural beats for specific outcomes (4-7 Hz theta for meditation depth, 12-15 Hz SMR for focused calm, 8-12 Hz alpha for creative flow, 40 Hz gamma for insight), so that I can target specific brainwave states with scientific precision.
+
+US-074: Solfeggio Frequency Integration
+As a user, I want the option to integrate solfeggio frequencies (396 Hz for releasing fear, 528 Hz for transformation, 639 Hz for connection, 741 Hz for expression, 852 Hz for intuition, 963 Hz for divine connection) into my soundscapes, so that I can work with these ancient healing tones.
+
+US-075: Nature Sound Layering
+As a user, I want realistic nature sounds (rain, ocean, forest, wind, fire) that can be layered with music or used alone, with intensity that matches real environmental dynamics, so that I can connect with natural rhythms and cycles.
+
+US-076: Sacred Sound Technologies
+As a user, I want access to sacred sound technologies (Gregorian chanting qualities, Tibetan singing bowls, gongs, mantric repetition, Aboriginal didgeridoo techniques), so that I can draw on cross-cultural wisdom traditions for healing and transformation.
+
+US-077: Personalized Sonic Signature
+As a user, I want the AI to develop a unique sonic signature for me over time based on what most supports my regulation, transformation, and growth, so that my soundscapes become increasingly personalized and effective.
+
+===============================================================================
+SECOND-BY-SECOND ADAPTIVE AUDIO
+===============================================================================
+
+US-078: Continuous Biofeedback Loop
+As a user, I want the audio system to maintain a continuous biofeedback loop, reading my signals (HRV, breathing, movement, voice, typing) every second and adjusting audio parameters in real-time, so that support is constant and responsive.
+
+US-079: Predictive State Modeling
+As a user, I want the AI to learn my patterns and predict when state transitions are likely (stress buildup, energy crashes, focus degradation) and proactively adjust audio before problems fully manifest, so that I receive preventive rather than reactive support.
+
+US-080: Micro-Parameter Adjustment
+As a user, I want the audio to make hundreds of micro-adjustments per minute (subtle tempo shifts, minor key changes, volume adjustments, harmonic variations) based on my continuous biofeedback, so that optimization happens below my conscious awareness.
+
+US-081: Attention Detection and Guidance
+As a user, when the system detects my attention wandering (through eye tracking, typing pauses, or biofeedback), I want audio cues (gentle chimes, rhythm shifts, coaching prompts) that bring me back to focus without being jarring, so that I maintain productivity with gentle guidance.
+
+US-082: Fatigue Detection and Intervention
+As a user, when the system detects cognitive or physical fatigue (slowed responses, decreased HRV, shallow breathing), I want immediate audio interventions that either energize me or suggest a break, so that I don't push past healthy limits.
+
+US-083: Optimal Challenge Point Audio
+As a user, I want audio that maintains me at my optimal challenge point (neither bored nor overwhelmed) by adjusting complexity and intensity based on my performance and arousal level, so that I remain in the zone of proximal development.
+
+US-084: Real-Time Emotion Sonification
+As a user, I want my emotions to be sonified in real-time as background elements in the music, so that I can hear my emotional state externalized and gain awareness of patterns I might otherwise miss.
+
+US-085: Synchronization to External Rhythms
+As a user, I want the audio to synchronize to my external rhythms (walking pace, typing speed, speaking cadence) and then gently guide them toward optimal ranges, so that my natural rhythms are honored and optimized.
+
+US-086: Multi-Timeframe Optimization
+As a user, I want the audio to optimize across multiple timeframes simultaneously (second-by-second for immediate regulation, minute-by-minute for task support, hour-by-hour for energy management, day-by-day for vision progress), so that I receive layered support at all scales.
+
+US-087: Context-Aware Audio Switching
+As a user, when the app detects I've switched contexts (from journaling to habit tracking, from vision board to focus session), I want seamless audio transitions that immediately adapt to the new context's needs, so that sonic support is always appropriate.
+
+US-088: Physiological Rhythm Entrainment
+As a user, I want the audio to gently entrain my physiological rhythms (heart rate, breathing, brain waves) toward optimal patterns through rhythmic synchronization and gradual tempo guidance, so that my body's natural rhythms become more coherent.
+
+US-089: Stress Escalation Prevention
+As a user, when the system detects early signs of stress escalation (rising heart rate, tension in voice, rapid breathing), I want immediate de-escalation audio that intervenes before stress becomes acute, so that I can maintain equilibrium throughout the day.
+
+US-090: Performance Enhancement Sequences
+As a user before high-stakes activities, I want audio sequences that systematically prepare me for peak performance (progressive energizing, focus sharpening, confidence building, anxiety reduction), so that I arrive at important moments in optimal state.
+
+===============================================================================
+HABITS TRACKING
+===============================================================================
+
+US-091: Create Habit
+As a user, I want to create a new habit with a name, description, color, time, and frequency, so that I can track behaviors I want to build.
+
+US-092: Habit Groups
+As a user, I want to organize habits into groups (Morning, Evening, Health), so that I can manage related habits together.
+
+US-093: Daily Habit Completion
+As a user, I want to mark habits as complete or skipped for each day, so that I can track my progress honestly.
+
+US-094: Habit Completion State Audio
+As a user, when I complete a habit, I want celebratory audio that varies based on my current psychosomatic state (if stressed, calming celebration; if tired, energizing celebration; if optimal, joyful celebration), so that the reward supports my overall regulation.
+
+US-095: Habit Formation Neuroplasticity Audio
+As a user building a new habit, I want audio during and after the habit that enhances neuroplastic changes, using frequencies and patterns that support memory consolidation and behavior encoding, so that the habit forms more quickly and durably.
+
+US-096: Habit Streaks
+As a user, I want to see my current and longest streaks for each habit, so that I can stay motivated by my progress.
+
+US-097: Streak Milestone Sonic Ceremonies
+As a user reaching habit streak milestones, I want full sonic ceremonies (not just brief sounds) that honor the achievement with 2-5 minute immersive soundscapes that help me feel and integrate the accomplishment, so that milestones become transformative moments.
+
+US-098: Habit Calendar View
+As a user, I want to see a visual calendar of my habit history with color-coded completion, so that I can see patterns at a glance.
+
+US-099: Habit Statistics
+As a user, I want to see statistics (total completions, this week, this month, success rate), so that I can measure my overall progress.
+
+US-100: Habit Journal Notes
+As a user, I want to add journal notes to individual habit completions, so that I can reflect on my experience with each habit.
+
+US-101: Habit Journal State-Supportive Audio
+As a user writing habit journal notes, I want audio that supports whatever state I'm processing (if noting difficulties, compassionate sounds; if celebrating insights, uplifting sounds; if reflecting neutrally, contemplative sounds), so that journaling becomes a supported emotional process.
+
+US-102: CBT Notes for Habits
+As a user, I want to record CBT (Cognitive Behavioral Therapy) notes for habits using the framework (Situation → Thoughts → Worldview → Sit → Response → Outcome), so that I can process emotions and thoughts related to my habits.
+
+US-103: CBT Process Audio Support
+As a user working through CBT notes, I want audio that supports each phase of the CBT process (grounding for situation, spacious for thoughts, deep for worldview, silent for sitting, energizing for constructive response, integrating for outcome), so that the cognitive work is emotionally supported.
+
+US-104: Tomorrow's Habit Prep
+As a user, I want to add notes for tomorrow's habits, so that I can prepare myself mentally for the next day.
+
+US-105: Future-Pacing Audio
+As a user preparing for tomorrow's habits, I want audio that supports future-pacing and mental rehearsal, creating sonic environments that help me vividly imagine successful habit execution, so that I pre-program success.
+
+US-106: Habit Navigation
+As a user, I want to navigate between habits using arrow keys or swipe gestures, so that I can quickly review multiple habits.
+
+US-107: Habit Progress Indicator
+As a user, I want to see a segmented progress bar showing all my habits, so that I know which habit I'm currently viewing.
+
+US-108: Edit Habit Details
+As a user, I want to edit a habit's name, description, color, time, frequency, and vision board connection, so that I can adjust habits as my needs change.
+
+US-109: Delete Habit
+As a user, I want to delete a habit with confirmation, so that I can remove habits I no longer need.
+
+US-110: Habit Frequency Selection
+As a user, I want to set specific days of the week for each habit (M-T-W-T-F-S-S) or choose "Every day!", so that I can track habits with different schedules.
+
+US-111: Habit Color Saturation
+As a user, I want to see habit completion boxes gradually darken in color as my streak grows, so that I can visualize momentum building.
+
+US-112: Link Habit to Vision Board
+As a user, I want to connect a habit to specific items in my vision board hierarchy (Range → Mountain → Hill → Terrain → Length), so that I can align daily actions with long-term goals.
+
+US-113: Habit-Vision Sonic Journey
+As a user completing a habit linked to vision board goals, I want audio that takes me on a brief sonic journey from the habit's immediate reward to the vision's ultimate fulfillment, so that I experience the connection between today's action and tomorrow's achievement.
+
+US-114: Habit Units Tracking
+As a user, I want to record units (e.g., steps, minutes, reps) for each habit completion, so that I can track quantity in addition to completion.
+
+US-115: Habit Time Sonic Preparation
+As a user approaching my scheduled habit time, I want the audio to gradually shift 10-15 minutes before the habit to create the optimal state for that habit (energizing for exercise, calming for meditation, focusing for study), so that I arrive at the habit already in the right state.
+
+US-116: Habit Resistance Audio Coaching
+As a user experiencing resistance to a habit, I want real-time audio coaching that compassionately explores the resistance, helps me understand its function, and supports me in moving through it or honoring it wisely, so that resistance becomes information rather than failure.
+
+===============================================================================
+JOURNAL
+===============================================================================
+
+US-117: Create Journal Entry
+As a user, I want to create a new journal entry with a title and content, so that I can record my thoughts and experiences.
+
+US-118: Journal Entry Moods
+As a user, I want to tag journal entries with moods (Amazing, Happy, Content, Neutral, Anxious, Sad, Upset, Tired), so that I can track my emotional patterns.
+
+US-119: Mood-Matched Journal Audio with Transformation Option
+As a user, I want AI-generated music that initially matches my selected mood, then offers the option to gradually transform toward a more resourceful state, so that journaling becomes both cathartic and transformative.
+
+US-120: Voice-Emotion Detection During Journaling
+As a user who journals by voice, I want the AI to detect emotional content in my voice (sadness, anger, joy, fear) and adjust the soundscape in real-time to support emotional processing, so that verbal journaling is fully supported.
+
+US-121: Journal Entry Tags
+As a user, I want to add custom tags to journal entries, so that I can organize and find entries by topic.
+
+US-122: Timeline vs Calendar View
+As a user, I want to switch between timeline and calendar views in my journal, so that I can browse entries in my preferred format.
+
+US-123: Search Journal Entries
+As a user, I want to search journal entries by text, mood, tags, and date range, so that I can find specific entries quickly.
+
+US-124: Filter Journal Entries
+As a user, I want to filter entries by mood, tags, date range, category, and template type, so that I can focus on specific types of reflections.
+
+US-125: Journal Entry Categories
+As a user, I want journal entries to be automatically categorized (Timeline, Habits, General), so that I can see the source of each entry.
+
+US-126: Link Journal to Vision Board
+As a user, I want to link journal entries to specific vision board items, so that I can document progress toward my goals.
+
+US-127: Compiled Daily Habit Entries
+As a user, I want my habit journal notes from each day to automatically compile into a single daily journal entry, so that I can see all my habit reflections in one place.
+
+US-128: View Compiled Habit Notes
+As a user, I want to view compiled daily habit journal entries on the journal page with habit names clearly labeled, so that I can review all my daily habit work together.
+
+US-129: Edit Journal Entry
+As a user, I want to edit existing journal entries, so that I can refine my thoughts or add details.
+
+US-130: Delete Journal Entry
+As a user, I want to delete journal entries, so that I can remove entries I no longer want to keep.
+
+US-131: Archive Journal Entry
+As a user, I want to archive journal entries, so that I can hide old entries without deleting them.
+
+US-132: Favorite Journal Entry
+As a user, I want to mark journal entries as favorites, so that I can quickly find important reflections.
+
+US-133: Journal Sonic Context Replay
+As a user, I want to replay not just the music but the complete sonic context (music + ambient sounds + coaching prompts + my own physiological state sonified) from when I wrote an entry, so that I can fully revisit that moment.
+
+US-134: Stream of Consciousness Audio Support
+As a user doing stream of consciousness journaling, I want flowing, unstructured audio that supports free association and removes self-censorship, so that deeper truths can emerge.
+
+US-135: Prompted Reflection Audio
+As a user, I want audio-guided journaling prompts with music that creates contemplative space between questions, so that I can go deeper in my reflection than I would alone.
+
+===============================================================================
+VISION BOARD
+===============================================================================
+
+US-136: Vision Board Hierarchy
+As a user, I want to organize my life vision in a 5-level hierarchy (Range → Mountain → Hill → Terrain → Length), so that I can structure my long-term goals clearly.
+
+US-137: Create Vision Items
+As a user, I want to create items at each level of the vision board, so that I can define my aspirations from broad to specific.
+
+US-138: Visual Goal Representation
+As a user, I want to see my vision board items visually, so that I can maintain focus on my long-term direction.
+
+US-139: Vision Board Psychosomatic Alignment
+As a user viewing my vision board, I want audio that creates the physiological state associated with having already achieved my vision (confidence, peace, fulfillment, joy), so that my body learns what success feels like and becomes aligned with it.
+
+US-140: Vision Level State Progression
+As a user navigating vision board levels, I want the audio to guide me through appropriate state progressions (Range = expansive dreaming, Mountain = ambitious planning, Hill = focused strategy, Terrain = determined action, Length = detailed execution), so that each level evokes the right mindset.
+
+US-141: Vision Item Embodiment Audio
+As a user focusing on a specific vision item, I want immersive audio experiences that help me fully embody what it would be like to have achieved that goal, engaging all senses through sound design and coaching, so that the vision becomes viscerally real.
+
+US-142: Vision Progress Sonic Evolution
+As a user making progress toward vision items, I want the audio for those items to evolve in richness, complexity, and beauty, sonically representing the journey from seed to fruition, so that I hear my progress.
+
+US-143: Link Items to Habits
+As a user, I want to connect habits to specific vision board items, so that I can ensure my daily actions align with my bigger picture.
+
+US-144: Link Items to Journal
+As a user, I want to reference vision board items in journal entries, so that I can document my journey toward specific goals.
+
+US-145: Vision Board Sonic Meditation
+As a user, I want guided meditation experiences that combine vision board visualization with precisely designed audio that deepens the meditation and makes the vision more tangible, so that visualization practice becomes more powerful.
+
+US-146: Vision Achievement Integration Ceremony
+As a user who achieves a vision board goal, I want a complete audio ceremony that helps me integrate the achievement, honor the journey, process what changed in me, and prepare for new visions, so that completion is fully honored and integrated.
+
+US-147: Vision Board Timeline Sonification
+As a user, I want to hear my entire vision board timeline sonified as a continuous musical piece, with different instruments representing different goals and harmonies representing how they interact, so that I can hear the symphony of my life vision.
+
+===============================================================================
+FOCUS / MEDITATION
+===============================================================================
+
+US-148: Focus Sessions
+As a user, I want to start timed focus sessions, so that I can practice deep work or meditation.
+
+US-149: Real-Time Breath-Synchronized Audio
+As a user in meditation or focus, I want AI-generated music that synchronizes perfectly with my real breathing rhythm (detected through microphone, wearable, or camera), adapting instantly to any changes in my breath, so that audio and breath become one flowing experience.
+
+US-150: Meditation Depth Guidance
+As a user meditating, I want audio that actively guides me deeper through progressively slower tempos, lower frequencies, and increasing spaciousness that matches my deepening state, so that I naturally descend into profound meditation.
+
+US-151: Attention Training Audio
+As a user developing concentration, I want audio specifically designed to train attention (single tones to focus on, slowly shifting soundscapes that reward sustained attention), so that my concentration capacity systematically improves.
+
+US-152: Open Awareness Audio
+As a user practicing open awareness meditation, I want complex, multi-layered soundscapes that represent the richness of present-moment experience while remaining centered, so that I can practice holding awareness of many things simultaneously.
+
+US-153: Default Session Duration
+As a user, I want to set a default duration for focus sessions (1-1439 minutes), so that my preferred session length is always ready.
+
+US-154: Auto-Loop Focus Sessions
+As a user, I want focus sessions to automatically restart when complete, so that I can maintain continuous practice.
+
+US-155: Sound Notifications
+As a user, I want to enable/disable audio notifications for focus sessions, so that I can control how I'm alerted.
+
+US-156: Focus Mode
+As a user, I want to enable focus mode that minimizes distractions, so that I can concentrate better.
+
+US-157: Work Type Optimization Audio
+As a user doing different types of work, I want audio precisely optimized for each type (creative work = divergent soundscapes, analytical work = structured patterns, writing = flowing progressions, problem-solving = question-answer musical phrases), so that the sonic environment enhances my specific cognitive mode.
+
+US-158: Binaural Beat Precision Protocol
+As a user, I want precise binaural beat protocols for specific outcomes with proper ramp-up and ramp-down periods, so that brainwave entrainment is safe and effective.
+
+US-159: Focus Recovery After Distraction
+As a user who gets distracted during focus sessions, I want audio that detects the distraction (through attention metrics) and provides a gentle sound cue that brings me back without breaking flow, so that I can recover quickly from mind-wandering.
+
+US-160: Pomodoro Integration Audio
+As a user using Pomodoro technique, I want audio that supports the work-break cycle with energizing music during work periods and restorative soundscapes during breaks, so that the rhythm is auditorially reinforced.
+
+US-161: Deep Work State Induction
+As a user starting deep work, I want a 5-10 minute audio induction sequence that systematically prepares my nervous system for extended focus, so that I enter deep work from an optimal starting state.
+
+US-162: Meditation Breakthrough Support
+As a user experiencing meditation breakthroughs (insights, releases, expansions), I want audio that recognizes these moments (through biofeedback changes) and provides spacious, supportive soundscapes that help me integrate the experience, so that breakthroughs are fully received.
+
+===============================================================================
+HEALTH TRACKING
+===============================================================================
+
+US-163: Health Metrics
+As a user, I want to track health-related metrics and goals, so that I can monitor my physical well-being.
+
+US-164: Fitness Goals
+As a user, I want to set and track fitness goals, so that I can work toward better health.
+
+US-165: Wellness Monitoring
+As a user, I want to monitor overall wellness indicators, so that I can maintain a holistic view of my health.
+
+US-166: Exercise-Synchronized Audio
+As a user exercising, I want audio that synchronizes with my movement patterns and heart rate in real-time, increasing intensity when I push hard and providing recovery during rest, so that music becomes my intelligent training partner.
+
+US-167: Heart Rate Zone Audio Guidance
+As a user training in specific heart rate zones, I want audio that guides me to stay in my target zone through tempo and intensity adjustments, so that I optimize cardiovascular training.
+
+US-168: Recovery Audio Protocols
+As a user in recovery periods, I want audio specifically designed to enhance parasympathetic activation and tissue repair, using frequencies and rhythms that support healing, so that recovery is actively supported.
+
+US-169: Sleep Optimization Audio
+As a user preparing for sleep, I want audio that guides my nervous system through the natural sleep stages (drowsy → light sleep → deep sleep), adjusting throughout the night based on movement detection, so that sleep quality improves.
+
+US-170: Pain Management Soundscapes
+As a user experiencing pain, I want audio protocols that help manage pain through gate control theory (competing sensory input), endorphin release (specific frequencies), and attention redirection, so that I have non-pharmaceutical pain support.
+
+US-171: Immune System Support Audio
+As a user, I want access to audio designed to support immune function through stress reduction, vagal tone enhancement, and frequencies associated with cellular health, so that I can support my body's natural defenses.
+
+===============================================================================
+EMOTIONAL INTELLIGENCE
+===============================================================================
+
+US-172: Mood Tracking
+As a user, I want to track my daily moods, so that I can identify emotional patterns.
+
+US-173: Emotion Management
+As a user, I want to record and analyze my emotions, so that I can develop greater emotional awareness.
+
+US-174: Emotion Processing Audio Protocols
+As a user working with difficult emotions, I want complete audio protocols that guide me through healthy emotional processing (feeling, naming, allowing, exploring, transforming, integrating), so that I develop emotional mastery.
+
+US-175: Emotional Granularity Training
+As a user, I want audio experiences that help me develop emotional granularity (distinguishing between similar emotions like disappointment vs. sadness vs. grief), so that I can understand my emotional landscape with precision.
+
+US-176: Window of Tolerance Audio Support
+As a user, I want audio that helps me stay within my window of tolerance (not hyperaroused or hypoaroused), detecting when I'm approaching edges and providing regulation support, so that I remain in the zone where I can process effectively.
+
+US-177: Affect Regulation Audio Training
+As a user, I want systematic audio training that builds my affect regulation capacity over time, gradually increasing my ability to tolerate emotional intensity, so that my nervous system becomes more resilient.
+
+US-178: Mindfulness Tools
+As a user, I want access to mindfulness exercises and tools, so that I can improve emotional regulation.
+
+US-179: Create Custom Emotions
+As a user, I want to create custom emotion labels with descriptions, so that I can track feelings specific to my experience.
+
+US-180: Update Emotions
+As a user, I want to edit emotion names and descriptions, so that I can refine my emotional vocabulary.
+
+US-181: Delete Emotions
+As a user, I want to delete custom emotions I no longer need, so that I can keep my emotion list relevant.
+
+US-182: Emotion Pattern Sonification with Insights
+As a user, I want my emotional patterns over time sonified as music with AI-generated insights about what the patterns reveal, so that I gain both felt and cognitive understanding of my emotional life.
+
+US-183: Compassion Cultivation Audio
+As a user, I want guided audio experiences that cultivate self-compassion and compassion for others through specific practices and supportive soundscapes, so that my capacity for compassion systematically grows.
+
+US-184: Emotional Alchemy Audio
+As a user, I want audio protocols that guide me through emotional alchemy (transforming shadow emotions into gold), using musical progressions that mirror the alchemical process, so that all emotions become valuable.
+
+===============================================================================
+WEALTH MANAGEMENT
+===============================================================================
+
+US-185: Financial Tracking
+As a user, I want to track financial metrics and goals, so that I can monitor my wealth-building progress.
+
+US-186: Investment Tools
+As a user, I want tools to manage investments, so that I can make informed financial decisions.
+
+US-187: Wealth Goals
+As a user, I want to set and track wealth-building goals, so that I can work toward financial security.
+
+US-188: Wealth Goal Achievement Audio
+As a user hitting financial milestones, I want celebratory audio that also includes coaching about healthy relationship with money and avoiding hedonic adaptation, so that financial success is both celebrated and integrated wisely.
+
+US-189: Abundance Mindset Audio
+As a user, I want audio experiences designed to cultivate abundance mindset and release scarcity thinking, so that my relationship with money becomes healthier and more generative.
+
+===============================================================================
+SOCIAL / RELATIONSHIPS
+===============================================================================
+
+US-190: Social Connections
+As a user, I want to track important relationships, so that I can maintain meaningful connections.
+
+US-191: Relationship Tracking
+As a user, I want to record interactions and notes about relationships, so that I can be more intentional in my social life.
+
+US-192: Community Features
+As a user, I want to engage with community features, so that I can connect with others on similar journeys.
+
+US-193: Social Energy Audio Support
+As a user preparing for social interactions, I want audio that helps me arrive in an open, connected, authentic state, so that relationships are nourished from optimal internal conditions.
+
+===============================================================================
+PROJECTS / MISSIONS
+===============================================================================
+
+US-194: Create Projects
+As a user, I want to create projects with names, descriptions, status, and progress tracking, so that I can manage complex initiatives.
+
+US-195: Project Areas
+As a user, I want to organize projects into areas, so that I can group related work.
+
+US-196: Project Team Members
+As a user, I want to assign team members to projects, so that I can track collaboration.
+
+US-197: Project Tasks
+As a user, I want to create tasks within projects with descriptions, status, time periods, and assignments, so that I can break down large projects into actionable steps.
+
+US-198: Project Due Dates
+As a user, I want to set due dates for projects, so that I can manage timelines.
+
+US-199: Project Progress Tracking
+As a user, I want to see visual progress indicators for projects, so that I can monitor completion status.
+
+US-200: Project Theme Audio Evolution
+As a user, I want each project's musical theme to evolve as the project progresses (from nascent ideas to full manifestation), so that I hear the journey of creation.
+
+US-201: Project Completion Integration Ceremony
+As a user completing projects, I want full audio integration ceremonies that help me harvest learnings, celebrate team contributions, and close the project energetically, so that completions are honored.
+
+===============================================================================
+TIMELINE
+===============================================================================
+
+US-202: Timeline Steps
+As a user, I want to create timeline steps that represent significant life events or milestones, so that I can track my life journey.
+
+US-203: Timeline Step Sonic Memorials
+As a user, I want each timeline step to have a sonic memorial that captures the essence of that period, so that I can revisit important life chapters through sound.
+
+US-204: Timeline Journaling
+As a user, I want to add journal entries linked to timeline steps, so that I can document important moments.
+
+US-205: Life Story as Symphony
+As a user, I want my entire life timeline composed as a symphony, with different movements representing different life phases, themes for recurring patterns, and harmonic development representing growth, so that I can hear my life as a coherent musical narrative.
+
+US-206: Visual Timeline
+As a user, I want to see a visual representation of my timeline, so that I can understand my life's trajectory.
+
+US-207: Timeline Memory Resonance
+As a user reviewing timeline entries, I want audio that uses specific sonic elements to resonate with memories from that period, making recall more vivid and emotionally textured, so that my past becomes more accessible.
+
+===============================================================================
+TASKS MANAGEMENT
+===============================================================================
+
+US-208: Task Lists
+As a user, I want to create and manage task lists, so that I can organize my daily and weekly work.
+
+US-209: Task Completion
+As a user, I want to check off completed tasks, so that I can track my productivity.
+
+US-210: Task Overview
+As a user, I want to see active tasks on my dashboard, so that I can stay focused on current priorities.
+
+US-211: Task Completion Dopamine Audio
+As a user completing tasks, I want audio designed to optimize dopamine release (satisfying sounds, reward frequencies) without creating dependency, so that productivity is intrinsically rewarding.
+
+===============================================================================
+BUBBLES VISUALIZATION
+===============================================================================
+
+US-212: Bubbles View
+As a user, I want to see a bubbles visualization, so that I can interact with my data in a unique visual format.
+
+US-213: Bubbles Interaction
+As a user, I want to interact with bubbles, so that I can explore connections and patterns in my life data.
+
+US-214: Bubbles Interactive Sonification
+As a user interacting with bubbles, I want each bubble to generate sounds based on its data (size = volume, color = timbre, connections = harmonies), so that exploring data becomes a musical composition process.
+
+===============================================================================
+QUOTES & MANTRAS
+===============================================================================
+
+US-215: Daily Quotes
+As a user, I want to see inspirational quotes, so that I can start my day with motivation.
+
+US-216: Personal Mantras
+As a user, I want to create and display personal mantras, so that I can reinforce positive beliefs.
+
+US-217: Mantra Management
+As a user, I want to add, edit, and remove mantras, so that I can keep them relevant to my current focus.
+
+US-218: Mantra Anchoring Audio
+As a user working with mantras, I want audio that anchors the mantra through rhythmic repetition, supportive drones, and frequencies that enhance memorization and embodiment, so that mantras become deeply installed.
+
+===============================================================================
+WEATHER INTEGRATION
+===============================================================================
+
+US-219: Weather Widget
+As a user, I want to see local weather information on my dashboard, so that I can plan my day accordingly.
+
+US-220: Weather Display Toggle
+As a user, I want to show/hide the weather widget, so that I can control dashboard clutter.
+
+US-221: Weather-Responsive Psychosomatic Support
+As a user, I want audio that not only incorporates weather sounds but also compensates for weather-related mood and energy impacts (uplifting audio on gray days, calming audio on storm days), so that weather's psychological effects are balanced.
+
+===============================================================================
+PERSONALIZATION & SETTINGS
+===============================================================================
+
+US-222: Greeting Message
+As a user, I want to see a personalized greeting on the dashboard, so that the app feels welcoming.
+
+US-223: Audio Settings
+As a user, I want to configure audio preferences for the app, so that sounds match my environment.
+
+US-224: Comprehensive Audio Control Center
+As a user, I want a central control panel for all audio features (master volume, feature-specific toggles, intensity preferences, voice coaching settings, silence ratios, biofeedback sensitivity), so that I have complete control over my sonic experience.
+
+US-225: Notification Preferences
+As a user, I want to configure when and how I receive notifications, so that I'm alerted appropriately.
+
+US-226: Mountain Preferences
+As a user, I want to set preferences for mountain/vision board visualizations, so that the interface matches my style.
+
+US-227: Links Management
+As a user, I want to manage quick links to external resources, so that I can access important tools easily.
+
+US-228: Menu Customization
+As a user, I want to show/hide specific menu items (Calendar, Tasks, Journal, Vision Board, Balance, Wealth Management, Links, Mantras, Quotes, Completed Mountains, Audio Settings, Mountain Preferences, Bubbles, Habits, Help), so that I can streamline my interface.
+
+US-229: Header Customization
+As a user, I want to show/hide header sections (Main, Focus, Emotional, Health, Habits, Vision, Wealth, Social, Projects, Sales, Marketplace, Timeline), so that I can focus on relevant areas.
+
+===============================================================================
+HELP & SUPPORT
+===============================================================================
+
+US-230: Help Documentation
+As a user, I want to access help documentation, so that I can learn how to use app features.
+
+US-231: Onboarding
+As a user, I want guided onboarding when I first use the app, so that I can understand key features quickly.
+
+US-232: Audio Feature Experiential Tutorial
+As a user, I want an experiential tutorial that lets me feel the effects of different audio interventions on my actual state (experiencing state transitions, biofeedback loops, coaching integration), so that I understand the power of the audio system through direct experience.
+
+===============================================================================
+DATA MANAGEMENT
+===============================================================================
+
+US-233: Data Persistence
+As a user, I want all my data to be saved automatically, so that I never lose my work.
+
+US-234: Data Sync
+As a user, I want my data to sync across devices, so that I can access my information anywhere.
+
+US-235: Export Data
+As a user, I want to export my data, so that I can keep backups or move to another platform.
+
+US-236: Import Data
+As a user, I want to import data from other sources, so that I can consolidate my personal development tracking.
+
+US-237: Audio Preferences and History Sync
+As a user, I want all my audio preferences, saved soundscapes, and effectiveness data to sync across devices, so that the AI's learning about me is consistent everywhere.
+
+===============================================================================
+ACCESSIBILITY
+===============================================================================
+
+US-238: Keyboard Navigation
+As a user, I want to navigate the app using keyboard shortcuts, so that I can use the app efficiently.
+
+US-239: Screen Reader Support
+As a user with visual impairments, I want screen reader support, so that I can access all app features.
+
+US-240: Touch-Optimized Controls
+As a mobile user, I want all interactive elements to have proper touch target sizes (min 44x44px), so that I can easily tap controls.
+
+US-241: Responsive Typography
+As a user, I want text to scale appropriately on different screen sizes, so that content is readable on any device.
+
+US-242: Full Audio Navigation Mode
+As a user with visual impairments, I want complete app navigation through audio alone (spatial audio for different sections, voice commands, auditory icons), so that I can use all features through sound.
+
+US-243: Haptic-Audio Synchronization
+As a mobile user, I want haptic feedback precisely synchronized with audio (vibration matching breathing cues, tactile representation of musical elements), so that I have rich multi-sensory feedback.
+
+===============================================================================
+PERFORMANCE
+===============================================================================
+
+US-244: Fast Load Times
+As a user, I want the app to load quickly, so that I can start my practice without delay.
+
+US-245: Smooth Animations
+As a user, I want smooth animations and transitions, so that the app feels polished and professional.
+
+US-246: Offline Support
+As a user, I want to access core features offline, so that I can use the app anywhere.
+
+US-247: Real-Time Audio Generation
+As a user, I want AI audio to generate in real-time without latency, so that biofeedback loops and adaptive responses feel immediate and seamless.
+
+US-248: Low-Bandwidth Adaptive Audio
+As a user with limited connectivity, I want the system to adapt audio quality dynamically while maintaining therapeutic effectiveness, so that I get support regardless of connection quality.
+
+===============================================================================
+SECURITY & PRIVACY
+===============================================================================
+
+US-249: Secure Authentication
+As a user, I want my authentication to be secure, so that my personal data is protected.
+
+US-250: Data Encryption
+As a user, I want my sensitive data encrypted, so that my private thoughts and information remain confidential.
+
+US-251: Privacy Controls
+As a user, I want control over what data is collected and how it's used, so that I maintain privacy.
+
+US-252: Biometric Data Privacy
+As a user, I want absolute assurance that my biometric data (heart rate, breathing, voice) is processed locally when possible and encrypted when transmitted, with clear consent controls, so that my physiological privacy is protected.
+
+US-253: Audio Recording Consent
+As a user, I want explicit control over when and if my audio is recorded for analysis, with clear indication when recording is active, so that I have complete audio privacy.
+
+===============================================================================
+ADVANCED INTEGRATION FEATURES
+===============================================================================
+
+US-254: Cross-Feature State Continuity
+As a user, when I move between app features (habits to journal to vision board), I want my psychosomatic state to be maintained and supported continuously, so that transitions don't disrupt my optimal functioning.
+
+US-255: Daily Audio Journey Composition
+As a user, I want the AI to compose my entire day as a coherent audio journey, considering my schedule, energy patterns, goals, and challenges, so that every moment is sonically supported toward my thriving.
+
+US-256: Life Season Audio Themes
+As a user in different life seasons (growth, consolidation, release, renewal), I want overarching audio themes that span weeks or months and support the deep work of each season, so that my audio experience evolves with my life's natural cycles.
+
+US-257: Relationship Pattern Audio Insights
+As a user, I want the AI to identify patterns in how I respond to different types of audio in different situations and provide insights about what this reveals about me, so that the audio system teaches me about myself.
+
+US-258: Audio as Transitional Object
+As a user, I want the ability to create audio "transitional objects" (specific soundscapes that I can rely on in difficult moments), so that I always have a sonic resource for regulation regardless of circumstances.
+
+US-259: Collective Resonance Experiences
+As a user, I want the option to participate in scheduled collective audio experiences where users globally engage with the same soundscape simultaneously, creating a sense of connection and shared humanity, so that I can feel part of something larger.
+
+US-260: Audio Legacy Creation
+As a user, I want to create an audio legacy that represents my life's journey, values, and wisdom that could be shared with loved ones, so that my growth journey has lasting meaning beyond myself.
+
+===============================================================================
+CONVERSATIONAL AI MUSIC SYSTEM
+===============================================================================
+
+US-261: Conversational Audio Interface
+As a user, I want to have natural conversations with the AI about what audio is working for me and what isn't, describing my experiences and preferences in my own words, so that the AI deeply understands my unique sonic needs.
+
+US-262: Real-Time Audio Feedback Dialogue
+As a user during an audio experience, I want to tell the AI "this is too intense" or "I need something more uplifting" or "this is perfect" and have it immediately adjust while learning from my feedback, so that every moment becomes a collaborative tuning process.
+
+US-263: AI Learning from User Conversations
+As a user, I want the AI to continuously learn from our conversations about what helps me in all dimensions (physical, emotional, mental, spiritual, relational, vocational), building a comprehensive model of my unique responses, so that recommendations become increasingly personalized over time.
+
+US-264: Spontaneous Music Creation from Resource Libraries
+As a user, I want the AI to spontaneously create music by drawing from vast libraries of musical resources (instrumental recordings, vocal samples, nature sounds, synthesized tones, cultural music traditions, orchestral elements), so that each soundscape is freshly composed for my exact needs in that moment.
+
+US-265: Real-Time Sound Manipulation and Synthesis
+As a user, I want the AI to manipulate and synthesize sounds in real-time (adjusting pitch, timbre, rhythm, layering, filtering, spatializing) to create the exact sonic qualities I need second-by-second, so that audio is infinitely flexible and responsive.
+
+US-266: Multi-Dimensional Effectiveness Tracking
+As a user, I want the AI to track how different audio interventions affect me across all dimensions (energy levels, mood, focus, physical sensations, productivity, creativity, relationship quality, vision progress), so that learning is comprehensive and holistic.
+
+US-267: Audio Experimentation and Discovery
+As a user, I want the AI to proactively suggest experimental audio approaches based on what it's learning about me, so that I discover sonic interventions I would never have thought to try.
+
+US-268: Vocal Element Integration
+As a user, I want the AI to incorporate human vocal elements (wordless vocals, harmonic overtone singing, chanting, humming, whispered affirmations) spontaneously into soundscapes when appropriate, so that the human voice becomes part of the therapeutic palette.
+
+US-269: Cross-Cultural Musical Wisdom
+As a user, I want the AI to draw on musical healing traditions from diverse cultures (Indian ragas, African drumming patterns, Indigenous ceremonial music, Sufi devotional music, Japanese shakuhachi techniques), so that I benefit from humanity's collective musical wisdom.
+
+US-270: Generative Compositional Intelligence
+As a user, I want the AI to compose entirely new musical pieces in real-time (not just selecting from pre-made tracks), using compositional intelligence to create melodies, harmonies, rhythms, and structures that serve my current state and goals, so that every soundscape is a unique creation.
+
+US-271: Sound Palette Customization Through Conversation
+As a user, I want to tell the AI about my musical preferences, aversions, associations, and memories, so that it knows to avoid triggering sounds and emphasize sounds that resonate positively with me.
+
+US-272: Collaborative Sound Design Sessions
+As a user, I want dedicated sessions where I collaborate with the AI to design specific soundscapes together through conversation ("make it more grounded," "add something that feels like hope," "remove that high frequency"), so that I develop sonic environments perfectly suited to recurring needs.
+
+US-273: AI Music Rationale Explanations
+As a user, I want the AI to explain why it chose specific musical elements for my current situation ("I used slower tempo because your heart rate suggests stress," "I added strings because you mentioned they help you feel hopeful"), so that I understand the therapeutic logic and can provide better feedback.
+
+US-274: Long-Term Pattern Recognition and Insights
+As a user, I want the AI to identify long-term patterns in what audio helps me ("you respond better to nature sounds in the morning," "piano seems most effective for your anxiety," "you need more silence during high-stress weeks"), so that I gain insights about my relationship with sound.
+
+US-275: Audio Journal Integration
+As a user, I want to journal about my audio experiences and have the AI read and learn from those reflections, so that qualitative feedback complements quantitative biofeedback.
+
+US-276: Collaborative Evolution of Sonic Identity
+As a user, I want the AI and I to collaboratively evolve my "sonic identity" over time through ongoing dialogue, experimentation, and reflection, so that my audio experience matures with my personal growth.
+
+US-277: Emergency Sound Rescue System
+As a user in acute distress, I want to tell the AI "I need help now" and receive an immediate audio intervention spontaneously created for my exact state, drawing on everything it knows about what helps me, so that I have instant sonic support in crisis.
+
+US-278: Celebration of Musical Diversity
+As a user, I want the AI to introduce me to musical elements from traditions I've never encountered, expanding my sonic horizons while respecting my preferences, so that my musical world continuously expands.
+
+US-279: Intention-Based Music Generation
+As a user, I want to state my intention ("I want to feel more courageous," "I need to process grief," "I'm preparing for a difficult conversation") and have the AI spontaneously create music that supports that specific intention, so that audio serves my conscious growth work.
+
+US-280: AI as Musical Collaborator and Teacher
+As a user, I want the AI to be not just a provider of music but a collaborator and teacher who helps me understand how music affects me, what I can create with sound, and how to use audio as a lifelong tool for wellbeing, so that I develop my own sonic intelligence.
+
+===============================================================================
+HYPERCUSTOM LIFE SOUNDTRACK INTEGRATION
+===============================================================================
+
+US-281: Continuous Life Soundtrack Generation
+As a user, I want the AI to generate a continuous, seamless soundtrack for my entire life that flows across all contexts (morning routines, commute, work, meals, exercise, relationships, evening wind-down), so that I'm sonically supported every moment, not just when using the app.
+
+US-282: Cross-Device Audio Continuity
+As a user, I want my life soundtrack to follow me seamlessly across all my devices (phone, computer, smart speakers, headphones, car audio), automatically transitioning when I switch contexts, so that sonic support is omnipresent without manual switching.
+
+US-283: Context-Aware Environmental Integration
+As a user, I want the AI to detect my environmental context (at home, in office, outdoors, in transit, with others, alone) and adapt the soundtrack appropriately, so that audio always fits my physical and social environment.
+
+US-284: Hyperpersonalized Sonic DNA
+As a user, I want the AI to develop my unique "sonic DNA" - a hypercustom profile of my musical preferences, physiological responses, emotional patterns, circadian rhythms, life goals, and growth edges - so that my soundtrack is unlike anyone else's in the world.
+
+US-285: Silence as Composed Element
+As a user, I want silence to be an intentionally composed and scheduled part of my life soundtrack, placed strategically by the AI for maximum benefit (silence for integration after intense experiences, silence for deep reflection, silence to honor transitions), so that quiet becomes as therapeutic as sound.
+
+US-286: Real-World Activity Soundtrack Adaptation
+As a user, I want the soundtrack to adapt to my real-world activities detected through sensors and calendar (working out = energizing rhythm, cooking = flowing background, important meeting = pre-game preparation then silence, bedtime = sleep induction), so that every activity is optimally supported.
+
+US-287: Social Context Sensitivity
+As a user, when I'm with other people, I want the AI to either provide silent support, subtle ambient audio that doesn't interfere with conversation, or suggest shared listening experiences, so that my soundtrack respects social dynamics.
+
+US-288: Life Event Soundtrack Themes
+As a user going through major life events (starting new job, ending relationship, moving homes, achieving goals, experiencing loss), I want the AI to create extended soundtrack themes that support me through the entire arc of these experiences, so that transformation is musically held.
+
+US-289: Micro-Moment Soundtrack Precision
+As a user, I want the soundtrack to respond to micro-moments (receiving difficult news, moment of joy, sudden insight, wave of fatigue) with immediate sonic shifts that match and support my experience, so that every emotional fluctuation is acknowledged and held.
+
+US-290: Predictive Soundtrack Composition
+As a user, I want the AI to compose my soundtrack predictively based on my schedule, historical patterns, and current trajectory, preparing me for what's coming and supporting me through what's happening, so that I'm always one step ahead energetically.
+
+US-291: Dream and Sleep Soundtrack Integration
+As a user, I want my life soundtrack to extend into sleep, with audio that supports sleep cycles, potentially influences dream content positively, and prepares me for waking, so that the full 24-hour cycle is sonically optimized.
+
+US-292: Soundtrack Intensity Modulation
+As a user, I want control over how present or subtle my life soundtrack is (from foreground immersive to barely perceptible ambient to complete silence), adjustable moment-by-moment, so that I determine the intensity of sonic support.
+
+US-293: Location-Based Soundtrack Elements
+As a user, I want the AI to incorporate location-specific elements into my soundtrack (nature sounds when I'm hiking, urban textures when I'm in the city, ocean sounds at the beach), so that music connects me more deeply to where I am.
+
+US-294: Relationship Soundtrack Integration
+As a user, I want the option to have shared soundtrack moments with specific people in my life, where the AI creates music that supports our connection, so that relationships have their own sonic signature.
+
+US-295: Life Soundtrack Archive and Replay
+As a user, I want to access an archive of my life soundtrack, able to replay the music that accompanied significant moments, so that I can sonically revisit my journey.
+
+US-296: Morning Soundtrack Launch Sequence
+As a user, I want my mornings to begin with a personalized launch sequence that progressively wakes my nervous system, aligns me with my intentions, and energizes me for the day ahead, so that I start each day optimally.
+
+US-297: Evening Integration Soundtrack
+As a user, I want my evenings to include a soundtrack integration sequence that helps me process the day, release what doesn't serve, consolidate learning, and prepare for restorative sleep, so that each day completes well.
+
+US-298: Hypercustom Instrument Selection
+As a user, I want the AI to learn which specific instruments, timbres, and sound qualities most affect me positively, and weight my soundtrack heavily toward those while occasionally introducing new elements, so that my sonic palette is both familiar and evolving.
+
+US-299: Soundtrack Narrative Arc
+As a user, I want my life soundtrack to have narrative coherence over days, weeks, and months, with musical themes that develop, transform, and resolve like a great symphony, so that my audio experience tells the story of my growth.
+
+US-300: Universal Life Soundtrack Philosophy
+As a user, I want to experience audio not as something I occasionally use but as a continuous intelligent companion that supports my thriving in every moment through hypercustom music, strategic silence, and deep learning about what elevates me, so that sound becomes integral to living my best life.
+
+===============================================================================
+THERAPEUTIC INTEGRATION & JOURNAL FEEDBACK
+===============================================================================
+
+US-301: Journal Entry Analysis for Audio Refinement
+As a user, I want the AI to continuously analyze my journal entries to understand my emotional patterns, breakthrough moments, struggles, insights, and growth edges, using this information to refine my soundtrack, so that music evolves based on my written self-reflection.
+
+US-302: Psychotherapy Session Integration
+As a user engaged in psychotherapy, I want to share notes, themes, or recordings from therapy sessions with the AI (with appropriate consent and privacy), so that my soundtrack can support the therapeutic work I'm doing between sessions.
+
+US-303: Therapeutic Theme Audio Support
+As a user, when I'm working on specific therapeutic themes (attachment wounds, inner child work, grief processing, boundary setting, trauma integration), I want the AI to detect these themes in my journal and therapy notes and create audio that specifically supports that work, so that music becomes an extension of therapy.
+
+US-304: Journal-Detected Emotional Patterns
+As a user, I want the AI to identify emotional patterns in my journaling (recurring anxieties, cyclical depression, triggered states, joyful experiences) and proactively create audio interventions that address these patterns before they escalate, so that music provides preventive emotional support.
+
+US-305: Therapeutic Language Mirroring
+As a user, I want the AI to learn the specific language and frameworks my therapist uses (IFS parts work, CBT reframes, somatic awareness, attachment theory) from my therapy notes and incorporate those frameworks into voice coaching, so that my soundtrack reinforces therapeutic learning.
+
+US-306: Breakthrough Moment Consolidation Audio
+As a user, when I journal about therapeutic breakthroughs or significant insights, I want the AI to create special consolidation soundscapes that help me integrate and embody those breakthroughs, so that insights become lasting changes.
+
+US-307: Trauma-Informed Audio Adaptation
+As a user working with trauma, I want the AI to learn my trauma history and triggers from therapy notes (with my explicit consent) and ensure all audio is trauma-informed, avoiding triggering sounds and emphasizing safety-building frequencies, so that my soundtrack is always safe.
+
+US-308: Therapeutic Homework Audio Support
+As a user, when my therapist assigns homework (self-compassion practices, exposure exercises, relationship experiments), I want the AI to detect these assignments in my notes and create audio that supports me in completing them, so that therapeutic homework is sonically scaffolded.
+
+US-309: Parts Work Audio Dialogue
+As a user doing Internal Family Systems or parts work, I want the AI to learn about my different parts from journal and therapy notes (the critic, the protector, the wounded child) and create distinct sonic signatures for each part, facilitating dialogue and integration, so that parts work is musically supported.
+
+US-310: Therapy Session Preparation Audio
+As a user, before therapy sessions, I want the AI to create audio that opens me emotionally, grounds me in my body, and prepares me to go deep, based on what I've journaled about wanting to explore, so that I arrive at therapy ready to work.
+
+US-311: Post-Therapy Integration Soundscapes
+As a user, after therapy sessions, I want the AI to provide integration soundscapes that help me process what came up, soothe any activation, and consolidate learning, so that the therapeutic work continues beyond the session.
+
+US-312: Journal Sentiment Analysis Audio Response
+As a user, I want the AI to perform sentiment analysis on my journal entries and adjust my soundtrack's emotional tone accordingly (more uplifting when journaling reveals depression, more grounding when anxiety is high), so that music provides emotional counterbalance.
+
+US-313: Therapeutic Goal Progress Sonification
+As a user, I want my progress toward therapeutic goals (as documented in journal and therapy notes) to be sonified, with music becoming richer and more complex as I make progress, so that I can hear my healing journey.
+
+US-314: Therapist Collaboration Interface
+As a user, I want my therapist to have the option to access a collaboration interface where they can suggest audio interventions, provide feedback on what's working, and help calibrate the AI's therapeutic approach, so that my soundtrack is professionally guided.
+
+US-315: Journal Writing Soundtrack Optimization
+As a user, I want the AI to learn what audio best supports my journaling process (based on depth of entries, emotional honesty, and breakthroughs achieved during different soundscapes), so that journaling time is optimally supported.
+
+US-316: Therapeutic Attachment Repair Audio
+As a user working on attachment healing, I want audio specifically designed to support secure attachment development (consistent, attuned, soothing presence), so that music itself becomes a corrective attachment experience.
+
+US-317: Journal-to-Music Emotional Translation
+As a user, I want the AI to translate the emotional content of my journal entries into music, creating soundscapes that mirror what I've written, so that I can experience my emotions both through words and sound.
+
+US-318: Therapy Modality-Specific Audio
+As a user, I want the AI to adapt audio based on my therapy modality (EMDR, somatic experiencing, psychodynamic, CBT, ACT, DBT), using approaches that complement each modality's methods, so that music aligns with therapeutic philosophy.
+
+US-319: Long-Term Therapeutic Narrative Audio
+As a user, I want the AI to track my long-term therapeutic narrative (healing arc over months and years as documented in journals and therapy notes) and create evolving musical themes that represent my healing journey, so that I can hear how far I've come.
+
+US-320: Therapeutic Wisdom Integration
+As a user, I want the AI to identify key therapeutic insights and wisdom from my journal and therapy work and integrate them into voice coaching and musical motifs that remind me of these truths when I need them, so that therapeutic learning is continuously reinforced through sound.
+
+===============================================================================
+
+Total User Stories: 320
+
+These user stories represent the Mauna App as a comprehensive psychosomatic
+regulation and vision implementation platform where AI-generated audio is the
+primary therapeutic and transformational modality.
+
+The audio system operates on multiple simultaneous levels:
+
+PHYSIOLOGICAL REGULATION:
+- Second-by-second biofeedback loops
+- Heart rate variability optimization
+- Breathwork synchronization
+- Nervous system state detection and guidance
+- Circadian and ultradian rhythm support
+
+PSYCHOLOGICAL TRANSFORMATION:
+- State transition protocols (anxiety→calm, fatigue→energy, scattered→focused)
+- Cognitive reframing audio support
+- Limiting belief transformation
+- Growth mindset reinforcement
+- Emotional processing and alchemy
+
+VISION IMPLEMENTATION:
+- Complete journey support (Dreaming→Achieving→Integrating→Evolving)
+- State-appropriate audio for each implementation phase
+- Resistance detection and compassionate resolution
+- Confidence building and motivation restoration
+- Celebration and integration ceremonies
+
+COACHING INTEGRATION:
+- Personalized AI voice coaching
+- Socratic questioning
+- Compassionate self-talk modeling
+- Parts work facilitation
+- Contextual micro-coaching
+
+STRATEGIC SILENCE:
+- Therapeutic use of quiet
+- Intentional pauses for integration
+- Silence as state marker
+- Balance of sound and space
+
+SECOND-BY-SECOND ADAPTATION:
+- Continuous monitoring and micro-adjustments
+- Predictive state modeling
+- Multi-timeframe optimization
+- Context-aware switching
+- Stress escalation prevention
+
+CONVERSATIONAL AI MUSIC SYSTEM:
+- Natural dialogue about audio preferences and effectiveness
+- Real-time feedback and adjustment during experiences
+- Continuous learning from user conversations
+- Spontaneous music creation from vast resource libraries
+- Real-time sound manipulation and synthesis
+- Multi-dimensional effectiveness tracking
+- Cross-cultural musical wisdom integration
+- Generative compositional intelligence
+- Emergency sound rescue system
+- AI as musical collaborator and teacher
+
+HYPERCUSTOM LIFE SOUNDTRACK:
+- Continuous seamless soundtrack for entire life
+- Cross-device audio continuity
+- Context-aware environmental integration
+- Unique "sonic DNA" for each user
+- Silence as composed element
+- Real-world activity adaptation
+- Social context sensitivity
+- Life event soundtrack themes
+- Micro-moment precision
+- Predictive composition
+- 24-hour cycle optimization (including sleep)
+- Location-based soundtrack elements
+- Relationship soundtrack integration
+- Archive and replay capabilities
+- Morning launch and evening integration sequences
+- Narrative arc across days, weeks, months
+
+THERAPEUTIC INTEGRATION & JOURNAL FEEDBACK:
+- Journal entry analysis for audio refinement
+- Psychotherapy session integration
+- Therapeutic theme audio support
+- Journal-detected emotional pattern intervention
+- Therapeutic language and framework mirroring
+- Breakthrough moment consolidation
+- Trauma-informed audio adaptation
+- Therapeutic homework audio scaffolding
+- Parts work audio dialogue
+- Pre-therapy preparation and post-therapy integration
+- Journal sentiment analysis audio response
+- Therapeutic goal progress sonification
+- Therapist collaboration interface
+- Journal writing soundtrack optimization
+- Attachment repair audio
+- Journal-to-music emotional translation
+- Therapy modality-specific audio
+- Long-term therapeutic narrative tracking
+- Therapeutic wisdom integration and reinforcement
+
+The goal is to harness the full potential of audio to positively influence every
+second of the user's experience, using music, coaching, silence, and sound
+design as medicine for the body-mind system and as a catalyst for manifesting
+their highest vision.
+
+This is not background music—this is:
+- Audio as active therapy, coaching, biofeedback, and state regulation
+- A hypercustom life soundtrack that knows you better than anyone
+- An AI collaborator that learns from your conversations, journal, and therapy
+- A continuous intelligent companion supporting your thriving in every moment
+- Spontaneously created music drawing on infinite musical resources
+- Strategic silence as powerful as sound
+- Direct integration into your life as your personal soundtrack
+
+The vision is that every user experiences sound as an integral part of living
+their best life, with AI that learns what elevates them across all dimensions
+and continuously composes their unique journey through hypercustom music and
+intentional silence.

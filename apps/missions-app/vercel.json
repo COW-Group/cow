@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "framework": null,
+  "buildCommand": "cd ../.. && npm install --legacy-peer-deps && cd apps/missions-app && npm run build",
+  "outputDirectory": "dist",
+  "routes": [
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}

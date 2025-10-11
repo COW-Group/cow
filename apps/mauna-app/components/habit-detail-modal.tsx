@@ -1195,23 +1195,27 @@ export function HabitDetailModal({
                     ) : (
                       <div ref={journalScrollRef} className="space-y-3 overflow-y-auto flex-1 py-4 sm:py-6" style={{ scrollPaddingTop: 0 }}>
                           {(() => {
-                            // Calculate today and tomorrow once, outside the loop
+                            // Calculate today and dates for next 7 days
                             const todayStr = getLocalDateString()
-                            const tomorrowDate = new Date()
-                            tomorrowDate.setDate(tomorrowDate.getDate() + 1)
-                            const tomorrowStr = getLocalDateString(tomorrowDate)
+                            const futureDates: string[] = []
+                            for (let d = 1; d <= 7; d++) {
+                              const futureDate = new Date()
+                              futureDate.setDate(futureDate.getDate() + d)
+                              futureDates.push(getLocalDateString(futureDate))
+                            }
 
-                            console.log('[HabitDetailModal Journal] Today:', todayStr, 'Tomorrow:', tomorrowStr)
+                            console.log('[HabitDetailModal Journal] Today:', todayStr, 'Future dates:', futureDates)
 
-                            return Array.from({ length: 31 }, (_, i) => {
+                            return Array.from({ length: 38 }, (_, i) => {
+                              // Start from day 7 in future, go through today (day 7), then past days
                               const date = new Date()
-                              date.setDate(date.getDate() + 1 - i) // Start from tomorrow (+1), then today (0), then yesterday (-1), etc
+                              date.setDate(date.getDate() + 7 - i)
                               const dateStr = getLocalDateString(date)
                               const isToday = dateStr === todayStr
-                              const isTomorrow = dateStr === tomorrowStr
+                              const isFuturePrep = futureDates.includes(dateStr)
 
-                              if (i < 3) {
-                                console.log(`[HabitDetailModal Journal] i=${i}, dateStr=${dateStr}, isToday=${isToday}, isTomorrow=${isTomorrow}`)
+                              if (i < 10) {
+                                console.log(`[HabitDetailModal Journal] i=${i}, dateStr=${dateStr}, isToday=${isToday}, isFuturePrep=${isFuturePrep}`)
                               }
                             const isCompleted = habit.history?.includes(dateStr)
                             const isSkipped = habit.skipped?.[dateStr]
@@ -1222,7 +1226,7 @@ export function HabitDetailModal({
 
                             return (
                               <div key={dateStr} className="flex gap-3 sm:gap-4">
-                                {!isTomorrow && (
+                                {!isFuturePrep && (
                                   <button
                                     type="button"
                                     onClick={async (e) => {
@@ -1267,7 +1271,7 @@ export function HabitDetailModal({
                                     )}
                                   </button>
                                 )}
-                                {isTomorrow && (
+                                {isFuturePrep && (
                                   <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex-shrink-0 border-2 border-dashed border-white/30 flex items-center justify-center bg-white/5">
                                     <CalendarIcon className="w-5 h-5 text-cream-25/40" />
                                   </div>
@@ -1279,7 +1283,7 @@ export function HabitDetailModal({
                                     setIsEditingJournal(true)
                                   }}
                                   className={`flex-1 p-4 sm:p-5 rounded-lg transition-all text-left ${
-                                    isTomorrow
+                                    isFuturePrep
                                       ? 'bg-white/5 border-2 border-dashed border-white/40 hover:bg-white/8 hover:border-white/50'
                                       : isToday
                                       ? 'bg-white/10 border-2 border-white/30 hover:bg-white/12'
@@ -1287,8 +1291,8 @@ export function HabitDetailModal({
                                   }`}
                                 >
                                   <div className="flex items-center justify-between mb-2">
-                                    <span className={`text-sm font-medium ${isTomorrow ? 'text-cream-25/80 flex items-center gap-2' : isToday ? 'text-white font-bold' : 'text-cream-25'}`}>
-                                      {isTomorrow && <span className="text-xs px-2 py-0.5 rounded-full bg-white/20 text-cream-25">Tomorrow</span>}
+                                    <span className={`text-sm font-medium ${isFuturePrep ? 'text-cream-25/80 flex items-center gap-2' : isToday ? 'text-white font-bold' : 'text-cream-25'}`}>
+                                      {isFuturePrep && <span className="text-xs px-2 py-0.5 rounded-full bg-white/20 text-cream-25">Future</span>}
                                       {date.toLocaleDateString("en-US", {
                                         weekday: "short",
                                         month: "short",
@@ -1303,7 +1307,7 @@ export function HabitDetailModal({
                                   </div>
                                   {!hasNote && !hasCbtNote && (
                                     <p className="text-sm sm:text-base text-cream-25/70">
-                                      {isTomorrow ? 'Tap to prep notes for tomorrow' : 'Tap to add a journal entry'}
+                                      {isFuturePrep ? 'Tap to prep notes' : 'Tap to add a journal entry'}
                                     </p>
                                   )}
                                   {hasNote && (

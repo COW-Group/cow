@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react"
 import {
-  X, Clock, Palette, Trash2, Copy, CheckCircle2, Circle, Inbox,
+  X, Clock, Palette, Trash2, Copy, CheckCircle2, Circle, Inbox, Plus, Pencil, Save,
   Briefcase, Coffee, Book, Code, Dumbbell, Heart, Zap, Target,
   Music, Palette as PaletteIcon, Camera, Video, ShoppingCart, Home,
   Car, Plane, Mail, DollarSign, Gift, Hammer, Puzzle, BarChart,
@@ -10,6 +10,11 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { Input } from "@/components/ui/input"
+import { useAuth } from "@/hooks/use-auth"
+import { AuthService } from "@/lib/auth-service"
+import { databaseService } from "@/lib/database-service"
+import { useToast } from "@/hooks/use-toast"
 
 interface Breath {
   id: string
@@ -139,6 +144,8 @@ export function StepDetailModal({
   onToggleBreath,
   onMoveToInbox,
 }: StepDetailModalProps) {
+  const { user } = useAuth(AuthService)
+  const { toast } = useToast()
   const [editLabel, setEditLabel] = useState(step.label)
   const [editDescription, setEditDescription] = useState(step.description || "")
   const [editJournalContent, setEditJournalContent] = useState(step.journalContent || "")
@@ -151,6 +158,13 @@ export function StepDetailModal({
   const [selectedDays, setSelectedDays] = useState<string[]>([])
   const [isCustomFrequency, setIsCustomFrequency] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+
+  // Breath management state
+  const [editBreaths, setEditBreaths] = useState<Breath[]>(step.breaths || [])
+  const [newBreathName, setNewBreathName] = useState("")
+  const [editingBreathId, setEditingBreathId] = useState<string | null>(null)
+  const [editingBreathName, setEditingBreathName] = useState("")
+  const [editingBreathEstimation, setEditingBreathEstimation] = useState(0)
 
   // Inject scrollbar styles
   useEffect(() => {
@@ -279,9 +293,70 @@ export function StepDetailModal({
     }
   }
 
+  // Breath management handlers
+  const handleAddBreath = async () => {
+    if (!user?.id || !newBreathName.trim()) return
+
+    try {
+      const nextPosition = editBreaths.length > 0 ? Math.max(...editBreaths.map(b => b.position || 0)) + 1 : 1
+      const newBreath = await databaseService.createBreath(user.id, step.id, newBreathName.trim(), nextPosition)
+
+      setEditBreaths([...editBreaths, newBreath])
+      setNewBreathName("")
+      toast({ title: "Breath Added", description: `"${newBreathName.trim()}" has been added.` })
+    } catch (error: any) {
+      toast({ title: "Error", description: "Failed to add breath.", variant: "destructive" })
+    }
+  }
+
+  const handleEditBreath = (breath: Breath) => {
+    setEditingBreathId(breath.id)
+    setEditingBreathName(breath.name)
+    setEditingBreathEstimation(Math.floor(breath.timeEstimationSeconds / 60))
+  }
+
+  const handleSaveBreath = async () => {
+    if (!user?.id || !editingBreathId) return
+
+    try {
+      const updates = {
+        name: editingBreathName,
+        timeEstimationSeconds: editingBreathEstimation * 60,
+      }
+
+      await databaseService.updateBreathTiming(editingBreathId, user.id, updates)
+
+      setEditBreaths(editBreaths.map(b =>
+        b.id === editingBreathId
+          ? { ...b, name: editingBreathName, timeEstimationSeconds: editingBreathEstimation * 60 }
+          : b
+      ))
+
+      setEditingBreathId(null)
+      toast({ title: "Breath Updated", description: "Breath has been updated." })
+    } catch (error: any) {
+      toast({ title: "Error", description: "Failed to update breath.", variant: "destructive" })
+    }
+  }
+
+  const handleDeleteBreath = async (breathId: string) => {
+    if (!user?.id) return
+
+    const confirmDelete = window.confirm("Are you sure you want to delete this breath?")
+    if (!confirmDelete) return
+
+    try {
+      await databaseService.deleteBreath(breathId, user.id)
+      setEditBreaths(editBreaths.filter(b => b.id !== breathId))
+      toast({ title: "Breath Deleted", description: "Breath has been removed." })
+    } catch (error: any) {
+      toast({ title: "Error", description: "Failed to delete breath.", variant: "destructive" })
+    }
+  }
+
   // Count completed breaths
-  const completedBreaths = step.breaths?.filter(b => b.completed).length || 0
-  const totalBreaths = step.breaths?.length || 0
+  const completedBreaths = editBreaths.filter(b => b.completed).length
+  const totalBreaths = editBreaths.length
 
   return (
     <div
@@ -492,64 +567,167 @@ export function StepDetailModal({
                 )}
               </div>
 
-              {/* Breaths Section */}
-              {step.breaths && step.breaths.length > 0 && (
-                <div className="space-y-3 p-4 rounded-xl bg-white/5 border border-white/10">
-                  <div className="flex items-center justify-between">
-                    <label className="text-sm font-semibold text-cream-25 uppercase tracking-wide">Breaths</label>
-                    <span className="text-xs font-medium text-cream-25/60 px-2 py-1 rounded-full bg-white/10">
-                      {completedBreaths}/{totalBreaths} completed
-                    </span>
-                  </div>
-                  <div className="space-y-2">
-                    {step.breaths
-                      .sort((a, b) => a.position - b.position)
-                      .map((breath) => {
-                        const breathMinutes = Math.ceil(breath.timeEstimationSeconds / 60)
-                        return (
-                          <button
-                            key={breath.id}
-                            onClick={(e) => handleToggleBreathCompletion(e, breath.id, breath.completed)}
-                            className="w-full flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10 transition-all group"
-                          >
+              {/* Breaths Section - Editable */}
+              <div className="space-y-3 p-4 rounded-xl bg-white/5 border border-white/10">
+                <div className="flex items-center justify-between">
+                  <label className="text-sm font-semibold text-cream-25 uppercase tracking-wide">Breaths</label>
+                  <span className="text-xs font-medium text-cream-25/60 px-2 py-1 rounded-full bg-white/10">
+                    {completedBreaths}/{totalBreaths} completed
+                  </span>
+                </div>
+
+                {/* Add new breath */}
+                <div className="flex gap-2">
+                  <Input
+                    type="text"
+                    placeholder="Add a new breath..."
+                    value={newBreathName}
+                    onChange={(e) => setNewBreathName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault()
+                        handleAddBreath()
+                      }
+                    }}
+                    className="flex-1 bg-white/10 border-white/10 text-cream-25 placeholder:text-cream-25/50 focus:border-white/30"
+                  />
+                  <Button
+                    onClick={handleAddBreath}
+                    disabled={!newBreathName.trim()}
+                    className="bg-cyan-500 hover:bg-cyan-600 text-white"
+                    size="sm"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                {/* Breath list */}
+                <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                  {editBreaths
+                    .sort((a, b) => a.position - b.position)
+                    .map((breath) => {
+                      const breathMinutes = Math.ceil(breath.timeEstimationSeconds / 60)
+                      const isEditing = editingBreathId === breath.id
+
+                      return (
+                        <div
+                          key={breath.id}
+                          className="p-3 rounded-lg bg-white/5 border border-white/10 space-y-2"
+                        >
+                          {/* Breath item row */}
+                          <div className="flex items-center gap-3">
                             {/* Checkbox */}
-                            <div
-                              className="flex-shrink-0 w-6 h-6 rounded-md flex items-center justify-center transition-all group-hover:scale-110"
-                              style={{
-                                borderWidth: '2px',
-                                borderColor: breath.completed ? step.color : "rgba(249, 250, 251, 0.3)",
-                                backgroundColor: breath.completed ? step.color : "transparent",
-                                boxShadow: breath.completed ? `0 4px 8px ${step.color}40` : 'none'
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                if (onToggleBreath) {
+                                  onToggleBreath(step.id, breath.id, !breath.completed)
+                                }
                               }}
+                              className="flex-shrink-0"
                             >
-                              {breath.completed ? (
-                                <CheckCircle2 className="w-4 h-4 text-white" strokeWidth={3} />
+                              <div
+                                className="w-6 h-6 rounded-md flex items-center justify-center transition-all hover:scale-110"
+                                style={{
+                                  borderWidth: '2px',
+                                  borderColor: breath.completed ? step.color : "rgba(249, 250, 251, 0.3)",
+                                  backgroundColor: breath.completed ? step.color : "transparent",
+                                  boxShadow: breath.completed ? `0 4px 8px ${step.color}40` : 'none'
+                                }}
+                              >
+                                {breath.completed ? (
+                                  <CheckCircle2 className="w-4 h-4 text-white" strokeWidth={3} />
+                                ) : (
+                                  <Circle className="w-3 h-3 text-cream-25/20" />
+                                )}
+                              </div>
+                            </button>
+
+                            {/* Name */}
+                            <div className="flex-1">
+                              {isEditing ? (
+                                <Input
+                                  type="text"
+                                  value={editingBreathName}
+                                  onChange={(e) => setEditingBreathName(e.target.value)}
+                                  className="bg-white/10 border-white/10 text-cream-25 h-8 text-sm"
+                                />
                               ) : (
-                                <Circle className="w-3 h-3 text-cream-25/20" />
+                                <span
+                                  className="text-sm font-medium"
+                                  style={{
+                                    color: breath.completed ? "rgba(249, 250, 251, 0.5)" : "rgba(249, 250, 251, 0.9)",
+                                    textDecoration: breath.completed ? "line-through" : "none",
+                                  }}
+                                >
+                                  {breath.name}
+                                </span>
                               )}
                             </div>
 
-                            {/* Content */}
-                            <div className="flex-1 flex items-center justify-between text-left">
-                              <span
-                                className="text-sm font-medium transition-all"
-                                style={{
-                                  color: breath.completed ? "rgba(249, 250, 251, 0.5)" : "rgba(249, 250, 251, 0.9)",
-                                  textDecoration: breath.completed ? "line-through" : "none",
-                                }}
-                              >
-                                {breath.name}
-                              </span>
-                              <span className="text-xs text-cream-25/40 font-inter ml-2">
-                                {breathMinutes}m
-                              </span>
+                            {/* Time estimation */}
+                            <div className="text-xs text-cream-25/60">
+                              {breathMinutes}m
                             </div>
-                          </button>
-                        )
-                      })}
-                  </div>
+
+                            {/* Actions */}
+                            {isEditing ? (
+                              <Button
+                                onClick={handleSaveBreath}
+                                size="sm"
+                                variant="ghost"
+                                className="text-green-500 hover:text-green-600 h-8 w-8 p-0"
+                              >
+                                <Save className="h-4 w-4" />
+                              </Button>
+                            ) : (
+                              <>
+                                <Button
+                                  onClick={() => handleEditBreath(breath)}
+                                  size="sm"
+                                  variant="ghost"
+                                  className="text-cream-25/70 hover:text-cream-25 h-8 w-8 p-0"
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  onClick={() => handleDeleteBreath(breath.id)}
+                                  size="sm"
+                                  variant="ghost"
+                                  className="text-red-400 hover:text-red-500 h-8 w-8 p-0"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </>
+                            )}
+                          </div>
+
+                          {/* Time estimation input (when editing) */}
+                          {isEditing && (
+                            <div className="flex items-center gap-2 ml-9">
+                              <label className="text-xs text-cream-25/70">
+                                Est. (min):
+                              </label>
+                              <Input
+                                type="number"
+                                min="0"
+                                value={editingBreathEstimation}
+                                onChange={(e) => setEditingBreathEstimation(Number(e.target.value))}
+                                className="w-20 h-7 text-xs bg-white/10 border-white/10 text-cream-25"
+                              />
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })}
+
+                  {editBreaths.length === 0 && (
+                    <div className="text-center py-6 text-cream-25/50 text-sm">
+                      No breaths yet. Add one above to get started!
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           </div>
 

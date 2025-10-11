@@ -7,6 +7,9 @@ export interface TimelineItem {
   description: string
   color: string
   scheduledTime: string
+  scheduledDate?: string // ISO date string for the scheduled date
+  estimatedStartTime?: string | null // Full timestamp with date and time
+  estimatedEndTime?: string | null // Full timestamp with date and time
   duration: number
   type: "habit" | "activity"
   isCompleted: boolean
@@ -15,6 +18,8 @@ export interface TimelineItem {
   isBuildHabit?: boolean
   history?: string[]
   breaths?: any[]
+  taskListId?: string | null // ID of the task list this step belongs to
+  taskListName?: string | null // Name of the task list (e.g., "Hot List", "Morning Routine")
 }
 
 export interface TimelineItemWithPosition {

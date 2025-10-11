@@ -21,6 +21,9 @@ interface TimelineItem {
   description: string
   color: string
   scheduledTime: string // HH:mm format
+  scheduledDate?: string // ISO date string for the scheduled date
+  estimatedStartTime?: string | null // Full timestamp with date and time
+  estimatedEndTime?: string | null // Full timestamp with date and time
   duration: number // in minutes
   type: "habit" | "activity"
   isCompleted: boolean
@@ -29,6 +32,8 @@ interface TimelineItem {
   isBuildHabit?: boolean
   history?: string[]
   breaths?: Breath[]
+  taskListId?: string | null // ID of the task list this step belongs to
+  taskListName?: string | null // Name of the task list (e.g., "Hot List", "Morning Routine")
 }
 
 interface TimelineContextType {
@@ -71,7 +76,7 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
       setLoading(true)
       setError(null)
 
-      // Fetch all steps (both habits and activities) with their breaths
+      // Fetch all steps (both habits and activities) with their breaths and task list info
       const { data, error } = await databaseService.supabase
         .from("steps")
         .select(`
@@ -87,6 +92,14 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
           habit_notes,
           icon,
           completed,
+          task_list_id,
+          priority_letter,
+          priority_rank,
+          timezone,
+          task_lists (
+            id,
+            name
+          ),
           breaths (
             id,
             name,
@@ -107,11 +120,21 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
       }
 
       // Map steps to timeline items
-      const timelineItems: TimelineItem[] = data
+      const allTimelineItems: TimelineItem[] = data
         .map((step: any) => {
-          // Get scheduled time from habit_notes or default to 08:00
+          // Extract task list information
+          const taskListId = step.task_list_id || null
+          const taskListName = step.task_lists?.name || null
+
+          // Get scheduled time from habit_notes
           const habitNotes = step.habit_notes || {}
           const scheduledTime = habitNotes._scheduled_time || "08:00"
+
+          // For now, we don't have date information in the database
+          // All steps will show for all dates (legacy behavior)
+          const scheduledDate: string | undefined = undefined
+          const estimatedStartTime = null
+          const estimatedEndTime = null
 
           // Map breaths
           const breaths: Breath[] = (step.breaths || [])
@@ -137,6 +160,9 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
             description: step.description || "No description",
             color: step.color || "#FFD700",
             scheduledTime: scheduledTime,
+            scheduledDate: scheduledDate,
+            estimatedStartTime: estimatedStartTime,
+            estimatedEndTime: estimatedEndTime,
             duration: durationInMinutes,
             type: step.tag === "habit" ? "habit" : "activity",
             isCompleted: step.completed || false,
@@ -145,6 +171,8 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
             isBuildHabit: step.isbuildhabit ?? null,
             history: step.history || [],
             breaths: breaths,
+            taskListId: taskListId,
+            taskListName: taskListName,
           }
         })
         // Sort by scheduled time
@@ -154,6 +182,40 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
           return timeA[0] * 60 + timeA[1] - (timeB[0] * 60 + timeB[1])
         })
 
+      // Filter items by selected date
+      const timelineItems = allTimelineItems.filter((item) => {
+        // Habits show based on their frequency
+        if (item.type === "habit") {
+          const frequency = item.frequency || "Every day!"
+
+          // If frequency is "Every day!", show on all days
+          if (frequency === "Every day!") {
+            return true
+          }
+
+          // Otherwise, check if the selected date's day of week is in the frequency string
+          const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+          const selectedDayOfWeek = dayNames[selectedDate.getDay()]
+
+          // Check if the frequency string includes this day of week
+          return frequency.includes(selectedDayOfWeek)
+        }
+
+        // Activities only show on their specific scheduled date
+        if (item.type === "activity") {
+          if (!item.scheduledDate) {
+            // One-time activities without a scheduled date are not shown
+            return false
+          }
+          // Compare dates (YYYY-MM-DD)
+          const itemDate = item.scheduledDate
+          const selectedDateStr = selectedDate.toISOString().split('T')[0]
+          return itemDate === selectedDateStr
+        }
+
+        return false
+      })
+
       setItems(timelineItems)
       setLoading(false)
     } catch (err: any) {
@@ -161,11 +223,11 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
       toast({ title: "Error", description: "Unexpected error loading timeline.", variant: "destructive" })
       setLoading(false)
     }
-  }, [user?.id, authLoading, toast])
+  }, [user?.id, authLoading, selectedDate, toast])
 
   useEffect(() => {
     loadTimelineItems()
-  }, [user?.id, authLoading, loadTimelineItems])
+  }, [loadTimelineItems])
 
   const refreshTimeline = useCallback(async () => {
     await loadTimelineItems()

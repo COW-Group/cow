@@ -96,6 +96,7 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
           priority_letter,
           priority_rank,
           timezone,
+          scheduled_date,
           task_lists (
             id,
             name
@@ -130,9 +131,8 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
           const habitNotes = step.habit_notes || {}
           const scheduledTime = habitNotes._scheduled_time || "08:00"
 
-          // For now, we don't have date information in the database
-          // All steps will show for all dates (legacy behavior)
-          const scheduledDate: string | undefined = undefined
+          // Get scheduled date from database (for activities)
+          const scheduledDate: string | undefined = step.scheduled_date || undefined
           const estimatedStartTime = null
           const estimatedEndTime = null
 

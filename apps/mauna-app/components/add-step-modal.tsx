@@ -60,7 +60,7 @@ export function AddStepModal({ isOpen, onClose, onSave, selectedDate }: AddStepM
     duration: 15,
     color: "#00D9FF",
     energyLevel: 3,
-    frequency: "Once" as "Once" | "Daily" | "Weekly" | "Monthly",
+    frequency: "Every day!" as string,
     alerts: [] as string[],
     breaths: [] as Breath[],
     notes: "",
@@ -106,7 +106,7 @@ export function AddStepModal({ isOpen, onClose, onSave, selectedDate }: AddStepM
         duration: 15,
         color: "#00D9FF",
         energyLevel: 3,
-        frequency: "Once",
+        frequency: "Every day!",
         alerts: [],
         breaths: [],
         notes: "",
@@ -160,6 +160,7 @@ export function AddStepModal({ isOpen, onClose, onSave, selectedDate }: AddStepM
       duration: formData.duration * 60000, // Convert to milliseconds
       frequency: formData.frequency,
       scheduledTime: formData.scheduledTime,
+      scheduledDate: selectedDate.toISOString().split('T')[0], // Add scheduled date for activities
       energyLevel: formData.energyLevel,
       lengthId: selectedLengthId || null,
       alerts: formData.alerts,
@@ -408,20 +409,23 @@ export function AddStepModal({ isOpen, onClose, onSave, selectedDate }: AddStepM
 
             <div>
               <label className="text-sm font-semibold text-cream-25 mb-3 block">How often?</label>
-              <div className="grid grid-cols-4 gap-2">
-                {["Once", "Daily", "Weekly", "Monthly"].map((freq) => (
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { value: "Every day!", label: "Daily" },
+                  { value: "Monday, Tuesday, Wednesday, Thursday, Friday", label: "Weekdays" },
+                  { value: "Saturday, Sunday", label: "Weekends" },
+                  { value: "", label: "Once" },
+                ].map((freq) => (
                   <button
-                    key={freq}
-                    onClick={() =>
-                      setFormData({ ...formData, frequency: freq as "Once" | "Daily" | "Weekly" | "Monthly" })
-                    }
+                    key={freq.value}
+                    onClick={() => setFormData({ ...formData, frequency: freq.value })}
                     className={`p-3 rounded-lg text-sm font-medium transition-all ${
-                      formData.frequency === freq
+                      formData.frequency === freq.value
                         ? "bg-cyan-500 text-white"
                         : "bg-white/5 text-cream-25/70 hover:bg-white/10"
                     }`}
                   >
-                    {freq}
+                    {freq.label}
                   </button>
                 ))}
               </div>

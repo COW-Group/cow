@@ -258,6 +258,16 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
       if (error) {
         toast({ title: "Error", description: "Failed to update breath.", variant: "destructive" })
       } else {
+        // Update the focusModeStep state immediately for responsive UI
+        if (focusModeStep && focusModeStep.id === stepId) {
+          setFocusModeStep({
+            ...focusModeStep,
+            breaths: focusModeStep.breaths?.map(breath =>
+              breath.id === breathId ? { ...breath, completed } : breath
+            )
+          })
+        }
+
         await refreshTimeline()
         toast({ title: "Updated", description: "Breath status updated." })
       }

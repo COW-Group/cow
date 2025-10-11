@@ -33,6 +33,8 @@ interface StepItem {
   cbtNotes?: string
   color: string
   scheduledTime: string
+  startDate?: string
+  endDate?: string
   duration: number
   type: "habit" | "activity"
   isCompleted: boolean
@@ -154,6 +156,8 @@ export function StepDetailModal({
   const [editColor, setEditColor] = useState(step.color)
   const [editIcon, setEditIcon] = useState(step.icon || "Briefcase")
   const [editScheduledTime, setEditScheduledTime] = useState(step.scheduledTime)
+  const [editStartDate, setEditStartDate] = useState(step.startDate || "")
+  const [editEndDate, setEditEndDate] = useState(step.endDate || "")
   const [editDuration, setEditDuration] = useState(step.duration)
   const [editFrequency, setEditFrequency] = useState(step.frequency || "Every day!")
   const [selectedDays, setSelectedDays] = useState<string[]>([])
@@ -213,6 +217,8 @@ export function StepDetailModal({
         color: editColor,
         icon: editIcon,
         scheduledTime: editScheduledTime,
+        startDate: editStartDate || undefined,
+        endDate: editEndDate || undefined,
         duration: editDuration,
         frequency: editFrequency,
       })
@@ -469,6 +475,39 @@ export function StepDetailModal({
                     placeholder="30"
                   />
                 </div>
+              </div>
+
+              {/* Date Range Row */}
+              <div className="grid grid-cols-2 gap-4">
+                {/* Start Date */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-cream-25">
+                    Start Date {step.type === "habit" ? "(Habit begins)" : "(Scheduled date)"}
+                  </label>
+                  <input
+                    type="date"
+                    value={editStartDate}
+                    onChange={(e) => setEditStartDate(e.target.value)}
+                    className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-cream-25 focus:outline-none focus:border-white/30 focus:ring-2 focus:ring-white/10 transition-all"
+                  />
+                </div>
+
+                {/* End Date - Only for habits */}
+                {step.type === "habit" && (
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-cream-25">
+                      End Date (Optional)
+                    </label>
+                    <input
+                      type="date"
+                      value={editEndDate}
+                      onChange={(e) => setEditEndDate(e.target.value)}
+                      min={editStartDate}
+                      className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-cream-25 focus:outline-none focus:border-white/30 focus:ring-2 focus:ring-white/10 transition-all"
+                      placeholder="Leave empty for ongoing"
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Color */}

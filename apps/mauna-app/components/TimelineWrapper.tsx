@@ -260,6 +260,8 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
     if (updates.color !== undefined) dbUpdates.color = updates.color
     if (updates.duration !== undefined) dbUpdates.duration = updates.duration
     if (updates.icon !== undefined) dbUpdates.icon = updates.icon
+    if (updates.startDate !== undefined) dbUpdates.start_date = updates.startDate || null
+    if (updates.endDate !== undefined) dbUpdates.end_date = updates.endDate || null
     if (updates.journalContent !== undefined || updates.cbtNotes !== undefined) {
       // These are handled separately in Timeline component
     }

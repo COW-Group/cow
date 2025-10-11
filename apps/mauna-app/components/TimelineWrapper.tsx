@@ -245,6 +245,26 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
     if (updates.description !== undefined) dbUpdates.description = updates.description
     if (updates.color !== undefined) dbUpdates.color = updates.color
     if (updates.duration !== undefined) dbUpdates.duration = updates.duration
+    if (updates.icon !== undefined) dbUpdates.icon = updates.icon
+    if (updates.journalContent !== undefined || updates.cbtNotes !== undefined) {
+      // These are handled separately in Timeline component
+    }
+
+    // Handle frequency update
+    if (updates.frequency !== undefined) {
+      dbUpdates.frequency = updates.frequency
+
+      // If changing to "Once" (empty string), set as activity and add scheduled_date
+      if (updates.frequency === "") {
+        dbUpdates.tag = "activity"
+        // Set scheduled_date to the currently selected date if not already set
+        dbUpdates.scheduled_date = selectedDate.toISOString().split('T')[0]
+      } else {
+        // If changing to a recurring frequency, set as habit and clear scheduled_date
+        dbUpdates.tag = "habit"
+        dbUpdates.scheduled_date = null
+      }
+    }
 
     // Handle scheduled time update
     if (updates.scheduledTime !== undefined) {
@@ -271,7 +291,7 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
       refreshTimeline()
       toast({ title: "Item Updated", description: "Timeline item was successfully updated." })
     }
-  }, [user?.id, refreshTimeline, toast])
+  }, [user?.id, refreshTimeline, toast, selectedDate])
 
   const contextValue = useMemo(
     () => ({

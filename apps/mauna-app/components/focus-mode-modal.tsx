@@ -12,7 +12,21 @@ interface FocusModeModalProps {
 }
 
 export function FocusModeModal({ step, onClose, onToggleBreath }: FocusModeModalProps) {
-  const [elapsedSeconds, setElapsedSeconds] = useState(0)
+  // Calculate how much time has elapsed since scheduled start
+  const calculateInitialElapsed = () => {
+    const now = new Date()
+    const [hours, minutes] = step.scheduledTime.split(':').map(Number)
+    const scheduledStart = new Date()
+    scheduledStart.setHours(hours, minutes, 0, 0)
+
+    const elapsedMs = now.getTime() - scheduledStart.getTime()
+    const elapsedSec = Math.floor(elapsedMs / 1000)
+
+    // Clamp between 0 and total duration
+    return Math.max(0, Math.min(elapsedSec, step.duration * 60))
+  }
+
+  const [elapsedSeconds, setElapsedSeconds] = useState(calculateInitialElapsed())
   const [isRunning, setIsRunning] = useState(true)
 
   // Calculate total duration in seconds

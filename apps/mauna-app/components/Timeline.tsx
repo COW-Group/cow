@@ -273,6 +273,10 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
       // Extract fields that are not database columns
       const { breaths, scheduledTime, scheduledDate, lengthId, energyLevel, alerts, notes, ...coreStepFields } = stepData
 
+      // Debug: Log received breaths
+      console.log("[handleCreateStep] Received stepData:", stepData)
+      console.log("[handleCreateStep] Breaths received:", breaths)
+
       // Prepare step data with only valid database columns
       const stepToInsert = {
         label: stepData.label,
@@ -308,6 +312,7 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
 
       // Insert breaths if any
       if (breaths && breaths.length > 0) {
+        console.log("[handleCreateStep] Inserting breaths for step:", newStep.id)
         const breathsToInsert = breaths.map((breath: any) => ({
           name: breath.name,
           step_id: newStep.id,
@@ -317,13 +322,21 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
           position: breath.position,
         }))
 
-        const { error: breathsError } = await databaseService.supabase
+        console.log("[handleCreateStep] Breaths to insert:", breathsToInsert)
+
+        const { data: insertedBreaths, error: breathsError } = await databaseService.supabase
           .from("breaths")
           .insert(breathsToInsert)
+          .select()
 
         if (breathsError) {
-          toast({ title: "Warning", description: "Step created but some breaths failed to save.", variant: "destructive" })
+          console.error("[handleCreateStep] Breaths insert error:", breathsError)
+          toast({ title: "Warning", description: `Step created but breaths failed to save: ${breathsError.message}`, variant: "destructive" })
+        } else {
+          console.log("[handleCreateStep] Breaths inserted successfully:", insertedBreaths)
         }
+      } else {
+        console.log("[handleCreateStep] No breaths to insert")
       }
 
       toast({ title: "Step Created", description: "New step added to your timeline." })

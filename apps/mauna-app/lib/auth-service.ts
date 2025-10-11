@@ -93,4 +93,69 @@ export const AuthService = {
     } = supabase.auth.onAuthStateChange(callback)
     return subscription
   },
+
+  async getUserProfile(userId: string): Promise<{ profile: { id: string; name: string | null; email: string } | null; error: string | null }> {
+    console.log("Supabase: Fetching user profile for user ID:", userId)
+
+    // First get the auth user to get email
+    const { data: authData, error: authError } = await supabase.auth.getUser()
+    if (authError) {
+      console.error("Supabase: Error getting auth user:", authError.message)
+      return { profile: null, error: authError.message }
+    }
+
+    // Then get the profile data
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("id, preferred_name, full_name")
+      .eq("id", userId)
+      .single()
+
+    if (error) {
+      console.error("Supabase: Error fetching user profile:", error.message)
+      return { profile: null, error: error.message }
+    }
+
+    // Use preferred_name if available, otherwise full_name
+    const name = data?.preferred_name || data?.full_name || null
+
+    console.log("Supabase: User profile fetched successfully")
+    return {
+      profile: {
+        id: data.id,
+        name: name,
+        email: authData.user?.email || ""
+      },
+      error: null
+    }
+  },
+
+  async updateProfile(userId: string, updates: { name?: string; email?: string }): Promise<{ error: string | null }> {
+    console.log("Supabase: Updating user profile for user ID:", userId, updates)
+
+    // Update profile table with name
+    if (updates.name !== undefined) {
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .update({ preferred_name: updates.name, full_name: updates.name })
+        .eq("id", userId)
+
+      if (profileError) {
+        console.error("Supabase: Error updating profile:", profileError.message)
+        return { error: profileError.message }
+      }
+    }
+
+    // Update auth email if provided
+    if (updates.email !== undefined) {
+      const { error: emailError } = await supabase.auth.updateUser({ email: updates.email })
+      if (emailError) {
+        console.error("Supabase: Error updating email:", emailError.message)
+        return { error: emailError.message }
+      }
+    }
+
+    console.log("Supabase: User profile updated successfully")
+    return { error: null }
+  },
 }

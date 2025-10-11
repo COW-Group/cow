@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useContext, useState, useEffect } from "react"
+import React, { useContext, useState, useEffect, useMemo } from "react"
 import { TimelineContext } from "./TimelineWrapper"
 import { StepDetailModal } from "./step-detail-modal"
 import { AddStepModal } from "./add-step-modal"
@@ -17,18 +17,17 @@ import { databaseService } from "@/lib/database-service"
 import { useAuth } from "@/hooks/use-auth"
 import { AuthService } from "@/lib/auth-service"
 import { useToast } from "@/hooks/use-toast"
-
-// Custom scrollbar styles - completely hidden
-const scrollbarStyles = `
-  .timeline-scroll {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-  }
-
-  .timeline-scroll::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-  }
-`
+import { TIMELINE_CONSTANTS } from "@/lib/timeline-constants"
+import {
+  type TimelineItem,
+  calculateTimelineBounds,
+  calculateItemPositions,
+  calculateOverlapLayout,
+  getItemsForDay,
+  timeToMinutes,
+  minutesToTime,
+  generateTimeSlots,
+} from "@/lib/timeline-utils"
 
 // Icon map for timeline items
 const iconMap: Record<string, any> = {
@@ -38,15 +37,29 @@ const iconMap: Record<string, any> = {
   Mic, Phone, Users, Star, Sun, Moon, Cloud, Umbrella, CheckCircle2, Clock
 }
 
+interface InboxItem {
+  id: string
+  label: string
+  description?: string
+  color: string
+  duration?: number
+  completed?: boolean
+  isbuildhabit?: boolean
+  frequency?: string
+  habit_notes?: {
+    _scheduled_time?: string
+  }
+}
+
 export function Timeline({ currentDate }: { currentDate: Date }) {
   const { items, loading, error, selectedDate, setSelectedDate, updateItem, refreshTimeline } = useContext(TimelineContext)
   const { user } = useAuth(AuthService)
   const { toast } = useToast()
   const [weekStart, setWeekStart] = useState(startOfWeek(currentDate, { weekStartsOn: 0 }))
-  const [selectedStep, setSelectedStep] = useState<any>(null)
+  const [selectedStep, setSelectedStep] = useState<TimelineItem | null>(null)
   const [isAddStepModalOpen, setIsAddStepModalOpen] = useState(false)
   const [isInboxOpen, setIsInboxOpen] = useState(false)
-  const [inboxItems, setInboxItems] = useState<any[]>([])
+  const [inboxItems, setInboxItems] = useState<InboxItem[]>([])
 
   const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
 
@@ -69,26 +82,14 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
         .order("created_at", { ascending: false })
 
       if (error) {
-        console.error("Error fetching inbox items:", error)
         toast({ title: "Error", description: "Failed to load inbox items.", variant: "destructive" })
       } else {
         setInboxItems(data || [])
       }
     } catch (err) {
-      console.error("Unexpected error fetching inbox:", err)
+      toast({ title: "Error", description: "Unexpected error fetching inbox.", variant: "destructive" })
     }
   }
-
-  // Inject custom scrollbar styles
-  useEffect(() => {
-    const styleId = 'timeline-scrollbar-styles'
-    if (!document.getElementById(styleId)) {
-      const style = document.createElement('style')
-      style.id = styleId
-      style.textContent = scrollbarStyles
-      document.head.appendChild(style)
-    }
-  }, [])
 
   const handlePrevWeek = () => {
     setWeekStart(addWeeks(weekStart, -1))
@@ -251,8 +252,6 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
     if (!user?.id) return
 
     try {
-      console.log("[Timeline.handleCreateStep] Received stepData:", stepData)
-
       // Extract fields that are not database columns
       const { breaths, scheduledTime, lengthId, energyLevel, alerts, notes, ...coreStepFields } = stepData
 
@@ -276,8 +275,6 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
         },
       }
 
-      console.log("[Timeline.handleCreateStep] Inserting step:", stepToInsert)
-
       // Insert step
       const { data: newStep, error: stepError } = await databaseService.supabase
         .from("steps")
@@ -286,12 +283,9 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
         .single()
 
       if (stepError) {
-        console.error("[Timeline.handleCreateStep] Error creating step:", stepError)
         toast({ title: "Error", description: `Failed to create step: ${stepError.message}`, variant: "destructive" })
         return
       }
-
-      console.log("[Timeline.handleCreateStep] Step created successfully:", newStep)
 
       // Insert breaths if any
       if (breaths && breaths.length > 0) {
@@ -304,14 +298,11 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
           position: breath.position,
         }))
 
-        console.log("[Timeline.handleCreateStep] Inserting breaths:", breathsToInsert)
-
         const { error: breathsError } = await databaseService.supabase
           .from("breaths")
           .insert(breathsToInsert)
 
         if (breathsError) {
-          console.error("[Timeline.handleCreateStep] Error inserting breaths:", breathsError)
           toast({ title: "Warning", description: "Step created but some breaths failed to save.", variant: "destructive" })
         }
       }
@@ -319,7 +310,6 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
       toast({ title: "Step Created", description: "New step added to your timeline." })
       await refreshTimeline()
     } catch (err) {
-      console.error("[Timeline.handleCreateStep] Unexpected error:", err)
       toast({ title: "Error", description: "Unexpected error creating step.", variant: "destructive" })
     }
   }
@@ -331,57 +321,21 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
     return totalItems > 0 ? Math.round((completedItems / totalItems) * 38) : 0
   }
 
-  // Helper to convert HH:mm to minutes from midnight
-  const timeToMinutes = (time: string): number => {
-    const [hours, minutes] = time.split(':').map(Number)
-    return hours * 60 + minutes
-  }
-
-  // Helper to convert minutes to HH:mm
-  const minutesToTime = (minutes: number): string => {
-    const hours = Math.floor(minutes / 60).toString().padStart(2, '0')
-    const mins = (minutes % 60).toString().padStart(2, '0')
-    return `${hours}:${mins}`
-  }
-
-  // Calculate timeline bounds
-  const getTimelineBounds = () => {
-    if (items.length === 0) {
-      return { start: 0, end: 1440 }
-    }
-
-    const startMinutes = items.map(item => timeToMinutes(item.scheduledTime))
-    const endMinutes = items.map(item => timeToMinutes(item.scheduledTime) + item.duration)
-
-    const earliestStart = Math.min(...startMinutes)
-    const latestEnd = Math.max(...endMinutes)
-
-    // Round to nearest hour
-    const startHour = Math.floor(earliestStart / 60) * 60
-    const endHour = Math.ceil(latestEnd / 60) * 60
-
-    return { start: startHour, end: endHour }
-  }
-
-  const timelineBounds = getTimelineBounds()
+  // Use memoized timeline bounds calculation
+  const timelineBounds = useMemo(() => calculateTimelineBounds(items), [items])
   const timelineRangeMinutes = timelineBounds.end - timelineBounds.start
 
-  // Generate time slots for the active range
-  const generateTimeSlots = () => {
-    const slots = []
-    const startHour = Math.floor(timelineBounds.start / 60)
-    const endHour = Math.ceil(timelineBounds.end / 60)
+  // Use memoized time slots generation
+  const timeSlots = useMemo(
+    () => generateTimeSlots(timelineBounds.start, timelineBounds.end),
+    [timelineBounds]
+  )
 
-    for (let hour = startHour; hour <= endHour; hour++) {
-      slots.push({
-        time: `${hour.toString().padStart(2, '0')}:00`,
-        minutes: hour * 60
-      })
-    }
-    return slots
-  }
-
-  const timeSlots = generateTimeSlots()
+  // Use memoized item position calculations with overlap detection
+  const itemsWithPosition = useMemo(
+    () => calculateItemPositions(items, timelineBounds),
+    [items, timelineBounds]
+  )
 
   if (loading) {
     return (
@@ -475,8 +429,8 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
           const dayOfWeek = format(day, 'EEE')
           const dayOfMonth = format(day, 'd')
 
-          // Get items for this specific day (simplified - would need actual date-based filtering)
-          const dayItems = items.slice(0, 4) // Show max 4 colored dots
+          // Get items for this specific day - properly filtered
+          const dayItems = getItemsForDay(items, day, TIMELINE_CONSTANTS.MAX_DAY_DOTS)
 
           return (
             <button
@@ -531,7 +485,7 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
         </div>
 
         {/* Timeline Track with Vertical Scrolling */}
-        <div className="flex-1 relative overflow-y-auto timeline-scroll" style={{ maxHeight: 'calc(100vh - 300px)' }}>
+        <div className="flex-1 relative overflow-y-auto scrollbar-hide" style={{ maxHeight: 'calc(100vh - 300px)' }}>
           <div className="relative pb-32" style={{ minHeight: `${(timelineRangeMinutes / 60) * 96 + 200}px` }}>
             {/* Time labels on the left */}
             <div className="absolute left-0 top-0 w-16 flex flex-col">
@@ -549,40 +503,19 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
             />
 
             {/* Timeline items positioned at their scheduled times */}
-            {(() => {
-              // Detect overlapping items and group them
-              const itemsWithPosition = items.map((item, index) => {
-                const itemStartMinutes = timeToMinutes(item.scheduledTime)
-                const itemEndMinutes = itemStartMinutes + item.duration
-                const topPosition = ((itemStartMinutes - timelineBounds.start) / 60) * 96
-                const height = (item.duration / 60) * 96
+            {itemsWithPosition.map(({ item, itemStartMinutes, itemEndMinutes, topPosition, height, overlaps, index }) => {
+              const hasOverlaps = overlaps.length > 0
+              const { width, offsetPercent } = calculateOverlapLayout(hasOverlaps, index)
 
-                // Find overlapping items
-                const overlaps = items.filter((other, otherIndex) => {
-                  if (other.id === item.id) return false
-                  const otherStart = timeToMinutes(other.scheduledTime)
-                  const otherEnd = otherStart + other.duration
-                  return (itemStartMinutes < otherEnd && itemEndMinutes > otherStart)
-                })
-
-                return { item, itemStartMinutes, itemEndMinutes, topPosition, height, overlaps, index }
-              })
-
-              return itemsWithPosition.map(({ item, itemStartMinutes, itemEndMinutes, topPosition, height, overlaps, index }) => {
-                const hasOverlaps = overlaps.length > 0
-                // Calculate horizontal offset for overlapping items
-                const overlapOffset = hasOverlaps ? (index % 2) * 45 : 0
-                const itemWidth = hasOverlaps ? 'calc(45% - 40px)' : 'calc(70% - 40px)'
-
-                return (
+              return (
                   <div
                     key={item.id}
                     className="absolute left-20 cursor-pointer flex items-start gap-3"
                     style={{
                       top: `${topPosition}px`,
-                      width: itemWidth,
+                      width: width,
                       height: `${height}px`,
-                      marginLeft: `${overlapOffset}%`,
+                      marginLeft: `${offsetPercent}%`,
                     }}
                     onClick={() => setSelectedStep(item)}
                   >
@@ -658,8 +591,7 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
                     </div>
                   </div>
                 )
-              })
-            })()}
+              })}
           </div>
         </div>
       </div>
@@ -705,10 +637,7 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
 
           {/* Slide-Over Panel */}
           <div
-            className="fixed left-0 top-0 bottom-0 w-full sm:w-96 bg-gray-900/95 backdrop-blur-xl shadow-2xl z-[9999] overflow-hidden flex flex-col transition-transform duration-300 ease-out"
-            style={{
-              animation: 'slideInFromLeft 0.3s ease-out',
-            }}
+            className="fixed left-0 top-0 bottom-0 w-full sm:w-96 bg-gray-900/95 backdrop-blur-xl shadow-2xl z-[9999] overflow-hidden flex flex-col animate-slide-in-left"
           >
             {/* Inbox Header */}
             <div className="flex-shrink-0 flex items-center justify-between px-6 py-4 border-b border-white/10">
@@ -851,18 +780,6 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
               </Button>
             </div>
           </div>
-
-          {/* CSS for slide-in animation */}
-          <style jsx>{`
-            @keyframes slideInFromLeft {
-              from {
-                transform: translateX(-100%);
-              }
-              to {
-                transform: translateX(0);
-              }
-            }
-          `}</style>
         </>
       )}
     </div>

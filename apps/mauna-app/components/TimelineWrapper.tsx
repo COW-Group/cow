@@ -61,12 +61,8 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
   const [error, setError] = useState<string | null>(null)
   const [selectedDate, setSelectedDate] = useState<Date>(currentDate)
 
-  console.log("[TimelineWrapper] Auth state:", { userId: user?.id, authLoading })
-
   const loadTimelineItems = useCallback(async () => {
-    console.log("[TimelineWrapper.loadTimelineItems] Starting with userId:", user?.id, "authLoading:", authLoading)
     if (!user?.id || authLoading) {
-      console.log("[TimelineWrapper.loadTimelineItems] Skipping - no user or still loading")
       setLoading(false)
       return
     }
@@ -74,7 +70,6 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
     try {
       setLoading(true)
       setError(null)
-      console.log("[TimelineWrapper.loadTimelineItems] Fetching steps for timeline")
 
       // Fetch all steps (both habits and activities) with their breaths
       const { data, error } = await databaseService.supabase
@@ -104,19 +99,11 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
         .eq("user_id", user.id)
         .order("created_at", { ascending: true })
 
-      console.log("[TimelineWrapper.loadTimelineItems] Supabase response:", { data, error })
-
       if (error) {
-        console.error("[TimelineWrapper.loadTimelineItems] Error fetching timeline items:", error)
         setError("Failed to load timeline items: " + error.message)
         toast({ title: "Error", description: "Failed to load timeline items: " + error.message, variant: "destructive" })
         setLoading(false)
         return
-      }
-
-      console.log("[TimelineWrapper.loadTimelineItems] Raw steps data:", data?.length || 0, "steps")
-      if (data && data.length > 0) {
-        console.log("[TimelineWrapper.loadTimelineItems] First step sample:", data[0])
       }
 
       // Map steps to timeline items
@@ -167,11 +154,9 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
           return timeA[0] * 60 + timeA[1] - (timeB[0] * 60 + timeB[1])
         })
 
-      console.log("[TimelineWrapper.loadTimelineItems] Processed timeline items:", JSON.stringify(timelineItems, null, 2))
       setItems(timelineItems)
       setLoading(false)
     } catch (err: any) {
-      console.error("[TimelineWrapper.loadTimelineItems] Unexpected error:", err)
       setError("Unexpected error loading timeline: " + err.message)
       toast({ title: "Error", description: "Unexpected error loading timeline.", variant: "destructive" })
       setLoading(false)
@@ -179,22 +164,18 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
   }, [user?.id, authLoading, toast])
 
   useEffect(() => {
-    console.log("[TimelineWrapper] Triggering useEffect with userId:", user?.id, "authLoading:", authLoading)
     loadTimelineItems()
   }, [user?.id, authLoading, loadTimelineItems])
 
   const refreshTimeline = useCallback(async () => {
-    console.log("[TimelineWrapper.refreshTimeline] Refreshing timeline")
     await loadTimelineItems()
   }, [loadTimelineItems])
 
   const updateItem = useCallback(async (itemId: string, updates: Partial<TimelineItem>) => {
     if (!user?.id) {
-      console.error("[TimelineWrapper.updateItem] No user ID available")
       toast({ title: "Error", description: "User not authenticated.", variant: "destructive" })
       return
     }
-    console.log("[TimelineWrapper.updateItem] Updating item:", { itemId, updates })
 
     const dbUpdates: Record<string, any> = {}
     if (updates.isCompleted !== undefined) dbUpdates.completed = updates.isCompleted
@@ -223,7 +204,6 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
       .eq("user_id", user.id)
 
     if (error) {
-      console.error("[TimelineWrapper.updateItem] Error updating item:", error)
       toast({ title: "Error", description: "Failed to update item.", variant: "destructive" })
     } else {
       refreshTimeline()

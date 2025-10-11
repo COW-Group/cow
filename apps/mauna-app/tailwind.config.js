@@ -147,6 +147,14 @@ module.exports = {
             transform: "rotate(180deg)",
           },
         },
+        "slide-in-left": {
+          "0%": {
+            transform: "translateX(-100%)",
+          },
+          "100%": {
+            transform: "translateX(0)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -154,6 +162,7 @@ module.exports = {
         "fade-in": "fade-in 0.6s ease-out",
         "sunlight-glow": "sunlight-glow 4s ease-in-out infinite",
         "rotate-toggle": "rotate-toggle 0.3s ease-in-out",
+        "slide-in-left": "slide-in-left 0.3s ease-out",
       },
       backdropBlur: {
         xs: "2px",
@@ -163,5 +172,21 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    function ({ addUtilities }) {
+      addUtilities({
+        '.scrollbar-hide': {
+          /* Firefox */
+          'scrollbar-width': 'none',
+          /* IE and Edge */
+          '-ms-overflow-style': 'none',
+          /* Chrome, Safari and Opera */
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+        },
+      })
+    },
+  ],
 }

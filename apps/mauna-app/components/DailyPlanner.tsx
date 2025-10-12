@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback, useRef } from "react"
 import { useVisionData } from "@/lib/vision-data-provider"
 import { databaseService } from "@/lib/database-service"
 import { Button } from "@/components/ui/button"
@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { toast } from "sonner"
-import { XIcon, EditIcon, CheckIcon } from "lucide-react"
+import { XIcon, EditIcon, CheckIcon, Loader2Icon, CheckCircle2Icon, AlertCircleIcon } from "lucide-react"
 import type { Range, Mountain, Hill, Terrain, Length, Step, TaskList } from "@/lib/types"
 
 interface DailyPlan {
@@ -45,9 +45,13 @@ export const DailyPlanner: React.FC = () => {
   const [planId, setPlanId] = useState<string | null>(null)
   const [editingSuccessIndex, setEditingSuccessIndex] = useState<number | null>(null)
   const [editingSuccessText, setEditingSuccessText] = useState("")
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "error">("idle")
+  const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const isInitialLoadRef = useRef(true)
 
   useEffect(() => {
     const fetchPlanAndTaskLists = async () => {
+      isInitialLoadRef.current = true
       try {
         const userId = await databaseService.supabase.auth.getUser().then((res) => res.data.user?.id || "");
         // Fetch daily plan
@@ -78,6 +82,11 @@ export const DailyPlanner: React.FC = () => {
       } catch (err: any) {
         console.error("[DailyPlanner] Failed to fetch daily plan or task lists:", err);
         toast.error("Failed to load daily plan or task lists.");
+      } finally {
+        // Mark initial load as complete after a brief delay to avoid triggering autosave
+        setTimeout(() => {
+          isInitialLoadRef.current = false
+        }, 500)
       }
     };
     fetchPlanAndTaskLists();
@@ -318,20 +327,17 @@ export const DailyPlanner: React.FC = () => {
     return steps;
   };
 
-  const saveDailyPlan = async () => {
-    console.log("[saveDailyPlan] Starting save process for date:", selectedDate, "planId:", planId);
-    console.log("[saveDailyPlan] Current state:", {
-      selectedGoals,
-      typedGoals,
-      reviewTypedGoals,
-      quote,
-      selectedTargets,
-      successes,
-      taskLists,
-      planId,
-    });
+  const saveDailyPlan = async (isAutoSave = false) => {
+    console.log("[saveDailyPlan] Starting save process for date:", selectedDate, "planId:", planId, "isAutoSave:", isAutoSave);
+
+    // Don't save if there are no goals selected
+    if (selectedGoals.length === 0 && !isAutoSave) {
+      toast.error("Please select at least one goal before saving.");
+      return;
+    }
 
     try {
+      setSaveStatus("saving");
       const userId = await databaseService.supabase.auth.getUser().then((res) => res.data.user?.id || "");
       console.log("[saveDailyPlan] User ID:", userId);
 
@@ -372,33 +378,96 @@ export const DailyPlanner: React.FC = () => {
       }
       console.log("[saveDailyPlan] Supabase response:", { id: result.id, error: result.error });
       setPlanId(result.id);
-      toast.success("Daily plan saved successfully!");
+      setSaveStatus("saved");
+
+      if (!isAutoSave) {
+        toast.success("Daily plan saved successfully!");
+      }
+
+      // Reset to idle after 2 seconds
+      setTimeout(() => {
+        setSaveStatus("idle");
+      }, 2000);
     } catch (err: any) {
       console.error("[saveDailyPlan] Failed to save daily plan:", err);
-      toast.error("Failed to save daily plan: " + err.message);
+      setSaveStatus("error");
+      if (!isAutoSave) {
+        toast.error("Failed to save daily plan: " + err.message);
+      }
+      // Reset to idle after 3 seconds
+      setTimeout(() => {
+        setSaveStatus("idle");
+      }, 3000);
     }
   };
+
+  // Autosave effect - triggers when plan data changes
+  useEffect(() => {
+    // Don't autosave during initial load or when there are no goals
+    if (isInitialLoadRef.current || selectedGoals.length === 0) {
+      return;
+    }
+
+    // Clear any pending autosave
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+    }
+
+    // Set a new autosave timeout (2 seconds debounce)
+    autoSaveTimeoutRef.current = setTimeout(() => {
+      console.log("[DailyPlanner] Autosaving...");
+      saveDailyPlan(true);
+    }, 2000);
+
+    // Cleanup on unmount or when dependencies change
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+    };
+  }, [selectedGoals, typedGoals, reviewTypedGoals, quote, selectedTargets, successes]);
 
   return (
     <Card className="bg-white/10 backdrop-blur-md border border-white/20 text-cream-25">
       <CardHeader>
-        <CardTitle>
-          Daily Planner
-          <div className="mt-2">
-            <Label htmlFor="date-picker" className="text-sm font-semibold">Select Date</Label>
-            <Input
-              id="date-picker"
-              type="date"
-              value={selectedDate}
-              onChange={(e) => {
-                console.log("[DailyPlanner] Selected date:", e.target.value);
-                setSelectedDate(e.target.value);
-              }}
-              className="bg-white/20 border-white/30 text-cream-25 w-40 ml-2"
-            />
-            <p className="text-sm mt-1">Selected: {selectedDate}</p>
+        <div className="flex items-center justify-between">
+          <CardTitle>Daily Planner</CardTitle>
+          {/* Save Status Indicator */}
+          <div className="flex items-center gap-2 text-sm">
+            {saveStatus === "saving" && (
+              <>
+                <Loader2Icon className="h-4 w-4 animate-spin text-cyan-500" />
+                <span className="text-cyan-500">Saving...</span>
+              </>
+            )}
+            {saveStatus === "saved" && (
+              <>
+                <CheckCircle2Icon className="h-4 w-4 text-green-500" />
+                <span className="text-green-500">Saved</span>
+              </>
+            )}
+            {saveStatus === "error" && (
+              <>
+                <AlertCircleIcon className="h-4 w-4 text-red-500" />
+                <span className="text-red-500">Error saving</span>
+              </>
+            )}
           </div>
-        </CardTitle>
+        </div>
+        <div className="mt-2">
+          <Label htmlFor="date-picker" className="text-sm font-semibold">Select Date</Label>
+          <Input
+            id="date-picker"
+            type="date"
+            value={selectedDate}
+            onChange={(e) => {
+              console.log("[DailyPlanner] Selected date:", e.target.value);
+              setSelectedDate(e.target.value);
+            }}
+            className="bg-white/20 border-white/30 text-cream-25 w-40 ml-2"
+          />
+          <p className="text-sm mt-1">Selected: {selectedDate}</p>
+        </div>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Section 1: Select Goals */}
@@ -603,13 +672,17 @@ export const DailyPlanner: React.FC = () => {
         <Button
           onClick={() => {
             console.log("[DailyPlanner] Save Daily Plan button clicked, date:", selectedDate);
-            saveDailyPlan();
+            saveDailyPlan(false);
           }}
-          className="w-full"
-          disabled={selectedGoals.length === 0}
+          variant="outline"
+          className="w-full border-white/20 hover:bg-white/10"
+          disabled={selectedGoals.length === 0 || saveStatus === "saving"}
         >
-          Save Daily Plan
+          {saveStatus === "saving" ? "Saving..." : "Save Now"}
         </Button>
+        <p className="text-xs text-center text-cream-25/60 -mt-4">
+          Changes are automatically saved
+        </p>
       </CardContent>
     </Card>
   );

@@ -7,6 +7,10 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { format } from "date-fns"
 import { useVisionData } from "@/lib/vision-data-provider"
+import { databaseService } from "@/lib/database-service"
+import { useAuth } from "@/hooks/use-auth"
+import { AuthService } from "@/lib/auth-service"
+import { useToast } from "@/hooks/use-toast"
 
 interface Breath {
   id?: string
@@ -51,6 +55,8 @@ const STEP_TYPES = [
 ]
 
 export function AddStepModal({ isOpen, onClose, onSave, selectedDate }: AddStepModalProps) {
+  const { user } = useAuth(AuthService)
+  const { toast } = useToast()
   const [currentStep, setCurrentStep] = useState(1)
   const [formData, setFormData] = useState({
     label: "",
@@ -72,7 +78,20 @@ export function AddStepModal({ isOpen, onClose, onSave, selectedDate }: AddStepM
   const [selectedTerrainId, setSelectedTerrainId] = useState<string>("")
   const [selectedLengthId, setSelectedLengthId] = useState<string>("")
 
-  const { ranges } = useVisionData()
+  // State for adding new hierarchy items
+  const [showAddRange, setShowAddRange] = useState(false)
+  const [showAddMountain, setShowAddMountain] = useState(false)
+  const [showAddHill, setShowAddHill] = useState(false)
+  const [showAddTerrain, setShowAddTerrain] = useState(false)
+  const [showAddLength, setShowAddLength] = useState(false)
+
+  const [newRangeName, setNewRangeName] = useState("")
+  const [newMountainName, setNewMountainName] = useState("")
+  const [newHillName, setNewHillName] = useState("")
+  const [newTerrainName, setNewTerrainName] = useState("")
+  const [newLengthName, setNewLengthName] = useState("")
+
+  const { ranges, refreshData } = useVisionData()
 
   // Calculate available options based on selections
   const availableMountains = ranges.find((r) => r.id === selectedRangeId)?.mountains || []
@@ -151,6 +170,77 @@ export function AddStepModal({ isOpen, onClose, onSave, selectedDate }: AddStepM
     setFormData({ ...formData, alerts })
   }
 
+  // Handlers for adding new hierarchy items
+  const handleAddRange = async () => {
+    if (!user?.id || !newRangeName.trim()) return
+    try {
+      const newRange = await databaseService.createRange(user.id, newRangeName.trim())
+      await refreshData(true)
+      setSelectedRangeId(newRange.id)
+      setNewRangeName("")
+      setShowAddRange(false)
+      toast({ title: "Range Created", description: `"${newRangeName.trim()}" has been added.` })
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to create range.", variant: "destructive" })
+    }
+  }
+
+  const handleAddMountain = async () => {
+    if (!user?.id || !newMountainName.trim() || !selectedRangeId) return
+    try {
+      const newMountain = await databaseService.createMountain(user.id, selectedRangeId, newMountainName.trim())
+      await refreshData(true)
+      setSelectedMountainId(newMountain.id)
+      setNewMountainName("")
+      setShowAddMountain(false)
+      toast({ title: "Mountain Created", description: `"${newMountainName.trim()}" has been added.` })
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to create mountain.", variant: "destructive" })
+    }
+  }
+
+  const handleAddHill = async () => {
+    if (!user?.id || !newHillName.trim() || !selectedMountainId) return
+    try {
+      const newHill = await databaseService.createHill(user.id, selectedMountainId, newHillName.trim())
+      await refreshData(true)
+      setSelectedHillId(newHill.id)
+      setNewHillName("")
+      setShowAddHill(false)
+      toast({ title: "Hill Created", description: `"${newHillName.trim()}" has been added.` })
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to create hill.", variant: "destructive" })
+    }
+  }
+
+  const handleAddTerrain = async () => {
+    if (!user?.id || !newTerrainName.trim() || !selectedHillId) return
+    try {
+      const newTerrain = await databaseService.createTerrain(user.id, selectedHillId, newTerrainName.trim())
+      await refreshData(true)
+      setSelectedTerrainId(newTerrain.id)
+      setNewTerrainName("")
+      setShowAddTerrain(false)
+      toast({ title: "Terrain Created", description: `"${newTerrainName.trim()}" has been added.` })
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to create terrain.", variant: "destructive" })
+    }
+  }
+
+  const handleAddLength = async () => {
+    if (!user?.id || !newLengthName.trim() || !selectedTerrainId) return
+    try {
+      const newLength = await databaseService.createLength(user.id, selectedTerrainId, newLengthName.trim())
+      await refreshData(true)
+      setSelectedLengthId(newLength.id)
+      setNewLengthName("")
+      setShowAddLength(false)
+      toast({ title: "Length Created", description: `"${newLengthName.trim()}" has been added.` })
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to create length.", variant: "destructive" })
+    }
+  }
+
   const handleSave = async () => {
     // Determine tag based on frequency: "Once" (empty string) = activity, otherwise habit
     const isActivity = formData.frequency === ""
@@ -217,7 +307,38 @@ export function AddStepModal({ isOpen, onClose, onSave, selectedDate }: AddStepM
               <div className="space-y-3">
                 {/* Range */}
                 <div>
-                  <label className="text-xs font-medium text-cream-25/60 mb-1 block">Range</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-medium text-cream-25/60">Range</label>
+                    <button
+                      type="button"
+                      onClick={() => setShowAddRange(!showAddRange)}
+                      className="text-xs text-cyan-500 hover:text-cyan-400 flex items-center gap-1"
+                    >
+                      <Plus className="w-3 h-3" />
+                      Add New
+                    </button>
+                  </div>
+
+                  {showAddRange ? (
+                    <div className="flex gap-2 mb-2">
+                      <Input
+                        placeholder="New range name..."
+                        value={newRangeName}
+                        onChange={(e) => setNewRangeName(e.target.value)}
+                        onKeyPress={(e) => e.key === "Enter" && handleAddRange()}
+                        className="bg-white/5 border-white/10 text-cream-25 text-sm"
+                      />
+                      <Button
+                        onClick={handleAddRange}
+                        disabled={!newRangeName.trim()}
+                        className="bg-cyan-500 hover:bg-cyan-600 text-white px-3"
+                        size="sm"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  ) : null}
+
                   <select
                     value={selectedRangeId}
                     onChange={(e) => {
@@ -240,7 +361,40 @@ export function AddStepModal({ isOpen, onClose, onSave, selectedDate }: AddStepM
 
                 {/* Mountain */}
                 <div>
-                  <label className="text-xs font-medium text-cream-25/60 mb-1 block">Mountain</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-medium text-cream-25/60">Mountain</label>
+                    {selectedRangeId && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAddMountain(!showAddMountain)}
+                        className="text-xs text-cyan-500 hover:text-cyan-400 flex items-center gap-1"
+                      >
+                        <Plus className="w-3 h-3" />
+                        Add New
+                      </button>
+                    )}
+                  </div>
+
+                  {showAddMountain && selectedRangeId ? (
+                    <div className="flex gap-2 mb-2">
+                      <Input
+                        placeholder="New mountain name..."
+                        value={newMountainName}
+                        onChange={(e) => setNewMountainName(e.target.value)}
+                        onKeyPress={(e) => e.key === "Enter" && handleAddMountain()}
+                        className="bg-white/5 border-white/10 text-cream-25 text-sm"
+                      />
+                      <Button
+                        onClick={handleAddMountain}
+                        disabled={!newMountainName.trim()}
+                        className="bg-cyan-500 hover:bg-cyan-600 text-white px-3"
+                        size="sm"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  ) : null}
+
                   <select
                     value={selectedMountainId}
                     onChange={(e) => {
@@ -263,7 +417,40 @@ export function AddStepModal({ isOpen, onClose, onSave, selectedDate }: AddStepM
 
                 {/* Hill */}
                 <div>
-                  <label className="text-xs font-medium text-cream-25/60 mb-1 block">Hill</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-medium text-cream-25/60">Hill</label>
+                    {selectedMountainId && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAddHill(!showAddHill)}
+                        className="text-xs text-cyan-500 hover:text-cyan-400 flex items-center gap-1"
+                      >
+                        <Plus className="w-3 h-3" />
+                        Add New
+                      </button>
+                    )}
+                  </div>
+
+                  {showAddHill && selectedMountainId ? (
+                    <div className="flex gap-2 mb-2">
+                      <Input
+                        placeholder="New hill name..."
+                        value={newHillName}
+                        onChange={(e) => setNewHillName(e.target.value)}
+                        onKeyPress={(e) => e.key === "Enter" && handleAddHill()}
+                        className="bg-white/5 border-white/10 text-cream-25 text-sm"
+                      />
+                      <Button
+                        onClick={handleAddHill}
+                        disabled={!newHillName.trim()}
+                        className="bg-cyan-500 hover:bg-cyan-600 text-white px-3"
+                        size="sm"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  ) : null}
+
                   <select
                     value={selectedHillId}
                     onChange={(e) => {
@@ -285,7 +472,40 @@ export function AddStepModal({ isOpen, onClose, onSave, selectedDate }: AddStepM
 
                 {/* Terrain */}
                 <div>
-                  <label className="text-xs font-medium text-cream-25/60 mb-1 block">Terrain</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-medium text-cream-25/60">Terrain</label>
+                    {selectedHillId && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAddTerrain(!showAddTerrain)}
+                        className="text-xs text-cyan-500 hover:text-cyan-400 flex items-center gap-1"
+                      >
+                        <Plus className="w-3 h-3" />
+                        Add New
+                      </button>
+                    )}
+                  </div>
+
+                  {showAddTerrain && selectedHillId ? (
+                    <div className="flex gap-2 mb-2">
+                      <Input
+                        placeholder="New terrain name..."
+                        value={newTerrainName}
+                        onChange={(e) => setNewTerrainName(e.target.value)}
+                        onKeyPress={(e) => e.key === "Enter" && handleAddTerrain()}
+                        className="bg-white/5 border-white/10 text-cream-25 text-sm"
+                      />
+                      <Button
+                        onClick={handleAddTerrain}
+                        disabled={!newTerrainName.trim()}
+                        className="bg-cyan-500 hover:bg-cyan-600 text-white px-3"
+                        size="sm"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  ) : null}
+
                   <select
                     value={selectedTerrainId}
                     onChange={(e) => {
@@ -306,7 +526,40 @@ export function AddStepModal({ isOpen, onClose, onSave, selectedDate }: AddStepM
 
                 {/* Length */}
                 <div>
-                  <label className="text-xs font-medium text-cream-25/60 mb-1 block">Length</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="text-xs font-medium text-cream-25/60">Length</label>
+                    {selectedTerrainId && (
+                      <button
+                        type="button"
+                        onClick={() => setShowAddLength(!showAddLength)}
+                        className="text-xs text-cyan-500 hover:text-cyan-400 flex items-center gap-1"
+                      >
+                        <Plus className="w-3 h-3" />
+                        Add New
+                      </button>
+                    )}
+                  </div>
+
+                  {showAddLength && selectedTerrainId ? (
+                    <div className="flex gap-2 mb-2">
+                      <Input
+                        placeholder="New length name..."
+                        value={newLengthName}
+                        onChange={(e) => setNewLengthName(e.target.value)}
+                        onKeyPress={(e) => e.key === "Enter" && handleAddLength()}
+                        className="bg-white/5 border-white/10 text-cream-25 text-sm"
+                      />
+                      <Button
+                        onClick={handleAddLength}
+                        disabled={!newLengthName.trim()}
+                        className="bg-cyan-500 hover:bg-cyan-600 text-white px-3"
+                        size="sm"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  ) : null}
+
                   <select
                     value={selectedLengthId}
                     onChange={(e) => setSelectedLengthId(e.target.value)}

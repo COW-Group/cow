@@ -866,54 +866,106 @@ export default function FocusPage() {
 
   const handleTaskQueue30MoveToBottom = useCallback(
     async (taskId: string) => {
-      if (!taskListService || !currentTaskListId) return
+      if (!databaseService || !user?.id) return
       try {
-        const currentList = taskLists.find(list => list.id === currentTaskListId)
-        if (!currentList) return
+        // Get all tasks in current queue
+        const allTasks = taskLists
+          .filter((list) => list.id !== NO_TASK_LIST_SELECTED_ID && list.name !== "✅ Completed Tasks")
+          .flatMap((list) => list.steps)
+          .filter((step) => !step.completed)
+          .sort((a, b) => (a.positionWhenAllListsActive ?? 9999) - (b.positionWhenAllListsActive ?? 9999))
 
-        const taskIndex = currentList.steps.findIndex(t => t.id === taskId)
+        const taskIndex = allTasks.findIndex(t => t.id === taskId)
         if (taskIndex === -1) return
 
-        const reorderedTasks = [...currentList.steps]
+        // Move task to bottom
+        const reorderedTasks = [...allTasks]
         const [task] = reorderedTasks.splice(taskIndex, 1)
         reorderedTasks.push(task)
 
-        setTaskLists((prevLists) =>
-          prevLists.map((list) => (list.id === currentTaskListId ? { ...list, steps: reorderedTasks } : list)),
+        // Update positionWhenAllListsActive for all tasks
+        const tasksWithNewPositions = reorderedTasks.map((task, index) => ({
+          ...task,
+          positionWhenAllListsActive: index + 1
+        }))
+
+        // Batch update all tasks in database
+        await Promise.all(
+          tasksWithNewPositions.map(task =>
+            databaseService.updateStep(task.id, user.id, { positionWhenAllListsActive: task.positionWhenAllListsActive })
+          )
         )
+
+        // Update local state
+        setTaskLists(prevLists =>
+          prevLists.map(list => ({
+            ...list,
+            steps: list.steps.map(step => {
+              const updatedTask = tasksWithNewPositions.find(t => t.id === step.id)
+              return updatedTask || step
+            })
+          }))
+        )
+
         toast({ title: "Task Moved", description: "Task moved to bottom of queue." })
       } catch (error: any) {
         console.error("Failed to move task:", error)
         toast({ title: "Error", description: `Failed to move task: ${error.message}`, variant: "destructive" })
       }
     },
-    [taskListService, currentTaskListId, taskLists, toast],
+    [databaseService, user?.id, taskLists, toast],
   )
 
   const handleTaskQueue30MoveToTop = useCallback(
     async (taskId: string) => {
-      if (!taskListService || !currentTaskListId) return
+      if (!databaseService || !user?.id) return
       try {
-        const currentList = taskLists.find(list => list.id === currentTaskListId)
-        if (!currentList) return
+        // Get all tasks in current queue
+        const allTasks = taskLists
+          .filter((list) => list.id !== NO_TASK_LIST_SELECTED_ID && list.name !== "✅ Completed Tasks")
+          .flatMap((list) => list.steps)
+          .filter((step) => !step.completed)
+          .sort((a, b) => (a.positionWhenAllListsActive ?? 9999) - (b.positionWhenAllListsActive ?? 9999))
 
-        const taskIndex = currentList.steps.findIndex(t => t.id === taskId)
+        const taskIndex = allTasks.findIndex(t => t.id === taskId)
         if (taskIndex === -1) return
 
-        const reorderedTasks = [...currentList.steps]
+        // Move task to top
+        const reorderedTasks = [...allTasks]
         const [task] = reorderedTasks.splice(taskIndex, 1)
         reorderedTasks.unshift(task)
 
-        setTaskLists((prevLists) =>
-          prevLists.map((list) => (list.id === currentTaskListId ? { ...list, steps: reorderedTasks } : list)),
+        // Update positionWhenAllListsActive for all tasks
+        const tasksWithNewPositions = reorderedTasks.map((task, index) => ({
+          ...task,
+          positionWhenAllListsActive: index + 1
+        }))
+
+        // Batch update all tasks in database
+        await Promise.all(
+          tasksWithNewPositions.map(task =>
+            databaseService.updateStep(task.id, user.id, { positionWhenAllListsActive: task.positionWhenAllListsActive })
+          )
         )
+
+        // Update local state
+        setTaskLists(prevLists =>
+          prevLists.map(list => ({
+            ...list,
+            steps: list.steps.map(step => {
+              const updatedTask = tasksWithNewPositions.find(t => t.id === step.id)
+              return updatedTask || step
+            })
+          }))
+        )
+
         toast({ title: "Task Moved", description: "Task moved to top of queue." })
       } catch (error: any) {
         console.error("Failed to move task:", error)
         toast({ title: "Error", description: `Failed to move task: ${error.message}`, variant: "destructive" })
       }
     },
-    [taskListService, currentTaskListId, taskLists, toast],
+    [databaseService, user?.id, taskLists, toast],
   )
 
   const handleTaskQueue30Edit = useCallback(
@@ -924,11 +976,98 @@ export default function FocusPage() {
   )
 
   const handleTaskQueue30InsertNewTask = useCallback(
-    (position: number) => {
-      setShowTaskForm(true)
-      toast({ title: "Add New Task", description: `Adding new task at position ${position + 1}.` })
+    async (position: number) => {
+      if (!databaseService || !user?.id || !taskListService) return
+
+      try {
+        // Get all tasks in current queue
+        const allTasks = taskLists
+          .filter((list) => list.id !== NO_TASK_LIST_SELECTED_ID && list.name !== "✅ Completed Tasks")
+          .flatMap((list) => list.steps)
+          .filter((step) => !step.completed)
+          .sort((a, b) => (a.positionWhenAllListsActive ?? 9999) - (b.positionWhenAllListsActive ?? 9999))
+
+        // Create a new blank task
+        const newTask: Step = {
+          id: crypto.randomUUID(),
+          label: "New Task",
+          duration: settings.defaultDuration * 60 * 1000,
+          color: "#00D9FF",
+          icon: "📝",
+          completed: false,
+          locked: false,
+          history: [],
+          breaths: [],
+          priorityLetter: "None",
+          priorityRank: 0,
+          mantra: "",
+          startingRitual: "",
+          endingRitual: "",
+          position: 0,
+          positionWhenAllListsActive: position + 1,
+          timezone: "",
+          taskListId: currentTaskListId === ALL_ACTIVE_TASKS_ID
+            ? (taskLists.find(list => list.id !== NO_TASK_LIST_SELECTED_ID && list.name !== "✅ Completed Tasks")?.id || "")
+            : currentTaskListId,
+          userId: user.id,
+          tag: "task-list",
+        }
+
+        // Insert at correct position and update all subsequent tasks
+        const reorderedTasks = [...allTasks]
+        reorderedTasks.splice(position, 0, newTask)
+
+        // Update positionWhenAllListsActive for all tasks
+        const tasksWithNewPositions = reorderedTasks.map((task, index) => ({
+          ...task,
+          positionWhenAllListsActive: index + 1
+        }))
+
+        // Add new task to database
+        await databaseService.createStep(newTask, user.id)
+
+        // Update positions for existing tasks if needed
+        await Promise.all(
+          tasksWithNewPositions
+            .filter(task => task.id !== newTask.id)
+            .map(task =>
+              databaseService.updateStep(task.id, user.id, { positionWhenAllListsActive: task.positionWhenAllListsActive })
+            )
+        )
+
+        // Update local state
+        setTaskLists(prevLists =>
+          prevLists.map(list => {
+            if (list.id === newTask.taskListId) {
+              return {
+                ...list,
+                steps: [...list.steps, newTask].map(step => {
+                  const updatedTask = tasksWithNewPositions.find(t => t.id === step.id)
+                  return updatedTask || step
+                })
+              }
+            }
+            return {
+              ...list,
+              steps: list.steps.map(step => {
+                const updatedTask = tasksWithNewPositions.find(t => t.id === step.id)
+                return updatedTask || step
+              })
+            }
+          })
+        )
+
+        // Open edit dialog for the new task
+        setTaskToEdit(newTask)
+        setIsTaskEditDialogOpen(true)
+
+        toast({ title: "Task Created", description: `New task added at position ${position + 1}.` })
+      } catch (error: any) {
+        console.error("Failed to create task:", error)
+        toast({ title: "Error", description: `Failed to create task: ${error.message}`, variant: "destructive" })
+      }
     },
-    [toast],
+    [databaseService, user?.id, taskListService, currentTaskListId, taskLists, settings.defaultDuration, toast],
   )
 
   const handleTaskQueue30PauseAll = useCallback(() => {
@@ -1210,8 +1349,55 @@ export default function FocusPage() {
           currentTaskId={currentTask?.id}
           onTaskClick={handleTaskQueue30Click}
           onTaskDelete={handleDeleteTask}
-          onTaskReorder={(taskId, newPosition) => {
-            console.log("Reorder task", taskId, "to position", newPosition)
+          onTaskReorder={async (taskId, newPosition) => {
+            if (!databaseService || !user?.id) return
+
+            try {
+              // Get all tasks in current queue
+              const allTasks = taskLists
+                .filter((list) => list.id !== NO_TASK_LIST_SELECTED_ID && list.name !== "✅ Completed Tasks")
+                .flatMap((list) => list.steps)
+                .filter((step) => !step.completed)
+                .sort((a, b) => (a.positionWhenAllListsActive ?? 9999) - (b.positionWhenAllListsActive ?? 9999))
+
+              // Find the task being moved
+              const taskIndex = allTasks.findIndex(t => t.id === taskId)
+              if (taskIndex === -1) return
+
+              // Reorder the array
+              const reorderedTasks = [...allTasks]
+              const [movedTask] = reorderedTasks.splice(taskIndex, 1)
+              reorderedTasks.splice(newPosition, 0, movedTask)
+
+              // Update positionWhenAllListsActive for all tasks
+              const tasksWithNewPositions = reorderedTasks.map((task, index) => ({
+                ...task,
+                positionWhenAllListsActive: index + 1
+              }))
+
+              // Batch update all tasks in database
+              await Promise.all(
+                tasksWithNewPositions.map(task =>
+                  databaseService.updateStep(task.id, user.id, { positionWhenAllListsActive: task.positionWhenAllListsActive })
+                )
+              )
+
+              // Update local state
+              setTaskLists(prevLists =>
+                prevLists.map(list => ({
+                  ...list,
+                  steps: list.steps.map(step => {
+                    const updatedTask = tasksWithNewPositions.find(t => t.id === step.id)
+                    return updatedTask || step
+                  })
+                }))
+              )
+
+              toast({ title: "Task Reordered", description: "Queue order saved successfully." })
+            } catch (error: any) {
+              console.error("Failed to reorder task:", error)
+              toast({ title: "Error", description: `Failed to reorder: ${error.message}`, variant: "destructive" })
+            }
           }}
           onTaskMoveToBottom={handleTaskQueue30MoveToBottom}
           onTaskMoveToTop={handleTaskQueue30MoveToTop}

@@ -79,6 +79,10 @@ export function TaskQueue30({
   const shakeThreshold = 15 // Acceleration threshold
   const shakeTimeout = 1000 // Min time between shakes
 
+  // Copy debouncing
+  const lastCopyTimeRef = useRef<number>(0)
+  const copyDebounceMs = 1000 // Prevent multiple copies within 1 second
+
   // Helper function to show gesture overlay
   const showGestureOverlay = (message: string) => {
     setGestureOverlay(message)
@@ -191,6 +195,14 @@ export function TaskQueue30({
         longPressTimeoutRef.current = null
       }
       e.preventDefault()
+
+      // Debounce to prevent multiple copies
+      const now = Date.now()
+      if (now - lastCopyTimeRef.current < copyDebounceMs) {
+        return // Ignore duplicate copy within debounce period
+      }
+      lastCopyTimeRef.current = now
+
       if ('vibrate' in navigator) navigator.vibrate([50, 100, 50])
       showGestureOverlay("📋 Copy task")
       if (onCopyTask) {

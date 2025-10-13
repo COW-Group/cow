@@ -2,7 +2,7 @@
   "version": 2,
   "framework": null,
   "installCommand": "echo 'Skipping default install'",
-  "buildCommand": "cd ../.. && npm install --legacy-peer-deps && cd apps/missions-app && npm run build",
+  "buildCommand": "sleep 2 && cp .npmrc ../.. && cd ../.. && npm ci --legacy-peer-deps && cd apps/missions-app && npm run build",
   "outputDirectory": "dist",
   "routes": [
     {

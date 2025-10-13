@@ -2,5 +2,5 @@
   "version": 2,
   "framework": "nextjs",
   "installCommand": "cd ../.. && npm install",
-  "buildCommand": "npm run build"
+  "buildCommand": "cd ../../packages/supabase-client && npm run build && cd ../../apps/mauna-app && npm run build"
 }

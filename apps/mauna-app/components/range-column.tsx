@@ -240,8 +240,8 @@ export function RangeColumn({
               onDragEnd={handleDragEnd}
               modifiers={[restrictToVerticalAxis, restrictToFirstScrollableAncestor]}
             >
-              <SortableContext items={range.mountains.map((m) => m.id)} strategy={verticalListSortingStrategy}>
-                {range.mountains.map((mountain) => (
+              <SortableContext items={range.mountains.filter(m => !m.completed).map((m) => m.id)} strategy={verticalListSortingStrategy}>
+                {range.mountains.filter(mountain => !mountain.completed).map((mountain) => (
                   <SortableMountainCard
                     key={mountain.id}
                     mountain={mountain}

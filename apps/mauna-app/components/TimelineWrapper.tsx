@@ -35,6 +35,7 @@ interface TimelineItem {
   breaths?: Breath[]
   taskListId?: string | null // ID of the task list this step belongs to
   taskListName?: string | null // Name of the task list (e.g., "Hot List", "Morning Routine")
+  tag?: string // Source tag (habit, task-list, vision, etc.)
 }
 
 interface TimelineContextType {
@@ -177,6 +178,12 @@ export const TimelineWrapper = ({ currentDate = new Date() }: { currentDate?: Da
             breaths: breaths,
             taskListId: taskListId,
             taskListName: taskListName,
+            tag: step.tag || null,
+            dddptDiscover: habitNotes.dddpt_discover || "",
+            dddptDefine: habitNotes.dddpt_define || "",
+            dddptIdeate: habitNotes.dddpt_ideate || "",
+            dddptPrototype: habitNotes.dddpt_prototype || "",
+            dddptTest: habitNotes.dddpt_test || "",
           }
         })
         // Sort by scheduled time

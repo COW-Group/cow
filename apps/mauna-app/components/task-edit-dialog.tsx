@@ -161,8 +161,28 @@ export function TaskEditDialog({
     taskLists,
   ])
 
+  // Icon picker options (similar to 30/30 app)
+  const iconOptions = [
+    "📋", "✏️", "💻", "📧", "📞", "🔧", "🎨", "📷", "🎸", "🛒",
+    "⛽", "🐷", "🍴", "☕", "👣", "🐾", "📺", "🎬", "📖", "✈️",
+    "🛏️", "🐦", "👤", "⛹️", "🎯", "💡", "🌟", "🎵", "🏃", "💪",
+    "🧘", "📚", "🎓", "💼", "🏠", "🚗", "🌱", "🍎", "💊", "🧪",
+    "🔬", "📊", "💰", "📝", "🗓️", "⏰", "🔔", "🎁", "🌈", "☀️"
+  ]
+
+  // Color options (similar to 30/30 app palette)
+  const colorOptions = [
+    "#FF8C42", "#FF4757", "#A05EB5", "#26A6D1", "#4CAF50",
+    "#9B59B6", "#E17B77", "#FFA834", "#00D9FF", "#FF6B6B",
+    "#48C774", "#3273DC", "#F39C12", "#E74C3C", "#1ABC9C",
+    "#9013FE", "#F368E0", "#00D2D3", "#FFA502", "#747D8C"
+  ]
+
+  const [showIconPicker, setShowIconPicker] = useState(false)
+  const [showColorPicker, setShowColorPicker] = useState(false)
+
   return (
-    <Card className="bg-cream-50/10 backdrop-blur-sm border border-cream-25/30 rounded-xl p-6 shadow-lg w-full max-w-md">
+    <Card className="bg-cream-50/10 backdrop-blur-sm border border-cream-25/30 rounded-xl p-6 shadow-lg w-full max-w-2xl">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-2xl font-bold text-cream-25">Edit Task</CardTitle>
         <Button variant="ghost" size="icon" onClick={onClose} className="text-cream-25 hover:bg-white/20">
@@ -170,50 +190,107 @@ export function TaskEditDialog({
         </Button>
       </CardHeader>
       <CardContent>
-        <ScrollArea className="h-[400px] pr-4">
+        <ScrollArea className="h-[500px] pr-4">
           <div className="grid gap-4 py-4">
+            {/* Task Name Input */}
             <div className="flex flex-col gap-2">
-              <Label htmlFor="label" className="text-cream-25">
-                Label
+              <Label htmlFor="label" className="text-cream-25 text-sm font-medium">
+                Task Name
               </Label>
-              <Input
-                id="label"
-                value={label}
-                onChange={(e) => setLabel(e.target.value)}
-                className="glassmorphism-inner-card border-none text-cream-25 placeholder:text-cream-25/70"
-              />
+              <div className="flex items-center gap-2">
+                <div
+                  onClick={() => setShowIconPicker(!showIconPicker)}
+                  className="w-12 h-12 flex items-center justify-center text-2xl cursor-pointer glassmorphism-inner-card rounded-lg hover:bg-white/10 transition-colors"
+                  title="Change icon"
+                >
+                  {icon || "📋"}
+                </div>
+                <Input
+                  id="label"
+                  value={label}
+                  onChange={(e) => setLabel(e.target.value)}
+                  placeholder="Type a new label"
+                  className="flex-1 glassmorphism-inner-card border-none text-cream-25 placeholder:text-cream-25/50 text-lg"
+                />
+                <div className="text-cream-25 font-mono text-sm bg-white/10 px-3 py-2 rounded-lg">
+                  {Math.floor(duration)}:00
+                </div>
+              </div>
             </div>
+
+            {/* Icon Picker */}
+            {showIconPicker && (
+              <div className="glassmorphism-inner-card rounded-lg p-4">
+                <Label className="text-cream-25 text-sm font-medium mb-3 block">Select Icon</Label>
+                <div className="grid grid-cols-10 gap-2">
+                  {iconOptions.map((iconOption) => (
+                    <button
+                      key={iconOption}
+                      onClick={() => {
+                        setIcon(iconOption)
+                        setShowIconPicker(false)
+                      }}
+                      className={`w-10 h-10 flex items-center justify-center text-2xl rounded-lg transition-all hover:bg-white/20 ${
+                        icon === iconOption ? "bg-white/30 ring-2 ring-cyan-400" : "bg-white/5"
+                      }`}
+                    >
+                      {iconOption}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Color Picker */}
             <div className="flex flex-col gap-2">
-              <Label htmlFor="icon" className="text-cream-25">
-                Icon
-              </Label>
-              <Input
-                id="icon"
-                value={icon}
-                onChange={(e) => setIcon(e.target.value)}
-                className="glassmorphism-inner-card border-none text-cream-25 placeholder:text-cream-25/70"
-              />
+              <Label className="text-cream-25 text-sm font-medium">Task Color</Label>
+              <div className="flex items-center gap-2">
+                <div
+                  onClick={() => setShowColorPicker(!showColorPicker)}
+                  className="w-12 h-12 rounded-lg cursor-pointer border-2 border-white/30 hover:border-white/50 transition-colors"
+                  style={{ backgroundColor: color || "#00D9FF" }}
+                  title="Change color"
+                />
+                <Input
+                  id="color"
+                  value={color}
+                  onChange={(e) => setColor(e.target.value)}
+                  placeholder="#00D9FF"
+                  className="flex-1 glassmorphism-inner-card border-none text-cream-25 placeholder:text-cream-25/50 font-mono text-sm"
+                />
+              </div>
+              {showColorPicker && (
+                <div className="glassmorphism-inner-card rounded-lg p-4">
+                  <div className="grid grid-cols-10 gap-2">
+                    {colorOptions.map((colorOption) => (
+                      <button
+                        key={colorOption}
+                        onClick={() => {
+                          setColor(colorOption)
+                          setShowColorPicker(false)
+                        }}
+                        className={`w-10 h-10 rounded-lg transition-all hover:scale-110 ${
+                          color === colorOption ? "ring-2 ring-white ring-offset-2 ring-offset-transparent" : ""
+                        }`}
+                        style={{ backgroundColor: colorOption }}
+                        title={colorOption}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
+
+            {/* Duration */}
             <div className="flex flex-col gap-2">
-              <Label htmlFor="duration" className="text-cream-25">
-                Duration (min)
+              <Label htmlFor="duration" className="text-cream-25 text-sm font-medium">
+                Duration (minutes)
               </Label>
               <Input
                 id="duration"
                 type="number"
                 value={duration}
                 onChange={(e) => setDuration(Number(e.target.value))}
-                className="glassmorphism-inner-card border-none text-cream-25 placeholder:text-cream-25/70"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Label htmlFor="color" className="text-cream-25">
-                Color
-              </Label>
-              <Input
-                id="color"
-                value={color}
-                onChange={(e) => setColor(e.target.value)}
                 className="glassmorphism-inner-card border-none text-cream-25 placeholder:text-cream-25/70"
               />
             </div>

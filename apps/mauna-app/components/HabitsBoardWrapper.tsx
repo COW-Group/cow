@@ -6,6 +6,7 @@ import { AuthService } from "@/lib/auth-service"
 import { useToast } from "@/hooks/use-toast"
 import { Loader2Icon } from "lucide-react"
 import { VisionDataProvider } from "@/lib/vision-data-provider"
+import { HabitTaskListSyncService } from "@/lib/habit-task-list-sync"
 
 interface HabitItem {
   id: string
@@ -59,8 +60,19 @@ export const HabitsBoardWrapper = ({ currentMonth = new Date() }: { currentMonth
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [syncService, setSyncService] = useState<HabitTaskListSyncService | null>(null)
 
   console.log("[HabitsBoardWrapper] Auth state:", { userId: user?.id, authLoading })
+
+  // Initialize sync service when user is available
+  useEffect(() => {
+    if (user?.id && !syncService) {
+      const service = new HabitTaskListSyncService(user.id, databaseService)
+      setSyncService(service)
+    } else if (!user?.id && syncService) {
+      setSyncService(null)
+    }
+  }, [user?.id, syncService])
 
   const loadHabits = useCallback(async () => {
     console.log("[HabitsBoardWrapper.loadHabits] Starting loadHabits with userId:", user?.id, "authLoading:", authLoading)
@@ -206,10 +218,20 @@ export const HabitsBoardWrapper = ({ currentMonth = new Date() }: { currentMonth
       console.error("[HabitsBoardWrapper.addHabit] Error adding habit:", error)
       toast({ title: "Error", description: "Failed to add habit.", variant: "destructive" })
     } else {
+      // Link habit to task list if it has a group
+      if (data && data.length > 0 && habit.habitGroup && syncService) {
+        try {
+          await syncService.linkHabitToTaskList(data[0].id, habit.habitGroup)
+          console.log("[HabitsBoardWrapper.addHabit] Habit linked to task list for group:", habit.habitGroup)
+        } catch (syncError) {
+          console.error("[HabitsBoardWrapper.addHabit] Error syncing habit to task list:", syncError)
+          // Don't show error to user as habit was created successfully
+        }
+      }
       refreshHabits()
       toast({ title: "Habit Added", description: `"${habit.label}" was successfully added.` })
     }
-  }, [user?.id, categories, refreshHabits, toast])
+  }, [user?.id, categories, refreshHabits, toast, syncService])
 
   const updateHabit = useCallback(async (habitId: string, updates: Partial<HabitItem>) => {
     if (!user?.id) {
@@ -261,10 +283,25 @@ export const HabitsBoardWrapper = ({ currentMonth = new Date() }: { currentMonth
       console.error("[HabitsBoardWrapper.updateHabit] Error updating habit:", error)
       toast({ title: "Error", description: "Failed to update habit.", variant: "destructive" })
     } else {
+      // Sync habit with task list if habitGroup changed
+      if (updates.habitGroup !== undefined && syncService) {
+        try {
+          if (updates.habitGroup) {
+            await syncService.linkHabitToTaskList(habitId, updates.habitGroup)
+            console.log("[HabitsBoardWrapper.updateHabit] Habit linked to task list for group:", updates.habitGroup)
+          } else {
+            await syncService.unlinkHabitFromTaskList(habitId)
+            console.log("[HabitsBoardWrapper.updateHabit] Habit unlinked from task list")
+          }
+        } catch (syncError) {
+          console.error("[HabitsBoardWrapper.updateHabit] Error syncing habit to task list:", syncError)
+          // Don't show error to user as habit was updated successfully
+        }
+      }
       refreshHabits()
       toast({ title: "Habit Updated", description: "Habit was successfully updated." })
     }
-  }, [user?.id, refreshHabits, toast])
+  }, [user?.id, refreshHabits, toast, syncService])
 
   const deleteHabit = useCallback(async (habitId: string) => {
     if (!user?.id) {

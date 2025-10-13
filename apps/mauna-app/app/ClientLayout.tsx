@@ -1,7 +1,7 @@
 "use client"
 import type React from "react"
-import { useState } from "react"
-import { usePathname } from "next/navigation"
+import { useState, useEffect } from "react"
+import { usePathname, useRouter } from "next/navigation"
 import { Header } from "@/components/header"
 import { TaskListManager } from "@/components/task-list-manager"
 import { VisionBoard } from "@/components/vision-board"
@@ -64,10 +64,56 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   const { toast } = useToast()
   const isMobile = useIsMobile()
   const pathname = usePathname()
+  const router = useRouter()
   const isDashboardPage = pathname === "/dashboard"
   const isFocusPage = pathname === "/focus"
   const isHabitsPage = pathname === "/habits"
   const isTimelinePage = pathname === "/timeline"
+  const isVisionPage = pathname === "/vision"
+  const isEmotionalPage = pathname === "/emotional"
+
+  // Keyboard shortcuts for navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Only trigger if Cmd (Mac) or Ctrl (Windows/Linux) is pressed
+      if (!(event.metaKey || event.ctrlKey)) return
+
+      // Don't trigger if user is typing in an input/textarea
+      const target = event.target as HTMLElement
+      if (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable) {
+        return
+      }
+
+      // Navigation shortcuts
+      switch (event.key.toLowerCase()) {
+        case "h":
+          event.preventDefault()
+          router.push("/habits")
+          break
+        case "f":
+          event.preventDefault()
+          router.push("/focus")
+          break
+        case "t":
+          event.preventDefault()
+          router.push("/timeline")
+          break
+        case "v":
+          event.preventDefault()
+          router.push("/vision")
+          break
+        case "d":
+          event.preventDefault()
+          router.push("/dashboard")
+          break
+        default:
+          break
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [router])
 
   if (loading) {
     return (
@@ -108,7 +154,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             "flex min-h-screen flex-col bg-transparent font-sans antialiased overflow-y-auto",
           )}
         >
-          {!isDashboardPage && !isFocusPage && !isHabitsPage && !isTimelinePage && (
+          {!isDashboardPage && !isFocusPage && !isHabitsPage && !isTimelinePage && !isVisionPage && !isEmotionalPage && (
             <>
               <Header isMenuOpen={isAppMenuOpen} onToggleMenu={toggleAppMenu} settings={appSettings} />
               <DashboardMenu

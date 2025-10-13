@@ -48,6 +48,7 @@ import { Label } from "@/components/ui/label"
 import { toast } from "sonner"
 import { Badge } from "@/components/ui/badge"
 import { ResetContext } from "@/app/vision/page"
+import { databaseService } from "@/lib/database-service"
 
 interface SortableMountainCardProps {
   mountain: Mountain
@@ -76,6 +77,8 @@ interface SortableMountainCardProps {
 interface LengthItemProps {
   length: Length
   terrainId: string
+  hillId: string
+  mountainId: string
   rangeId: string
   onUpdateLength: (terrainId: string, lengthId: string, newName: string, completed: boolean, tag?: string | null) => Promise<void>
   onDeleteLength: (terrainId: string, lengthId: string) => Promise<void>
@@ -95,6 +98,8 @@ interface LengthItemProps {
 const LengthItem: React.FC<LengthItemProps> = ({
   length,
   terrainId,
+  hillId,
+  mountainId,
   rangeId,
   onUpdateLength,
   onDeleteLength,
@@ -122,6 +127,10 @@ const LengthItem: React.FC<LengthItemProps> = ({
         id: length.id,
         name: length.name,
         type: "Length",
+        parentMountainId: mountainId,
+        parentHillId: hillId,
+        parentTerrainId: terrainId,
+        parentLengthId: null,
       })
       await onUpdateLength(terrainId, length.id, length.name, true, length.tag)
       toast.success("Length marked as complete!")
@@ -359,7 +368,15 @@ const LengthItem: React.FC<LengthItemProps> = ({
                 size="sm"
                 onClick={async () => {
                   try {
-                    await markComplete(rangeId, { id: step.id, name: step.label, type: "Step" })
+                    await markComplete(rangeId, {
+                      id: step.id,
+                      name: step.label,
+                      type: "Step",
+                      parentMountainId: mountainId,
+                      parentHillId: hillId,
+                      parentTerrainId: terrainId,
+                      parentLengthId: length.id,
+                    })
                     await onUpdateStep(lengthId, step.id, { ...step, completed: true })
                     toast.success("Step marked as complete!")
                   } catch (err) {
@@ -503,7 +520,7 @@ const LengthItem: React.FC<LengthItemProps> = ({
       </div>
       {isExpanded && (
         <div className="ml-4 mt-2">
-          {length.steps.map((step) => renderStep(step, length.id))}
+          {length.steps.filter(step => !step.completed).map((step) => renderStep(step, length.id))}
           <form
             onSubmit={async (e) => {
               e.preventDefault()
@@ -534,6 +551,7 @@ const LengthItem: React.FC<LengthItemProps> = ({
 interface TerrainItemProps {
   terrain: Terrain
   hillId: string
+  mountainId: string
   rangeId: string
   onUpdateTerrain: (hillId: string, terrainId: string, newName: string) => Promise<void>
   onUpdateTerrainTag: (hillId: string, terrainId: string, tag: string | null) => Promise<void>
@@ -557,6 +575,7 @@ interface TerrainItemProps {
 const TerrainItem: React.FC<TerrainItemProps> = ({
   terrain,
   hillId,
+  mountainId,
   rangeId,
   onUpdateTerrain,
   onUpdateTerrainTag,
@@ -584,11 +603,27 @@ const TerrainItem: React.FC<TerrainItemProps> = ({
 
   const handleMarkComplete = async () => {
     try {
+      // First, mark as completed in database
+      const userId = await databaseService.supabase.auth.getUser().then((res) => res.data.user?.id || "")
+      if (!userId) throw new Error("User not authenticated")
+
+      await databaseService.supabase
+        .from("terrains")
+        .update({ completed: true, updated_at: new Date().toISOString() })
+        .eq("id", terrain.id)
+        .eq("user_id", userId)
+
+      // Then archive it
       await markComplete(rangeId, {
         id: terrain.id,
         name: terrain.name,
         type: "Terrain",
+        parentMountainId: mountainId,
+        parentHillId: hillId,
+        parentTerrainId: null,
+        parentLengthId: null,
       })
+
       await onUpdateTerrain(hillId, terrain.id, terrain.name)
       toast.success("Terrain marked as complete!")
     } catch (err) {
@@ -702,11 +737,13 @@ const TerrainItem: React.FC<TerrainItemProps> = ({
       </div>
       {isExpanded && (
         <div className="ml-4 mt-2">
-          {terrain.lengths.map((length) => (
+          {terrain.lengths.filter(length => !length.completed).map((length) => (
             <LengthItem
               key={length.id}
               length={length}
               terrainId={terrain.id}
+              hillId={hillId}
+              mountainId={mountainId}
               rangeId={rangeId}
               onUpdateLength={onUpdateLength}
               onDeleteLength={onDeleteLength}
@@ -794,11 +831,27 @@ export function SortableMountainCard({
 
   const handleMarkMountainComplete = async () => {
     try {
+      // First, mark as completed in database
+      const userId = await databaseService.supabase.auth.getUser().then((res) => res.data.user?.id || "")
+      if (!userId) throw new Error("User not authenticated")
+
+      await databaseService.supabase
+        .from("mountains")
+        .update({ completed: true, updated_at: new Date().toISOString() })
+        .eq("id", mountain.id)
+        .eq("user_id", userId)
+
+      // Then archive it
       await markComplete(rangeId, {
         id: mountain.id,
         name: mountain.name,
         type: "Mountain",
+        parentMountainId: null,
+        parentHillId: null,
+        parentTerrainId: null,
+        parentLengthId: null,
       })
+
       await onUpdateMountain(rangeId, mountain.id, mountain.name)
       toast.success("Mountain marked as complete!")
     } catch (err) {
@@ -945,11 +998,27 @@ export function SortableMountainCard({
     const isExpanded = expandedItems[hill.id] ?? true
     const handleMarkComplete = async () => {
       try {
+        // First, mark as completed in database
+        const userId = await databaseService.supabase.auth.getUser().then((res) => res.data.user?.id || "")
+        if (!userId) throw new Error("User not authenticated")
+
+        await databaseService.supabase
+          .from("hills")
+          .update({ completed: true, updated_at: new Date().toISOString() })
+          .eq("id", hill.id)
+          .eq("user_id", userId)
+
+        // Then archive it
         await markComplete(rangeId, {
           id: hill.id,
           name: hill.name,
           type: "Hill",
+          parentMountainId: mountain.id,
+          parentHillId: null,
+          parentTerrainId: null,
+          parentLengthId: null,
         })
+
         await onUpdateHill(mountain.id, hill.id, hill.name)
         toast.success("Hill marked as complete!")
       } catch (err) {
@@ -1063,11 +1132,12 @@ export function SortableMountainCard({
         </div>
         {isExpanded && (
           <div className="ml-4 mt-2">
-            {hill.terrains.map((terrain) => (
+            {hill.terrains.filter(terrain => !terrain.completed).map((terrain) => (
               <TerrainItem
                 key={terrain.id}
                 terrain={terrain}
                 hillId={hill.id}
+                mountainId={mountain.id}
                 rangeId={rangeId}
                 onUpdateTerrain={onUpdateTerrain}
                 onUpdateTerrainTag={onUpdateTerrainTag}
@@ -1258,8 +1328,8 @@ export function SortableMountainCard({
           </div>
 
           {expandedItems[mountain.id] && (
-            <SortableContext items={mountain.hills.map((h) => h.id)} strategy={verticalListSortingStrategy}>
-              {mountain.hills.map((hill) => renderHill(hill))}
+            <SortableContext items={mountain.hills.filter(h => !h.completed).map((h) => h.id)} strategy={verticalListSortingStrategy}>
+              {mountain.hills.filter(hill => !hill.completed).map((hill) => renderHill(hill))}
               <form
                 onSubmit={async (e) => {
                   e.preventDefault()

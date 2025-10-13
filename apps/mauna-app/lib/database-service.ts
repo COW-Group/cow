@@ -44,10 +44,19 @@ export interface ArchivedItem {
   id: string
   user_id: string
   range_id: string
+  reset_period_id: string
   item_id: string
   item_name: string
   item_type: "Mountain" | "Hill" | "Terrain" | "Length" | "Step"
   completed_at: string
+  parent_mountain_id?: string | null
+  parent_hill_id?: string | null
+  parent_terrain_id?: string | null
+  parent_length_id?: string | null
+  parent_mountain_name?: string | null
+  parent_hill_name?: string | null
+  parent_terrain_name?: string | null
+  parent_length_name?: string | null
 }
 
 export interface DailyPlan {
@@ -61,6 +70,15 @@ export interface DailyPlan {
   successes: string[]
   reviewTypedGoals: { id: string; type: string; typedName: string }[]
   taskListIds: { goalId: string; taskListId: string }[] // Add this
+  created_at: string
+  updated_at: string
+}
+
+export interface UserSettings {
+  id: string
+  user_id: string
+  week_start: number // 0 = Sunday, 1 = Monday, etc.
+  time_zone: string // IANA time zone identifier
   created_at: string
   updated_at: string
 }
@@ -466,6 +484,7 @@ async fetchRanges(userId: string): Promise<any[]> {
       frequency,
       isbuildhabit,
       history,
+      tag,
       mountains (
         id,
         name,
@@ -474,6 +493,8 @@ async fetchRanges(userId: string): Promise<any[]> {
         frequency,
         isbuildhabit,
         history,
+        tag,
+        completed,
         hills (
           id,
           name,
@@ -482,6 +503,8 @@ async fetchRanges(userId: string): Promise<any[]> {
           frequency,
           isbuildhabit,
           history,
+          tag,
+          completed,
           terrains (
             id,
             name,
@@ -490,6 +513,8 @@ async fetchRanges(userId: string): Promise<any[]> {
             frequency,
             isbuildhabit,
             history,
+            tag,
+            completed,
             lengths (
               id,
               name,
@@ -498,6 +523,8 @@ async fetchRanges(userId: string): Promise<any[]> {
               frequency,
               isbuildhabit,
               history,
+              tag,
+              completed,
               steps (
                 id,
                 label,
@@ -507,7 +534,8 @@ async fetchRanges(userId: string): Promise<any[]> {
                 frequency,
                 isbuildhabit,
                 history,
-                tag
+                tag,
+                completed
               )
             )
           )
@@ -926,18 +954,32 @@ async fetchRanges(userId: string): Promise<any[]> {
   async archiveCompletedItem(
     userId: string,
     rangeId: string,
-    item: { id: string; name: string; type: "Mountain" | "Hill" | "Terrain" | "Length" | "Step" }
+    resetPeriodId: string,
+    item: {
+      id: string;
+      name: string;
+      type: "Mountain" | "Hill" | "Terrain" | "Length" | "Step";
+      parentMountainId?: string | null;
+      parentHillId?: string | null;
+      parentTerrainId?: string | null;
+      parentLengthId?: string | null;
+    }
   ): Promise<ArchivedItem> {
-    console.log("DatabaseService.archiveCompletedItem: Archiving item for user:", userId, "range:", rangeId, "item:", item)
+    console.log("DatabaseService.archiveCompletedItem: Archiving item for user:", userId, "range:", rangeId, "resetPeriod:", resetPeriodId, "item:", item)
     const { data, error } = await this.supabase
       .from("archives")
       .insert({
         user_id: userId,
         range_id: rangeId,
+        reset_period_id: resetPeriodId,
         item_id: item.id,
         item_name: item.name,
         item_type: item.type,
         completed_at: new Date().toISOString(),
+        parent_mountain_id: item.parentMountainId || null,
+        parent_hill_id: item.parentHillId || null,
+        parent_terrain_id: item.parentTerrainId || null,
+        parent_length_id: item.parentLengthId || null,
       })
       .select("*")
       .single()
@@ -950,10 +992,15 @@ async fetchRanges(userId: string): Promise<any[]> {
       id: data.id,
       user_id: data.user_id,
       range_id: data.range_id,
+      reset_period_id: data.reset_period_id,
       item_id: data.item_id,
       item_name: data.item_name,
       item_type: data.item_type,
       completed_at: data.completed_at,
+      parent_mountain_id: data.parent_mountain_id,
+      parent_hill_id: data.parent_hill_id,
+      parent_terrain_id: data.parent_terrain_id,
+      parent_length_id: data.parent_length_id,
     } as ArchivedItem
   }
 
@@ -961,7 +1008,13 @@ async fetchRanges(userId: string): Promise<any[]> {
     console.log("DatabaseService.fetchArchivedItems: Fetching archived items for user:", userId, "range:", rangeId)
     const { data, error } = await this.supabase
       .from("archives")
-      .select("*")
+      .select(`
+        *,
+        parent_mountain:mountains!archives_parent_mountain_id_fkey(id, name),
+        parent_hill:hills!archives_parent_hill_id_fkey(id, name),
+        parent_terrain:terrains!archives_parent_terrain_id_fkey(id, name),
+        parent_length:lengths!archives_parent_length_id_fkey(id, name)
+      `)
       .eq("user_id", userId)
       .eq("range_id", rangeId)
       .order("completed_at", { ascending: false })
@@ -973,10 +1026,19 @@ async fetchRanges(userId: string): Promise<any[]> {
       id: item.id,
       user_id: item.user_id,
       range_id: item.range_id,
+      reset_period_id: item.reset_period_id,
       item_id: item.item_id,
       item_name: item.item_name,
       item_type: item.item_type,
       completed_at: item.completed_at,
+      parent_mountain_id: item.parent_mountain_id,
+      parent_hill_id: item.parent_hill_id,
+      parent_terrain_id: item.parent_terrain_id,
+      parent_length_id: item.parent_length_id,
+      parent_mountain_name: item.parent_mountain?.name || null,
+      parent_hill_name: item.parent_hill?.name || null,
+      parent_terrain_name: item.parent_terrain?.name || null,
+      parent_length_name: item.parent_length?.name || null,
     })) as ArchivedItem[]
   }
 
@@ -2480,6 +2542,92 @@ async deleteStep(id: string, userId: string): Promise<void> {
       created_at: data.created_at,
       updated_at: data.updated_at,
     } as DailyPlan
+  }
+
+  // User Settings Methods
+  async fetchUserSettings(userId: string): Promise<UserSettings> {
+    const { data, error } = await this.supabase
+      .from("user_settings")
+      .select("*")
+      .eq("user_id", userId)
+      .single()
+
+    if (error && error.code !== "PGRST116") {
+      console.error("Error fetching user settings:", error)
+      throw new Error(error.message)
+    }
+
+    // If no settings exist, create default settings
+    if (!data) {
+      return await this.createUserSettings(userId)
+    }
+
+    return {
+      id: data.id,
+      user_id: data.user_id,
+      week_start: data.week_start,
+      time_zone: data.time_zone,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+    } as UserSettings
+  }
+
+  async createUserSettings(userId: string): Promise<UserSettings> {
+    // Get device time zone
+    const deviceTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+    const { data, error } = await this.supabase
+      .from("user_settings")
+      .insert({
+        user_id: userId,
+        week_start: 0, // Default to Sunday
+        time_zone: deviceTimeZone,
+      })
+      .select()
+      .single()
+
+    if (error) {
+      console.error("Error creating user settings:", error)
+      throw new Error(error.message)
+    }
+
+    return {
+      id: data.id,
+      user_id: data.user_id,
+      week_start: data.week_start,
+      time_zone: data.time_zone,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+    } as UserSettings
+  }
+
+  async updateUserSettings(
+    userId: string,
+    settings: { week_start?: number; time_zone?: string }
+  ): Promise<UserSettings> {
+    const { data, error } = await this.supabase
+      .from("user_settings")
+      .update({
+        ...settings,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("user_id", userId)
+      .select()
+      .single()
+
+    if (error) {
+      console.error("Error updating user settings:", error)
+      throw new Error(error.message)
+    }
+
+    return {
+      id: data.id,
+      user_id: data.user_id,
+      week_start: data.week_start,
+      time_zone: data.time_zone,
+      created_at: data.created_at,
+      updated_at: data.updated_at,
+    } as UserSettings
   }
 }
 

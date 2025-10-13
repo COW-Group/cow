@@ -118,7 +118,7 @@ export const VisionBoardWrapper = memo(function VisionBoardWrapper({ databaseSer
               ? {
                   ...range,
                   mountains: range.mountains.map((mountain) =>
-                    mountain.id === mountainId ? { ...mountain, name: updatedMountain.name } : mountain,
+                    mountain.id === mountainId ? { ...mountain, name: updatedMountain.name, completed: updatedMountain.completed } : mountain,
                   ),
                 }
               : range,
@@ -222,7 +222,7 @@ export const VisionBoardWrapper = memo(function VisionBoardWrapper({ databaseSer
                 ? {
                     ...mountain,
                     hills: mountain.hills.map((hill) =>
-                      hill.id === hillId ? { ...hill, name: updatedHill.name } : hill,
+                      hill.id === hillId ? { ...hill, name: updatedHill.name, completed: updatedHill.completed } : hill,
                     ),
                   }
                 : mountain,
@@ -338,7 +338,7 @@ export const VisionBoardWrapper = memo(function VisionBoardWrapper({ databaseSer
                   ? {
                       ...hill,
                       terrains: hill.terrains.map((terrain) =>
-                        terrain.id === terrainId ? { ...terrain, name: updatedTerrain.name } : terrain,
+                        terrain.id === terrainId ? { ...terrain, name: updatedTerrain.name, completed: updatedTerrain.completed } : terrain,
                       ),
                     }
                   : hill,

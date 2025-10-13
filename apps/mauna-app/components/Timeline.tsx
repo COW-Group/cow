@@ -10,7 +10,8 @@ import {
   Briefcase, Coffee, Book, Code, Dumbbell, Heart, Target,
   Music, Palette as PaletteIcon, Camera, Video, ShoppingCart, Home,
   Car, Plane, Mail, DollarSign, Gift, Hammer, Puzzle, BarChart,
-  Mic, Phone, Users, Star, Sun, Moon, Cloud, Umbrella, Clock, MoreVertical, Sparkles, Settings
+  Mic, Phone, Users, Star, Sun, Moon, Cloud, Umbrella, Clock, MoreVertical, Sparkles, Settings,
+  ExternalLink
 } from "lucide-react"
 import { SoundSelector } from "./sound-selector"
 import { Button } from "@/components/ui/button"
@@ -20,6 +21,7 @@ import { useAuth } from "@/hooks/use-auth"
 import { AuthService } from "@/lib/auth-service"
 import { useToast } from "@/hooks/use-toast"
 import { TIMELINE_CONSTANTS } from "@/lib/timeline-constants"
+import { useRouter } from "next/navigation"
 import {
   type TimelineItem,
   calculateTimelineBounds,
@@ -57,6 +59,7 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
   const { items, loading, error, selectedDate, setSelectedDate, updateItem, refreshTimeline } = useContext(TimelineContext)
   const { user } = useAuth(AuthService)
   const { toast } = useToast()
+  const router = useRouter()
   const [weekStart, setWeekStart] = useState(startOfWeek(currentDate, { weekStartsOn: 0 }))
   const [selectedStep, setSelectedStep] = useState<TimelineItem | null>(null)
   const [isAddStepModalOpen, setIsAddStepModalOpen] = useState(false)
@@ -117,6 +120,25 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
     setWeekStart(addWeeks(weekStart, 1))
   }
 
+  const handlePrevDay = () => {
+    const newDate = addDays(selectedDate, -1)
+    setSelectedDate(newDate)
+    // Update week start if the new date is outside current week
+    if (newDate < weekStart) {
+      setWeekStart(startOfWeek(newDate, { weekStartsOn: 0 }))
+    }
+  }
+
+  const handleNextDay = () => {
+    const newDate = addDays(selectedDate, 1)
+    setSelectedDate(newDate)
+    // Update week start if the new date is outside current week
+    const weekEnd = addDays(weekStart, 6)
+    if (newDate > weekEnd) {
+      setWeekStart(startOfWeek(newDate, { weekStartsOn: 0 }))
+    }
+  }
+
   const handleDateClick = (date: Date) => {
     setSelectedDate(date)
   }
@@ -127,6 +149,37 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
   }
 
   const handleStepUpdate = async (stepId: string, updates: any) => {
+    // Handle DDDPT fields by storing them in habit_notes
+    if (updates.dddptDiscover !== undefined || updates.dddptDefine !== undefined ||
+        updates.dddptIdeate !== undefined || updates.dddptPrototype !== undefined ||
+        updates.dddptTest !== undefined) {
+
+      // Fetch current habit_notes
+      const { data: currentStep } = await databaseService.supabase
+        .from("steps")
+        .select("habit_notes")
+        .eq("id", stepId)
+        .single()
+
+      const currentNotes = currentStep?.habit_notes || {}
+
+      // Merge DDDPT fields into habit_notes
+      const updatedNotes = {
+        ...currentNotes,
+        dddpt_discover: updates.dddptDiscover,
+        dddpt_define: updates.dddptDefine,
+        dddpt_ideate: updates.dddptIdeate,
+        dddpt_prototype: updates.dddptPrototype,
+        dddpt_test: updates.dddptTest,
+      }
+
+      // Update habit_notes in database
+      await databaseService.supabase
+        .from("steps")
+        .update({ habit_notes: updatedNotes })
+        .eq("id", stepId)
+    }
+
     await updateItem(stepId, updates)
 
     // Sync journal content to journal table if present
@@ -461,9 +514,43 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
           </div>
 
           {/* Month/Year - Better contrast */}
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-lora font-extralight text-cream-25 tracking-wider" style={{ textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>
-            {format(selectedDate, 'MMMM')} <span className="text-cream-25/80">{format(selectedDate, 'yyyy')}</span>
-          </h2>
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-lora font-extralight text-cream-25 tracking-wider" style={{ textShadow: '0 2px 4px rgba(0, 0, 0, 0.4)' }}>
+              {format(selectedDate, 'MMMM')} <span className="text-cream-25/80">{format(selectedDate, 'yyyy')}</span>
+            </h2>
+
+            {/* Day Navigation - Inline next to month/year */}
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handlePrevDay}
+                className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg text-cream-25 hover:bg-white/10"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  backdropFilter: 'blur(20px) saturate(180%)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                }}
+                title="Previous day"
+              >
+                <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleNextDay}
+                className="h-7 w-7 sm:h-8 sm:w-8 rounded-lg text-cream-25 hover:bg-white/10"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  backdropFilter: 'blur(20px) saturate(180%)',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                }}
+                title="Next day"
+              >
+                <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" style={{ filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3))' }} />
+              </Button>
+            </div>
+          </div>
 
           {/* Week Navigation - Inline on mobile - Liquid glass */}
           <div className="flex items-center gap-1 sm:hidden">
@@ -647,17 +734,83 @@ export function Timeline({ currentDate }: { currentDate: Date }) {
                           {item.label}
                         </div>
 
-                        {/* Task List Badge */}
-                        {item.taskListName && (
-                          <div className="mb-1.5 sm:mb-2">
+                        {/* Source Badge & Navigation */}
+                        <div className="mb-1.5 sm:mb-2 flex gap-1.5 flex-wrap items-center">
+                          {item.tag === "habit" && (
+                            <>
+                              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 sm:px-2 rounded-full text-[10px] sm:text-xs font-medium bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                                <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                </svg>
+                                Habits
+                              </span>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  router.push('/habits')
+                                }}
+                                className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-purple-500/10 text-purple-300/80 hover:bg-purple-500/20 hover:text-purple-300 border border-purple-500/20 transition-colors"
+                                title="View in Habits"
+                              >
+                                <ExternalLink className="w-2.5 h-2.5" />
+                                View
+                              </button>
+                            </>
+                          )}
+                          {item.tag === "task-list" && (
+                            <>
+                              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 sm:px-2 rounded-full text-[10px] sm:text-xs font-medium bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                                <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                                </svg>
+                                Focus
+                              </span>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  router.push('/focus')
+                                }}
+                                className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-cyan-500/10 text-cyan-300/80 hover:bg-cyan-500/20 hover:text-cyan-300 border border-cyan-500/20 transition-colors"
+                                title="View in Focus"
+                              >
+                                <ExternalLink className="w-2.5 h-2.5" />
+                                View
+                              </button>
+                            </>
+                          )}
+                          {item.tag && item.tag !== "habit" && item.tag !== "task-list" && (
+                            <>
+                              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 sm:px-2 rounded-full text-[10px] sm:text-xs font-medium bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                                <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                Vision
+                              </span>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  router.push('/vision')
+                                }}
+                                className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-500/10 text-amber-300/80 hover:bg-amber-500/20 hover:text-amber-300 border border-amber-500/20 transition-colors"
+                                title="View in Vision"
+                              >
+                                <ExternalLink className="w-2.5 h-2.5" />
+                                View
+                              </button>
+                            </>
+                          )}
+
+                          {/* Task List Badge */}
+                          {item.taskListName && (
                             <span className="inline-flex items-center gap-1 px-1.5 py-0.5 sm:px-2 rounded-full text-[10px] sm:text-xs font-medium bg-white/10 text-cream-25/70 border border-white/20">
                               <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
                               </svg>
                               {item.taskListName}
                             </span>
-                          </div>
-                        )}
+                          )}
+                        </div>
 
                         {/* Breaths/subtasks completion */}
                         {item.breaths && item.breaths.length > 0 && (

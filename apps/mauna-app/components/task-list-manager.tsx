@@ -5,10 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Card, CardContent, CardTitle } from "@/components/ui/card"
-import { Plus, Edit, Trash2, Check, GripVertical, Square } from "lucide-react"
+import { Plus, Edit, Trash2, Check, GripVertical, Square, Repeat, Clock } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import type { TaskList } from "@/lib/types"
 import { DatabaseService } from "@/lib/database-service"
+import { HabitTaskListSyncService } from "@/lib/habit-task-list-sync"
+import { AddHabitGroupToTimelineModal } from "./add-habit-group-to-timeline-modal"
 
 import {
   DndContext,
@@ -51,6 +53,7 @@ interface SortableTaskListCardProps {
   onSwitch: (listId: string) => void
   onListNameChange: (name: string) => void
   onSuggestedTimeBlockRangeChange: (range: string) => void
+  onAddToTimeline?: (list: TaskList) => void
   noTaskListSelectedId: string
 }
 
@@ -66,6 +69,7 @@ function SortableTaskListCard({
   onSwitch,
   onListNameChange,
   onSuggestedTimeBlockRangeChange,
+  onAddToTimeline,
   noTaskListSelectedId,
 }: SortableTaskListCardProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: list.id })
@@ -78,15 +82,21 @@ function SortableTaskListCard({
   }
 
   const isNoTaskListSelected = list.id === noTaskListSelectedId
+  // Check if this list contains any habits
+  const isHabitGroupList = list.steps?.some(step => (step as any).tag === 'habit') || false
 
   return (
     <Card
       ref={setNodeRef}
       style={style}
-      className={`mb-2 p-3 flex flex-col bg-white/20 border border-white/10 rounded-lg shadow-sm transition-all duration-200 ease-in-out ${isCurrent ? "border-vibrant-blue ring-1 ring-vibrant-blue" : ""}`}
+      className={`mb-2 p-3 flex flex-col rounded-lg shadow-sm transition-all duration-200 ease-in-out ${
+        isHabitGroupList
+          ? `bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-400/30 ${isCurrent ? "ring-2 ring-purple-400" : ""}`
+          : `bg-white/20 border-white/10 ${isCurrent ? "border-vibrant-blue ring-1 ring-vibrant-blue" : ""}`
+      }`}
     >
       <CardContent className="p-4 flex items-center justify-between">
-        {!isNoTaskListSelected && (
+        {!isNoTaskListSelected && !isHabitGroupList && (
           <Button
             variant="ghost"
             size="icon"
@@ -123,10 +133,18 @@ function SortableTaskListCard({
           </div>
         ) : (
           <div className="flex flex-col flex-grow">
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
+              {isHabitGroupList && (
+                <div className="flex-shrink-0 group/habit-badge relative">
+                  <Repeat className="w-4 h-4 text-purple-400" title="Habit Group" />
+                  <div className="absolute left-1/2 -translate-x-1/2 top-full mt-1 px-2 py-1 bg-gray-900/95 text-purple-400 text-xs rounded whitespace-nowrap opacity-0 group-hover/habit-badge:opacity-100 transition-opacity pointer-events-none z-50 border border-purple-400/30">
+                    Habit Group Task List
+                  </div>
+                </div>
+              )}
               <CardTitle className="text-lg font-medium text-cream-25 zen-heading mr-2">{list.name}</CardTitle>
               {!isNoTaskListSelected && (
-                <span className="text-sm text-cream-25/70 zen-ui">({list.steps.length} tasks)</span>
+                <span className="text-sm text-cream-25/70 zen-ui">({list.steps.length} {isHabitGroupList ? "habits" : "tasks"})</span>
               )}
             </div>
             {list.suggestedTimeBlockRange && (
@@ -144,7 +162,7 @@ function SortableTaskListCard({
                 <Check className="h-4 w-4 text-green-500" />
               </Button>
             ) : (
-              !isNoTaskListSelected && (
+              !isNoTaskListSelected && !isHabitGroupList && (
                 <Button
                   variant="ghost"
                   size="icon"
@@ -156,7 +174,7 @@ function SortableTaskListCard({
                 </Button>
               )
             )}
-            {!isNoTaskListSelected && (
+            {!isNoTaskListSelected && !isHabitGroupList && (
               <Button
                 variant="ghost"
                 size="icon"
@@ -165,6 +183,17 @@ function SortableTaskListCard({
                 className="text-red-400 hover:text-red-500"
               >
                 <Trash2 className="h-4 w-4" />
+              </Button>
+            )}
+            {!isNoTaskListSelected && !isHabitGroupList && onAddToTimeline && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => onAddToTimeline(list)}
+                aria-label="Add to Timeline"
+                className="text-cyan-400 hover:text-cyan-500"
+              >
+                <Clock className="h-4 w-4" />
               </Button>
             )}
           </div>
@@ -198,6 +227,7 @@ export function TaskListManager({
   const [editingListId, setEditingListId] = useState<string | null>(null)
   const [editingListName, setEditingListName] = useState("")
   const [editingSuggestedTimeBlockRange, setEditingSuggestedTimeBlockRange] = useState("")
+  const [taskListToAddToTimeline, setTaskListToAddToTimeline] = useState<TaskList | null>(null)
   const { toast } = useToast()
 
   const ALL_ACTIVE_TASKS_ID = "all-active-tasks"
@@ -332,6 +362,116 @@ export function TaskListManager({
     }
   }
 
+  // Handler to open "Add Task List to Timeline" modal
+  const handleAddTaskListToTimeline = (list: TaskList) => {
+    setTaskListToAddToTimeline(list)
+  }
+
+  // Handler to save task list to timeline (batch create entries)
+  const handleSaveTaskListToTimeline = async (data: { startDate: string; endDate: string; daysOfWeek: string[]; time: string; duration: number }) => {
+    if (!userId || !taskListToAddToTimeline) return
+
+    try {
+      const { startDate, endDate, daysOfWeek, time, duration } = data
+      const tasks = taskListToAddToTimeline.steps
+
+      // Create timeline entries for each selected day between start and end date
+      const start = new Date(startDate)
+      const end = new Date(endDate)
+      const entries = []
+
+      // Map day names to numbers (0 = Sunday, 1 = Monday, etc.)
+      const dayMap: { [key: string]: number } = { S: 0, M: 1, T: 2, W: 3, Th: 4, F: 5, Sa: 6 }
+
+      for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+        const dayOfWeek = date.getDay()
+        const dayNames = Object.keys(dayMap).filter(key => dayMap[key] === dayOfWeek)
+
+        // Check if this day of week is selected
+        if (dayNames.some(dayName => daysOfWeek.includes(dayName))) {
+          // Create main entry with task list name
+          const mainEntry = {
+            label: taskListToAddToTimeline.name,
+            description: `Task list from Focus Board`,
+            tag: "task-list",
+            color: "#00D9FF",
+            duration: duration * 60000,
+            frequency: "Daily",
+            completed: false,
+            isbuildhabit: false,
+            user_id: userId,
+            start_date: date.toISOString().split('T')[0],
+            habit_notes: {
+              _scheduled_time: time,
+              energyLevel: 3,
+              alerts: [],
+              notes: "",
+            },
+          }
+
+          entries.push(mainEntry)
+        }
+      }
+
+      if (entries.length === 0) {
+        toast({ title: "No Entries", description: "No matching days found in the selected date range.", variant: "destructive" })
+        return
+      }
+
+      // Batch insert all main entries
+      const { data: insertedEntries, error: insertError } = await DatabaseService.prototype.supabase
+        .from("steps")
+        .insert(entries)
+        .select()
+
+      if (insertError) {
+        toast({ title: "Error", description: `Failed to add task list to timeline: ${insertError.message}`, variant: "destructive" })
+        return
+      }
+
+      // Now create subtasks (breaths) for each main entry
+      if (insertedEntries && insertedEntries.length > 0) {
+        const subtasks = []
+
+        for (const mainEntry of insertedEntries) {
+          // Add each task in the list as a subtask
+          for (const task of tasks) {
+            subtasks.push({
+              label: task.label,
+              description: task.description || "",
+              stepId: mainEntry.id,
+              color: task.color || "#00D9FF",
+              duration: 0,
+              completed: false,
+              user_id: userId,
+              habit_notes: {},
+            })
+          }
+        }
+
+        if (subtasks.length > 0) {
+          const { error: subtaskError } = await DatabaseService.prototype.supabase
+            .from("breaths")
+            .insert(subtasks)
+
+          if (subtaskError) {
+            console.error('Error creating subtasks:', subtaskError)
+            toast({ title: "Warning", description: "Main entries created but some subtasks failed.", variant: "destructive" })
+          }
+        }
+      }
+
+      toast({
+        title: "Added to Timeline",
+        description: `Created ${entries.length} timeline entries for "${taskListToAddToTimeline.name}" with ${tasks.length} subtasks each`
+      })
+      setTaskListToAddToTimeline(null)
+    } catch (err) {
+      console.error('Error adding task list to timeline:', err)
+      toast({ title: "Error", description: "Unexpected error adding task list to timeline.", variant: "destructive" })
+    }
+  }
+
   const totalTasks = localTaskLists
     .filter((list) => list.name !== "✅ Completed Tasks")
     .reduce((sum, list) => sum + list.steps.length, 0)
@@ -402,6 +542,7 @@ export function TaskListManager({
               onSwitch={switchTaskList}
               onListNameChange={setEditingListName}
               onSuggestedTimeBlockRangeChange={setEditingSuggestedTimeBlockRange}
+              onAddToTimeline={handleAddTaskListToTimeline}
               noTaskListSelectedId={noTaskListSelectedId}
             />
           )}
@@ -425,6 +566,7 @@ export function TaskListManager({
                       onSwitch={switchTaskList}
                       onListNameChange={setEditingListName}
                       onSuggestedTimeBlockRangeChange={setEditingSuggestedTimeBlockRange}
+                      onAddToTimeline={handleAddTaskListToTimeline}
                       noTaskListSelectedId={noTaskListSelectedId}
                     />
                   ))
@@ -434,6 +576,18 @@ export function TaskListManager({
           </DndContext>
         </ScrollArea>
       </div>
+
+      {/* Add Task List to Timeline Modal */}
+      {taskListToAddToTimeline && (
+        <AddHabitGroupToTimelineModal
+          isOpen={!!taskListToAddToTimeline}
+          onClose={() => setTaskListToAddToTimeline(null)}
+          onSave={handleSaveTaskListToTimeline}
+          groupName={taskListToAddToTimeline.name}
+          groupColor="#00D9FF"
+          habitsCount={taskListToAddToTimeline.steps.length}
+        />
+      )}
     </div>
   )
 }
@@ -450,6 +604,7 @@ function TaskListCard({
   onSwitch,
   onListNameChange,
   onSuggestedTimeBlockRangeChange,
+  onAddToTimeline,
   noTaskListSelectedId,
 }: SortableTaskListCardProps) {
   const isNoTaskListSelected = list.id === noTaskListSelectedId
@@ -526,6 +681,17 @@ function TaskListCard({
                 className="text-red-400 hover:text-red-500"
               >
                 <Trash2 className="h-4 w-4" />
+              </Button>
+            )}
+            {!isNoTaskListSelected && onAddToTimeline && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => onAddToTimeline(list)}
+                aria-label="Add to Timeline"
+                className="text-cyan-400 hover:text-cyan-500"
+              >
+                <Clock className="h-4 w-4" />
               </Button>
             )}
           </div>

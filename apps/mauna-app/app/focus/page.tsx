@@ -14,6 +14,8 @@ import { TaskListService } from "@/lib/task-list-service"
 import { DatabaseService } from "@/lib/database-service"
 import { calculateTaskTimes } from "@/lib/time-calculation"
 import { FloatingNav } from "@/components/floating-nav"
+import { TaskQueue30 } from "@/components/task-queue-30"
+import { TodayOverviewWidget } from "@/components/today-overview-widget"
 
 
 const NO_TASK_LIST_SELECTED_ID = "no-list-selected"
@@ -41,6 +43,10 @@ export default function FocusPage() {
   const [isRunning, setIsRunning] = useState(false)
   const [totalSessionDuration, setTotalSessionDuration] = useState(pomodoroTime)
   const [autoloopEnabled, setAutoloopEnabled] = useState(false)
+  const [autoloopEndIndex, setAutoloopEndIndex] = useState<number | null>(null)
+  const [workBreakCycleEnabled, setWorkBreakCycleEnabled] = useState(false)
+  const [cycleWorkDuration, setCycleWorkDuration] = useState(30) // minutes
+  const [cycleBreakDuration, setCycleBreakDuration] = useState(5) // minutes
 
   const [showRubric, setShowRubric] = useState(false)
   const [showBreaths, setShowBreaths] = useState(false)
@@ -49,6 +55,8 @@ export default function FocusPage() {
   const [showTaskListSelector, setShowTaskListSelector] = useState(false)
   const [showWorldClockSection, setShowWorldClockSection] = useState(false)
   const [showGlobalTaskOrder, setShowGlobalTaskOrder] = useState(false)
+  const [showTaskQueue30, setShowTaskQueue30] = useState(false)
+  const [showTodayOverview, setShowTodayOverview] = useState(false)
 
   const [isOneOffMode, setIsOneOffMode] = useState(false)
   const [oneOffTaskLabel, setOneOffTaskLabel] = useState("One-Off Task")
@@ -302,7 +310,7 @@ export default function FocusPage() {
     return () => clearTimeout(timeoutId)
   }, [currentTaskListId, currentTask?.id, isRunning, calculateAndSetEstimatedTimes])
 
-  // Optimized timer with better performance
+  // Optimized timer with better performance and work/break cycle automation
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null
 
@@ -312,20 +320,48 @@ export default function FocusPage() {
       }, 1000)
     } else if (timeRemaining <= 0 && isRunning) {
       setIsRunning(false)
-      toast({
-        title: "Time's Up!",
-        description: `Your ${pomodoroPhase} session has ended.`,
-      })
-      if (autoloopEnabled) {
+
+      // Work/Break Cycle Automation (30/30 style)
+      if (workBreakCycleEnabled) {
+        const nextPhase = pomodoroPhase === "work" ? "break" : "work"
+        const nextDuration = nextPhase === "work" ? cycleWorkDuration * 60 * 1000 : cycleBreakDuration * 60 * 1000
+
+        toast({
+          title: `${pomodoroPhase === "work" ? "Work" : "Break"} Complete!`,
+          description: `Starting ${nextPhase} session (${nextPhase === "work" ? cycleWorkDuration : cycleBreakDuration} min)`,
+        })
+
+        setPomodoroPhase(nextPhase)
+        setTimeRemaining(nextDuration)
+        setTotalSessionDuration(nextDuration)
+
+        // Auto-start next phase
+        setTimeout(() => {
+          setIsRunning(true)
+        }, 1000)
+      }
+      // Regular autoloop (without work/break cycle)
+      else if (autoloopEnabled) {
+        toast({
+          title: "Time's Up!",
+          description: `Your ${pomodoroPhase} session has ended.`,
+        })
         const nextPhase = pomodoroPhase === "work" ? "break" : "work"
         handleSwitchPhase(nextPhase)
+      }
+      // No automation - just notify
+      else {
+        toast({
+          title: "Time's Up!",
+          description: `Your ${pomodoroPhase} session has ended.`,
+        })
       }
     }
 
     return () => {
       if (interval) clearInterval(interval)
     }
-  }, [isRunning, timeRemaining, pomodoroPhase, autoloopEnabled, toast])
+  }, [isRunning, timeRemaining, pomodoroPhase, autoloopEnabled, workBreakCycleEnabled, cycleWorkDuration, cycleBreakDuration, toast])
 
   const toggleTimer = useCallback(() => {
     setIsRunning((prev) => {
@@ -819,6 +855,134 @@ export default function FocusPage() {
     [currentTask, currentTaskListId, taskListService, toast],
   )
 
+  // TaskQueue30 handlers
+  const handleTaskQueue30Click = useCallback((task: Step) => {
+    setCurrentTask(task)
+    const newTime = task.duration || (settings.defaultDuration * 60 * 1000)
+    setTimeRemaining(newTime)
+    setTotalSessionDuration(newTime)
+    toast({ title: "Task Selected", description: `Now focusing on "${task.label}".` })
+  }, [settings.defaultDuration, toast])
+
+  const handleTaskQueue30MoveToBottom = useCallback(
+    async (taskId: string) => {
+      if (!taskListService || !currentTaskListId) return
+      try {
+        const currentList = taskLists.find(list => list.id === currentTaskListId)
+        if (!currentList) return
+
+        const taskIndex = currentList.steps.findIndex(t => t.id === taskId)
+        if (taskIndex === -1) return
+
+        const reorderedTasks = [...currentList.steps]
+        const [task] = reorderedTasks.splice(taskIndex, 1)
+        reorderedTasks.push(task)
+
+        setTaskLists((prevLists) =>
+          prevLists.map((list) => (list.id === currentTaskListId ? { ...list, steps: reorderedTasks } : list)),
+        )
+        toast({ title: "Task Moved", description: "Task moved to bottom of queue." })
+      } catch (error: any) {
+        console.error("Failed to move task:", error)
+        toast({ title: "Error", description: `Failed to move task: ${error.message}`, variant: "destructive" })
+      }
+    },
+    [taskListService, currentTaskListId, taskLists, toast],
+  )
+
+  const handleTaskQueue30MoveToTop = useCallback(
+    async (taskId: string) => {
+      if (!taskListService || !currentTaskListId) return
+      try {
+        const currentList = taskLists.find(list => list.id === currentTaskListId)
+        if (!currentList) return
+
+        const taskIndex = currentList.steps.findIndex(t => t.id === taskId)
+        if (taskIndex === -1) return
+
+        const reorderedTasks = [...currentList.steps]
+        const [task] = reorderedTasks.splice(taskIndex, 1)
+        reorderedTasks.unshift(task)
+
+        setTaskLists((prevLists) =>
+          prevLists.map((list) => (list.id === currentTaskListId ? { ...list, steps: reorderedTasks } : list)),
+        )
+        toast({ title: "Task Moved", description: "Task moved to top of queue." })
+      } catch (error: any) {
+        console.error("Failed to move task:", error)
+        toast({ title: "Error", description: `Failed to move task: ${error.message}`, variant: "destructive" })
+      }
+    },
+    [taskListService, currentTaskListId, taskLists, toast],
+  )
+
+  const handleTaskQueue30Edit = useCallback(
+    (task: Step) => {
+      handleEditTask(task)
+    },
+    [handleEditTask],
+  )
+
+  const handleTaskQueue30InsertNewTask = useCallback(
+    (position: number) => {
+      setShowTaskForm(true)
+      toast({ title: "Add New Task", description: `Adding new task at position ${position + 1}.` })
+    },
+    [toast],
+  )
+
+  const handleTaskQueue30PauseAll = useCallback(() => {
+    setIsRunning(false)
+    toast({ title: "All Tasks Paused", description: "Timer paused." })
+  }, [toast])
+
+  const handleTaskQueue30Undo = useCallback(() => {
+    toast({ title: "Undo", description: "Undo functionality coming soon!" })
+  }, [toast])
+
+  const handleTaskQueue30Copy = useCallback(
+    async (taskId: string) => {
+      if (!taskListService) return
+      try {
+        // Find the task to copy
+        const taskToCopy = taskLists
+          .flatMap(list => list.steps)
+          .find(t => t.id === taskId)
+
+        if (!taskToCopy) {
+          toast({ title: "Error", description: "Task not found.", variant: "destructive" })
+          return
+        }
+
+        // Create a copy with a new ID
+        const copiedTask: Step = {
+          ...taskToCopy,
+          id: crypto.randomUUID(),
+          label: `${taskToCopy.label} (Copy)`,
+          completed: false,
+        }
+
+        // Add to the same list
+        await taskListService.addTaskToTaskList(taskToCopy.taskListId, copiedTask)
+
+        // Update local state
+        setTaskLists((prevLists) =>
+          prevLists.map((list) =>
+            list.id === taskToCopy.taskListId
+              ? { ...list, steps: [...list.steps, copiedTask] }
+              : list
+          )
+        )
+
+        toast({ title: "Task Copied", description: `"${taskToCopy.label}" was copied successfully.` })
+      } catch (error: any) {
+        console.error("Failed to copy task:", error)
+        toast({ title: "Error", description: `Failed to copy task: ${error.message}`, variant: "destructive" })
+      }
+    },
+    [taskListService, taskLists, toast]
+  )
+
   const activeTaskForDisplay = useMemo(() => {
     if (isOneOffMode) {
       return {
@@ -974,7 +1138,7 @@ export default function FocusPage() {
       component: (
         <LazyTaskListManager
           isOpen={showTaskListSelector}
-          onClose={() => setMenuOpen(false)}
+          onClose={() => setShowTaskListSelector(false)}
           taskLists={taskLists}
           currentListId={currentTaskListId}
           updateTaskLists={setTaskLists}
@@ -1031,6 +1195,43 @@ export default function FocusPage() {
         />
       ),
     },
+    {
+      id: "taskQueue30",
+      isVisible: showTaskQueue30,
+      component: (
+        <TaskQueue30
+          tasks={
+            taskLists
+              .filter((list) => list.id !== NO_TASK_LIST_SELECTED_ID && list.name !== "✅ Completed Tasks")
+              .flatMap((list) => list.steps)
+              .filter((step) => !step.completed)
+              .sort((a, b) => (a.positionWhenAllListsActive ?? 9999) - (b.positionWhenAllListsActive ?? 9999))
+          }
+          currentTaskId={currentTask?.id}
+          onTaskClick={handleTaskQueue30Click}
+          onTaskDelete={handleDeleteTask}
+          onTaskReorder={(taskId, newPosition) => {
+            console.log("Reorder task", taskId, "to position", newPosition)
+          }}
+          onTaskMoveToBottom={handleTaskQueue30MoveToBottom}
+          onTaskMoveToTop={handleTaskQueue30MoveToTop}
+          onTaskEdit={handleTaskQueue30Edit}
+          onInsertNewTask={handleTaskQueue30InsertNewTask}
+          onPauseAll={handleTaskQueue30PauseAll}
+          onUndo={handleTaskQueue30Undo}
+          onCopyTask={handleTaskQueue30Copy}
+          isRunning={isRunning}
+          autoloopEnabled={autoloopEnabled}
+          autoloopEndIndex={autoloopEndIndex}
+          timeRemaining={timeRemaining}
+        />
+      ),
+    },
+    {
+      id: "todayOverview",
+      isVisible: showTodayOverview,
+      component: <TodayOverviewWidget />,
+    },
   ]
 
   const activeSections = sections.filter((s) => s.isVisible)
@@ -1054,8 +1255,8 @@ export default function FocusPage() {
   return (
     <>
       <FloatingNav settings={settings} onSettingsUpdate={setSettings} />
-      <div className="content-wrapper absolute inset-0 flex items-center justify-center z-40 focus-mobile-layout overflow-hidden">
-        <div className="w-full h-full flex flex-col items-center justify-center p-4 pt-32 md:pt-48 sm:pt-24" style={{ maxHeight: '100vh', overflow: 'hidden' }}>
+      <div className="content-wrapper absolute inset-0 flex items-center justify-start z-40 focus-mobile-layout overflow-y-auto">
+        <div className="w-full flex flex-col items-center p-4 pt-32 md:pt-48 sm:pt-24">
           <CentralDashboardDisplay
             userProfileName={userProfileName}
             pomodoroTime={pomodoroTime}
@@ -1083,6 +1284,16 @@ export default function FocusPage() {
             toggleTaskListVisibility={() => setShowTaskList((prev) => !prev)}
             toggleTaskListSelectorVisibility={() => setShowTaskListSelector((prev) => !prev)}
             toggleGlobalTaskOrderVisibility={() => setShowGlobalTaskOrder((prev) => !prev)}
+            toggleTaskQueue30Visibility={() => setShowTaskQueue30((prev) => !prev)}
+            toggleTodayOverviewVisibility={() => setShowTodayOverview((prev) => !prev)}
+            workBreakCycleEnabled={workBreakCycleEnabled}
+            onToggleWorkBreakCycle={() => setWorkBreakCycleEnabled((prev) => !prev)}
+            cycleWorkDuration={cycleWorkDuration}
+            cycleBreakDuration={cycleBreakDuration}
+            onUpdateCycleDurations={(work, breakDuration) => {
+              setCycleWorkDuration(work)
+              setCycleBreakDuration(breakDuration)
+            }}
             isOneOffMode={isOneOffMode}
             onOneOffTaskChange={handleOneOffTaskChange}
             currentTask={activeTaskForDisplay}

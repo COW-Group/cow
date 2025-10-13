@@ -1,9 +1,14 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { ChevronLeft, ChevronRight, Edit2, Calendar as CalendarIcon } from "lucide-react"
+import { ChevronLeft, ChevronRight, Edit2, Calendar as CalendarIcon, Clock as ClockIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
+import { AddHabitToTimelineModal } from "./add-habit-to-timeline-modal"
+import { useAuth } from "@/hooks/use-auth"
+import { AuthService } from "@/lib/auth-service"
+import { databaseService } from "@/lib/database-service"
+import { useToast } from "@/hooks/use-toast"
 import { useVisionData } from "@/lib/vision-data-provider"
 
 interface HabitItem {
@@ -226,6 +231,8 @@ export function HabitDetailModal({
   onUpdate,
   onDelete,
 }: HabitDetailModalProps) {
+  const { user } = useAuth(AuthService)
+  const { toast } = useToast()
   const [activeTab, setActiveTab] = useState<"overview" | "calendar" | "journal">("overview")
   const [selectedDate, setSelectedDate] = useState<string>(getLocalDateString())
   const [journalNote, setJournalNote] = useState("")
@@ -241,6 +248,7 @@ export function HabitDetailModal({
   const [selectedHillId, setSelectedHillId] = useState<string>("")
   const [selectedTerrainId, setSelectedTerrainId] = useState<string>("")
   const [selectedLengthId, setSelectedLengthId] = useState<string>("")
+  const [showAddToTimeline, setShowAddToTimeline] = useState(false)
   const calendarScrollRef = React.useRef<HTMLDivElement>(null)
   const journalScrollRef = React.useRef<HTMLDivElement>(null)
 
@@ -351,6 +359,68 @@ export function HabitDetailModal({
     if (confirmDelete) {
       await onDelete(habit.id)
       onClose()
+    }
+  }
+
+  const handleAddToTimeline = async (data: {
+    startDate: string
+    endDate: string
+    frequency: string[]
+    time: string
+    duration: number
+  }) => {
+    if (!user?.id) return
+
+    try {
+      // Generate all dates in the range
+      const start = new Date(data.startDate)
+      const end = new Date(data.endDate)
+      const datesToCreate: string[] = []
+
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        const dayOfWeek = d.toLocaleDateString('en-US', { weekday: 'long' })
+        if (data.frequency.includes(dayOfWeek)) {
+          datesToCreate.push(d.toISOString().split('T')[0])
+        }
+      }
+
+      // Create steps for each date
+      const stepsToInsert = datesToCreate.map(date => ({
+        label: habit.label,
+        description: habit.description || `Habit: ${habit.label}`,
+        tag: "habit",
+        color: habit.color,
+        duration: data.duration * 60000, // Convert to milliseconds
+        frequency: habit.frequency || "Daily",
+        completed: false,
+        isbuildhabit: habit.isBuildHabit || false,
+        user_id: user.id,
+        length_id: habit.lengthId || null,
+        start_date: date,
+        habit_notes: {
+          _scheduled_time: data.time,
+          _habit_id: habit.id,
+          energyLevel: 3,
+          alerts: [],
+          notes: `Scheduled from habit: ${habit.label}`,
+        },
+      }))
+
+      const { error } = await databaseService.supabase
+        .from("steps")
+        .insert(stepsToInsert)
+
+      if (error) {
+        toast({ title: "Error", description: `Failed to add to timeline: ${error.message}`, variant: "destructive" })
+        return
+      }
+
+      toast({
+        title: "Added to Timeline!",
+        description: `"${habit.label}" has been scheduled for ${datesToCreate.length} ${datesToCreate.length === 1 ? 'day' : 'days'}`,
+      })
+    } catch (err) {
+      toast({ title: "Error", description: "Unexpected error adding to timeline.", variant: "destructive" })
     }
   }
 
@@ -490,12 +560,21 @@ export function HabitDetailModal({
             </div>
 
             {!isEditingHabit && (
-              <button
-                onClick={() => setIsEditingHabit(true)}
-                className="p-2 hover:bg-white/10 rounded-lg transition-colors flex-shrink-0"
-              >
-                <Edit2 className="w-4 h-4 sm:w-5 sm:h-5 text-cream-25" />
-              </button>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <button
+                  onClick={() => setShowAddToTimeline(true)}
+                  className="p-2 hover:bg-cyan-500/20 rounded-lg transition-colors"
+                  title="Add to Timeline"
+                >
+                  <ClockIcon className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
+                </button>
+                <button
+                  onClick={() => setIsEditingHabit(true)}
+                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                >
+                  <Edit2 className="w-4 h-4 sm:w-5 sm:h-5 text-cream-25" />
+                </button>
+              </div>
             )}
           </div>
 
@@ -1334,6 +1413,19 @@ export function HabitDetailModal({
           </div>
         </div>
       </div>
+
+      {/* Add to Timeline Modal */}
+      {showAddToTimeline && (
+        <AddHabitToTimelineModal
+          isOpen={showAddToTimeline}
+          onClose={() => setShowAddToTimeline(false)}
+          onSave={handleAddToTimeline}
+          habitName={habit.label}
+          habitColor={habit.color}
+          habitFrequency={habit.frequency}
+          habitTime={habit.time}
+        />
+      )}
     </div>
   )
 }

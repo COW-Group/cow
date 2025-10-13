@@ -31,6 +31,11 @@ interface StepItem {
   description: string
   journalContent?: string
   cbtNotes?: string
+  dddptDiscover?: string
+  dddptDefine?: string
+  dddptIdeate?: string
+  dddptPrototype?: string
+  dddptTest?: string
   color: string
   scheduledTime: string
   startDate?: string
@@ -153,6 +158,11 @@ export function StepDetailModal({
   const [editDescription, setEditDescription] = useState(step.description || "")
   const [editJournalContent, setEditJournalContent] = useState(step.journalContent || "")
   const [editCbtNotes, setEditCbtNotes] = useState(step.cbtNotes || "")
+  const [editDddptDiscover, setEditDddptDiscover] = useState(step.dddptDiscover || "")
+  const [editDddptDefine, setEditDddptDefine] = useState(step.dddptDefine || "")
+  const [editDddptIdeate, setEditDddptIdeate] = useState(step.dddptIdeate || "")
+  const [editDddptPrototype, setEditDddptPrototype] = useState(step.dddptPrototype || "")
+  const [editDddptTest, setEditDddptTest] = useState(step.dddptTest || "")
   const [editColor, setEditColor] = useState(step.color)
   const [editIcon, setEditIcon] = useState(step.icon || "Briefcase")
   const [editScheduledTime, setEditScheduledTime] = useState(step.scheduledTime)
@@ -214,6 +224,11 @@ export function StepDetailModal({
         description: editDescription,
         journalContent: editJournalContent,
         cbtNotes: editCbtNotes,
+        dddptDiscover: editDddptDiscover,
+        dddptDefine: editDddptDefine,
+        dddptIdeate: editDddptIdeate,
+        dddptPrototype: editDddptPrototype,
+        dddptTest: editDddptTest,
         color: editColor,
         icon: editIcon,
         scheduledTime: editScheduledTime,
@@ -445,6 +460,71 @@ export function StepDetailModal({
                   className="h-[100px] bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none focus:border-white/30"
                   placeholder="Enter your CBT notes here..."
                 />
+              </div>
+
+              {/* Mini-DDDPT Section */}
+              <div className="space-y-3 p-4 rounded-xl bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-1 h-6 bg-gradient-to-b from-cyan-500 to-purple-500 rounded-full"></div>
+                  <label className="text-sm font-bold text-cream-25 uppercase tracking-wide">DDDPT Framework</label>
+                </div>
+
+                <div className="space-y-3">
+                  {/* Discover */}
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-cyan-400 uppercase tracking-wide">Discover</label>
+                    <Textarea
+                      value={editDddptDiscover}
+                      onChange={(e) => setEditDddptDiscover(e.target.value)}
+                      className="h-[60px] bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none focus:border-cyan-400/50 text-sm"
+                      placeholder="What did you discover or learn?"
+                    />
+                  </div>
+
+                  {/* Define */}
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-blue-400 uppercase tracking-wide">Define</label>
+                    <Textarea
+                      value={editDddptDefine}
+                      onChange={(e) => setEditDddptDefine(e.target.value)}
+                      className="h-[60px] bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none focus:border-blue-400/50 text-sm"
+                      placeholder="What did you define or clarify?"
+                    />
+                  </div>
+
+                  {/* Ideate */}
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-purple-400 uppercase tracking-wide">Ideate</label>
+                    <Textarea
+                      value={editDddptIdeate}
+                      onChange={(e) => setEditDddptIdeate(e.target.value)}
+                      className="h-[60px] bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none focus:border-purple-400/50 text-sm"
+                      placeholder="What ideas or solutions emerged?"
+                    />
+                  </div>
+
+                  {/* Prototype */}
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-pink-400 uppercase tracking-wide">Prototype</label>
+                    <Textarea
+                      value={editDddptPrototype}
+                      onChange={(e) => setEditDddptPrototype(e.target.value)}
+                      className="h-[60px] bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none focus:border-pink-400/50 text-sm"
+                      placeholder="What did you prototype or try?"
+                    />
+                  </div>
+
+                  {/* Test */}
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-green-400 uppercase tracking-wide">Test</label>
+                    <Textarea
+                      value={editDddptTest}
+                      onChange={(e) => setEditDddptTest(e.target.value)}
+                      className="h-[60px] bg-white/5 border-white/10 text-cream-25 placeholder:text-cream-25/40 resize-none focus:border-green-400/50 text-sm"
+                      placeholder="What did you test or validate?"
+                    />
+                  </div>
+                </div>
               </div>
 
               {/* Time and Duration Row */}

@@ -8,9 +8,10 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import {
   LayoutDashboard,
-  Calendar,
+  Calendar as CalendarIcon,
   BookOpen,
   Eye,
   Folders,
@@ -33,6 +34,7 @@ import {
   Menu,
   Repeat,
   Cog,
+  Globe,
 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
@@ -41,6 +43,8 @@ import { NavLinks } from "./nav-links"
 import { useToast } from "@/hooks/use-toast"
 import { AuthService } from "@/lib/auth-service"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { databaseService, type UserSettings } from "@/lib/database-service"
+import { getDayName } from "@/lib/week-utils"
 
 interface DashboardMenuProps {
   isOpen: boolean
@@ -108,6 +112,9 @@ export function DashboardMenu({
   const [passwordForm, setPasswordForm] = useState({ newPassword: "", confirmPassword: "" })
   const [selectedTimeOfDay, setSelectedTimeOfDay] = useState("morning")
   const [currentBackground, setCurrentBackground] = useState("")
+  const [userSettings, setUserSettings] = useState<UserSettings | null>(null)
+  const [weekSettingsForm, setWeekSettingsForm] = useState({ week_start: 0, time_zone: "America/Los_Angeles" })
+  const [isSavingWeekSettings, setIsSavingWeekSettings] = useState(false)
 
   // Initialize current background from localStorage or settings
   useEffect(() => {
@@ -152,6 +159,19 @@ export function DashboardMenu({
       } else {
         setProfile(fetchedProfile)
         setProfileForm({ name: fetchedProfile.name || "", email: fetchedProfile.email })
+      }
+
+      // Load user week settings
+      try {
+        const fetchedSettings = await databaseService.fetchUserSettings(userId)
+        setUserSettings(fetchedSettings)
+        setWeekSettingsForm({
+          week_start: fetchedSettings.week_start,
+          time_zone: fetchedSettings.time_zone,
+        })
+      } catch (error) {
+        console.error("Error loading week settings:", error)
+        // Settings will be created with defaults on first save
       }
     } catch (error) {
       console.error("Error loading profile/settings:", error)
@@ -212,6 +232,37 @@ export function DashboardMenu({
       toast({ title: "Error", description: `An unexpected error occurred: ${error.message}`, variant: "destructive" })
     } finally {
       setIsSavingPassword(false)
+    }
+  }
+
+  const handleWeekSettingsSave = async () => {
+    setIsSavingWeekSettings(true)
+    try {
+      if (userSettings) {
+        // Update existing settings
+        await databaseService.updateUserSettings(userId, weekSettingsForm)
+      } else {
+        // Create new settings (though this should be handled by fetchUserSettings)
+        await databaseService.createUserSettings(userId)
+      }
+
+      toast({
+        title: "Week Settings Updated ✨",
+        description: `Week starts on ${getDayName(weekSettingsForm.week_start)} in ${weekSettingsForm.time_zone}`
+      })
+
+      // Reload settings to confirm
+      const updatedSettings = await databaseService.fetchUserSettings(userId)
+      setUserSettings(updatedSettings)
+      setWeekSettingsForm({
+        week_start: updatedSettings.week_start,
+        time_zone: updatedSettings.time_zone,
+      })
+    } catch (error: any) {
+      console.error("Error updating week settings:", error)
+      toast({ title: "Error", description: `Failed to update week settings: ${error.message}`, variant: "destructive" })
+    } finally {
+      setIsSavingWeekSettings(false)
     }
   }
 
@@ -822,7 +873,7 @@ export function DashboardMenu({
         return (
           <div className="space-y-8">
             <Tabs defaultValue="profile" className="w-full">
-              <TabsList className="glassmorphism flex md:grid w-full md:grid-cols-5 rounded-3xl border-0 shadow-lg p-2.5 h-auto md:h-16 overflow-x-auto gap-2 md:gap-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-cream-25/20">
+              <TabsList className="glassmorphism flex md:grid w-full md:grid-cols-6 rounded-3xl border-0 shadow-lg p-2.5 h-auto md:h-16 overflow-x-auto gap-2 md:gap-1 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-cream-25/20">
                 <TabsTrigger value="profile" className="flex items-center justify-center gap-2 text-sm md:text-sm font-inter text-cream-25 hover:bg-cream-25/20 data-[state=active]:bg-cream-25/30 data-[state=active]:shadow-lg rounded-2xl transition-all duration-300 h-11 md:h-12 min-w-[5rem] md:min-w-0 px-4 md:px-2 touch-manipulation">
                   <UserCircle className="h-4 w-4 md:h-4 md:w-4 flex-shrink-0" />
                   <span className="whitespace-nowrap font-medium">Profile</span>
@@ -831,6 +882,10 @@ export function DashboardMenu({
                   <LockKeyhole className="h-4 w-4 md:h-4 md:w-4 flex-shrink-0" />
                   <span className="whitespace-nowrap font-medium hidden sm:inline">Password</span>
                   <span className="whitespace-nowrap font-medium sm:hidden">Pass</span>
+                </TabsTrigger>
+                <TabsTrigger value="week_settings" className="flex items-center justify-center gap-2 text-sm md:text-sm font-inter text-cream-25 hover:bg-cream-25/20 data-[state=active]:bg-cream-25/30 data-[state=active]:shadow-lg rounded-2xl transition-all duration-300 h-11 md:h-12 min-w-[5rem] md:min-w-0 px-4 md:px-2 touch-manipulation">
+                  <CalendarIcon className="h-4 w-4 md:h-4 md:w-4 flex-shrink-0" />
+                  <span className="whitespace-nowrap font-medium">Week</span>
                 </TabsTrigger>
                 <TabsTrigger value="preferences" className="flex items-center justify-center gap-2 text-sm md:text-sm font-inter text-cream-25 hover:bg-cream-25/20 data-[state=active]:bg-cream-25/30 data-[state=active]:shadow-lg rounded-2xl transition-all duration-300 h-11 md:h-12 min-w-[5rem] md:min-w-0 px-4 md:px-2 touch-manipulation">
                   <Palette className="h-4 w-4 md:h-4 md:w-4 flex-shrink-0" />
@@ -899,6 +954,97 @@ export function DashboardMenu({
                             className="w-full zen-button-primary font-inter"
                           >
                             {isSavingProfile ? "Saving..." : "Save Profile"}
+                          </Button>
+                        </>
+                      )}
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="week_settings" className="space-y-6">
+                  <Card className="glassmorphism rounded-3xl shadow-xl border-0 overflow-hidden">
+                    <CardHeader className="pb-6">
+                      <CardTitle className="flex items-center gap-3 font-lora zen-heading text-xl">
+                        <div className="w-10 h-10 rounded-2xl glassmorphism flex items-center justify-center">
+                          <CalendarIcon className="h-5 w-5 text-logo-blue" />
+                        </div>
+                        Week & Time Zone Settings
+                      </CardTitle>
+                      <CardDescription className="font-inter text-base">
+                        Configure when your week starts and your time zone for accurate weekly planning
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4 pt-0">
+                      {isLoading ? (
+                        <div className="space-y-4">
+                          <div className="h-10 bg-cream-100 dark:bg-ink-800 rounded animate-pulse" />
+                          <div className="h-10 bg-cream-100 dark:bg-ink-800 rounded animate-pulse" />
+                        </div>
+                      ) : (
+                        <>
+                          <div className="space-y-2">
+                            <Label htmlFor="week-start" className="font-inter">
+                              Week Start Day
+                            </Label>
+                            <Select
+                              value={String(weekSettingsForm.week_start)}
+                              onValueChange={(value) =>
+                                setWeekSettingsForm({ ...weekSettingsForm, week_start: Number(value) })
+                              }
+                            >
+                              <SelectTrigger className="bg-cream-50/70 dark:bg-ink-800/70 border-brushed-silver/50 dark:border-ink-700/50 font-inter">
+                                <SelectValue placeholder="Select start of week" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="0">Sunday</SelectItem>
+                                <SelectItem value="1">Monday</SelectItem>
+                                <SelectItem value="2">Tuesday</SelectItem>
+                                <SelectItem value="3">Wednesday</SelectItem>
+                                <SelectItem value="4">Thursday</SelectItem>
+                                <SelectItem value="5">Friday</SelectItem>
+                                <SelectItem value="6">Saturday</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <p className="text-xs text-muted-foreground font-inter">
+                              Choose which day your week begins. Default is Sunday.
+                            </p>
+                          </div>
+                          <div className="space-y-2">
+                            <Label htmlFor="time-zone" className="font-inter">
+                              Time Zone
+                            </Label>
+                            <Select
+                              value={weekSettingsForm.time_zone}
+                              onValueChange={(value) =>
+                                setWeekSettingsForm({ ...weekSettingsForm, time_zone: value })
+                              }
+                            >
+                              <SelectTrigger className="bg-cream-50/70 dark:bg-ink-800/70 border-brushed-silver/50 dark:border-ink-700/50 font-inter">
+                                <SelectValue placeholder="Select time zone" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="America/Los_Angeles">Pacific Time (US)</SelectItem>
+                                <SelectItem value="America/Denver">Mountain Time (US)</SelectItem>
+                                <SelectItem value="America/Chicago">Central Time (US)</SelectItem>
+                                <SelectItem value="America/New_York">Eastern Time (US)</SelectItem>
+                                <SelectItem value="Europe/London">London (GMT)</SelectItem>
+                                <SelectItem value="Europe/Paris">Paris (CET)</SelectItem>
+                                <SelectItem value="Asia/Tokyo">Tokyo (JST)</SelectItem>
+                                <SelectItem value="Asia/Dubai">Dubai (GST)</SelectItem>
+                                <SelectItem value="Asia/Kolkata">India (IST)</SelectItem>
+                                <SelectItem value="Australia/Sydney">Sydney (AEDT)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <p className="text-xs text-muted-foreground font-inter">
+                              Your local time zone. Default is your device's time zone.
+                            </p>
+                          </div>
+                          <Button
+                            onClick={handleWeekSettingsSave}
+                            disabled={isSavingWeekSettings}
+                            className="w-full zen-button-primary font-inter"
+                          >
+                            {isSavingWeekSettings ? "Saving..." : "Save Week Settings"}
                           </Button>
                         </>
                       )}

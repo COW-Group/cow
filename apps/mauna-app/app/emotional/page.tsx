@@ -16,7 +16,7 @@ import { useAuth } from "@/hooks/use-auth"
 import { AuthService } from "@/lib/auth-service"
 import { useToast } from "@/hooks/use-toast"
 import { Loader2 } from "lucide-react"
-import { Header } from "@/components/header"
+import { FloatingNav } from "@/components/floating-nav"
 
 export default function EmotionalPage() {
   const [activeTab, setActiveTab] = useState("trigger")
@@ -405,9 +405,9 @@ export default function EmotionalPage() {
 
   return (
     <div className="min-h-screen relative">
-      <Header />
+      <FloatingNav />
 
-      <div className="relative z-10 p-4 pt-20">
+      <div className="relative z-10 p-4">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-8 space-y-2">
             {/* Glassmorphic wrapper for the main heading */}

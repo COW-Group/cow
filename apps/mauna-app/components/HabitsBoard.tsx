@@ -2,10 +2,11 @@ import React, { useContext, useState, useEffect, useRef } from "react"
 import ReactDOM from "react-dom"
 import { HabitsContext } from "./HabitsBoardWrapper"
 import { HabitDetailModal } from "./habit-detail-modal"
+import { AddHabitGroupToTimelineModal } from "./add-habit-group-to-timeline-modal"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { Plus, X, ChevronLeft, ChevronDown, ChevronRight, Edit2, Loader2Icon, Check, LayoutGrid, LayoutList, SlidersHorizontal, Circle, Menu, Bell, Palette, GripVertical, Clock } from "lucide-react"
+import { Plus, X, ChevronLeft, ChevronDown, ChevronRight, Edit2, Loader2Icon, Check, LayoutGrid, LayoutList, SlidersHorizontal, Circle, Menu, Bell, Palette, GripVertical, Clock, ListTodo } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import { databaseService } from "@/lib/database-service"
 import {
@@ -236,6 +237,7 @@ interface SortableCategoryProps {
   toggleGroup: (groupId: string) => void
   children: React.ReactNode
   onUpdateCategory?: (categoryId: string, updates: { name?: string; color?: string }) => void
+  onAddGroupToTimeline?: (category: Category) => void
   colorOptions: any[]
 }
 
@@ -249,6 +251,7 @@ const SortableCategory: React.FC<SortableCategoryProps> = ({
   toggleGroup,
   children,
   onUpdateCategory,
+  onAddGroupToTimeline,
   colorOptions,
 }) => {
   const {
@@ -428,14 +431,17 @@ const SortableCategory: React.FC<SortableCategoryProps> = ({
                 <Bell className={`w-4 h-4 sm:w-5 sm:h-5 text-white ${notificationsEnabled ? 'fill-white' : ''}`} />
               </button>
 
-              {/* Time (placeholder for future time-based reordering) */}
+              {/* Add Group to Timeline */}
               <button
                 onClick={(e) => {
                   e.stopPropagation()
+                  if (onAddGroupToTimeline) {
+                    onAddGroupToTimeline(category)
+                  }
                 }}
                 className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 flex items-center justify-center hover:opacity-80 transition-opacity"
                 style={{ backgroundColor: category.color }}
-                title="Time-based reordering"
+                title="Add habit group to timeline"
               >
                 <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </button>
@@ -476,9 +482,22 @@ const SortableCategory: React.FC<SortableCategoryProps> = ({
                   onClick={(e) => e.stopPropagation()}
                 />
               ) : (
-                <span className="text-sm font-medium text-cream-25 uppercase tracking-wide truncate">
-                  {category.name}
-                </span>
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="text-sm font-medium text-cream-25 uppercase tracking-wide truncate">
+                    {category.name}
+                  </span>
+                  {category.name && (
+                    <div className="flex-shrink-0 group/badge relative">
+                      <ListTodo
+                        className="w-3.5 h-3.5 text-cyan-400/70 hover:text-cyan-400 transition-colors"
+                        title="Linked to Task List"
+                      />
+                      <div className="absolute left-1/2 -translate-x-1/2 top-full mt-1 px-2 py-1 bg-gray-900/95 text-cyan-400 text-xs rounded whitespace-nowrap opacity-0 group-hover/badge:opacity-100 transition-opacity pointer-events-none z-50 border border-cyan-400/30">
+                        Linked to Focus Task List
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
             </button>
           </div>
@@ -1108,6 +1127,9 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
   const [calendarDates, setCalendarDates] = useState(() => generateCalendarDates(14))
   const [currentDateKey, setCurrentDateKey] = useState(() => new Date().toDateString())
 
+  // Add Habit Group to Timeline Modal
+  const [habitGroupToAddToTimeline, setHabitGroupToAddToTimeline] = useState<Category | null>(null)
+
   // Board items for individual habit positioning
   type BoardItem =
     | { type: 'ungrouped-habit', id: string }
@@ -1487,6 +1509,118 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
     }
   }
 
+  // Handler to open "Add Habit Group to Timeline" modal
+  const handleAddGroupToTimeline = (category: Category) => {
+    setHabitGroupToAddToTimeline(category)
+  }
+
+  // Handler to save habit group to timeline (batch create entries)
+  const handleSaveGroupToTimeline = async (data: { startDate: string; endDate: string; daysOfWeek: string[]; time: string; duration: number }) => {
+    if (!userId || !habitGroupToAddToTimeline) return
+
+    try {
+      const { startDate, endDate, daysOfWeek, time, duration } = data
+      const habits = habitGroupToAddToTimeline.habits
+
+      // Create timeline entries for each selected day between start and end date
+      const start = new Date(startDate)
+      const end = new Date(endDate)
+      const entries = []
+
+      // Map day names to numbers (0 = Sunday, 1 = Monday, etc.)
+      const dayMap: { [key: string]: number } = { S: 0, M: 1, T: 2, W: 3, Th: 4, F: 5, Sa: 6 }
+
+      for (let date = new Date(start); date <= end; date.setDate(date.getDate() + 1)) {
+        const dayOfWeek = date.getDay()
+        const dayNames = Object.keys(dayMap).filter(key => dayMap[key] === dayOfWeek)
+
+        // Check if this day of week is selected
+        if (dayNames.some(dayName => daysOfWeek.includes(dayName))) {
+          // Create main entry with habit group name
+          const mainEntry = {
+            label: habitGroupToAddToTimeline.name,
+            description: `Habit group from Habits Board`,
+            tag: "habit",
+            color: habitGroupToAddToTimeline.color || "#00D9FF",
+            duration: duration * 60000,
+            frequency: "Daily",
+            completed: false,
+            isbuildhabit: false,
+            user_id: userId,
+            start_date: date.toISOString().split('T')[0],
+            habit_notes: {
+              _scheduled_time: time,
+              energyLevel: 3,
+              alerts: [],
+              notes: "",
+            },
+            // Store habit group reference
+            habit_group: habitGroupToAddToTimeline.name,
+          }
+
+          entries.push(mainEntry)
+        }
+      }
+
+      if (entries.length === 0) {
+        toast({ title: "No Entries", description: "No matching days found in the selected date range.", variant: "destructive" })
+        return
+      }
+
+      // Batch insert all main entries
+      const { data: insertedEntries, error: insertError } = await databaseService.supabase
+        .from("steps")
+        .insert(entries)
+        .select()
+
+      if (insertError) {
+        toast({ title: "Error", description: `Failed to add habit group to timeline: ${insertError.message}`, variant: "destructive" })
+        return
+      }
+
+      // Now create subtasks (breaths) for each main entry
+      if (insertedEntries && insertedEntries.length > 0) {
+        const subtasks = []
+
+        for (const mainEntry of insertedEntries) {
+          // Add each habit in the group as a subtask
+          for (const habit of habits) {
+            subtasks.push({
+              label: habit.label,
+              description: habit.description || "",
+              stepId: mainEntry.id,
+              color: habit.color,
+              duration: 0,
+              completed: false,
+              user_id: userId,
+              habit_notes: {},
+            })
+          }
+        }
+
+        if (subtasks.length > 0) {
+          const { error: subtaskError } = await databaseService.supabase
+            .from("breaths")
+            .insert(subtasks)
+
+          if (subtaskError) {
+            console.error('Error creating subtasks:', subtaskError)
+            toast({ title: "Warning", description: "Main entries created but some subtasks failed.", variant: "destructive" })
+          }
+        }
+      }
+
+      toast({
+        title: "Added to Timeline",
+        description: `Created ${entries.length} timeline entries for "${habitGroupToAddToTimeline.name}" with ${habits.length} subtasks each`
+      })
+      setHabitGroupToAddToTimeline(null)
+    } catch (err) {
+      console.error('Error adding habit group to timeline:', err)
+      toast({ title: "Error", description: "Unexpected error adding habit group to timeline.", variant: "destructive" })
+    }
+  }
+
   // Scroll to today on mount
   useEffect(() => {
     if (scrollContainerRef.current) {
@@ -1862,6 +1996,7 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
                         showQuickActions={showQuickActions}
                         toggleGroup={toggleGroup}
                         onUpdateCategory={handleUpdateCategory}
+                        onAddGroupToTimeline={handleAddGroupToTimeline}
                         colorOptions={colorOptions}
                       >
                         {/* Habits are rendered as individual board items */}
@@ -2109,6 +2244,18 @@ export const HabitsBoard = ({ currentMonth = new Date() }: { currentMonth?: Date
             setSelectedHabit(prev => prev ? { ...prev, ...updates } : null)
           }}
           onDelete={deleteHabit}
+        />
+      )}
+
+      {/* Add Habit Group to Timeline Modal */}
+      {habitGroupToAddToTimeline && (
+        <AddHabitGroupToTimelineModal
+          isOpen={!!habitGroupToAddToTimeline}
+          onClose={() => setHabitGroupToAddToTimeline(null)}
+          onSave={handleSaveGroupToTimeline}
+          groupName={habitGroupToAddToTimeline.name}
+          groupColor={habitGroupToAddToTimeline.color}
+          habitsCount={habitGroupToAddToTimeline.habits.length}
         />
       )}
     </div>

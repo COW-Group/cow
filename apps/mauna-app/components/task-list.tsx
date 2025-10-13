@@ -183,6 +183,32 @@ const SortableTaskItem = memo(({
             </span>
           </div>
         </div>
+
+        {/* Habit Group Progress (Breaths) */}
+        {task.breaths && task.breaths.length > 0 && (
+          <div className="mt-3 p-3 rounded-lg bg-white/10 border border-white/10">
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-medium text-cream-25 flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+                Subtasks:
+              </span>
+              <span className="font-semibold text-sapphire-blue">
+                {task.breaths.filter(b => b.completed).length}/{task.breaths.length} completed
+              </span>
+            </div>
+            {/* Progress Bar */}
+            <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-gradient-to-r from-sapphire-blue to-cyan-400 transition-all duration-300"
+                style={{
+                  width: `${(task.breaths.filter(b => b.completed).length / task.breaths.length) * 100}%`
+                }}
+              />
+            </div>
+          </div>
+        )}
         <div className="flex items-center gap-3 mt-3">
           <span className="font-medium text-cream-25">Move to:</span>
           <Select

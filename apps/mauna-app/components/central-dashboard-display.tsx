@@ -35,7 +35,10 @@ import {
   CheckCircle,
   Globe,
   ListOrdered,
+  LayoutDashboard,
+  Repeat,
 } from "lucide-react"
+import { useRouter } from "next/navigation"
 import type { Step } from "@/lib/types"
 import { useEffect, useState, useRef } from "react"
 import { Input } from "@/components/ui/input"
@@ -80,6 +83,13 @@ interface CentralDashboardDisplayProps {
   toggleTaskListVisibility: () => void
   toggleTaskListSelectorVisibility: () => void
   toggleGlobalTaskOrderVisibility: () => void
+  toggleTaskQueue30Visibility?: () => void
+  toggleTodayOverviewVisibility?: () => void
+  workBreakCycleEnabled?: boolean
+  onToggleWorkBreakCycle?: () => void
+  cycleWorkDuration?: number
+  cycleBreakDuration?: number
+  onUpdateCycleDurations?: (work: number, breakDuration: number) => void
   isOneOffMode: boolean
   onOneOffTaskChange: (field: string, value: string) => void
   currentTask: Step | undefined
@@ -117,6 +127,13 @@ export function CentralDashboardDisplay({
   toggleTaskListVisibility,
   toggleTaskListSelectorVisibility,
   toggleGlobalTaskOrderVisibility,
+  toggleTaskQueue30Visibility,
+  toggleTodayOverviewVisibility,
+  workBreakCycleEnabled = false,
+  onToggleWorkBreakCycle,
+  cycleWorkDuration = 30,
+  cycleBreakDuration = 5,
+  onUpdateCycleDurations,
   isOneOffMode,
   onOneOffTaskChange,
   currentTask,
@@ -142,6 +159,7 @@ export function CentralDashboardDisplay({
   const [previousTaskId, setPreviousTaskId] = useState<string | undefined>(undefined)
   const [touchStartX, setTouchStartX] = useState<number | null>(null)
   const [touchStartY, setTouchStartY] = useState<number | null>(null)
+  const router = useRouter()
 
   const [internalOneOffTask, setInternalOneOffTask] = useState<Step>({
     id: "one-off",
@@ -395,7 +413,7 @@ export function CentralDashboardDisplay({
               />
             </svg>
 
-            <div className="flex gap-4 mb-8 text-cream-25 text-lg font-bold">
+            <div className="flex gap-4 mb-4 text-cream-25 text-lg font-bold">
               <button
                 onClick={() => onSwitchPhase("work")}
                 className={pomodoroPhase === "work" ? "opacity-100" : "opacity-50"}
@@ -410,6 +428,118 @@ export function CentralDashboardDisplay({
                 BREAK
               </button>
             </div>
+
+            {/* Work/Break Cycle Toggle (30/30 style) */}
+            {!isInFocusMode && onToggleWorkBreakCycle && (
+              <div className="mb-4 animate-in fade-in duration-300">
+                <div className="glassmorphism rounded-lg p-4 border border-white/10">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <Repeat className="w-4 h-4 text-cyan-400" />
+                      <span className="text-sm font-medium text-cream-25">Auto Work/Break Cycle</span>
+                    </div>
+                    <button
+                      onClick={onToggleWorkBreakCycle}
+                      className={`relative w-12 h-6 rounded-full transition-colors duration-200 ${
+                        workBreakCycleEnabled ? "bg-cyan-500" : "bg-white/20"
+                      }`}
+                    >
+                      <div
+                        className={`absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-transform duration-200 ${
+                          workBreakCycleEnabled ? "transform translate-x-6" : ""
+                        }`}
+                      />
+                    </button>
+                  </div>
+                  {workBreakCycleEnabled && (
+                    <div className="flex gap-3 text-xs text-cream-25/70">
+                      <div className="flex-1">
+                        <div className="mb-1">Work: {cycleWorkDuration}min</div>
+                        <input
+                          type="range"
+                          min="5"
+                          max="60"
+                          step="5"
+                          value={cycleWorkDuration}
+                          onChange={(e) => onUpdateCycleDurations?.(Number(e.target.value), cycleBreakDuration)}
+                          className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <div className="mb-1">Break: {cycleBreakDuration}min</div>
+                        <input
+                          type="range"
+                          min="1"
+                          max="30"
+                          step="1"
+                          value={cycleBreakDuration}
+                          onChange={(e) => onUpdateCycleDurations?.(cycleWorkDuration, Number(e.target.value))}
+                          className="w-full h-1 bg-white/20 rounded-lg appearance-none cursor-pointer"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Quick Navigation to Other Pages */}
+            {!isInFocusMode && (
+              <div className="flex gap-2 mb-6 justify-center flex-wrap animate-in fade-in duration-300">
+                {toggleTodayOverviewVisibility && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={toggleTodayOverviewVisibility}
+                    className="glassmorphism border border-white/30 text-white/90 hover:text-white hover:bg-white/10 transition-all duration-200 text-xs px-3 py-1.5 font-semibold"
+                    title="Today's Overview"
+                  >
+                    <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                    Today
+                  </Button>
+                )}
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => router.push('/timeline')}
+                  className="glassmorphism border border-cream-25/20 text-cream-25/80 hover:text-cream-25 hover:bg-cream-25/10 transition-all duration-200 text-xs px-3 py-1.5"
+                  title="View Timeline"
+                >
+                  <Clock className="h-3.5 w-3.5 mr-1.5" />
+                  Timeline
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => router.push('/habits')}
+                  className="glassmorphism border border-purple-500/30 text-purple-300/80 hover:text-purple-300 hover:bg-purple-500/10 transition-all duration-200 text-xs px-3 py-1.5"
+                  title="View Habits"
+                >
+                  <Repeat className="h-3.5 w-3.5 mr-1.5" />
+                  Habits
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => router.push('/vision')}
+                  className="glassmorphism border border-amber-500/30 text-amber-300/80 hover:text-amber-300 hover:bg-amber-500/10 transition-all duration-200 text-xs px-3 py-1.5"
+                  title="View Vision Board"
+                >
+                  <Eye className="h-3.5 w-3.5 mr-1.5" />
+                  Vision
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={toggleTaskListVisibility}
+                  className="glassmorphism border border-cyan-500/30 text-cyan-300/80 hover:text-cyan-300 hover:bg-cyan-500/10 transition-all duration-200 text-xs px-3 py-1.5"
+                  title="View All Tasks"
+                >
+                  <LayoutDashboard className="h-3.5 w-3.5 mr-1.5" />
+                  All Tasks
+                </Button>
+              </div>
+            )}
 
             <div className="mb-8 glassmorphism rounded-lg px-6 py-3 border border-cream-25/30 backdrop-blur-sm min-h-[60px] flex items-center justify-center">
               <p className="text-cream-25 text-xl font-caveat italic text-center">
@@ -571,6 +701,18 @@ export function CentralDashboardDisplay({
                 >
                   <ListOrdered className="h-5 w-5" />
                 </Button>
+                {toggleTaskQueue30Visibility && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={toggleTaskQueue30Visibility}
+                    aria-label="Toggle 30/30 style task queue"
+                    className="w-12 h-12 rounded-full glassmorphism border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10 transition-all duration-200"
+                    title="30/30 Task Queue"
+                  >
+                    <LayoutDashboard className="h-5 w-5" />
+                  </Button>
+                )}
 
                 {/* Wellness & Evaluation Controls */}
                 <Button

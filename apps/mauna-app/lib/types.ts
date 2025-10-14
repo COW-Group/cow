@@ -1306,7 +1306,10 @@ export interface Step {
   taskListId: string | null
   lengthId: string | null
   label: string
-  duration: number
+  duration: number // Estimated duration in milliseconds
+  actualDuration?: number // Actual time spent in milliseconds
+  sessionStartTime?: number // Timestamp when current session started
+  elapsedTime?: number // Elapsed time in current session (milliseconds)
   completed: boolean
   locked: boolean
   color: string
@@ -1315,7 +1318,7 @@ export interface Step {
   priorityRank: number
   estimatedStartTime: string | null
   estimatedEndTime: string | null
-  history: { startTime: string; endTime: string }[]
+  history: { startTime: string; endTime: string; actualDuration?: number }[]
   breaths: Breath[]
   mantra: string
   startingRitual: string
@@ -1327,6 +1330,7 @@ export interface Step {
   rubric?: any
   lifeline: string | null
   tag: string | null
+  positionWhenAllListsActive?: number
 }
 
 export interface TaskList {

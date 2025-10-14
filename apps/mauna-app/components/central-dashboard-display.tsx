@@ -580,6 +580,39 @@ export function CentralDashboardDisplay({
               )}
             </div>
 
+            {/* Duration Tracking Indicators */}
+            {currentTask && !isInFocusMode && (
+              <div className="mb-6 glassmorphism rounded-lg p-4 border border-white/10 max-w-md mx-auto animate-in fade-in duration-300">
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div className="text-xs text-cream-25/60 mb-1">Estimated</div>
+                    <div className="text-lg font-semibold text-cyan-300">
+                      {Math.round((currentTask.duration || 0) / 60000)}m
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-cream-25/60 mb-1">Actual Focus</div>
+                    <div className="text-lg font-semibold text-purple-300">
+                      {Math.round((currentTask.actualDuration || 0) / 60000)}m
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-cream-25/60 mb-1">Breaths Total</div>
+                    <div className="text-lg font-semibold text-green-300">
+                      {Math.round(
+                        (currentTask.breaths || []).reduce((sum, breath) => sum + breath.totalTimeSeconds, 0) / 60
+                      )}m
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-3 text-xs text-cream-25/50 text-center">
+                  {currentTask.actualDuration && currentTask.actualDuration > 0
+                    ? `Remaining: ${Math.max(0, Math.round((currentTask.duration - (currentTask.actualDuration || 0)) / 60000))}m`
+                    : "Timer tracks actual time spent vs estimated"}
+                </div>
+              </div>
+            )}
+
             {/* Essential Controls - Always Visible */}
             <div className="flex gap-2 mb-4 justify-center">
               <Button

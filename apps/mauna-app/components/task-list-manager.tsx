@@ -1,11 +1,11 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Card, CardContent, CardTitle } from "@/components/ui/card"
-import { Plus, Edit, Trash2, Check, GripVertical, Square, Repeat, Clock } from "lucide-react"
+import { Plus, Edit, Trash2, Check, GripVertical, Square, Repeat, Clock, Copy, MoveDown, MoveUp } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 import type { TaskList } from "@/lib/types"
 import { DatabaseService } from "@/lib/database-service"
@@ -54,7 +54,11 @@ interface SortableTaskListCardProps {
   onListNameChange: (name: string) => void
   onSuggestedTimeBlockRangeChange: (range: string) => void
   onAddToTimeline?: (list: TaskList) => void
+  onDuplicate?: (list: TaskList) => void
+  onMoveToTop?: (listId: string) => void
+  onMoveToBottom?: (listId: string) => void
   noTaskListSelectedId: string
+  allListsCount: number
 }
 
 function SortableTaskListCard({
@@ -70,9 +74,22 @@ function SortableTaskListCard({
   onListNameChange,
   onSuggestedTimeBlockRangeChange,
   onAddToTimeline,
+  onDuplicate,
+  onMoveToTop,
+  onMoveToBottom,
   noTaskListSelectedId,
+  allListsCount,
 }: SortableTaskListCardProps) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: list.id })
+
+  // Gesture state
+  const [touchStartX, setTouchStartX] = useState<number | null>(null)
+  const [touchStartY, setTouchStartY] = useState<number | null>(null)
+  const [swipeDirection, setSwipeDirection] = useState<"left" | "right" | null>(null)
+  const [swipeOffset, setSwipeOffset] = useState<number>(0)
+  const [lastTapTime, setLastTapTime] = useState<number>(0)
+  const [initialPinchDistance, setInitialPinchDistance] = useState<number | null>(null)
+  const longPressTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const style = {
     transform: CSS.Transform.toString(transform),
@@ -85,16 +102,173 @@ function SortableTaskListCard({
   // Check if this list contains any habits
   const isHabitGroupList = list.steps?.some(step => (step as any).tag === 'habit') || false
 
+  // Helper to get distance between two touches
+  const getTouchDistance = (touch1: React.Touch, touch2: React.Touch) => {
+    const dx = touch1.clientX - touch2.clientX
+    const dy = touch1.clientY - touch2.clientY
+    return Math.sqrt(dx * dx + dy * dy)
+  }
+
+  // Touch gesture handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (isNoTaskListSelected || isHabitGroupList) return
+
+    const touchCount = e.touches.length
+
+    if (touchCount === 1) {
+      setTouchStartX(e.touches[0].clientX)
+      setTouchStartY(e.touches[0].clientY)
+
+      // Check for double tap
+      const now = Date.now()
+      const timeSinceLastTap = now - lastTapTime
+      if (timeSinceLastTap < 300) {
+        e.preventDefault()
+        if ('vibrate' in navigator) navigator.vibrate([30, 50, 30])
+        onEdit(list)
+        setLastTapTime(0)
+      } else {
+        setLastTapTime(now)
+      }
+    } else if (touchCount === 2) {
+      e.preventDefault()
+      const distance = getTouchDistance(e.touches[0], e.touches[1])
+      setInitialPinchDistance(distance)
+
+      // Check for immediate 2-finger tap
+      const tapTimeout = setTimeout(() => {
+        if ('vibrate' in navigator) navigator.vibrate([30, 50, 30])
+        if (onMoveToTop) onMoveToTop(list.id)
+      }, 50)
+
+      const handleTouchEnd = () => {
+        clearTimeout(tapTimeout)
+        document.removeEventListener('touchend', handleTouchEnd)
+      }
+      document.addEventListener('touchend', handleTouchEnd, { once: true })
+    } else if (touchCount === 3) {
+      e.preventDefault()
+      if ('vibrate' in navigator) navigator.vibrate([50, 100, 50])
+      if (onDuplicate) onDuplicate(list)
+    }
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (isNoTaskListSelected || isHabitGroupList) return
+    if (!touchStartX || !touchStartY) return
+
+    const touchCurrentX = e.touches[0].clientX
+    const touchCurrentY = e.touches[0].clientY
+    const deltaX = touchCurrentX - touchStartX
+    const deltaY = touchCurrentY - touchStartY
+
+    // Only handle horizontal swipes
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 20) {
+      e.preventDefault()
+      setSwipeOffset(deltaX)
+      setSwipeDirection(deltaX > 0 ? "right" : "left")
+    }
+
+    // Handle pinch gestures
+    if (e.touches.length === 2 && initialPinchDistance) {
+      e.preventDefault()
+      const currentDistance = getTouchDistance(e.touches[0], e.touches[1])
+      const distanceChange = currentDistance - initialPinchDistance
+
+      // Detect vertical vs horizontal spread
+      const touch1Y = e.touches[0].clientY
+      const touch2Y = e.touches[1].clientY
+      const verticalAlignment = Math.abs(touch1Y - touch2Y)
+
+      if (Math.abs(distanceChange) > 50) {
+        if (distanceChange > 0) {
+          // Spread gesture
+          if (verticalAlignment > 50 && onAddToTimeline) {
+            // Vertical spread - show add to timeline hint
+          }
+        }
+      }
+    }
+  }
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (isNoTaskListSelected || isHabitGroupList) return
+
+    const touchCount = e.changedTouches.length
+
+    if (touchCount === 1 && touchStartX !== null && touchStartY !== null) {
+      const touchEndX = e.changedTouches[0].clientX
+      const touchEndY = e.changedTouches[0].clientY
+      const deltaX = touchEndX - touchStartX
+      const deltaY = touchEndY - touchStartY
+      const distance = Math.abs(deltaX)
+
+      const swipeThreshold = 80
+      const maxVerticalDeviation = 60
+
+      if (distance > swipeThreshold && Math.abs(deltaY) < maxVerticalDeviation) {
+        if ('vibrate' in navigator) navigator.vibrate(50)
+
+        if (deltaX > 0) {
+          // Swipe right: Delete
+          onDelete(list.id)
+        } else {
+          // Swipe left: Move to bottom
+          if (onMoveToBottom) onMoveToBottom(list.id)
+        }
+      }
+    } else if (touchCount === 2 && initialPinchDistance) {
+      const finalDistance = getTouchDistance(e.changedTouches[0], e.changedTouches[1])
+      const distanceChange = finalDistance - initialPinchDistance
+      const touch1Y = e.changedTouches[0].clientY
+      const touch2Y = e.changedTouches[1].clientY
+      const verticalAlignment = Math.abs(touch1Y - touch2Y)
+
+      if (Math.abs(distanceChange) > 50) {
+        if ('vibrate' in navigator) navigator.vibrate([30, 50, 30])
+
+        if (distanceChange > 0 && verticalAlignment > 50) {
+          // Vertical spread - Add to timeline
+          if (onAddToTimeline) onAddToTimeline(list)
+        }
+      }
+    }
+
+    // Reset gesture state
+    setTouchStartX(null)
+    setTouchStartY(null)
+    setSwipeDirection(null)
+    setSwipeOffset(0)
+    setInitialPinchDistance(null)
+  }
+
   return (
     <Card
       ref={setNodeRef}
-      style={style}
-      className={`mb-2 p-3 flex flex-col rounded-lg shadow-sm transition-all duration-200 ease-in-out ${
+      style={{
+        ...style,
+        transform: `${CSS.Transform.toString(transform)} translateX(${swipeOffset}px)`,
+      }}
+      className={`mb-2 p-3 flex flex-col rounded-lg shadow-sm transition-all duration-200 ease-in-out relative overflow-hidden ${
         isHabitGroupList
           ? `bg-gradient-to-br from-purple-500/10 to-pink-500/10 border-purple-400/30 ${isCurrent ? "ring-2 ring-purple-400" : ""}`
           : `bg-white/20 border-white/10 ${isCurrent ? "border-vibrant-blue ring-1 ring-vibrant-blue" : ""}`
       }`}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
+      {/* Swipe Actions Overlay */}
+      {swipeDirection === "right" && swipeOffset > 20 && (
+        <div className="absolute inset-0 bg-red-500/20 flex items-center justify-start px-6 pointer-events-none">
+          <Trash2 className="w-6 h-6 text-red-500" />
+        </div>
+      )}
+      {swipeDirection === "left" && swipeOffset < -20 && (
+        <div className="absolute inset-0 bg-blue-500/20 flex items-center justify-end px-6 pointer-events-none">
+          <MoveDown className="w-6 h-6 text-blue-500" />
+        </div>
+      )}
       <CardContent className="p-4 flex items-center justify-between">
         {!isNoTaskListSelected && !isHabitGroupList && (
           <Button
@@ -228,9 +402,19 @@ export function TaskListManager({
   const [editingListName, setEditingListName] = useState("")
   const [editingSuggestedTimeBlockRange, setEditingSuggestedTimeBlockRange] = useState("")
   const [taskListToAddToTimeline, setTaskListToAddToTimeline] = useState<TaskList | null>(null)
+  const [gestureOverlay, setGestureOverlay] = useState<string | null>(null)
+  const [initialPinchDistance, setInitialPinchDistance] = useState<number | null>(null)
+  const gestureTimeoutRef = useRef<NodeJS.Timeout | null>(null)
   const { toast } = useToast()
 
   const ALL_ACTIVE_TASKS_ID = "all-active-tasks"
+
+  // Helper function to show gesture overlay
+  const showGestureOverlay = (message: string) => {
+    setGestureOverlay(message)
+    if (gestureTimeoutRef.current) clearTimeout(gestureTimeoutRef.current)
+    gestureTimeoutRef.current = setTimeout(() => setGestureOverlay(null), 2000)
+  }
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -327,11 +511,88 @@ export function TaskListManager({
         } else if (currentListId === listId && reorderedForDeletion.length === 0) {
           switchTaskList(noTaskListSelectedId)
         }
+        showGestureOverlay("🗑 List deleted")
         toast({ title: "List Deleted", description: "Task list and its tasks removed." })
       } catch (error: any) {
         console.error("handleDeleteList: Failed to delete list:", error)
         toast({ title: "Error", description: `Failed to delete list: ${error.message}`, variant: "destructive" })
       }
+    }
+  }
+
+  const handleDuplicateList = async (list: TaskList) => {
+    try {
+      const newPosition = localTaskLists.length + 1
+      const newList = await DatabaseService.createTaskList(userId, `${list.name} (Copy)`, newPosition)
+
+      // Copy all tasks from the original list
+      for (const task of list.steps) {
+        const newTask = { ...task, id: crypto.randomUUID(), taskListId: newList.id }
+        await DatabaseService.createStep(newTask, userId)
+      }
+
+      // Fetch updated lists
+      const updatedLists = await DatabaseService.fetchTaskLists(userId)
+      setLocalTaskLists(updatedLists.filter((l) => l.id !== noTaskListSelectedId).sort((a, b) => (a.position ?? 0) - (b.position ?? 0)))
+      updateTaskLists(updatedLists)
+
+      showGestureOverlay("📋 List duplicated")
+      toast({ title: "List Duplicated ✨", description: `"${list.name}" was duplicated.` })
+    } catch (error: any) {
+      console.error("handleDuplicateList: Failed to duplicate list:", error)
+      toast({ title: "Error", description: `Failed to duplicate list: ${error.message}`, variant: "destructive" })
+    }
+  }
+
+  const handleMoveListToTop = async (listId: string) => {
+    try {
+      const listIndex = localTaskLists.findIndex((list) => list.id === listId)
+      if (listIndex <= 0) return // Already at top or not found
+
+      const reorderedLists = [...localTaskLists]
+      const [movedList] = reorderedLists.splice(listIndex, 1)
+      reorderedLists.unshift(movedList)
+
+      const reorderedWithPositions = reorderedLists.map((list, index) => ({
+        ...list,
+        position: index + 1,
+      }))
+
+      setLocalTaskLists(reorderedWithPositions)
+      updateTaskLists(reorderedWithPositions)
+
+      await DatabaseService.reorderTaskLists(userId, reorderedWithPositions)
+      showGestureOverlay("⬆ Moved to top")
+      toast({ title: "List Moved", description: "Task list moved to top." })
+    } catch (error: any) {
+      console.error("handleMoveListToTop: Failed to move list:", error)
+      toast({ title: "Error", description: `Failed to move list: ${error.message}`, variant: "destructive" })
+    }
+  }
+
+  const handleMoveListToBottom = async (listId: string) => {
+    try {
+      const listIndex = localTaskLists.findIndex((list) => list.id === listId)
+      if (listIndex === -1 || listIndex === localTaskLists.length - 1) return // Not found or already at bottom
+
+      const reorderedLists = [...localTaskLists]
+      const [movedList] = reorderedLists.splice(listIndex, 1)
+      reorderedLists.push(movedList)
+
+      const reorderedWithPositions = reorderedLists.map((list, index) => ({
+        ...list,
+        position: index + 1,
+      }))
+
+      setLocalTaskLists(reorderedWithPositions)
+      updateTaskLists(reorderedWithPositions)
+
+      await DatabaseService.reorderTaskLists(userId, reorderedWithPositions)
+      showGestureOverlay("⬇ Moved to bottom")
+      toast({ title: "List Moved", description: "Task list moved to bottom." })
+    } catch (error: any) {
+      console.error("handleMoveListToBottom: Failed to move list:", error)
+      toast({ title: "Error", description: `Failed to move list: ${error.message}`, variant: "destructive" })
     }
   }
 
@@ -479,10 +740,66 @@ export function TaskListManager({
   const sortableItems = localTaskLists.map((list) => list.id)
   const nonSortableItem = taskLists.find((list) => list.id === noTaskListSelectedId)
 
+  // Pinch-to-close gesture detection
+  const getTouchDistance = (touch1: Touch, touch2: Touch) => {
+    const dx = touch1.clientX - touch2.clientX
+    const dy = touch1.clientY - touch2.clientY
+    return Math.sqrt(dx * dx + dy * dy)
+  }
+
+  const handleManagerTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      const distance = getTouchDistance(e.touches[0], e.touches[1])
+      setInitialPinchDistance(distance)
+    }
+  }
+
+  const handleManagerTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2 && initialPinchDistance) {
+      const currentDistance = getTouchDistance(e.touches[0], e.touches[1])
+      const distanceChange = currentDistance - initialPinchDistance
+
+      // Pinch inward to close
+      if (distanceChange < -50) {
+        showGestureOverlay("🤏 Pinch to close")
+      }
+    }
+  }
+
+  const handleManagerTouchEnd = (e: React.TouchEvent) => {
+    if (e.changedTouches.length === 2 && initialPinchDistance) {
+      const finalDistance = getTouchDistance(e.changedTouches[0], e.changedTouches[1])
+      const distanceChange = finalDistance - initialPinchDistance
+
+      if (distanceChange < -50) {
+        if ('vibrate' in navigator) navigator.vibrate([30, 50, 30])
+        onClose()
+      }
+
+      setInitialPinchDistance(null)
+    }
+  }
+
   if (!isOpen) return null
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-4 bg-ink-950/20 backdrop-blur-sm border border-brushed-silver/20 text-cream-25 shadow-2xl rounded-lg">
+    <div
+      className="w-full max-w-2xl mx-auto p-4 bg-ink-950/20 backdrop-blur-sm border border-brushed-silver/20 text-cream-25 shadow-2xl rounded-lg relative"
+      onTouchStart={handleManagerTouchStart}
+      onTouchMove={handleManagerTouchMove}
+      onTouchEnd={handleManagerTouchEnd}
+    >
+      {/* Gesture Overlay */}
+      {gestureOverlay && (
+        <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none">
+          <div className="glassmorphism rounded-2xl px-8 py-4 border border-white/30 shadow-2xl">
+            <p className="text-2xl font-medium text-cream-25 text-center whitespace-nowrap">
+              {gestureOverlay}
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-between mb-4">
         <h2 className="flex items-center gap-2 text-xl font-montserrat font-light text-cream-25 zen-heading">
           <Plus className="h-5 w-5 text-cream-25" />
@@ -492,7 +809,7 @@ export function TaskListManager({
           Close
         </Button>
       </div>
-      <p className="font-inter text-cream-25/70 mb-4">Create, edit, and organize your task lists.</p>
+      <p className="font-inter text-cream-25/70 mb-4">Create, edit, and organize your task lists with gestures.</p>
 
       <div className="flex-1 overflow-y-auto p-1">
         <Card className={`mb-4 p-3 flex flex-col bg-white/20 border border-white/10 rounded-lg shadow-sm transition-all duration-200 ease-in-out ${currentListId === ALL_ACTIVE_TASKS_ID ? "border-vibrant-blue ring-1 ring-vibrant-blue" : ""}`}>
@@ -543,7 +860,11 @@ export function TaskListManager({
               onListNameChange={setEditingListName}
               onSuggestedTimeBlockRangeChange={setEditingSuggestedTimeBlockRange}
               onAddToTimeline={handleAddTaskListToTimeline}
+              onDuplicate={handleDuplicateList}
+              onMoveToTop={handleMoveListToTop}
+              onMoveToBottom={handleMoveListToBottom}
               noTaskListSelectedId={noTaskListSelectedId}
+              allListsCount={localTaskLists.length}
             />
           )}
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -567,13 +888,60 @@ export function TaskListManager({
                       onListNameChange={setEditingListName}
                       onSuggestedTimeBlockRangeChange={setEditingSuggestedTimeBlockRange}
                       onAddToTimeline={handleAddTaskListToTimeline}
+                      onDuplicate={handleDuplicateList}
+                      onMoveToTop={handleMoveListToTop}
+                      onMoveToBottom={handleMoveListToBottom}
                       noTaskListSelectedId={noTaskListSelectedId}
+                      allListsCount={localTaskLists.length}
                     />
                   ))
                 )}
               </div>
             </SortableContext>
           </DndContext>
+
+          {/* Gesture Guide */}
+          {localTaskLists.length > 0 && (
+            <div className="mt-6 px-4">
+              <div className="glassmorphism rounded-lg p-4 border border-white/10">
+                <h4 className="text-xs font-semibold text-cream-25 mb-3 text-center">Available Gestures</h4>
+                <div className="grid grid-cols-1 gap-2 text-xs text-cream-25/70">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">👆👆</span>
+                    <span>Double tap to edit list</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">👉</span>
+                    <span>Slide right to delete</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">👈</span>
+                    <span>Slide left to move to bottom</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">👆👆</span>
+                    <span>2-finger tap to move to top</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">👆👆👆</span>
+                    <span>3-finger tap to duplicate list</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🙌</span>
+                    <span>Spread apart vertically to add to timeline</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">🤏</span>
+                    <span>Pinch to close manager</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">👆</span>
+                    <span>Drag handle to reorder</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </ScrollArea>
       </div>
 
@@ -605,9 +973,16 @@ function TaskListCard({
   onListNameChange,
   onSuggestedTimeBlockRangeChange,
   onAddToTimeline,
+  onDuplicate,
+  onMoveToTop,
+  onMoveToBottom,
   noTaskListSelectedId,
+  allListsCount,
 }: SortableTaskListCardProps) {
   const isNoTaskListSelected = list.id === noTaskListSelectedId
+
+  // Note: TaskListCard is for "No Task List Selected" which shouldn't have gestures
+  // So we don't add gesture handlers here
 
   return (
     <Card

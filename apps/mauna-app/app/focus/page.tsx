@@ -48,6 +48,10 @@ export default function FocusPage() {
   const [cycleWorkDuration, setCycleWorkDuration] = useState(30) // minutes
   const [cycleBreakDuration, setCycleBreakDuration] = useState(5) // minutes
 
+  // Time tracking state
+  const [sessionStartTime, setSessionStartTime] = useState<number | null>(null)
+  const [elapsedTimeInSession, setElapsedTimeInSession] = useState(0)
+
   const [showRubric, setShowRubric] = useState(false)
   const [showBreaths, setShowBreaths] = useState(false)
   const [showTaskForm, setShowTaskForm] = useState(false)
@@ -317,6 +321,12 @@ export default function FocusPage() {
     if (isRunning && timeRemaining > 0) {
       interval = setInterval(() => {
         setTimeRemaining((prevTime) => prevTime - 1000)
+
+        // Track elapsed time in current session
+        if (sessionStartTime) {
+          const elapsed = Date.now() - sessionStartTime
+          setElapsedTimeInSession(elapsed)
+        }
       }, 1000)
     } else if (timeRemaining <= 0 && isRunning) {
       setIsRunning(false)
@@ -363,13 +373,83 @@ export default function FocusPage() {
     }
   }, [isRunning, timeRemaining, pomodoroPhase, autoloopEnabled, workBreakCycleEnabled, cycleWorkDuration, cycleBreakDuration, toast])
 
-  const toggleTimer = useCallback(() => {
+  const toggleTimer = useCallback(async () => {
     setIsRunning((prev) => {
       const newIsRunning = !prev
+
+      if (newIsRunning) {
+        // Starting timer
+        setSessionStartTime(Date.now())
+        setElapsedTimeInSession(0)
+
+        // Auto-reveal breaths component
+        setShowBreaths(true)
+
+        // Auto-create first breath if none exist
+        if (currentTask && (!currentTask.breaths || currentTask.breaths.length === 0) && databaseService && user?.id) {
+          const firstBreath: Breath = {
+            id: crypto.randomUUID(),
+            name: "set up first breath",
+            completed: false,
+            isRunning: true,
+            startTime: new Date().toISOString(),
+            endTime: null,
+            pausedTime: 0,
+            totalTimeSeconds: 0,
+            timeEstimationSeconds: Math.floor((currentTask.duration || 0) / 1000),
+            position: 0,
+            emotionId: null,
+          }
+
+          // Update current task with first breath
+          setCurrentTask(prev => prev ? { ...prev, breaths: [firstBreath] } : prev)
+
+          // Save to database
+          databaseService.updateStepBreaths(user.id, currentTask.id, [firstBreath]).catch(console.error)
+
+          toast({
+            title: "First Breath Created",
+            description: "Break down your step into breaths for better tracking!",
+          })
+        }
+      } else {
+        // Stopping/Pausing timer
+        if (sessionStartTime && currentTask) {
+          const elapsed = Date.now() - sessionStartTime
+          setElapsedTimeInSession(elapsed)
+
+          // Update step's actual duration
+          const newActualDuration = (currentTask.actualDuration || 0) + elapsed
+          const newTimeRemaining = Math.max(0, (currentTask.duration || 0) - newActualDuration)
+
+          // Update timeRemaining to reflect remaining time (not reset)
+          setTimeRemaining(newTimeRemaining)
+
+          // Update current task
+          setCurrentTask(prev => prev ? {
+            ...prev,
+            actualDuration: newActualDuration,
+            elapsedTime: elapsed
+          } : prev)
+
+          // Update in database
+          if (taskListService && currentTaskListId) {
+            const updatedTask = {
+              ...currentTask,
+              actualDuration: newActualDuration,
+              elapsedTime: elapsed,
+              duration: newTimeRemaining, // Update duration to remaining time
+            }
+            taskListService.updateTaskInTaskList(currentTaskListId, updatedTask).catch(console.error)
+          }
+        }
+        setSessionStartTime(null)
+      }
+
       calculateAndSetEstimatedTimes()
       return newIsRunning
     })
-  }, [calculateAndSetEstimatedTimes])
+  }, [calculateAndSetEstimatedTimes, currentTask, sessionStartTime, databaseService, user, taskListService, currentTaskListId, toast])
 
   const skipToNextTask = useCallback(async () => {
     if (isOneOffMode) {
@@ -428,16 +508,35 @@ export default function FocusPage() {
 
     try {
       const now = new Date()
-      const startTime = new Date(now.getTime() - (currentTask.duration || 0))
+
+      // Calculate actual duration (including current session if running)
+      let totalActualDuration = currentTask.actualDuration || 0
+      if (sessionStartTime && isRunning) {
+        totalActualDuration += Date.now() - sessionStartTime
+      }
+
+      // Calculate total breath durations
+      const totalBreathDuration = (currentTask.breaths || []).reduce(
+        (sum, breath) => sum + (breath.totalTimeSeconds * 1000),
+        0
+      )
+
+      const startTime = new Date(now.getTime() - totalActualDuration)
       const updatedHistory = [
         ...(currentTask.history || []),
         {
           startTime: startTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false }),
           endTime: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false }),
+          actualDuration: totalActualDuration,
         },
       ]
 
-      const completedTask = { ...currentTask, completed: true, history: updatedHistory }
+      const completedTask = {
+        ...currentTask,
+        completed: true,
+        history: updatedHistory,
+        actualDuration: totalActualDuration,
+      }
       await taskListService.updateTaskInTaskList(currentTaskListId, completedTask)
 
       await taskListService.deleteTaskFromTaskList(currentTaskListId, currentTask.id)
@@ -446,9 +545,17 @@ export default function FocusPage() {
           list.id === currentTaskListId ? { ...list, steps: list.steps.filter((t) => t.id !== currentTask.id) } : list,
         )
       })
+
+      // Reset timer state
+      setSessionStartTime(null)
+      setElapsedTimeInSession(0)
+
+      const actualMinutes = Math.round(totalActualDuration / 60000)
+      const breathMinutes = Math.round(totalBreathDuration / 60000)
+
       toast({
         title: "Task Completed!",
-        description: `"${currentTask.label}" was completed.`,
+        description: `"${currentTask.label}" completed. Focus: ${actualMinutes}m | Breaths: ${breathMinutes}m`,
       })
       calculateAndSetEstimatedTimes()
     } catch (error: any) {
@@ -460,6 +567,8 @@ export default function FocusPage() {
     isOneOffMode,
     oneOffTaskLabel,
     taskListService,
+    sessionStartTime,
+    isRunning,
     toast,
     calculateAndSetEstimatedTimes,
   ])

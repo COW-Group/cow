@@ -547,6 +547,22 @@ export function TaskQueue30({
                         {estimatedTimes[index].startTime} → {estimatedTimes[index].endTime}
                       </div>
                     )}
+                    {/* Duration Tracking */}
+                    {task.actualDuration && task.actualDuration > 0 && (
+                      <div className="mt-1 flex items-center gap-2 text-xs">
+                        <span className="text-white/60">Est:</span>
+                        <span className="text-cyan-300">{Math.round((task.duration || 0) / 60000)}m</span>
+                        <span className="text-white/60">|</span>
+                        <span className="text-white/60">Actual:</span>
+                        <span className="text-purple-300">{Math.round((task.actualDuration || 0) / 60000)}m</span>
+                        {task.breaths && task.breaths.length > 0 && (
+                          <>
+                            <span className="text-white/60">|</span>
+                            <span className="text-green-300">{task.breaths.length}🌬️</span>
+                          </>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   {/* Duration & Status */}

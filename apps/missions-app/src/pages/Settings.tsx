@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
@@ -17,15 +17,20 @@ import {
   VolumeX
 } from 'lucide-react';
 import { useAppTheme } from '../hooks/useAppTheme';
+import { useAppStore } from '../store';
+import { supabase } from '@cow/supabase-client';
 
 export function Settings() {
   const navigate = useNavigate();
   const { classes, themeName, toggleTheme } = useAppTheme();
+  const { currentUser, setCurrentUser } = useAppStore();
+  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   // Settings state
   const [profile, setProfile] = useState({
-    fullName: 'Likhitha Palaypu',
-    email: 'likhitha@example.com',
+    fullName: '',
+    email: '',
     timezone: 'America/New_York',
     language: 'English'
   });
@@ -44,11 +49,134 @@ export function Settings() {
     readReceipts: true
   });
 
-  const handleSave = () => {
-    // In a real app, this would save to backend
-    console.log('Settings saved:', { profile, notifications, privacy });
-    // Show success message
-    alert('Settings saved successfully!');
+  // Load user profile from Supabase on mount
+  useEffect(() => {
+    const loadUserProfile = async () => {
+      try {
+        // Get current auth user
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+          console.warn('No authenticated user found');
+          setLoading(false);
+          return;
+        }
+
+        console.log('📥 Loading user profile from Supabase...', user.id);
+
+        // Try to load user profile from profiles table
+        const { data: userProfile, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+
+        if (error && error.code !== 'PGRST116') {
+          // PGRST116 is "no rows returned" - that's ok for new users
+          console.error('Error loading profile:', error);
+        }
+
+        // Set profile data from Supabase or user metadata
+        setProfile({
+          fullName: userProfile?.full_name || user.user_metadata?.full_name || user.email?.split('@')[0] || '',
+          email: user.email || '',
+          timezone: userProfile?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
+          language: userProfile?.language || 'English'
+        });
+
+        // Set notifications preferences
+        if (userProfile?.preferences?.notifications) {
+          setNotifications(userProfile.preferences.notifications);
+        }
+
+        // Set privacy preferences
+        if (userProfile?.preferences?.privacy) {
+          setPrivacy(userProfile.preferences.privacy);
+        }
+
+      } catch (error) {
+        console.error('Failed to load user profile:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadUserProfile();
+  }, []);
+
+  const handleSave = async () => {
+    setSaving(true);
+
+    try {
+      // Get current auth user
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+        alert('You must be logged in to save settings');
+        return;
+      }
+
+      console.log('💾 Saving user profile to Supabase...', user.id);
+
+      // Update user metadata for name
+      const { error: metadataError } = await supabase.auth.updateUser({
+        data: {
+          full_name: profile.fullName
+        }
+      });
+
+      if (metadataError) {
+        console.error('Error updating user metadata:', metadataError);
+      }
+
+      // Upsert user profile to profiles table
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .upsert({
+          id: user.id,
+          full_name: profile.fullName,
+          email: profile.email,
+          timezone: profile.timezone,
+          language: profile.language,
+          preferences: {
+            notifications,
+            privacy,
+            theme: themeName
+          },
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'id'
+        });
+
+      if (profileError) {
+        console.error('Error saving profile:', profileError);
+        throw profileError;
+      }
+
+      console.log('✅ Settings saved successfully');
+
+      // Update app store
+      if (currentUser) {
+        setCurrentUser({
+          ...currentUser,
+          fullName: profile.fullName,
+          name: profile.fullName,
+          email: profile.email,
+          timezone: profile.timezone,
+          preferences: {
+            ...currentUser.preferences,
+            notifications,
+          }
+        });
+      }
+
+      alert('Settings saved successfully!');
+    } catch (error: any) {
+      console.error('Failed to save settings:', error);
+      alert(`Failed to save settings: ${error.message}`);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -73,10 +201,20 @@ export function Settings() {
 
             <button
               onClick={handleSave}
-              className={`flex items-center space-x-2 ${classes.button.primary} px-6 py-3 rounded-xl smooth-hover font-medium`}
+              disabled={saving}
+              className={`flex items-center space-x-2 ${classes.button.primary} px-6 py-3 rounded-xl smooth-hover font-medium disabled:opacity-50 disabled:cursor-not-allowed`}
             >
-              <Save className="w-4 h-4" />
-              <span>Save Changes</span>
+              {saving ? (
+                <>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <span>Saving...</span>
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" />
+                  <span>Save Changes</span>
+                </>
+              )}
             </button>
           </div>
         </div>

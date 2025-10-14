@@ -1,54 +1,109 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppStore } from '@/store';
+import { supabase } from '@cow/supabase-client';
+import { debugSupabaseConfig } from '../utils/supabase-debug';
 
 export function Login() {
   const navigate = useNavigate();
-  const { setCurrentUser } = useAppStore();
-  
+
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [isSignUp, setIsSignUp] = useState(false);
+
+  useEffect(() => {
+    // Debug Supabase configuration on mount
+    debugSupabaseConfig();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return;
-    
+    if (!email.trim() || !password.trim()) return;
+
     setIsLoading(true);
-    
-    // Simulate login - in a real app this would call an API
-    setTimeout(() => {
-      const mockUser = {
-        id: '1',
-        email: email,
-        fullName: email.split('@')[0] || 'User',
-        avatarUrl: `https://ui-avatars.com/api/?name=${email.split('@')[0]}&background=0084ff&color=fff`,
-        timezone: 'UTC',
-        preferences: {
-          theme: 'system' as const,
-          notifications: {
-            email: true,
-            push: true,
-            desktop: true,
-            mobile: true,
-            marketing: false
-          },
-          sidebarCollapsed: false,
-          favoriteItems: [],
-          recentlyViewed: []
-        },
-        createdAt: new Date(),
-        updatedAt: new Date()
-      };
-      
-      setCurrentUser(mockUser);
+    setError(null);
+
+    try {
+      console.log('🔐 Attempting authentication...', { email, isSignUp });
+
+      if (isSignUp) {
+        // Sign up new user
+        console.log('📝 Signing up new user...');
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: email.split('@')[0],
+            }
+          }
+        });
+
+        console.log('📝 Sign up response:', { data, error });
+
+        if (error) {
+          console.error('❌ Sign up error:', error);
+          throw error;
+        }
+
+        if (data.user) {
+          // Check if email confirmation is required
+          if (data.user.identities?.length === 0) {
+            setError('This email is already registered. Please sign in instead.');
+            setIsSignUp(false);
+          } else {
+            alert('Check your email for the confirmation link!');
+          }
+        }
+      } else {
+        // Sign in existing user
+        console.log('🔑 Signing in user...');
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        console.log('🔑 Sign in response:', {
+          hasSession: !!data.session,
+          hasUser: !!data.user,
+          error: error?.message
+        });
+
+        if (error) {
+          console.error('❌ Sign in error:', error);
+          throw error;
+        }
+
+        if (data.session) {
+          console.log('✅ Login successful, navigating to app...');
+          navigate('/app/my-office');
+        } else {
+          console.warn('⚠️ No session returned from login');
+          setError('Login succeeded but no session was created. Please try again.');
+        }
+      }
+    } catch (err: any) {
+      console.error('❌ Authentication error:', err);
+      setError(err.message || 'An error occurred');
+    } finally {
       setIsLoading(false);
-      navigate('/dashboard');
-    }, 1000);
+    }
   };
 
-  const handleGoogleSignIn = () => {
-    // In a real app, this would integrate with Google OAuth
-    console.log('Google Sign In clicked');
+  const handleGoogleSignIn = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/app/my-office`
+        }
+      });
+
+      if (error) throw error;
+    } catch (err: any) {
+      setError(err.message || 'Failed to sign in with Google');
+    }
   };
 
   return (
@@ -76,22 +131,44 @@ export function Login() {
         <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-semibold text-gray-900 mb-2">
-              Log in to your account
+              {isSignUp ? 'Create your account' : 'Log in to your account'}
             </h1>
           </div>
+
+          {error && (
+            <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+              {error}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Input */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Enter your work email address
+                Email address
               </label>
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="example@company.com"
+                placeholder="likhitha@mycow.io"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-gray-900 placeholder-gray-500"
+                required
+              />
+            </div>
+
+            {/* Password Input */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors text-gray-900 placeholder-gray-500"
                 required
               />
@@ -100,17 +177,17 @@ export function Login() {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={isLoading || !email.trim()}
+              disabled={isLoading || !email.trim() || !password.trim()}
               className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isLoading ? (
                 <>
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Signing in...
+                  {isSignUp ? 'Creating account...' : 'Signing in...'}
                 </>
               ) : (
                 <>
-                  Next
+                  {isSignUp ? 'Sign Up' : 'Sign In'}
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -155,15 +232,15 @@ export function Login() {
           {/* Footer Links */}
           <div className="mt-6 text-center text-sm text-gray-600 space-y-2">
             <div>
-              Don't have an account yet?{' '}
-              <button className="text-blue-600 hover:text-blue-700 font-medium">
-                Sign up
-              </button>
-            </div>
-            <div>
-              Can't log in?{' '}
-              <button className="text-blue-600 hover:text-blue-700 font-medium">
-                Visit our help center
+              {isSignUp ? 'Already have an account?' : "Don't have an account yet?"}{' '}
+              <button
+                onClick={() => {
+                  setIsSignUp(!isSignUp);
+                  setError(null);
+                }}
+                className="text-blue-600 hover:text-blue-700 font-medium"
+              >
+                {isSignUp ? 'Sign in' : 'Sign up'}
               </button>
             </div>
           </div>

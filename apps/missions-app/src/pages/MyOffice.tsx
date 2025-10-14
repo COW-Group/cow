@@ -43,44 +43,21 @@ export function MyOffice() {
   const [currentWalkthroughStep, setCurrentWalkthroughStep] = useState(0);
   const [isCustomizing, setIsCustomizing] = useState(false);
   const [showAIRecommendations, setShowAIRecommendations] = useState(false);
+  const [widgetsInitialized, setWidgetsInitialized] = useState(false);
 
-  // Initialize mock user if none exists
-  useEffect(() => {
-    if (!currentUser) {
-      setCurrentUser({
-        id: 'user-1',
-        email: 'user@example.com',
-        fullName: 'Alex Johnson',
-        timezone: 'America/New_York',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        preferences: {
-          theme: 'system',
-          notifications: {
-            email: true,
-            push: true,
-            mentions: true,
-            dueDates: true,
-            statusUpdates: true,
-          },
-          sidebarCollapsed: false,
-          favoriteItems: [],
-          recentlyViewed: [],
-        },
-      });
-    }
-  }, [currentUser, setCurrentUser]);
+  // Note: User is now initialized by useAuth hook in AppHeader
+  // No need for mock user here
 
-  // Initialize widgets from persistence or defaults
+  // Initialize widgets from persistence or defaults - ONLY ONCE
   useEffect(() => {
-    if (activeWidgets.length === 0 && currentUser) {
+    if (!widgetsInitialized && currentUser) {
       // Try to load saved layout first
       const savedWidgets = WidgetPersistenceService.loadCurrentLayout(currentUser.id);
 
       if (savedWidgets && savedWidgets.length > 0) {
         setActiveWidgets(savedWidgets);
       } else {
-        // Fall back to default widgets
+        // Fall back to default widgets only if no saved layout exists
         const defaultWidgets: Widget[] = DEFAULT_WIDGETS.map((widgetType, index) => ({
           id: `widget-${widgetType}-${Date.now()}`,
           type: widgetType as WidgetType,
@@ -96,15 +73,16 @@ export function MyOffice() {
         }));
         setActiveWidgets(defaultWidgets);
       }
+      setWidgetsInitialized(true);
     }
-  }, [activeWidgets.length, currentUser]);
+  }, [widgetsInitialized, currentUser]);
 
-  // Save widgets whenever they change
+  // Save widgets whenever they change (including when all are removed)
   useEffect(() => {
-    if (activeWidgets.length > 0 && currentUser) {
+    if (widgetsInitialized && currentUser) {
       WidgetPersistenceService.saveCurrentLayout(currentUser.id, activeWidgets);
     }
-  }, [activeWidgets, currentUser]);
+  }, [activeWidgets, currentUser, widgetsInitialized]);
 
   // Load data on component mount
   useEffect(() => {
@@ -137,15 +115,58 @@ export function MyOffice() {
     const widgetConfig = WIDGET_CONFIGS[widgetType];
     if (!widgetConfig) return;
 
-    // Find available position
-    const occupiedPositions = new Set(activeWidgets.map(w => `${w.position.x}-${w.position.y}`));
+    // Helper function to check if a position would cause overlap
+    const wouldOverlap = (testX: number, testY: number, testWidth: number, testHeight: number): boolean => {
+      return activeWidgets.some(widget => {
+        // Check if any cell of the new widget would overlap with existing widget cells
+        const widgetRight = widget.position.x + widget.position.width;
+        const widgetBottom = widget.position.y + widget.position.height;
+        const testRight = testX + testWidth;
+        const testBottom = testY + testHeight;
+
+        // Check for overlap
+        return !(testRight <= widget.position.x ||
+                 testX >= widgetRight ||
+                 testBottom <= widget.position.y ||
+                 testY >= widgetBottom);
+      });
+    };
+
+    // Find available position by checking each grid cell
+    const GRID_COLS = 6;
+    const GRID_ROWS = 8;
+    let foundPosition = false;
     let x = 0, y = 0;
 
-    while (occupiedPositions.has(`${x}-${y}`)) {
-      x++;
-      if (x >= 6) {
-        x = 0;
-        y++;
+    // Try to find a position that fits the widget without overlap
+    for (let row = 0; row < GRID_ROWS && !foundPosition; row++) {
+      for (let col = 0; col < GRID_COLS && !foundPosition; col++) {
+        // Check if widget fits within grid bounds
+        if (col + widgetConfig.defaultSize.width <= GRID_COLS &&
+            row + widgetConfig.defaultSize.height <= GRID_ROWS) {
+          // Check if this position would cause overlap
+          if (!wouldOverlap(col, row, widgetConfig.defaultSize.width, widgetConfig.defaultSize.height)) {
+            x = col;
+            y = row;
+            foundPosition = true;
+          }
+        }
+      }
+    }
+
+    // If no position found, place at end (may cause overlap but user can move it)
+    if (!foundPosition) {
+      // Calculate position based on the last widget
+      if (activeWidgets.length > 0) {
+        const lastWidget = activeWidgets[activeWidgets.length - 1];
+        x = lastWidget.position.x;
+        y = lastWidget.position.y + lastWidget.position.height;
+
+        // Wrap to next column if we exceed grid bounds
+        if (y + widgetConfig.defaultSize.height > GRID_ROWS) {
+          x = (lastWidget.position.x + lastWidget.position.width) % GRID_COLS;
+          y = 0;
+        }
       }
     }
 
@@ -180,14 +201,16 @@ export function MyOffice() {
 
   const handleWidgetMove = (widgetId: string, newPosition: { x: number; y: number }) => {
     const widget = activeWidgets.find(w => w.id === widgetId);
-    if (widget) {
-      // Track widget movement for AI recommendations
-      WidgetRecommendationService.trackWidgetUsage(widget.type, 'move');
-    }
+    if (!widget) return;
+
+    // newPosition is already in grid coordinates from WidgetContainer
+    // Track widget movement for AI recommendations
+    WidgetRecommendationService.trackWidgetUsage(widget.type, 'move');
+
     setActiveWidgets(widgets =>
       widgets.map(w =>
         w.id === widgetId
-          ? { ...w, position: { ...w.position, ...newPosition } }
+          ? { ...w, position: { ...w.position, x: newPosition.x, y: newPosition.y } }
           : w
       )
     );
@@ -195,17 +218,53 @@ export function MyOffice() {
 
   const handleWidgetResize = (widgetId: string, newSize: { width: number; height: number }) => {
     const widget = activeWidgets.find(w => w.id === widgetId);
-    if (widget) {
+    if (!widget) return;
+
+    // Ensure minimum size
+    const minWidth = WIDGET_CONFIGS[widget.type]?.minSize?.width || 1;
+    const minHeight = WIDGET_CONFIGS[widget.type]?.minSize?.height || 1;
+    const maxWidth = WIDGET_CONFIGS[widget.type]?.maxSize?.width || 6;
+    const maxHeight = WIDGET_CONFIGS[widget.type]?.maxSize?.height || 4;
+
+    const clampedWidth = Math.max(minWidth, Math.min(newSize.width, maxWidth));
+    const clampedHeight = Math.max(minHeight, Math.min(newSize.height, maxHeight));
+
+    // Check if new size would fit in grid
+    const GRID_COLS = 6;
+    const GRID_ROWS = 8;
+    if (widget.position.x + clampedWidth > GRID_COLS ||
+        widget.position.y + clampedHeight > GRID_ROWS) {
+      return; // Would exceed grid bounds
+    }
+
+    // Check for collisions with other widgets
+    const wouldCollide = activeWidgets.some(w => {
+      if (w.id === widgetId) return false; // Skip self
+
+      const wRight = w.position.x + w.position.width;
+      const wBottom = w.position.y + w.position.height;
+      const newRight = widget.position.x + clampedWidth;
+      const newBottom = widget.position.y + clampedHeight;
+
+      return !(newRight <= w.position.x ||
+               widget.position.x >= wRight ||
+               newBottom <= w.position.y ||
+               widget.position.y >= wBottom);
+    });
+
+    // Only update if no collision
+    if (!wouldCollide) {
       // Track widget resizing for AI recommendations
       WidgetRecommendationService.trackWidgetUsage(widget.type, 'resize');
+
+      setActiveWidgets(widgets =>
+        widgets.map(w =>
+          w.id === widgetId
+            ? { ...w, position: { ...w.position, width: clampedWidth, height: clampedHeight } }
+            : w
+        )
+      );
     }
-    setActiveWidgets(widgets =>
-      widgets.map(w =>
-        w.id === widgetId
-          ? { ...w, position: { ...w.position, ...newSize } }
-          : w
-      )
-    );
   };
 
   const handleLayoutSave = (name: string) => {
@@ -344,14 +403,14 @@ export function MyOffice() {
   // Show widget-based office with customization
   if (activeWidgets.length > 0) {
     return (
-      <div className="flex-1 min-h-screen relative bg-gradient-to-br from-gray-900 via-black to-gray-900">
+      <div className="flex-1 min-h-screen relative">
         {/* Enhanced Header with Smart Features */}
-        <div className="liquid-glass-header p-6 pb-4 sticky top-0 z-40">
+        <div className="p-6 pb-4 sticky top-0 z-40">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-4">
               <div>
                 <h1 className="text-3xl font-bold text-adaptive-primary mb-2 flex items-center gap-3">
-                  {currentUser?.fullName.split(' ')[0] || 'My'} Office
+                  {currentUser?.fullName.split(' ')[0] ? `${currentUser.fullName.split(' ')[0]}'s` : 'My'} Office
                   <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" title="Live workspace" />
                 </h1>
                 <p className="text-adaptive-secondary">Your AI-powered productivity workspace • {activeWidgets.length} widgets active</p>
@@ -359,7 +418,7 @@ export function MyOffice() {
             </div>
             <div className="flex items-center gap-3">
               {/* Quick Stats */}
-              <div className="flex items-center gap-3 px-4 py-2 liquid-glass-sidebar rounded-lg">
+              <div className="flex items-center gap-3 px-4 py-2 bg-white/5 rounded-lg border border-white/10">
                 <div className="text-xs text-adaptive-muted">
                   <span className="font-medium text-adaptive-primary">{Math.round(Math.random() * 100)}%</span> productivity
                 </div>
@@ -393,7 +452,7 @@ export function MyOffice() {
 
           {/* Smart Context Bar - Only show when customizing */}
           {isCustomizing && (
-            <div className="liquid-glass-section rounded-xl p-4 mb-4 animate-in slide-in-from-top-2 duration-300">
+            <div className="bg-blue-500/10 rounded-xl p-4 mb-4 animate-in slide-in-from-top-2 duration-300 border border-blue-500/20">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-6">
                   <div className="flex items-center gap-2">
@@ -419,7 +478,7 @@ export function MyOffice() {
 
         {/* Enhanced Widget Grid Container */}
         <div className="px-6 pb-6">
-          <div className="relative min-h-[800px] rounded-2xl liquid-glass-sidebar overflow-hidden group">
+          <div className="relative min-h-[800px] rounded-2xl overflow-hidden group">
             {/* Advanced Grid Guidelines with Smart Zones */}
             {isCustomizing && (
               <div className="absolute inset-0 pointer-events-none">
@@ -452,7 +511,7 @@ export function MyOffice() {
                 </div>
 
                 {/* Performance Indicator */}
-                <div className="absolute top-4 right-4 flex items-center gap-2 px-3 py-2 liquid-glass-sidebar rounded-lg">
+                <div className="absolute top-4 right-4 flex items-center gap-2 px-3 py-2 bg-white/5 rounded-lg border border-white/10">
                   <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
                   <span className="text-xs text-adaptive-muted">Optimized Layout</span>
                 </div>
@@ -491,6 +550,7 @@ export function MyOffice() {
                   onMove={handleWidgetMove}
                   onResize={handleWidgetResize}
                   isCustomizing={isCustomizing}
+                  activeWidgets={activeWidgets}
                 >
                   {renderWidgetContent(widget)}
                 </WidgetContainer>
@@ -500,7 +560,7 @@ export function MyOffice() {
             {/* Floating Action Hints */}
             {isCustomizing && activeWidgets.length > 0 && (
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2">
-                <div className="flex items-center gap-2 px-4 py-2 liquid-glass-sidebar rounded-full">
+                <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-full border border-white/10">
                   <div className="flex items-center gap-2 text-xs text-adaptive-muted">
                     <kbd className="px-2 py-1 bg-white/10 rounded text-xs">⌘</kbd>
                     <span>+ click for quick actions</span>
@@ -577,13 +637,13 @@ export function MyOffice() {
 
   // Fallback to empty state
   return (
-    <div className="flex-1 min-h-screen relative bg-gradient-to-br from-gray-900 via-black to-gray-900">
+    <div className="flex-1 min-h-screen relative">
       <div className="p-6">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-4xl font-bold text-white mb-2">
-              {currentUser?.fullName.split(' ')[0] || 'My'} Office
+              {currentUser?.fullName.split(' ')[0] ? `${currentUser.fullName.split(' ')[0]}'s` : 'My'} Office
             </h1>
             <p className="text-gray-400 text-lg">Set up your personalized workspace with widgets</p>
           </div>
@@ -673,7 +733,7 @@ interface AppWalkthroughProps {
 function AppWalkthrough({ currentStep, onStepChange, onComplete, onSkip }: AppWalkthroughProps) {
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4">
-      <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl p-8 max-w-md w-full border border-white/10 shadow-2xl">
+      <div className="bg-white/5 backdrop-blur-xl rounded-2xl p-8 max-w-md w-full border border-white/10 shadow-2xl">
         <h2 className="text-xl font-bold text-white mb-4">App Walkthrough</h2>
         <p className="text-gray-400 mb-6">Learn how to use your customizable office space.</p>
         <div className="flex justify-end gap-3">

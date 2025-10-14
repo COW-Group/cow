@@ -7,6 +7,15 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 // Pages
 import Login from './pages/auth/Login';
 import Dashboard from './pages/dashboard/Dashboard';
+
+// Platform Admin Pages
+import PlatformDashboard from './pages/platform/PlatformDashboard';
+import OrganizationsManagement from './pages/platform/OrganizationsManagement';
+import UsersManagement from './pages/platform/UsersManagement';
+import TeamsManagement from './pages/platform/TeamsManagement';
+import EcosystemAppsManagement from './pages/platform/EcosystemAppsManagement';
+
+// Legacy pages (keeping for now)
 import CompanyManagement from './pages/companies/CompanyManagement';
 import InvestorOversight from './pages/investors/InvestorOversight';
 import TradingOversight from './pages/trading/TradingOversight';
@@ -22,6 +31,48 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={
+            <ProtectedRoute>
+              <Layout>
+                <PlatformDashboard />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/platform" element={
+            <ProtectedRoute>
+              <Layout>
+                <PlatformDashboard />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/organizations" element={
+            <ProtectedRoute>
+              <Layout>
+                <OrganizationsManagement />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/users" element={
+            <ProtectedRoute>
+              <Layout>
+                <UsersManagement />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/teams" element={
+            <ProtectedRoute>
+              <Layout>
+                <TeamsManagement />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/apps" element={
+            <ProtectedRoute>
+              <Layout>
+                <EcosystemAppsManagement />
+              </Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/dashboard" element={
             <ProtectedRoute>
               <Layout>
                 <Dashboard />

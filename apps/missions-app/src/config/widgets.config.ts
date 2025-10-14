@@ -161,10 +161,8 @@ export const WIDGET_CONFIGS: Record<string, WidgetConfig> = {
   },
 };
 
-export const DEFAULT_WIDGETS = [
-  'quick-stats',
-  'tasks-table',
-  'activity-feed',
+export const DEFAULT_WIDGETS: string[] = [
+  // Start with empty workspace - let users add widgets as needed
 ];
 
 export const GRID_COLS = 6;

@@ -43,14 +43,20 @@ export function HeroBackground() {
 
         // Get time-based colors and settings
         const getTimeBasedSettings = () => {
+          // ACTIVE: Always use Sunset colors
+          return {
+            backgroundColor: 0xf2b840,  // Brighter golden
+            skyColor: 0xf0720d,         // Vibrant orange-red
+            cloudShadowColor: 0x2d4a6b, // Deeper blue
+            sunColor: 0xfff2dc,         // Brighter cream
+            speed: 0.5                  // Original speed
+          }
+
+          // INACTIVE: Time-based color system (preserved for future use)
+          // Uncomment the code below and comment out the return above to enable time-based colors
+          /*
           const hour = new Date().getHours()
-          
-          // PREVIOUS SETTINGS (Enhanced Vibrant):
-          // backgroundColor: 0xf2b840 (brighter golden)
-          // skyColor: 0xf0720d (vibrant orange-red)
-          // cloudShadowColor: 0x2d4a6b (deeper blue)
-          // sunColor: 0xfff2dc (brighter cream)
-          
+
           if (hour >= 5 && hour < 8) {
             // Dawn - Soft pastels with warm pinks and light blues
             return {
@@ -65,7 +71,7 @@ export function HeroBackground() {
             // Morning - Bright and fresh
             return {
               backgroundColor: 0x87ceeb,  // Sky blue
-              skyColor: 0x4682b4,         // Steel blue  
+              skyColor: 0x4682b4,         // Steel blue
               cloudShadowColor: 0x2f4f4f, // Dark slate gray
               sunColor: 0xffd700,         // Pure gold
               speed: 0.4,                 // Gentle morning breeze
@@ -111,6 +117,7 @@ export function HeroBackground() {
               sunlightColor: 0xe6e6fa     // Lavender (gentle moonlight)
             }
           }
+          */
         }
 
         // Initialize Vanta effect

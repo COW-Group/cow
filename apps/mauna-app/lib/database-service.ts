@@ -1198,6 +1198,9 @@ async updateDailyPlan(id: string, userId: string, updates: {
       id: data.id,
       label: data.label,
       duration: data.duration,
+      actualDuration: data.actual_duration,
+      sessionStartTime: data.session_start_time,
+      elapsedTime: data.elapsed_time,
       completed: data.completed,
       locked: data.locked,
       taskListId: data.task_list_id,
@@ -1228,6 +1231,9 @@ async updateDailyPlan(id: string, userId: string, updates: {
     const dbUpdates: Record<string, any> = { updated_at: new Date().toISOString() }
     if (updates.label !== undefined) dbUpdates.label = updates.label
     if (updates.duration !== undefined) dbUpdates.duration = updates.duration
+    if (updates.actualDuration !== undefined) dbUpdates.actual_duration = updates.actualDuration
+    if (updates.sessionStartTime !== undefined) dbUpdates.session_start_time = updates.sessionStartTime
+    if (updates.elapsedTime !== undefined) dbUpdates.elapsed_time = updates.elapsedTime
     if (updates.completed !== undefined) dbUpdates.completed = updates.completed
     if (updates.locked !== undefined) dbUpdates.locked = updates.locked
     if (updates.icon !== undefined) dbUpdates.icon = updates.icon
@@ -1264,6 +1270,9 @@ async updateDailyPlan(id: string, userId: string, updates: {
       id: data.id,
       label: data.label,
       duration: data.duration,
+      actualDuration: data.actual_duration,
+      sessionStartTime: data.session_start_time,
+      elapsedTime: data.elapsed_time,
       completed: data.completed,
       locked: data.locked,
       taskListId: data.task_list_id,

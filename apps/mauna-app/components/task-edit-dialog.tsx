@@ -41,6 +41,7 @@ export function TaskEditDialog({
 
   const [label, setLabel] = useState(task.label)
   const [duration, setDuration] = useState(task.duration / 60000)
+  const [actualDuration, setActualDuration] = useState((task.actualDuration || 0) / 60000)
   const [color, setColor] = useState(task.color || "")
   const [icon, setIcon] = useState(task.icon || "")
   const [completed, setCompleted] = useState(task.completed)
@@ -78,6 +79,7 @@ export function TaskEditDialog({
   useEffect(() => {
     setLabel(task.label)
     setDuration(task.duration / 60000)
+    setActualDuration((task.actualDuration || 0) / 60000)
     setColor(task.color || "")
     setIcon(task.icon || "")
     setCompleted(task.completed)
@@ -99,6 +101,7 @@ export function TaskEditDialog({
       ...task,
       label,
       duration: duration * 60000,
+      actualDuration: actualDuration * 60000,
       color,
       icon,
       completed,
@@ -140,6 +143,7 @@ export function TaskEditDialog({
     task,
     label,
     duration,
+    actualDuration,
     color,
     icon,
     completed,
@@ -284,13 +288,27 @@ export function TaskEditDialog({
             {/* Duration */}
             <div className="flex flex-col gap-2">
               <Label htmlFor="duration" className="text-cream-25 text-sm font-medium">
-                Duration (minutes)
+                Estimated Duration (minutes)
               </Label>
               <Input
                 id="duration"
                 type="number"
                 value={duration}
                 onChange={(e) => setDuration(Number(e.target.value))}
+                className="glassmorphism-inner-card border-none text-cream-25 placeholder:text-cream-25/70"
+              />
+            </div>
+
+            {/* Actual Duration */}
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="actualDuration" className="text-cream-25 text-sm font-medium">
+                Actual Duration (minutes)
+              </Label>
+              <Input
+                id="actualDuration"
+                type="number"
+                value={actualDuration}
+                onChange={(e) => setActualDuration(Number(e.target.value))}
                 className="glassmorphism-inner-card border-none text-cream-25 placeholder:text-cream-25/70"
               />
             </div>

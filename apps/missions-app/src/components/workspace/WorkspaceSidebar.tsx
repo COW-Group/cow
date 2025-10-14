@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   ChevronDown,
   ChevronRight,
+  ChevronLeft,
   Plus,
   Search,
   Star,
@@ -29,7 +30,9 @@ import {
   Activity,
   Play,
   Pause,
-  RotateCcw
+  RotateCcw,
+  Bell,
+  HelpCircle
 } from 'lucide-react';
 import { Workspace, Folder as WorkspaceFolder, WorkspaceBoard } from '../../types/workspace.types';
 import { workspaceService } from '../../services/workspace.service';
@@ -46,17 +49,23 @@ import { useMaunAppsStore } from '../../store/maun-apps.store';
 import { useAppStore } from '../../store';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import { useAdaptiveColors } from '../../hooks/useAdaptiveColors';
+import { ThemeToggle } from '../theme/ThemeToggle';
+import { useAuth } from '../../hooks/useAuth';
 
 interface WorkspaceSidebarProps {
   currentWorkspaceId?: string;
   onWorkspaceChange?: (workspaceId: string) => void;
   onBoardSelect?: (boardId: string) => void;
+  collapsed?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
 }
 
 export function WorkspaceSidebar({
   currentWorkspaceId,
   onWorkspaceChange,
-  onBoardSelect
+  onBoardSelect,
+  collapsed = false,
+  onCollapsedChange
 }: WorkspaceSidebarProps) {
   const navigate = useNavigate();
   const { classes } = useAppTheme();
@@ -72,7 +81,7 @@ export function WorkspaceSidebar({
   const [showWorkspaceModal, setShowWorkspaceModal] = useState(false);
   const [createItemType, setCreateItemType] = useState<CreateItemType | null>(null);
   const [targetFolder, setTargetFolder] = useState<WorkspaceFolder | undefined>();
-  
+
   // Asana-style enhancements
   const [favoritesExpanded, setFavoritesExpanded] = useState(true);
   const [insightsExpanded, setInsightsExpanded] = useState(true);
@@ -80,6 +89,16 @@ export function WorkspaceSidebar({
   const [recentExpanded, setRecentExpanded] = useState(true);
   const [teamsExpanded, setTeamsExpanded] = useState(true);
   const [agentsExpanded, setAgentsExpanded] = useState(true);
+
+  // Navigation controls
+  const [showNotifications, setShowNotifications] = useState(false);
+  const sidebarCollapsed = collapsed;
+  const setSidebarCollapsed = (value: boolean) => {
+    if (onCollapsedChange) {
+      onCollapsedChange(value);
+    }
+  };
+  const { signOut } = useAuth();
   
   // Insights section items - Asana-style
   const insightsItems = [
@@ -189,6 +208,19 @@ export function WorkspaceSidebar({
 
   const handleAddApp = () => {
     openModal('MaunAppMarketplace', {});
+  };
+
+  const handleNotificationsClick = () => {
+    setShowNotifications(!showNotifications);
+  };
+
+  const handleSearchClick = () => {
+    // Navigate to my-office with search focus or open search modal
+    navigate('/app/my-office');
+  };
+
+  const handleHelpClick = () => {
+    navigate('/app/help');
   };
 
   const handleAppClick = (app: any) => {
@@ -464,18 +496,180 @@ export function WorkspaceSidebar({
   );
 
   return (
-    <div className="w-64 liquid-glass-sidebar flex flex-col h-full rounded-3xl p-4">
-      {/* Workspace Switcher Header */}
-      <div className="mb-4">
-        <WorkspaceSwitcher 
-          currentWorkspace={currentWorkspace}
-          onWorkspaceChange={(workspace) => {
-            setCurrentWorkspace(workspace);
-            onWorkspaceChange?.(workspace.id);
-          }}
-          onCreateWorkspace={() => setShowWorkspaceModal(true)}
-        />
-      </div>
+    <div className={`liquid-glass-sidebar flex flex-col h-full rounded-3xl transition-all duration-300 overflow-hidden ${
+      sidebarCollapsed ? 'w-16' : 'w-64'
+    }`}>
+      <div className="flex flex-col h-full p-4">
+        {/* Collapse/Expand Toggle Button */}
+        <div className="flex items-center justify-between mb-4">
+          {!sidebarCollapsed && (
+            <div className="flex-1 min-w-0">
+              <WorkspaceSwitcher
+                currentWorkspace={currentWorkspace}
+                onWorkspaceChange={(workspace) => {
+                  setCurrentWorkspace(workspace);
+                  onWorkspaceChange?.(workspace.id);
+                }}
+                onCreateWorkspace={() => setShowWorkspaceModal(true)}
+              />
+            </div>
+          )}
+          <button
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className={`p-2 icon-adaptive-muted hover:bg-white/08 transition-colors rounded-xl flex-shrink-0 ${
+              sidebarCollapsed ? 'mx-auto' : 'ml-2'
+            }`}
+            aria-label={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            title={sidebarCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {sidebarCollapsed ? (
+              <ChevronRight className="h-4 w-4" />
+            ) : (
+              <ChevronLeft className="h-4 w-4" />
+            )}
+          </button>
+        </div>
+
+      {/* Collapsed Navigation - Icon Only */}
+      {sidebarCollapsed && (
+        <div className="flex-1 flex flex-col items-center gap-4 py-4">
+          {/* My Office Icon */}
+          <button
+            onClick={() => navigate('/app/my-office')}
+            className="p-2 icon-adaptive-muted hover:bg-white/08 transition-colors rounded-xl"
+            title="My Office"
+          >
+            <Home className="h-5 w-5" />
+          </button>
+
+          {/* Notifications Icon */}
+          <button
+            onClick={handleNotificationsClick}
+            className="relative p-2 icon-adaptive-muted hover:bg-white/08 transition-colors rounded-xl"
+            title="Notifications"
+          >
+            <Bell className="h-5 w-5" />
+            <div className="absolute -top-0.5 -right-0.5 h-2 w-2 bg-red-500 rounded-full" />
+          </button>
+
+          {/* Search Icon */}
+          <button
+            onClick={handleSearchClick}
+            className="p-2 icon-adaptive-muted hover:bg-white/08 transition-colors rounded-xl"
+            title="Search"
+          >
+            <Search className="h-5 w-5" />
+          </button>
+
+          {/* Insights Icon */}
+          <button
+            onClick={() => navigate('/app/insights')}
+            className="p-2 icon-adaptive-muted hover:bg-white/08 transition-colors rounded-xl"
+            title="Insights"
+          >
+            <Zap className="h-5 w-5" />
+          </button>
+
+          {/* Teams Icon */}
+          <button
+            onClick={() => setTeamsExpanded(!teamsExpanded)}
+            className="p-2 icon-adaptive-muted hover:bg-white/08 transition-colors rounded-xl"
+            title="Teams"
+          >
+            <Users className="h-5 w-5" />
+          </button>
+
+          {/* Agents Icon */}
+          <button
+            onClick={() => navigate('/app/agents')}
+            className="p-2 icon-adaptive-muted hover:bg-white/08 transition-colors rounded-xl"
+            title="Agents"
+          >
+            <Bot className="h-5 w-5" />
+          </button>
+
+          {/* Help Icon */}
+          <button
+            onClick={handleHelpClick}
+            className="p-2 icon-adaptive-muted hover:bg-white/08 transition-colors rounded-xl"
+            title="Help"
+          >
+            <HelpCircle className="h-5 w-5" />
+          </button>
+        </div>
+      )}
+
+      {/* Navigation Controls */}
+      {!sidebarCollapsed && (
+        <div className="mb-4 pb-4 border-b border-white/10">
+          <div className="flex items-center justify-between px-2">
+            {/* Notifications */}
+            <div className="relative">
+              <button
+                onClick={handleNotificationsClick}
+                className="relative p-2 icon-adaptive-muted hover:bg-white/08 transition-colors rounded-xl"
+                aria-label="Notifications"
+              >
+                <Bell className="h-4 w-4" />
+                <div className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 bg-red-500 rounded-full flex items-center justify-center">
+                  <span className="text-[8px] text-white font-bold">3</span>
+                </div>
+              </button>
+
+              {/* Notifications Dropdown */}
+              {showNotifications && (
+                <>
+                  <div className="absolute left-0 top-full mt-2 w-72 liquid-glass-sidebar rounded-2xl shadow-lg py-2 z-50 border border-white/10">
+                    <div className="px-4 py-2 border-b border-white/10">
+                      <h3 className="text-sm font-semibold text-adaptive-primary">Notifications</h3>
+                    </div>
+                    <div className="max-h-64 overflow-y-auto">
+                      <div className="px-4 py-3 hover:bg-white/05 transition-colors cursor-pointer rounded-lg mx-2">
+                        <p className="text-sm text-adaptive-primary">New lead added to CRM</p>
+                        <p className="text-xs text-adaptive-muted">2 minutes ago</p>
+                      </div>
+                      <div className="px-4 py-3 hover:bg-white/05 transition-colors cursor-pointer rounded-lg mx-2">
+                        <p className="text-sm text-adaptive-primary">Board updated: Sales Pipeline</p>
+                        <p className="text-xs text-adaptive-muted">1 hour ago</p>
+                      </div>
+                      <div className="px-4 py-3 hover:bg-white/05 transition-colors cursor-pointer rounded-lg mx-2">
+                        <p className="text-sm text-adaptive-primary">New comment on task</p>
+                        <p className="text-xs text-adaptive-muted">3 hours ago</p>
+                      </div>
+                    </div>
+                  </div>
+                  {/* Click outside to close */}
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setShowNotifications(false)}
+                  />
+                </>
+              )}
+            </div>
+
+            {/* Search */}
+            <button
+              onClick={handleSearchClick}
+              className="p-2 icon-adaptive-muted hover:bg-white/08 transition-colors rounded-xl"
+              aria-label="Search"
+            >
+              <Search className="h-4 w-4" />
+            </button>
+
+            {/* Theme Toggle */}
+            <ThemeToggle size="sm" />
+
+            {/* Help */}
+            <button
+              onClick={handleHelpClick}
+              className="p-2 icon-adaptive-muted hover:bg-white/08 transition-colors rounded-xl"
+              aria-label="Help"
+            >
+              <HelpCircle className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Navigation */}
       <div className="flex-1 overflow-y-auto">
@@ -487,7 +681,7 @@ export function WorkspaceSidebar({
           >
             <Home className="w-5 h-5 mr-3 icon-adaptive-primary" />
             <span className="text-sm font-semibold text-adaptive-primary">
-              {currentUser?.fullName.split(' ')[0] || 'My'} Office
+              {currentUser?.fullName.split(' ')[0] ? `${currentUser.fullName.split(' ')[0]}'s` : 'My'} Office
             </span>
           </div>
         </div>
@@ -924,23 +1118,60 @@ export function WorkspaceSidebar({
           </div>
         )}
       </div>
+      </div>
 
       {/* Clean Footer */}
-      <div className="mt-auto">
-        <div className="flex items-center justify-between p-3 hover:bg-white/05 transition-colors rounded-2xl">
-          <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 bg-gradient-to-br from-blue-500/80 to-purple-600/80 rounded-full flex items-center justify-center border border-white/20">
-              <span className="text-white text-sm font-semibold">U</span>
+      <div className="mt-auto p-4">
+        {sidebarCollapsed ? (
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-9 h-9 bg-gradient-to-br from-blue-500/80 to-purple-600/80 rounded-full flex items-center justify-center border border-white/20 cursor-pointer hover:scale-105 transition-transform">
+              <span className="text-white text-sm font-semibold">
+                {currentUser?.name ?
+                  (currentUser.name.split(' ').length >= 2
+                    ? `${currentUser.name.split(' ')[0][0]}${currentUser.name.split(' ')[1][0]}`
+                    : currentUser.name.substring(0, 2)
+                  ).toUpperCase()
+                  : 'U'
+                }
+              </span>
             </div>
-            <div className="flex flex-col">
-              <span className="text-sm font-semibold text-adaptive-primary">User</span>
-              <span className="text-xs text-adaptive-muted font-medium">Online</span>
-            </div>
+            <button
+              className="p-2 hover:bg-white/08 transition-colors rounded-xl"
+              onClick={() => navigate('/app/settings')}
+              title="Settings"
+            >
+              <Settings className="w-4 h-4 icon-adaptive-muted" />
+            </button>
           </div>
-          <button className="p-2.5 hover:bg-white/08 transition-colors rounded-xl">
-            <Settings className="w-4 h-4 icon-adaptive-muted" />
-          </button>
-        </div>
+        ) : (
+          <div className="flex items-center justify-between p-3 hover:bg-white/05 transition-colors rounded-2xl">
+            <div className="flex items-center space-x-3">
+              <div className="w-9 h-9 bg-gradient-to-br from-blue-500/80 to-purple-600/80 rounded-full flex items-center justify-center border border-white/20">
+                <span className="text-white text-sm font-semibold">
+                  {currentUser?.name ?
+                    (currentUser.name.split(' ').length >= 2
+                      ? `${currentUser.name.split(' ')[0][0]}${currentUser.name.split(' ')[1][0]}`
+                      : currentUser.name.substring(0, 2)
+                    ).toUpperCase()
+                    : 'U'
+                  }
+                </span>
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-adaptive-primary">
+                  {currentUser?.name || currentUser?.fullName || 'User'}
+                </span>
+                <span className="text-xs text-adaptive-muted font-medium">Online</span>
+              </div>
+            </div>
+            <button
+              className="p-2.5 hover:bg-white/08 transition-colors rounded-xl"
+              onClick={() => navigate('/app/settings')}
+            >
+              <Settings className="w-4 h-4 icon-adaptive-muted" />
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Workspace Management Modal */}

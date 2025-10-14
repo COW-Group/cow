@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Zap, Target, Users, BarChart3, Shield, Building, Rocket, TrendingUp, Globe, CheckCircle, Star } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
+import { supabase } from '@cow/supabase-client';
 
 // Hero Background Component (similar to products-site)
 function MissionsHeroBackground() {
@@ -108,11 +110,14 @@ function MissionsHeroBackground() {
 }
 
 export function LandingPage() {
+  const navigate = useNavigate();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [signUpData, setSignUpData] = useState({ name: '', email: '', password: '', company: '' });
   const [isClient, setIsClient] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     setIsClient(true);
@@ -186,20 +191,93 @@ export function LandingPage() {
     }
   ];
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setShowLoginModal(false);
-    window.location.href = '/app/my-office';
+    if (!loginData.email.trim() || !loginData.password.trim()) return;
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      console.log('🔐 Modal Login: Attempting sign in...', loginData.email);
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: loginData.email,
+        password: loginData.password,
+      });
+
+      if (error) {
+        console.error('❌ Modal Login: Error', error);
+        throw error;
+      }
+
+      if (data.session) {
+        console.log('✅ Modal Login: Success! Redirecting...');
+        setShowLoginModal(false);
+        navigate('/app/my-office');
+      }
+    } catch (err: any) {
+      console.error('❌ Modal Login: Failed', err);
+      setError(err.message || 'Failed to sign in. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    setShowSignUpModal(false);
-    window.location.href = '/app/my-office';
+    if (!signUpData.email.trim() || !signUpData.password.trim() || !signUpData.name.trim()) return;
+
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      console.log('📝 Modal Signup: Attempting sign up...', signUpData.email);
+
+      const { data, error } = await supabase.auth.signUp({
+        email: signUpData.email,
+        password: signUpData.password,
+        options: {
+          data: {
+            full_name: signUpData.name,
+            company: signUpData.company,
+          }
+        }
+      });
+
+      if (error) {
+        console.error('❌ Modal Signup: Error', error);
+        throw error;
+      }
+
+      if (data.user) {
+        console.log('✅ Modal Signup: Success!', data.user.id);
+
+        // Check if email confirmation is required
+        if (data.user.identities?.length === 0) {
+          setError('This email is already registered. Please sign in instead.');
+        } else if (data.session) {
+          // User is auto-confirmed, redirect to app
+          setShowSignUpModal(false);
+          navigate('/app/my-office');
+        } else {
+          // Email confirmation required
+          setError(null);
+          alert('Success! Please check your email for a confirmation link.');
+          setShowSignUpModal(false);
+        }
+      }
+    } catch (err: any) {
+      console.error('❌ Modal Signup: Failed', err);
+      setError(err.message || 'Failed to sign up. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleDemoLogin = () => {
-    window.location.href = '/app/my-office';
+    // For demo, just navigate without auth
+    navigate('/app/my-office');
   };
 
   return (
@@ -753,6 +831,11 @@ export function LandingPage() {
           title="Welcome back"
         >
           <div className="p-6">
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                {error}
+              </div>
+            )}
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
@@ -792,12 +875,15 @@ export function LandingPage() {
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => setShowLoginModal(false)}
+                    onClick={() => {
+                      setShowLoginModal(false);
+                      setError(null);
+                    }}
                   >
                     Cancel
                   </Button>
-                  <Button type="submit">
-                    Sign In
+                  <Button type="submit" disabled={isLoading}>
+                    {isLoading ? 'Signing in...' : 'Sign In'}
                   </Button>
                 </div>
               </div>
@@ -836,6 +922,11 @@ export function LandingPage() {
           title="Create your account"
         >
           <div className="p-6">
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                {error}
+              </div>
+            )}
             <form onSubmit={handleSignUp} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
@@ -908,12 +999,15 @@ export function LandingPage() {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => setShowSignUpModal(false)}
+                  onClick={() => {
+                    setShowSignUpModal(false);
+                    setError(null);
+                  }}
                 >
                   Cancel
                 </Button>
-                <Button type="submit">
-                  Create Account
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? 'Creating account...' : 'Create Account'}
                 </Button>
               </div>
             </form>

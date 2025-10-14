@@ -511,7 +511,7 @@ export function WidgetCustomizationMenu({
       {/* Save Layout Dialog */}
       {showSaveDialog && (
         <div className="fixed inset-0 z-60 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl p-6 w-full max-w-md border border-white/10 shadow-2xl">
+          <div className="liquid-glass-sidebar rounded-2xl p-6 w-full max-w-md border border-white/10 shadow-2xl">
             <h3 className="text-lg font-semibold text-white mb-4">Save Layout</h3>
             <input
               type="text"

@@ -10,6 +10,8 @@ import {
 } from 'lucide-react';
 import { useAppTheme } from '../../hooks/useAppTheme';
 import { ThemeToggle } from '../theme/ThemeToggle';
+import { useAppStore } from '../../store/app.store';
+import { useAuth } from '../../hooks/useAuth';
 
 interface AppHeaderProps {
   onToggleTheme?: () => void;
@@ -20,6 +22,18 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const { classes } = useAppTheme();
+  const { currentUser } = useAppStore();
+  const { signOut } = useAuth();
+
+  // Get user initials for avatar
+  const getUserInitials = () => {
+    if (!currentUser?.name) return 'U';
+    const names = currentUser.name.split(' ');
+    if (names.length >= 2) {
+      return `${names[0][0]}${names[1][0]}`.toUpperCase();
+    }
+    return currentUser.name.substring(0, 2).toUpperCase();
+  };
 
   const handleNotificationsClick = () => {
     setShowNotifications(!showNotifications);
@@ -44,17 +58,17 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
 
   return (
     <div className="fixed top-6 left-1/2 transform -translate-x-1/2 z-40">
-      <div className="liquid-glass-sidebar rounded-2xl px-8 py-4 flex items-center gap-8 shadow-lg">
+      <div className="flex items-center gap-8 px-8 py-3">
         {/* Left side - Logo and brand */}
-        <div className="flex items-center space-x-3 cursor-pointer hover:bg-white/05 transition-colors px-4 py-2 rounded-xl" onClick={() => navigate('/')}>
-          <Circle className="h-7 w-7 fill-yellow-400 text-yellow-400" />
-          <span className="text-xl font-bold text-adaptive-primary tracking-tight">
+        <div className="flex items-center space-x-3 cursor-pointer hover:bg-white/05 transition-colors px-3 py-2 rounded-xl" onClick={() => navigate('/')}>
+          <Circle className="h-6 w-6 fill-yellow-400 text-yellow-400" />
+          <span className="text-lg font-bold text-adaptive-primary tracking-tight">
             COW
           </span>
         </div>
 
         {/* Separator */}
-        <div className="h-6 w-px bg-white/10"></div>
+        <div className="h-5 w-px bg-white/20"></div>
 
         {/* Right side - Icons and avatar */}
         <div className="flex items-center space-x-1">
@@ -132,15 +146,19 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
               className="h-9 w-9 rounded-full bg-gradient-to-br from-blue-500/80 to-purple-600/80 flex items-center justify-center cursor-pointer hover:bg-white/08 transition-colors border border-white/20"
               aria-label="User menu"
             >
-              <span className="text-sm text-white font-medium">LP</span>
+              <span className="text-sm text-white font-medium">{getUserInitials()}</span>
             </button>
 
             {/* User Menu Dropdown */}
             {showUserMenu && (
-              <div className="absolute right-0 top-full mt-3 w-48 liquid-glass-sidebar rounded-2xl shadow-lg py-2 z-50">
+              <div className="absolute right-0 top-full mt-3 w-56 liquid-glass-sidebar rounded-2xl shadow-lg py-2 z-50">
                 <div className="px-4 py-2 border-b border-white/10">
-                  <p className="text-sm font-medium text-adaptive-primary">Likhitha Palaypu</p>
-                  <p className="text-xs text-adaptive-muted">likhitha@example.com</p>
+                  <p className="text-sm font-medium text-adaptive-primary">
+                    {currentUser?.name || 'User'}
+                  </p>
+                  <p className="text-xs text-adaptive-muted truncate">
+                    {currentUser?.email || 'No email'}
+                  </p>
                 </div>
                 <button
                   onClick={() => {
@@ -161,9 +179,9 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
                   Account Settings
                 </button>
                 <button
-                  onClick={() => {
+                  onClick={async () => {
                     setShowUserMenu(false);
-                    // Sign out functionality - navigate to home
+                    await signOut();
                     navigate('/');
                   }}
                   className="w-full px-4 py-2 text-left text-sm text-adaptive-secondary hover:bg-white/05 hover:text-adaptive-primary transition-colors rounded-lg mx-2 mb-1"

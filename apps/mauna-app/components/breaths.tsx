@@ -41,6 +41,7 @@ interface SortableBreathItemProps {
   onDelete: (id: string) => void
   onUpdateName: (id: string, name: string) => void
   onEstimationChange: (id: string, value: string) => void
+  onTotalTimeChange: (id: string, value: string) => void
   isStepRunning: boolean // Passed from parent (FocusPage)
   formatTime: (seconds: number) => string
   formatDateTime: (dateString: string | undefined | null) => string
@@ -56,6 +57,7 @@ const SortableBreathItem = React.memo<SortableBreathItemProps>(
     onDelete,
     onUpdateName,
     onEstimationChange,
+    onTotalTimeChange,
     isStepRunning,
     formatTime,
     formatDateTime,
@@ -65,10 +67,12 @@ const SortableBreathItem = React.memo<SortableBreathItemProps>(
     const [isEditing, setIsEditing] = useState(false)
     const [editedName, setEditedName] = useState(breath.name ?? "")
     const [editedEstimation, setEditedEstimation] = useState(Math.floor((breath.timeEstimationSeconds ?? 0) / 60))
+    const [editedTotalTime, setEditedTotalTime] = useState(Math.floor((breath.totalTimeSeconds ?? 0) / 60))
 
     useEffect(() => {
       setEditedName(breath.name ?? "")
       setEditedEstimation(Math.floor((breath.timeEstimationSeconds ?? 0) / 60))
+      setEditedTotalTime(Math.floor((breath.totalTimeSeconds ?? 0) / 60))
     }, [breath])
 
     const style = {
@@ -85,6 +89,7 @@ const SortableBreathItem = React.memo<SortableBreathItemProps>(
     const handleSaveClick = () => {
       onUpdateName(breath.id, editedName)
       onEstimationChange(breath.id, editedEstimation.toString())
+      onTotalTimeChange(breath.id, editedTotalTime.toString())
       setIsEditing(false)
     }
 
@@ -210,19 +215,35 @@ const SortableBreathItem = React.memo<SortableBreathItemProps>(
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2 mt-2">
-            <Label htmlFor={`estimation-${breath.id}`} className="text-xs font-medium text-cream-25">
-              Est. (min):
-            </Label>
-            <Input
-              id={`estimation-${breath.id}`}
-              type="number"
-              min="0"
-              value={editedEstimation}
-              onChange={(e) => setEditedEstimation(Number(e.target.value))}
-              className="w-20 h-7 text-xs bg-white/10 border-brushed-silver/30 text-cream-25 placeholder:text-cream-25/70 focus-visible:ring-sapphire-blue focus-visible:ring-offset-0"
-              readOnly={!isEditing}
-            />
+          <div className="flex items-center gap-4 mt-2">
+            <div className="flex items-center gap-2">
+              <Label htmlFor={`estimation-${breath.id}`} className="text-xs font-medium text-cream-25">
+                Est. (min):
+              </Label>
+              <Input
+                id={`estimation-${breath.id}`}
+                type="number"
+                min="0"
+                value={editedEstimation}
+                onChange={(e) => setEditedEstimation(Number(e.target.value))}
+                className="w-20 h-7 text-xs bg-white/10 border-brushed-silver/30 text-cream-25 placeholder:text-cream-25/70 focus-visible:ring-sapphire-blue focus-visible:ring-offset-0"
+                readOnly={!isEditing}
+              />
+            </div>
+            <div className="flex items-center gap-2">
+              <Label htmlFor={`totalTime-${breath.id}`} className="text-xs font-medium text-cream-25">
+                Actual (min):
+              </Label>
+              <Input
+                id={`totalTime-${breath.id}`}
+                type="number"
+                min="0"
+                value={editedTotalTime}
+                onChange={(e) => setEditedTotalTime(Number(e.target.value))}
+                className="w-20 h-7 text-xs bg-white/10 border-brushed-silver/30 text-cream-25 placeholder:text-cream-25/70 focus-visible:ring-sapphire-blue focus-visible:ring-offset-0"
+                readOnly={!isEditing}
+              />
+            </div>
           </div>
         </div>
       </Card>
@@ -625,6 +646,34 @@ export default function Breaths({ currentStepId, initialBreaths, onSaveBreaths, 
     [user?.id, currentStepId, breaths, debouncedSaveBreaths, toast],
   )
 
+  const updateBreathTotalTime = useCallback(
+    async (breathId: string, totalMinutes: string) => {
+      if (!user?.id || !currentStepId) return
+
+      try {
+        const totalSeconds = Math.max(0, Number(totalMinutes) || 0) * 60
+        const updatedBreathFromDB = await databaseService.updateBreathTiming(breathId, user.id, {
+          totalTimeSeconds: totalSeconds,
+        })
+        const updatedBreaths = breaths.map((b) => (b.id === breathId ? { ...b, ...updatedBreathFromDB } : b))
+        setBreaths(updatedBreaths)
+        debouncedSaveBreaths(currentStepId, updatedBreaths)
+        toast({
+          title: "Breath updated",
+          description: "Breath actual time has been updated.",
+        })
+      } catch (error) {
+        console.error("Error updating breath total time:", error)
+        toast({
+          title: "Error",
+          description: "Failed to update breath total time. Please try again.",
+          variant: "destructive",
+        })
+      }
+    },
+    [user?.id, currentStepId, breaths, debouncedSaveBreaths, toast],
+  )
+
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event
@@ -713,6 +762,7 @@ export default function Breaths({ currentStepId, initialBreaths, onSaveBreaths, 
                   onDelete={deleteBreath}
                   onUpdateName={updateBreathName}
                   onEstimationChange={updateBreathEstimation}
+                  onTotalTimeChange={updateBreathTotalTime}
                   isStepRunning={isStepRunning}
                   formatTime={formatTime}
                   formatDateTime={formatDateTime}

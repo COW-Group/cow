@@ -1,12 +1,12 @@
 /**
- * Missions-app Supabase client
+ * Admin Portal Supabase client
  *
  * Uses shared @cow/supabase-client package for consistent configuration
  * across the monorepo. Database types are defined below for TypeScript support.
  */
-import { supabase as sharedSupabase } from '@cow/supabase-client';
+import { supabase } from '@cow/supabase-client';
 
-export const supabase = sharedSupabase;
+export { supabase };
 
 // Database types for TypeScript
 export interface Database {
@@ -634,6 +634,3 @@ export interface Database {
     };
   };
 }
-
-export type SupabaseClient = ReturnType<typeof createClient<Database>>;
-export const supabaseClient = supabase as SupabaseClient;

@@ -108,7 +108,7 @@ export function WorkspaceSwitcher({
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 mt-1 liquid-glass-sidebar rounded-lg shadow-lg z-50 max-h-96 overflow-hidden">
+        <div className="absolute top-full left-0 mt-1 liquid-glass-sidebar rounded-lg shadow-lg z-50 max-h-96 overflow-hidden border border-white/10" style={{ width: '240px', maxWidth: 'calc(100vw - 2rem)' }}>
           {/* Search */}
           <div className="p-3 border-b border-white/10">
             <div className="relative">

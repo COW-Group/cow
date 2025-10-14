@@ -11,6 +11,7 @@ interface WidgetContainerProps {
   onMove?: (widgetId: string, newPosition: { x: number; y: number }) => void;
   isCustomizing?: boolean;
   className?: string;
+  activeWidgets?: Widget[];
 }
 
 export function WidgetContainer({
@@ -21,56 +22,88 @@ export function WidgetContainer({
   onResize,
   onMove,
   isCustomizing = false,
-  className = ''
+  className = '',
+  activeWidgets = []
 }: WidgetContainerProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const dragRef = useRef<{ startX: number; startY: number; startLeft: number; startTop: number } | null>(null);
+  const [dragOffset, setDragOffset] = useState<{ x: number; y: number } | null>(null);
+  const [tentativePosition, setTentativePosition] = useState<{ x: number; y: number } | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Helper function to check if a position would cause overlap
+  const wouldOverlap = (testX: number, testY: number): boolean => {
+    return activeWidgets.some(w => {
+      if (w.id === widget.id) return false; // Skip self
+
+      const wRight = w.position.x + w.position.width;
+      const wBottom = w.position.y + w.position.height;
+      const testRight = testX + widget.position.width;
+      const testBottom = testY + widget.position.height;
+
+      return !(testRight <= w.position.x ||
+               testX >= wRight ||
+               testBottom <= w.position.y ||
+               testY >= wBottom);
+    });
+  };
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!isCustomizing || e.target !== e.currentTarget) return;
 
     e.preventDefault();
-    setIsDragging(true);
+    e.stopPropagation();
 
+    // Calculate offset from widget's top-left corner
     const rect = containerRef.current?.getBoundingClientRect();
     if (rect) {
-      dragRef.current = {
-        startX: e.clientX,
-        startY: e.clientY,
-        startLeft: rect.left,
-        startTop: rect.top
-      };
+      setDragOffset({
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top
+      });
+      setIsDragging(true);
     }
   };
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging || !dragRef.current) return;
+    if (!isDragging || !dragOffset) return;
 
     e.preventDefault();
-    const deltaX = e.clientX - dragRef.current.startX;
-    const deltaY = e.clientY - dragRef.current.startY;
 
-    const newX = Math.max(0, dragRef.current.startLeft + deltaX);
-    const newY = Math.max(0, dragRef.current.startTop + deltaY);
+    // Calculate pixel position
+    const pixelX = e.clientX - dragOffset.x;
+    const pixelY = e.clientY - dragOffset.y;
 
-    if (containerRef.current) {
-      containerRef.current.style.left = `${newX}px`;
-      containerRef.current.style.top = `${newY}px`;
+    // Convert to grid position with snapping
+    const GRID_CELL_WIDTH = 216;
+    const GRID_CELL_HEIGHT = 166;
+    const GRID_COLS = 6;
+    const GRID_ROWS = 8;
+
+    let gridX = Math.round(pixelX / GRID_CELL_WIDTH);
+    let gridY = Math.round(pixelY / GRID_CELL_HEIGHT);
+
+    // Clamp to grid bounds
+    gridX = Math.max(0, Math.min(gridX, GRID_COLS - widget.position.width));
+    gridY = Math.max(0, Math.min(gridY, GRID_ROWS - widget.position.height));
+
+    // Check if this position would overlap
+    if (!wouldOverlap(gridX, gridY)) {
+      setTentativePosition({ x: gridX, y: gridY });
     }
   };
 
   const handleMouseUp = () => {
-    if (isDragging && dragRef.current && containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      onMove?.(widget.id, { x: rect.left, y: rect.top });
+    if (isDragging && tentativePosition) {
+      // Apply the final position
+      onMove?.(widget.id, { x: tentativePosition.x, y: tentativePosition.y });
     }
 
     setIsDragging(false);
-    dragRef.current = null;
+    setDragOffset(null);
+    setTentativePosition(null);
   };
 
   React.useEffect(() => {
@@ -84,27 +117,31 @@ export function WidgetContainer({
     }
   }, [isDragging]);
 
+  // Use tentative position during drag, otherwise use widget position
+  const displayPosition = isDragging && tentativePosition ? tentativePosition : widget.position;
+
   const widgetStyle = {
     width: `${widget.position.width * 200 + (widget.position.width - 1) * 16}px`,
     height: isMinimized ? '48px' : `${widget.position.height * 150 + (widget.position.height - 1) * 16}px`,
-    left: `${widget.position.x * 216}px`,
-    top: `${widget.position.y * 166}px`,
+    left: `${displayPosition.x * 216}px`,
+    top: `${displayPosition.y * 166}px`,
     zIndex: isDragging ? 1000 : 'auto',
-    cursor: isCustomizing && !isDragging ? 'move' : 'default'
+    cursor: isCustomizing && !isDragging ? 'move' : 'default',
+    transition: isDragging ? 'none' : 'all 200ms ease-out'
   };
 
   return (
     <div
       ref={containerRef}
-      className={`absolute liquid-glass-sidebar rounded-2xl transition-all duration-300 group ${
+      className={`absolute liquid-glass-sidebar rounded-2xl transition-all duration-300 group overflow-hidden ${
         isDragging ? 'shadow-2xl shadow-blue-500/20 border-blue-500/30 scale-105 z-50' : ''
       } ${isCustomizing ? 'hover:border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/10' : ''} ${className}`}
       style={widgetStyle}
       onMouseDown={handleMouseDown}
     >
       {/* Widget Header */}
-      <div className={`liquid-glass-header flex items-center justify-between p-4 ${
-        isCustomizing ? 'liquid-glass-section' : ''
+      <div className={`flex items-center justify-between p-4 border-b border-white/10 bg-white/5 ${
+        isCustomizing ? 'bg-blue-500/10' : ''
       }`}>
         <div className="flex items-center gap-3">
           <h3 className="font-semibold text-adaptive-primary text-sm truncate">{widget.title}</h3>
@@ -137,51 +174,71 @@ export function WidgetContainer({
           {/* More Menu */}
           <div className="relative">
             <button
-              onClick={() => setShowMenu(!showMenu)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowMenu(!showMenu);
+              }}
               className="icon-adaptive-muted hover:text-adaptive-primary transition-all duration-200 p-1.5 rounded-lg liquid-glass-interactive"
             >
               <MoreVertical className="w-3 h-3" />
             </button>
 
             {showMenu && (
-              <div className="liquid-dropdown absolute right-0 top-full mt-2 w-44 rounded-xl shadow-2xl z-50">
-                <div className="py-2">
-                  {onSettings && (
-                    <button
-                      onClick={() => {
-                        onSettings(widget.id);
-                        setShowMenu(false);
-                      }}
-                      className="liquid-dropdown-item w-full px-3 py-2 text-left text-sm flex items-center gap-2 rounded-lg mx-1"
-                    >
-                      <Settings className="w-3 h-3" />
-                      Configure
-                    </button>
-                  )}
-                  <button
-                    onClick={() => setIsMinimized(!isMinimized)}
-                    className="liquid-dropdown-item w-full px-3 py-2 text-left text-sm flex items-center gap-2 rounded-lg mx-1"
-                  >
-                    {isMinimized ? <Maximize2 className="w-3 h-3" /> : <Minimize2 className="w-3 h-3" />}
-                    {isMinimized ? 'Expand' : 'Minimize'}
-                  </button>
-                  {onRemove && (
-                    <>
-                      <div className="border-t border-white/10 my-2 mx-2" />
+              <>
+                <div className="liquid-dropdown absolute right-0 top-full mt-2 w-44 rounded-xl shadow-2xl z-[60] liquid-glass-sidebar border border-white/10">
+                  <div className="py-2">
+                    {onSettings && (
                       <button
-                        onClick={() => {
-                          onRemove(widget.id);
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onSettings(widget.id);
                           setShowMenu(false);
                         }}
-                        className="w-full px-3 py-2 text-left text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 flex items-center gap-2 rounded-lg mx-1 transition-all duration-200"
+                        className="liquid-dropdown-item w-full px-3 py-2 text-left text-sm flex items-center gap-2 rounded-lg mx-1 text-adaptive-primary hover:bg-white/10"
                       >
-                        <X className="w-3 h-3" />
-                        Remove Widget
+                        <Settings className="w-3 h-3" />
+                        Configure
                       </button>
-                    </>
-                  )}
+                    )}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setIsMinimized(!isMinimized);
+                        setShowMenu(false);
+                      }}
+                      className="liquid-dropdown-item w-full px-3 py-2 text-left text-sm flex items-center gap-2 rounded-lg mx-1 text-adaptive-primary hover:bg-white/10"
+                    >
+                      {isMinimized ? <Maximize2 className="w-3 h-3" /> : <Minimize2 className="w-3 h-3" />}
+                      {isMinimized ? 'Expand' : 'Minimize'}
+                    </button>
+                    {onRemove && (
+                      <>
+                        <div className="border-t border-white/10 my-2 mx-2" />
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            console.log('Removing widget:', widget.id, widget.title);
+                            onRemove(widget.id);
+                            setShowMenu(false);
+                          }}
+                          className="w-full px-3 py-2 text-left text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 flex items-center gap-2 rounded-lg mx-1 transition-all duration-200"
+                        >
+                          <X className="w-3 h-3" />
+                          Remove Widget
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
+                {/* Click outside to close menu overlay */}
+                <div
+                  className="fixed inset-0 z-[55]"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowMenu(false);
+                  }}
+                />
+              </>
             )}
           </div>
 
@@ -266,14 +323,6 @@ export function WidgetContainer({
             </div>
           )}
         </>
-      )}
-
-      {/* Click outside to close menu */}
-      {showMenu && (
-        <div
-          className="fixed inset-0 z-40"
-          onClick={() => setShowMenu(false)}
-        />
       )}
     </div>
   );

@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { RootLayout } from '../layout/RootLayout';
 import { PublicLayout } from '../layout/PublicLayout';
 import { LandingPage } from '../../pages/LandingPage';
+import { Login } from '../../pages/Login';
 import { MyOffice } from '../../pages/MyOffice';
 import { BoardDetailPage } from '../../pages/BoardDetailPage';
 import { LatestBoard } from '../../pages/LatestBoard';
@@ -19,6 +20,9 @@ import { Settings } from '../../pages/Settings';
 import { HelpCenter } from '../../pages/HelpCenter';
 import { BoardDemo } from '../../pages/BoardDemo';
 import MigrationDashboard from '../migration/MigrationDashboard';
+import { OrganizationSettings } from '../../pages/organization/OrganizationSettings';
+import { OrganizationMembers } from '../../pages/organization/OrganizationMembers';
+import { OrganizationTeams } from '../../pages/organization/OrganizationTeams';
 
 
 export function RouterSetup() {
@@ -27,6 +31,7 @@ export function RouterSetup() {
       {/* Public routes without app layout */}
       <Route path="/" element={<PublicLayout />}>
         <Route index element={<LandingPage />} />
+        <Route path="login" element={<Login />} />
       </Route>
 
       {/* App routes with full layout */}
@@ -71,6 +76,11 @@ export function RouterSetup() {
         <Route path="upgrade" element={<div className="p-6"><h1 className="text-2xl font-bold">Upgrade - Coming Soon</h1></div>} />
         <Route path="help" element={<HelpCenter />} />
         <Route path="settings" element={<Settings />} />
+
+        {/* Organization routes */}
+        <Route path="organization/settings" element={<OrganizationSettings />} />
+        <Route path="organization/members" element={<OrganizationMembers />} />
+        <Route path="organization/teams" element={<OrganizationTeams />} />
       </Route>
 
       {/* Legacy routes - redirect to app */}

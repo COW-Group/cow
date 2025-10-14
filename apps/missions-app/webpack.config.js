@@ -1,6 +1,18 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
+const fs = require('fs');
+
+// Load environment variables from monorepo root
+const envPath = path.resolve(__dirname, '../../.env.local');
+if (fs.existsSync(envPath)) {
+  const envConfig = require('dotenv').config({ path: envPath });
+  if (envConfig.parsed) {
+    Object.keys(envConfig.parsed).forEach(key => {
+      process.env[key] = envConfig.parsed[key];
+    });
+  }
+}
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';

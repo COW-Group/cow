@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { AppHeader } from './AppHeader';
 import { WorkspaceSidebar } from '../workspace/WorkspaceSidebar';
 import { useAppStore } from '../../store';
 import { Modal } from '../ui/Modal';
@@ -12,6 +11,7 @@ import { VantaBackground } from '../background/VantaBackground';
 
 export function RootLayout() {
   const [currentWorkspaceId, setCurrentWorkspaceId] = useState<string>('');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { activeModal, modalData, closeModal } = useAppStore();
   const { activeApp } = useMaunAppsStore();
 
@@ -22,21 +22,26 @@ export function RootLayout() {
         <VantaBackground />
       </div>
 
-      {/* Floating Header */}
-      <AppHeader />
+      {/* AppHeader removed - navigation now in sidebar */}
 
       {/* Main Content Area */}
-      <div className="relative z-10 pt-16">
+      <div className="relative z-10 pt-4">
         {/* Enhanced Workspace Sidebar - Floating with proper spacing */}
-        <div className="fixed left-4 top-20 bottom-4 z-10 w-80">
+        <div className={`fixed left-4 top-4 bottom-4 z-10 transition-all duration-300 ${
+          sidebarCollapsed ? 'w-20' : 'w-80'
+        }`}>
           <WorkspaceSidebar
             currentWorkspaceId={currentWorkspaceId}
             onWorkspaceChange={setCurrentWorkspaceId}
+            collapsed={sidebarCollapsed}
+            onCollapsedChange={setSidebarCollapsed}
           />
         </div>
 
-        {/* Main Content */}
-        <div className="ml-88">
+        {/* Main Content - Adjusted margin based on sidebar state */}
+        <div className={`transition-all duration-300 ${
+          sidebarCollapsed ? 'ml-28' : 'ml-88'
+        }`}>
           <main className="min-h-screen">
             <Outlet />
           </main>

@@ -216,9 +216,34 @@ export function OrganizationSwitcher({
           {/* Divider */}
           <div className="border-t border-gray-200 my-2"></div>
 
+          {/* Organization Settings */}
+          <div className="px-2">
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                navigate('/app/organization/settings');
+              }}
+              className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-left"
+            >
+              <div className="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center">
+                <Settings className="w-5 h-5 text-gray-600" />
+              </div>
+              <span className="text-sm font-medium text-gray-700">Organization Settings</span>
+            </button>
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-gray-200 my-2"></div>
+
           {/* Create New Organization */}
           <div className="px-2">
-            <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-left">
+            <button
+              onClick={() => {
+                // TODO: Implement create organization modal
+                console.log('Create new organization clicked');
+              }}
+              className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors text-left"
+            >
               <div className="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center">
                 <Plus className="w-5 h-5 text-gray-600" />
               </div>

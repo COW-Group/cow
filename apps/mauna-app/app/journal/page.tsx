@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/hooks/use-auth"
+import { useEncryption } from "@/lib/encryption-context"
 import { AuthService } from "@/lib/auth-service"
 import { databaseService } from "@/lib/database-service"
 import type { JournalEntry, Range, AppSettings } from "@/lib/types"
@@ -53,6 +54,7 @@ type MoodKey = keyof typeof MOODS
 export default function JournalPage() {
   const router = useRouter()
   const { user, loading: authLoading } = useAuth(AuthService)
+  const { isEncryptionReady } = useEncryption()
   const [journalEntries, setJournalEntries] = useState<JournalEntry[]>([])
   const [visionBoardData, setVisionBoardData] = useState<Range[]>([])
   const [loading, setLoading] = useState(true)
@@ -157,6 +159,14 @@ export default function JournalPage() {
       router.push("/auth/signin")
     }
   }, [user?.id, authLoading, fetchJournalEntries, fetchVisionBoardData, router])
+
+  // Redirect to unlock page if user is logged in but encryption key is not available
+  useEffect(() => {
+    if (!authLoading && user && !isEncryptionReady) {
+      console.log("[JournalPage] User logged in but encryption not ready, redirecting to unlock")
+      router.push("/unlock")
+    }
+  }, [user, authLoading, isEncryptionReady, router])
 
   const handleDeleteEntry = useCallback(
     async (entryId: string) => {

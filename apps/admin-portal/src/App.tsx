@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { AdminRoleProvider } from './contexts/AdminRoleContext';
 import Layout from './components/layout/Layout';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
@@ -27,8 +28,9 @@ import BlockchainAdmin from './pages/blockchain/BlockchainAdmin';
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Routes>
+      <AdminRoleProvider>
+        <Router>
+          <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={
             <ProtectedRoute>
@@ -128,8 +130,9 @@ function App() {
               </Layout>
             </ProtectedRoute>
           } />
-        </Routes>
-      </Router>
+          </Routes>
+        </Router>
+      </AdminRoleProvider>
     </AuthProvider>
   );
 }

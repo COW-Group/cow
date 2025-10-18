@@ -9,8 +9,8 @@
     "start": "next start"
   },
   "dependencies": {
-    "@cow/supabase-client": "*",
     "@ai-sdk/openai": "latest",
+    "@cow/supabase-client": "*",
     "@dnd-kit/core": "latest",
     "@dnd-kit/modifiers": "latest",
     "@dnd-kit/sortable": "latest",
@@ -49,10 +49,12 @@
     "@supabase/auth-ui-react": "latest",
     "@supabase/auth-ui-shared": "latest",
     "@supabase/supabase-js": "latest",
+    "@types/crypto-js": "^4.2.2",
     "ai": "latest",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "latest",
+    "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
     "embla-carousel-react": "latest",
     "framer-motion": "latest",

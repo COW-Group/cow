@@ -13,6 +13,7 @@ import { RespondForm } from "@/components/respond-form"
 import { EmotionLog } from "@/components/emotion-log"
 import { emotionService, type Emotion } from "@/lib/emotion-service"
 import { useAuth } from "@/hooks/use-auth"
+import { useEncryption } from "@/lib/encryption-context"
 import { AuthService } from "@/lib/auth-service"
 import { useToast } from "@/hooks/use-toast"
 import { Loader2 } from "lucide-react"
@@ -28,6 +29,7 @@ export default function EmotionalPage() {
 
   const router = useRouter()
   const { user, loading: authLoading } = useAuth(AuthService)
+  const { isEncryptionReady } = useEncryption()
   const { toast } = useToast()
 
   // Load current emotion if there's an ID or if user changes
@@ -79,6 +81,14 @@ export default function EmotionalPage() {
     }
     loadEmotion()
   }, [currentEmotionId, user, toast])
+
+  // Redirect to unlock page if user is logged in but encryption key is not available
+  useEffect(() => {
+    if (!authLoading && user && !isEncryptionReady) {
+      console.log("[EmotionalPage] User logged in but encryption not ready, redirecting to unlock")
+      router.push("/unlock")
+    }
+  }, [user, authLoading, isEncryptionReady, router])
 
   const startNewEmotion = async () => {
     const userIdToUse = user?.id

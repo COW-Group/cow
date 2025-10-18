@@ -2,8 +2,10 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { RootLayout } from '../layout/RootLayout';
 import { PublicLayout } from '../layout/PublicLayout';
+import { ProtectedRoute, PublicRoute } from '../auth/ProtectedRoute';
 import { LandingPage } from '../../pages/LandingPage';
-import { Login } from '../../pages/Login';
+import Login from '../../pages/auth/Login';
+import SignUp from '../../pages/auth/SignUp';
 import { MyOffice } from '../../pages/MyOffice';
 import { BoardDetailPage } from '../../pages/BoardDetailPage';
 import { LatestBoard } from '../../pages/LatestBoard';
@@ -28,14 +30,17 @@ import { OrganizationTeams } from '../../pages/organization/OrganizationTeams';
 export function RouterSetup() {
   return (
     <Routes>
-      {/* Public routes without app layout */}
+      {/* Public routes - Auth pages */}
+      <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+      <Route path="/signup" element={<PublicRoute><SignUp /></PublicRoute>} />
+
+      {/* Public routes with layout */}
       <Route path="/" element={<PublicLayout />}>
         <Route index element={<LandingPage />} />
-        <Route path="login" element={<Login />} />
       </Route>
 
-      {/* App routes with full layout */}
-      <Route path="/app" element={<RootLayout />}>
+      {/* App routes with full layout - All protected */}
+      <Route path="/app" element={<ProtectedRoute><RootLayout /></ProtectedRoute>}>
         {/* Main pages */}
         <Route index element={<Navigate to="my-office" replace />} />
         <Route path="my-office" element={<MyOffice />} />

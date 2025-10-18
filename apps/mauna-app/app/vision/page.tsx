@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, createContext, useContext } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/hooks/use-auth"
+import { useEncryption } from "@/lib/encryption-context"
 import { AuthService } from "@/lib/auth-service"
 import { databaseService, type UserSettings } from "@/lib/database-service"
 import { VisionDataProvider, useVisionData } from "@/lib/vision-data-provider"
@@ -50,6 +51,7 @@ export const ResetContext = createContext<{
 export default function VisionPage() {
   const router = useRouter()
   const { user, loading: authLoading } = useAuth(AuthService)
+  const { isEncryptionReady } = useEncryption()
   console.log("[VisionPage] Rendering - authLoading:", authLoading, "user?.id:", user?.id)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -192,6 +194,14 @@ export default function VisionPage() {
     }
     fetchInitialData()
   }, [authLoading, user?.id, router])
+
+  // Redirect to unlock page if user is logged in but encryption key is not available
+  useEffect(() => {
+    if (!authLoading && user && !isEncryptionReady) {
+      console.log("[VisionPage] User logged in but encryption not ready, redirecting to unlock")
+      router.push("/unlock")
+    }
+  }, [user, authLoading, isEncryptionReady, router])
 
   const saveCurrentPeriod = async (rangeId: string) => {
     const period = currentPeriods[rangeId]

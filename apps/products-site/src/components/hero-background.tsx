@@ -41,88 +41,33 @@ export function HeroBackground() {
           })
         }
 
-        // Get time-based colors and settings
-        const getTimeBasedSettings = () => {
-          // ACTIVE: Always use Sunset colors
+        // Custom color scheme
+        const getNaturalCOWSettings = () => {
           return {
-            backgroundColor: 0xf2b840,  // Brighter golden
-            skyColor: 0xf0720d,         // Vibrant orange-red
-            cloudShadowColor: 0x2d4a6b, // Deeper blue
-            sunColor: 0xfff2dc,         // Brighter cream
-            speed: 0.5                  // Original speed
-          }
+            // White background
+            backgroundColor: 0xffffff,  // White
 
-          // INACTIVE: Time-based color system (preserved for future use)
-          // Uncomment the code below and comment out the return above to enable time-based colors
-          /*
-          const hour = new Date().getHours()
+            // Mid-tone cerulean
+            skyColor: 0x0096C7,         // Mid Cerulean
 
-          if (hour >= 5 && hour < 8) {
-            // Dawn - Soft pastels with warm pinks and light blues
-            return {
-              backgroundColor: 0xffd4a3,  // Soft peach
-              skyColor: 0xff9a8b,         // Warm coral
-              cloudShadowColor: 0x6b8db5, // Soft blue-gray
-              sunColor: 0xffeaa7,         // Gentle yellow
-              speed: 0.3,                 // Slower for peaceful dawn
-              sunlightColor: 0xfff8dc     // Soft cream sunlight
-            }
-          } else if (hour >= 8 && hour < 12) {
-            // Morning - Bright and fresh
-            return {
-              backgroundColor: 0x87ceeb,  // Sky blue
-              skyColor: 0x4682b4,         // Steel blue
-              cloudShadowColor: 0x2f4f4f, // Dark slate gray
-              sunColor: 0xffd700,         // Pure gold
-              speed: 0.4,                 // Gentle morning breeze
-              sunlightColor: 0xfffacd     // Light golden sunlight
-            }
-          } else if (hour >= 12 && hour < 17) {
-            // Afternoon - Warm and energetic (Enhanced Original)
-            return {
-              backgroundColor: 0xf2b840,  // Golden
-              skyColor: 0xf0720d,         // Orange-red
-              cloudShadowColor: 0x2d4a6b, // Deep blue
-              sunColor: 0xfff2dc,         // Bright cream
-              speed: 0.5,                 // Normal speed
-              sunlightColor: 0xffeaa7     // Warm afternoon light
-            }
-          } else if (hour >= 17 && hour < 20) {
-            // Sunset - Original Enhanced Vibrant Settings (The Best!)
-            return {
-              backgroundColor: 0xf2b840,  // Brighter golden
-              skyColor: 0xf0720d,         // Vibrant orange-red
-              cloudShadowColor: 0x2d4a6b, // Deeper blue
-              sunColor: 0xfff2dc,         // Brighter cream
-              speed: 0.5                  // Original speed
-            }
-          } else if (hour >= 20 && hour < 22) {
-            // Dusk - Deep blues and purples
-            return {
-              backgroundColor: 0x2d3436,  // Dark gray-blue
-              skyColor: 0x6c5ce7,         // Purple
-              cloudShadowColor: 0x2d3436, // Darker gray
-              sunColor: 0xe17055,         // Muted orange
-              speed: 0.4,                 // Calm dusk
-              sunlightColor: 0xf39c12     // Warm dusk light
-            }
-          } else {
-            // Night - Realistic dark blues and grays like real night sky
-            return {
-              backgroundColor: 0x141852,  // Space cadet (natural night sky)
-              skyColor: 0x2B2F77,         // St. Patrick's blue (realistic night blue)
-              cloudShadowColor: 0x4a4a4a, // Dark gray (real cloud shadows at night)
-              sunColor: 0xf5f5dc,         // Beige (soft moonlight color)
-              speed: 0.4,                 // Calm night movement
-              sunlightColor: 0xe6e6fa     // Lavender (gentle moonlight)
-            }
+            // Light blue-grey clouds with dark blue shadows
+            cloudColor: 0xadc1de,       // Light blue-grey
+            cloudShadowColor: 0x183550, // Dark blue
+
+            // Orange sun
+            sunColor: 0xff9919,         // Orange
+
+            // Orange sunlight
+            sunlightColor: 0xff9933,    // Orange
+
+            // Calm movement
+            speed: 0.3
           }
-          */
         }
 
-        // Initialize Vanta effect
+        // Initialize Vanta effect with natural COW colors
         if (mounted && elementRef.current && (window as any).VANTA?.CLOUDS) {
-          const settings = getTimeBasedSettings()
+          const settings = getNaturalCOWSettings()
           vantaRef.current = (window as any).VANTA.CLOUDS({
             el: elementRef.current,
             mouseControls: true,
@@ -132,14 +77,13 @@ export function HeroBackground() {
             minWidth: 200.0,
             backgroundColor: settings.backgroundColor,
             skyColor: settings.skyColor,
+            cloudColor: settings.cloudColor,
             cloudShadowColor: settings.cloudShadowColor,
             sunColor: settings.sunColor,
-            speed: settings.speed || 0.5,
             sunlightColor: settings.sunlightColor,
-            sunGlareColor: settings.sunGlareColor,
-            sunIntensity: settings.sunIntensity || 1.0,
+            speed: settings.speed,
           })
-          console.log("Vanta.js CLOUDS effect initialized with sunshine settings:", settings)
+          console.log("Vanta.js CLOUDS initialized with natural COW zen colors:", settings)
         }
       } catch (error) {
         console.warn("Vanta.js failed to load, using fallback:", error)
@@ -171,9 +115,8 @@ export function HeroBackground() {
       style={
         fallback
           ? {
-              background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 25%, #3d3d3d 50%, #2d2d2d 75%, #1a1a1a 100%)",
-              backgroundSize: "400% 400%",
-              animation: "gradientShift 15s ease infinite",
+              // Natural fallback gradient with COW colors
+              background: "linear-gradient(to bottom, #4FC3E0 0%, #B0E0E6 40%, #C9B8A8 100%)",
             }
           : undefined
       }

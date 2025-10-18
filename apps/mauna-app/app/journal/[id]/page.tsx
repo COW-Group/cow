@@ -6,6 +6,7 @@ import { JournalEntryForm } from "@/components/journal-entry-form"
 import { databaseService } from "@/lib/database-service"
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/hooks/use-auth"
+import { useEncryption } from "@/lib/encryption-context"
 import type { JournalEntry, VisionBoardSection } from "@/lib/types"
 import { useRouter } from "next/navigation"
 import { ArrowLeft, Search } from "lucide-react"
@@ -20,6 +21,7 @@ interface JournalEntryPageProps {
 export default function JournalEntryPage({ params }: JournalEntryPageProps) {
   const router = useRouter()
   const { user: currentUser, loading: isAuthLoading } = useAuth()
+  const { isEncryptionReady } = useEncryption()
   const [entry, setEntry] = useState<JournalEntry | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [visionBoardSections, setVisionBoardSections] = useState<VisionBoardSection[]>([])
@@ -134,6 +136,14 @@ export default function JournalEntryPage({ params }: JournalEntryPageProps) {
   useEffect(() => {
     searchItems()
   }, [searchTerm, selectedLevel, searchItems])
+
+  // Redirect to unlock page if user is logged in but encryption key is not available
+  useEffect(() => {
+    if (!isAuthLoading && currentUser && !isEncryptionReady) {
+      console.log("[JournalEntryPage] User logged in but encryption not ready, redirecting to unlock")
+      router.push("/unlock")
+    }
+  }, [currentUser, isAuthLoading, isEncryptionReady, router])
 
   const handleSaveEntry = async (
     updatedEntry: Omit<JournalEntry, "id" | "createdAt" | "updatedAt" | "isArchived" | "isFavorite">,

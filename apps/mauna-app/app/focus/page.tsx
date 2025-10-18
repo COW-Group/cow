@@ -7,6 +7,7 @@ import { TaskForm } from "@/components/task-form"
 import { TaskEditDialog } from "@/components/task-edit-dialog"
 import Breaths from "@/components/breaths"
 import { useAuth } from "@/hooks/use-auth"
+import { useEncryption } from "@/lib/encryption-context"
 import { useRouter } from "next/navigation"
 import type { Step, TaskList as TTaskList, Breath, RubricData, AppSettings } from "@/lib/types"
 import { useToast } from "@/hooks/use-toast"
@@ -30,6 +31,7 @@ const LazyGlobalTaskOrderDisplay = lazy(() => import("@/components/global-task-o
 
 export default function FocusPage() {
   const { user, loading } = useAuth()
+  const { isEncryptionReady } = useEncryption()
   const router = useRouter()
   const { toast } = useToast()
 
@@ -149,6 +151,14 @@ export default function FocusPage() {
       }
     }
   }, [user, loading, router])
+
+  // Redirect to unlock page if user is logged in but encryption key is not available
+  useEffect(() => {
+    if (!loading && user && !isEncryptionReady) {
+      console.log("[FocusPage] User logged in but encryption not ready, redirecting to unlock")
+      router.push("/unlock")
+    }
+  }, [user, loading, isEncryptionReady, router])
 
   const getTopMostTask = (taskLists: TTaskList[], currentListId: string, noTaskListSelectedId: string): Step | undefined => {
     if (currentListId === ALL_ACTIVE_TASKS_ID) {

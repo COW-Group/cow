@@ -19,6 +19,8 @@ import {
 import { useAppTheme } from '../hooks/useAppTheme';
 import { useAppStore } from '../store';
 import { supabase } from '@cow/supabase-client';
+import { storageService } from '../services/storage.service';
+import { FileUpload } from '../components/common/FileUpload';
 
 export function Settings() {
   const navigate = useNavigate();
@@ -31,6 +33,7 @@ export function Settings() {
   const [profile, setProfile] = useState({
     fullName: '',
     email: '',
+    avatar_url: '',
     timezone: 'America/New_York',
     language: 'English'
   });
@@ -80,6 +83,7 @@ export function Settings() {
         setProfile({
           fullName: userProfile?.full_name || user.user_metadata?.full_name || user.email?.split('@')[0] || '',
           email: user.email || '',
+          avatar_url: userProfile?.avatar_url || '',
           timezone: userProfile?.timezone || Intl.DateTimeFormat().resolvedOptions().timeZone,
           language: userProfile?.language || 'English'
         });
@@ -118,24 +122,15 @@ export function Settings() {
 
       console.log('💾 Saving user profile to Supabase...', user.id);
 
-      // Update user metadata for name
-      const { error: metadataError } = await supabase.auth.updateUser({
-        data: {
-          full_name: profile.fullName
-        }
-      });
-
-      if (metadataError) {
-        console.error('Error updating user metadata:', metadataError);
-      }
-
       // Upsert user profile to profiles table
+      // Note: We save directly to profiles table, not auth metadata to avoid triggering auth state changes
       const { error: profileError } = await supabase
         .from('profiles')
         .upsert({
           id: user.id,
           full_name: profile.fullName,
           email: profile.email,
+          avatar_url: profile.avatar_url,
           timezone: profile.timezone,
           language: profile.language,
           preferences: {
@@ -176,6 +171,72 @@ export function Settings() {
       alert(`Failed to save settings: ${error.message}`);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleAvatarUpload = async (file: File): Promise<{ success: boolean; url?: string; error?: string }> => {
+    try {
+      // Get current user
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        return { success: false, error: 'Not authenticated' };
+      }
+
+      // Delete old avatar if exists
+      if (profile.avatar_url) {
+        await storageService.deleteAvatar(user.id);
+      }
+
+      // Upload new avatar
+      const result = await storageService.uploadAvatar(user.id, file);
+
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
+      // Update profile state
+      setProfile({ ...profile, avatar_url: result.url });
+
+      console.log('✅ Avatar uploaded successfully:', result.url);
+
+      // Auto-save to database
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .upsert({
+          id: user.id,
+          avatar_url: result.url,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'id'
+        });
+
+      if (profileError) {
+        console.error('Error saving avatar to database:', profileError);
+        throw profileError;
+      }
+
+      console.log('✅ Avatar saved to database');
+
+      // Reload profile directly from database to update the UI
+      const { data: updatedProfile } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      if (updatedProfile) {
+        console.log('📸 Updated profile data:', updatedProfile.avatar_url);
+        setProfile({
+          ...profile,
+          avatar_url: updatedProfile.avatar_url || ''
+        });
+        console.log('✅ Profile reloaded with new avatar:', updatedProfile.avatar_url);
+      }
+
+      return { success: true, url: result.url };
+    } catch (error: any) {
+      console.error('Failed to upload avatar:', error);
+      return { success: false, error: error.message || 'Failed to upload avatar' };
     }
   };
 
@@ -231,6 +292,21 @@ export function Settings() {
             </div>
 
             <div className={`${classes.bg.secondary} rounded-2xl p-8 border ${classes.border.default}`}>
+              {/* Avatar Upload */}
+              <div className="mb-8 pb-8 border-b border-gray-200/20">
+                <FileUpload
+                  key={profile.avatar_url || 'no-avatar'} // Force re-render when avatar changes
+                  currentImageUrl={profile.avatar_url}
+                  onUpload={handleAvatarUpload}
+                  maxSize={2 * 1024 * 1024} // 2MB
+                  shape="circle"
+                  size="md"
+                  label="Profile Picture"
+                  helperText="Upload a profile picture. Recommended: Square image, JPG or PNG, max 2MB"
+                  acceptedTypes={['image/jpeg', 'image/jpg', 'image/png', 'image/webp']}
+                />
+              </div>
+
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className={`block text-sm font-medium ${classes.text.primary} mb-2`}>

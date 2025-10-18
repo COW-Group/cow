@@ -214,14 +214,18 @@ export function LandingPage() {
       if (data.session) {
         console.log('✅ Modal Login: Success! Redirecting...');
         setShowLoginModal(false);
-        navigate('/app/my-office');
+
+        // Small delay to let auth state settle before navigating
+        setTimeout(() => {
+          navigate('/app/my-office');
+        }, 100);
       }
     } catch (err: any) {
       console.error('❌ Modal Login: Failed', err);
       setError(err.message || 'Failed to sign in. Please try again.');
-    } finally {
       setIsLoading(false);
     }
+    // Note: Don't set isLoading to false on success - let the navigation happen
   };
 
   const handleSignUp = async (e: React.FormEvent) => {

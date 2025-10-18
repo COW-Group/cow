@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/hooks/use-auth"
+import { useEncryption } from "@/lib/encryption-context"
 import { AuthService } from "@/lib/auth-service"
 import { TimelineWrapper } from "@/components/TimelineWrapper"
 import { VisionDataProvider } from "@/lib/vision-data-provider"
@@ -15,6 +16,7 @@ export default function TimelinePage() {
   console.log("[TimelinePage] Rendering")
   const router = useRouter()
   const { user, loading: authLoading } = useAuth(AuthService)
+  const { isEncryptionReady } = useEncryption()
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const hasMountedRef = useRef(false)
@@ -78,6 +80,14 @@ export default function TimelinePage() {
       router.push("/auth/signin")
     }
   }, [authLoading, user?.id, router])
+
+  // Redirect to unlock page if user is logged in but encryption key is not available
+  useEffect(() => {
+    if (!authLoading && user && !isEncryptionReady) {
+      console.log("[TimelinePage] User logged in but encryption not ready, redirecting to unlock")
+      router.push("/unlock")
+    }
+  }, [user, authLoading, isEncryptionReady, router])
 
   if (isLoading) {
     return (

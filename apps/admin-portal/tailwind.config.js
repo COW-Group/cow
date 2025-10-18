@@ -14,29 +14,48 @@ module.exports = {
   ],
   theme: {
     extend: {
-      // COW Brand Colors
+      // COW Brand Colors (from Design Guide)
       colors: {
-        wisdom: {
-          50: '#FDFCFA',
-          100: '#F9F5F0',
-          200: '#F5E6D3',
-          300: '#E8D4BB',
-          400: '#D4B896',
-          500: '#C19A6B',
-          600: '#A67C52',
-          700: '#8B4513',
-          800: '#6D340F',
-          900: '#4F260B',
+        // Primary Palette - Cerulean (Sky & Water)
+        cerulean: {
+          deep: '#007BA7',      // Deep Cerulean - Primary brand color
+          DEFAULT: '#00A5CF',   // Cerulean - Interactive elements
+          light: '#4FC3E0',     // Light Cerulean - Highlights
+          powder: '#B0E0E6',    // Powder Blue - Backgrounds
+          ice: '#E8F4F8',       // Ice Blue - Page backgrounds
         },
-        earth: '#8B4513',
-        growth: '#00B774',
-        sky: '#627EEA',
-        sunset: '#FFB800',
-        // Blockchain colors
-        ethereum: '#627EEA',
-        polygon: '#8247E5',
-        solana: '#9945FF',
-        bitcoin: '#F7931A',
+        // Grounding Palette - Earth Tones (Stone, Clay & Growth)
+        earth: {
+          stone: '#9B8B7E',     // Warm Stone - Foundation
+          clay: '#C9B8A8',      // Soft Clay - Warm backgrounds
+          terracotta: '#C77A58',// Terra Cotta - Vitality
+          sand: '#D4BFA0',      // Desert Sand - Soft neutral
+        },
+        botanical: {
+          bamboo: '#6B8E6F',    // Bamboo Green - Growth
+          moss: '#8A9A7B',      // Moss - Natural accents
+          sage: '#A4AC96',      // Sage - Calm neutral
+        },
+        // Secondary Palette - Gold
+        gold: {
+          deep: '#B8860B',      // Deep Gold - Premium
+          soft: '#D4AF37',      // Soft Gold - Highlights
+        },
+        // Neutrals
+        ink: {
+          black: '#2C3E50',     // Ink Black - Primary text
+          charcoal: '#6B6B6B',  // Soft Charcoal - Secondary text
+          slate: '#4A5568',     // Slate - Tertiary text
+          silver: '#A0AEC0',    // Silver - Disabled/borders
+        },
+        paper: {
+          rice: '#F5F3F0',      // Rice Paper - Warm backgrounds
+          pearl: '#F7FAFC',     // Pearl - Cool backgrounds
+        },
+        // Semantic Colors
+        success: '#2D6A4F',     // Forest Green
+        warning: '#F59E0B',     // Amber
+        error: '#9B2C2C',       // Burgundy
       },
       // Glassmorphism utilities
       backdropBlur: {

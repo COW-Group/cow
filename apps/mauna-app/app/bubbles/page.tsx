@@ -14,6 +14,7 @@ import { RespondForm } from "@/components/respond-form"
 import { EmotionLog } from "@/components/emotion-log"
 import { emotionService, type Emotion } from "@/lib/emotion-service" // Ensure emotionService is the mock one
 import { useAuth } from "@/hooks/use-auth"
+import { useEncryption } from "@/lib/encryption-context"
 import { AuthService } from "@/lib/auth-service" // Import AuthService for useAuth
 import { useToast } from "@/hooks/use-toast"
 import { Loader2 } from "lucide-react" // Declare Loader2
@@ -30,6 +31,7 @@ export default function BubblesPage() {
 
   const router = useRouter()
   const { user, loading: authLoading } = useAuth(AuthService) // Use AuthService with useAuth
+  const { isEncryptionReady } = useEncryption()
   const { toast } = useToast()
 
   // Load current emotion if there's an ID or if user changes
@@ -87,6 +89,14 @@ export default function BubblesPage() {
     }
     loadEmotion()
   }, [currentEmotionId, user, toast]) // Keep user in deps for consistency, though behavior is mocked
+
+  // Redirect to unlock page if user is logged in but encryption key is not available
+  useEffect(() => {
+    if (!authLoading && user && !isEncryptionReady) {
+      console.log("[BubblesPage] User logged in but encryption not ready, redirecting to unlock")
+      router.push("/unlock")
+    }
+  }, [user, authLoading, isEncryptionReady, router])
 
   const startNewEmotion = async () => {
     const userIdToUse = MOCK_USER_ID // Use mock user ID

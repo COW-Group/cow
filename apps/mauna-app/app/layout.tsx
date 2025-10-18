@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@/components/ui/toaster"
 import ClientLayout from "./ClientLayout"
 import { AuthProvider } from "@/lib/auth-context"
+import { EncryptionProvider } from "@/lib/encryption-context"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -73,7 +74,9 @@ export default function RootLayout({
       <body className={bodyClassName} data-rm-theme="light">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <AuthProvider>
-            <ClientLayout>{children}</ClientLayout>
+            <EncryptionProvider>
+              <ClientLayout>{children}</ClientLayout>
+            </EncryptionProvider>
           </AuthProvider>
           <Toaster />
         </ThemeProvider>

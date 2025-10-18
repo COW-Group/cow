@@ -29,17 +29,17 @@ const LiveChat: React.FC = () => {
     {
       id: '1',
       type: 'system',
-      content: 'Welcome to Cycles of Wealth Support! How can we help you today?',
+      content: 'Welcome to COW Support. How can we help you today?',
       timestamp: new Date(),
     },
     {
       id: '2',
       type: 'agent',
-      content: 'Hi! I\'m Sarah from the support team. I\'m here to help you with any questions about your investments, tokenization, or trading activities.',
+      content: 'Hi! I\'m Sarah from the support team. I\'m here to help you with your Performance RWA platform, assets, or any questions you have.',
       timestamp: new Date(),
       sender: {
         name: 'Sarah Chen',
-        role: 'Senior Support Specialist'
+        role: 'Support Specialist'
       }
     }
   ]);
@@ -108,26 +108,26 @@ const LiveChat: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div className="flex flex-col h-screen bg-white">
       {/* Chat Header */}
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-              <UserIcon className="h-6 w-6 text-green-600" />
+            <div className="w-10 h-10 bg-cerulean-ice rounded-full flex items-center justify-center">
+              <UserIcon className="h-6 w-6 text-cerulean-deep" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Live Support Chat</h2>
+              <h2 className="text-lg font-normal text-ink-black">Live Support</h2>
               <div className="flex items-center space-x-2">
-                <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'}`}></div>
-                <span className={`text-sm ${isConnected ? 'text-green-600' : 'text-red-600'}`}>
+                <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-success' : 'bg-error'} ${isConnected ? 'animate-pulse' : ''}`}></div>
+                <span className={`text-sm font-light ${isConnected ? 'text-success' : 'text-error'}`}>
                   {isConnected ? 'Connected' : 'Disconnected'}
                 </span>
               </div>
             </div>
           </div>
-          <div className="text-sm text-gray-500">
-            Average response time: &lt; 2 minutes
+          <div className="text-sm font-light text-ink-charcoal">
+            Response time: &lt; 2 min
           </div>
         </div>
       </div>
@@ -142,34 +142,34 @@ const LiveChat: React.FC = () => {
             <div className={`max-w-3xl ${message.type === 'user' ? 'order-2' : 'order-1'}`}>
               {message.type !== 'user' && message.sender && (
                 <div className="flex items-center space-x-2 mb-1">
-                  <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                  <div className="w-6 h-6 bg-cerulean-ice rounded-full flex items-center justify-center">
                     {message.type === 'agent' ? (
-                      <UserIcon className="h-4 w-4 text-blue-600" />
+                      <UserIcon className="h-4 w-4 text-cerulean-deep" />
                     ) : (
-                      <ComputerDesktopIcon className="h-4 w-4 text-gray-600" />
+                      <ComputerDesktopIcon className="h-4 w-4 text-ink-charcoal" />
                     )}
                   </div>
-                  <span className="text-sm font-medium text-gray-700">
+                  <span className="text-sm font-light text-ink-black">
                     {message.sender.name}
                   </span>
                   {message.sender.role && (
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs font-light text-ink-charcoal">
                       • {message.sender.role}
                     </span>
                   )}
                 </div>
               )}
-              
+
               <div
-                className={`inline-block px-4 py-2 rounded-lg ${
+                className={`inline-block px-4 py-3 rounded-xl ${
                   message.type === 'user'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-cerulean-deep text-white'
                     : message.type === 'agent'
-                    ? 'bg-white border border-gray-200 text-gray-900'
-                    : 'bg-gray-100 text-gray-700'
+                    ? 'bg-white border border-gray-200 text-ink-black shadow-card'
+                    : 'bg-paper-rice text-ink-charcoal'
                 }`}
               >
-                <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                <p className="text-sm font-light whitespace-pre-wrap leading-relaxed">{message.content}</p>
                 
                 {message.attachments && message.attachments.length > 0 && (
                   <div className="mt-2 space-y-1">
@@ -194,17 +194,17 @@ const LiveChat: React.FC = () => {
           <div className="flex justify-start">
             <div className="max-w-3xl">
               <div className="flex items-center space-x-2 mb-1">
-                <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                  <UserIcon className="h-4 w-4 text-blue-600" />
+                <div className="w-6 h-6 bg-cerulean-ice rounded-full flex items-center justify-center">
+                  <UserIcon className="h-4 w-4 text-cerulean-deep" />
                 </div>
-                <span className="text-sm font-medium text-gray-700">Sarah Chen</span>
-                <span className="text-xs text-gray-500">is typing...</span>
+                <span className="text-sm font-light text-ink-black">Sarah Chen</span>
+                <span className="text-xs font-light text-ink-charcoal">is typing...</span>
               </div>
-              <div className="inline-block px-4 py-2 rounded-lg bg-white border border-gray-200">
+              <div className="inline-block px-4 py-3 rounded-xl bg-white border border-gray-200 shadow-card">
                 <div className="flex space-x-1">
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                  <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                  <div className="w-2 h-2 bg-cerulean-deep rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-cerulean-deep rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                  <div className="w-2 h-2 bg-cerulean-deep rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
                 </div>
               </div>
             </div>
@@ -223,31 +223,31 @@ const LiveChat: React.FC = () => {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Type your message here..."
+                placeholder="Type your message..."
                 rows={1}
-                className="w-full resize-none border border-gray-300 rounded-lg px-4 py-2 pr-24 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full resize-none border border-gray-300 rounded-xl px-4 py-3 pr-24 focus:outline-none focus:ring-2 focus:ring-cerulean-deep focus:border-transparent font-light"
                 style={{ minHeight: '44px', maxHeight: '120px' }}
               />
-              
+
               <div className="absolute right-2 bottom-2 flex items-center space-x-1">
                 <button
                   type="button"
                   onClick={handleFileAttach}
-                  className="p-1 text-gray-400 hover:text-gray-600 rounded"
+                  className="p-1 text-ink-charcoal hover:text-cerulean-deep rounded transition-colors"
                   title="Attach file"
                 >
                   <PaperClipIcon className="h-5 w-5" />
                 </button>
                 <button
                   type="button"
-                  className="p-1 text-gray-400 hover:text-gray-600 rounded"
+                  className="p-1 text-ink-charcoal hover:text-cerulean-deep rounded transition-colors"
                   title="Add emoji"
                 >
                   <FaceSmileIcon className="h-5 w-5" />
                 </button>
               </div>
             </div>
-            
+
             <input
               ref={fileInputRef}
               type="file"
@@ -256,18 +256,18 @@ const LiveChat: React.FC = () => {
               accept=".pdf,.doc,.docx,.txt,.png,.jpg,.jpeg"
             />
           </div>
-          
+
           <button
             onClick={handleSendMessage}
             disabled={!newMessage.trim()}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 transition-colors"
+            className="bg-cerulean-deep text-white px-6 py-3 rounded-xl hover:bg-cerulean hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2 transition-all duration-200 font-light"
           >
             <PaperAirplaneIcon className="h-5 w-5" />
             <span>Send</span>
           </button>
         </div>
-        
-        <div className="mt-2 text-xs text-gray-500">
+
+        <div className="mt-2 text-xs font-light text-ink-charcoal">
           Press Enter to send, Shift+Enter for new line
         </div>
       </div>

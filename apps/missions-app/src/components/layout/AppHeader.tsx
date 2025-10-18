@@ -11,7 +11,9 @@ import {
 import { useAppTheme } from '../../hooks/useAppTheme';
 import { ThemeToggle } from '../theme/ThemeToggle';
 import { useAppStore } from '../../store/app.store';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth as useAuthHook } from '../../hooks/useAuth';
+import { useAuth } from '../../contexts/AuthContext';
+import { OrganizationSwitcher } from '../organization/OrganizationSwitcher';
 
 interface AppHeaderProps {
   onToggleTheme?: () => void;
@@ -21,9 +23,11 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
   const navigate = useNavigate();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showOrgSettings, setShowOrgSettings] = useState(false);
   const { classes } = useAppTheme();
   const { currentUser } = useAppStore();
-  const { signOut } = useAuth();
+  const { signOut: legacySignOut } = useAuthHook();
+  const { user, userProfile, signOut } = useAuth();
 
   // Get user initials for avatar
   const getUserInitials = () => {
@@ -66,6 +70,22 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
             COW
           </span>
         </div>
+
+        {/* Organization Switcher */}
+        {user && userProfile && (
+          <>
+            {/* Separator */}
+            <div className="h-5 w-px bg-white/20"></div>
+            <div className="min-w-[200px]">
+              <OrganizationSwitcher
+                currentOrgId={userProfile.organization_id}
+                onOrganizationChange={(orgId) => {
+                  console.log('Organization switched to:', orgId);
+                }}
+              />
+            </div>
+          </>
+        )}
 
         {/* Separator */}
         <div className="h-5 w-px bg-white/20"></div>
@@ -154,10 +174,10 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
               <div className="absolute right-0 top-full mt-3 w-56 liquid-glass-sidebar rounded-2xl shadow-lg py-2 z-50">
                 <div className="px-4 py-2 border-b border-white/10">
                   <p className="text-sm font-medium text-adaptive-primary">
-                    {currentUser?.name || 'User'}
+                    {userProfile?.full_name || currentUser?.name || 'User'}
                   </p>
                   <p className="text-xs text-adaptive-muted truncate">
-                    {currentUser?.email || 'No email'}
+                    {userProfile?.email || currentUser?.email || 'No email'}
                   </p>
                 </div>
                 <button
@@ -172,19 +192,29 @@ export function AppHeader({ onToggleTheme }: AppHeaderProps) {
                 <button
                   onClick={() => {
                     setShowUserMenu(false);
-                    navigate('/app/settings');
+                    navigate('/app/organization/settings');
                   }}
                   className="w-full px-4 py-2 text-left text-sm text-adaptive-secondary hover:bg-white/05 hover:text-adaptive-primary transition-colors rounded-lg mx-2"
                 >
-                  Account Settings
+                  Organization Settings
                 </button>
+                <button
+                  onClick={() => {
+                    setShowUserMenu(false);
+                    navigate('/app/organization/members');
+                  }}
+                  className="w-full px-4 py-2 text-left text-sm text-adaptive-secondary hover:bg-white/05 hover:text-adaptive-primary transition-colors rounded-lg mx-2"
+                >
+                  Organization Members
+                </button>
+                <div className="border-t border-white/10 my-1"></div>
                 <button
                   onClick={async () => {
                     setShowUserMenu(false);
                     await signOut();
-                    navigate('/');
+                    navigate('/login');
                   }}
-                  className="w-full px-4 py-2 text-left text-sm text-adaptive-secondary hover:bg-white/05 hover:text-adaptive-primary transition-colors rounded-lg mx-2 mb-1"
+                  className="w-full px-4 py-2 text-left text-sm text-red-400 hover:bg-white/05 transition-colors rounded-lg mx-2 mb-1"
                 >
                   Sign Out
                 </button>

@@ -51,6 +51,8 @@ import { useAppTheme } from '../../hooks/useAppTheme';
 import { useAdaptiveColors } from '../../hooks/useAdaptiveColors';
 import { ThemeToggle } from '../theme/ThemeToggle';
 import { useAuth } from '../../hooks/useAuth';
+import { useAuth as useAuthContext } from '../../contexts/AuthContext';
+import { OrganizationSwitcher } from '../organization/OrganizationSwitcher';
 
 interface WorkspaceSidebarProps {
   currentWorkspaceId?: string;
@@ -99,6 +101,7 @@ export function WorkspaceSidebar({
     }
   };
   const { signOut } = useAuth();
+  const { user: authUser, userProfile } = useAuthContext();
   
   // Insights section items - Asana-style
   const insightsItems = [
@@ -503,7 +506,18 @@ export function WorkspaceSidebar({
         {/* Collapse/Expand Toggle Button */}
         <div className="flex items-center justify-between mb-4">
           {!sidebarCollapsed && (
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 space-y-3">
+              {/* Organization Switcher */}
+              {authUser && userProfile && (
+                <OrganizationSwitcher
+                  currentOrgId={userProfile.organization_id}
+                  onOrganizationChange={(orgId) => {
+                    console.log('Organization switched to:', orgId);
+                  }}
+                />
+              )}
+
+              {/* Workspace Switcher */}
               <WorkspaceSwitcher
                 currentWorkspace={currentWorkspace}
                 onWorkspaceChange={(workspace) => {

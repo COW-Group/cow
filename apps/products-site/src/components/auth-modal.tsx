@@ -47,13 +47,9 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
         setIsResendConfirmation(false)
         setSuccessMessage("")
         onClose()
-        
-        // Navigate to appropriate dashboard or onboarding
-        if (result.needsOnboarding) {
-          navigate('/onboarding')
-        } else {
-          navigate(getDashboardRoute())
-        }
+
+        // Always navigate to dashboard - onboarding is now accessed from dashboard nav
+        navigate(getDashboardRoute())
       }
     } catch (err) {
       console.error(isLogin ? "Sign-in error:" : "Sign-up error:", err)

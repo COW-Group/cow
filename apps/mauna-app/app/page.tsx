@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
 import { Mail, ArrowLeft, Eye, EyeOff } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
+import { useEncryption } from "@/lib/encryption-context"
 import { databaseService } from "@/lib/database-service"
 
 type OnboardingStep = "name" | "sync" | "email" | "password"
@@ -17,6 +18,7 @@ export default function OnboardingPage() {
   const router = useRouter()
   const { toast } = useToast()
   const { user, loading } = useAuth(AuthService)
+  const { setEncryptionKey, setUserData } = useEncryption()
   const [currentStep, setCurrentStep] = useState<OnboardingStep>("name")
   const [userName, setUserName] = useState("")
   const [userEmail, setUserEmail] = useState("")
@@ -102,12 +104,17 @@ export default function OnboardingPage() {
     let authMessage = ""
 
     try {
-      console.log("[handleAuthSubmit] Attempting sign-in...")
-      const signInResult = await AuthService.signInWithPassword(userEmail, userPassword)
+      console.log("[handleAuthSubmit] Attempting sign-in with decryption...")
+      const signInResult = await AuthService.signInWithDecryption(userEmail, userPassword)
 
       if (signInResult.error) {
-        console.log("[handleAuthSubmit] Sign-in failed, attempting sign-up:", signInResult.error.message)
-        const signUpResult = await AuthService.signUpWithPassword(userEmail, userPassword)
+        console.log("[handleAuthSubmit] Sign-in failed, attempting sign-up with encryption:", signInResult.error.message)
+        const signUpResult = await AuthService.signUpWithEncryption(userEmail, userPassword, {
+          metadata: {
+            last_sync: new Date().toISOString(),
+            data_schema_version: 1
+          }
+        })
 
         if (signUpResult.error) {
           console.error("[handleAuthSubmit] Sign-up also failed:", signUpResult.error.message)
@@ -115,29 +122,32 @@ export default function OnboardingPage() {
           authMessage = signUpResult.error.message || "An unknown error occurred during sign-up."
         } else {
           authSuccess = true
-          if (signUpResult.data.user?.identities && signUpResult.data.user.identities.length === 0) {
-            authMessage = "Sign up successful! Please check your email to confirm your account."
-            if (userName.trim() && signUpResult.data.user) {
-              await databaseService.createOrUpdateUserProfile(signUpResult.data.user.id, userName.trim())
-            }
-            console.log("[handleAuthSubmit] Sign-up successful, redirecting to auth confirm.")
-            router.push("/auth/confirm?type=signup_pending")
-            return
-          } else {
-            authMessage = "Account created and signed in successfully!"
-            if (signUpResult.data.user && userName.trim()) {
-              await databaseService.createOrUpdateUserProfile(signUpResult.data.user.id, userName.trim())
-            }
-            console.log("[handleAuthSubmit] Account created and signed in.")
+          // Store empty encryption context for new user
+          setEncryptionKey(userPassword)
+          setUserData({})
+
+          authMessage = "Sign up successful! Please check your email to confirm your account."
+          if (userName.trim() && signUpResult.user) {
+            await databaseService.createOrUpdateUserProfile(signUpResult.user.id, userName.trim())
           }
+          console.log("[handleAuthSubmit] Sign-up with encryption successful, redirecting to auth confirm.")
+          router.push("/auth/confirm?type=signup_pending")
+          return
         }
       } else {
         authSuccess = true
         authMessage = "Signed in successfully!"
-        if (signInResult.data.user && userName.trim()) {
-          await databaseService.createOrUpdateUserProfile(signInResult.data.user.id, userName.trim())
+
+        // Store encryption key and decrypted data in context
+        if (signInResult.encryptionKey && signInResult.userData) {
+          setEncryptionKey(signInResult.encryptionKey)
+          setUserData(signInResult.userData)
         }
-        console.log("[handleAuthSubmit] Signed in successfully.")
+
+        if (signInResult.user && userName.trim()) {
+          await databaseService.createOrUpdateUserProfile(signInResult.user.id, userName.trim())
+        }
+        console.log("[handleAuthSubmit] Signed in with decryption successfully.")
       }
 
       if (authSuccess) {

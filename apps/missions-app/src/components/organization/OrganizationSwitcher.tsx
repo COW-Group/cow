@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ChevronDown, Check, Building2, Plus } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronDown, Check, Building2, Plus, Settings } from 'lucide-react';
 import { supabasePermissionsService } from '../../services/supabase-permissions.service';
 import { Database } from '../../lib/supabase';
 
@@ -18,6 +19,7 @@ export function OrganizationSwitcher({
   currentOrgId,
   onOrganizationChange,
 }: OrganizationSwitcherProps) {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [organizations, setOrganizations] = useState<OrganizationWithRole[]>([]);
   const [currentOrg, setCurrentOrg] = useState<OrganizationWithRole | null>(null);

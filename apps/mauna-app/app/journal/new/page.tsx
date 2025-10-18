@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useAuth } from "@/hooks/use-auth"
+import { useEncryption } from "@/lib/encryption-context"
 import { AuthService } from "@/lib/auth-service"
 import { databaseService } from "@/lib/database-service"
 import type { JournalEntry, Range } from "@/lib/types"
@@ -21,6 +22,7 @@ export default function NewJournalEntryPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { user: currentUser, loading: authLoading } = useAuth(AuthService)
+  const { isEncryptionReady } = useEncryption()
   const [title, setTitle] = useState("")
   const [entry, setEntry] = useState("")
   const [category, setCategory] = useState("inbox")
@@ -281,6 +283,14 @@ export default function NewJournalEntryPage() {
       router.push("/auth/signin")
     }
   }, [authLoading, currentUser?.id, loadVisionBoardSections, searchParams, loadHabitsProgress, loadEmotionalProcessing, router])
+
+  // Redirect to unlock page if user is logged in but encryption key is not available
+  useEffect(() => {
+    if (!authLoading && currentUser && !isEncryptionReady) {
+      console.log("[NewJournalEntryPage] User logged in but encryption not ready, redirecting to unlock")
+      router.push("/unlock")
+    }
+  }, [currentUser, authLoading, isEncryptionReady, router])
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {

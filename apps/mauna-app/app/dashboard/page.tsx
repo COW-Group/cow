@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/hooks/use-auth"
+import { useEncryption } from "@/lib/encryption-context"
 import { AuthService } from "@/lib/auth-service"
 import { databaseService } from "@/lib/database-service"
 import type { TaskList, AppSettings } from "@/lib/types"
@@ -16,6 +17,7 @@ import { useToast } from "@/hooks/use-toast"
 export default function DashboardPage() {
   const router = useRouter()
   const { user, loading } = useAuth(AuthService)
+  const { isEncryptionReady } = useEncryption()
   const { toast } = useToast()
   const [currentTime, setCurrentTime] = useState("")
   const [taskLists, setTaskLists] = useState<TaskList[]>([])
@@ -71,6 +73,14 @@ export default function DashboardPage() {
     const interval = setInterval(updateTime, 1000)
     return () => clearInterval(interval)
   }, [])
+
+  // Redirect to unlock page if user is logged in but encryption key is not available
+  useEffect(() => {
+    if (!loading && user && !isEncryptionReady) {
+      console.log("[Dashboard] User logged in but encryption not ready, redirecting to unlock")
+      router.push("/unlock")
+    }
+  }, [user, loading, isEncryptionReady, router])
 
   useEffect(() => {
     if (user?.id) {

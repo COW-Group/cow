@@ -245,11 +245,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const getDashboardRoute = () => {
+    // Users without user_type go to default dashboard
+    // After onboarding, they'll be routed to type-specific dashboard
     if (!auth.profile?.user_type) {
-      return '/onboarding'
+      return '/dashboard'
     }
-    
-    // Route to different dashboard variants based on user type
+
+    // Route to different dashboard variants based on user type (after onboarding)
     switch (auth.profile.user_type) {
       case 'institutional_investor':
         return '/dashboard/institutional'

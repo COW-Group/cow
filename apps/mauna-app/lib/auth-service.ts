@@ -1,5 +1,12 @@
 import { supabase } from "./supabase"
 import type { User } from "./types"
+import {
+  encryptData,
+  decryptData,
+  generateSalt,
+  reEncryptData,
+  type SensitiveUserData
+} from "./encryption"
 
 export const AuthService = {
   async signInWithPassword(
@@ -157,5 +164,252 @@ export const AuthService = {
 
     console.log("Supabase: User profile updated successfully")
     return { error: null }
+  },
+
+  // ========== ENCRYPTION METHODS ==========
+
+  /**
+   * Register new user with encrypted data storage
+   */
+  async signUpWithEncryption(
+    email: string,
+    password: string,
+    initialData: Partial<SensitiveUserData> = {}
+  ): Promise<{ user: User | null; error: string | null }> {
+    try {
+      console.log("Supabase: Attempting sign-up with encryption for:", email)
+
+      // 1. Register user with Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email,
+        password
+      })
+
+      if (authError) throw authError
+      if (!authData.user) throw new Error('User registration failed')
+
+      // 2. Generate salt for this user
+      const salt = generateSalt()
+
+      // 3. Encrypt initial data with user's password
+      const encryptedData = encryptData(initialData, password)
+
+      // 4. Store encrypted data in database
+      const { error: dbError } = await supabase
+        .from('encrypted_user_data')
+        .insert({
+          user_id: authData.user.id,
+          encrypted_data: encryptedData,
+          salt: salt,
+          data_version: 1
+        })
+
+      if (dbError) throw dbError
+
+      console.log("Supabase: Sign-up with encryption successful")
+      return { user: authData.user, error: null }
+    } catch (error: any) {
+      console.error("Supabase: Sign-up with encryption failed:", error.message)
+      return { user: null, error: error.message }
+    }
+  },
+
+  /**
+   * Login and decrypt user data
+   */
+  async signInWithDecryption(
+    email: string,
+    password: string
+  ): Promise<{ user: User | null; userData: SensitiveUserData | null; encryptionKey: string | null; error: string | null }> {
+    try {
+      console.log("Supabase: Attempting sign-in with decryption for:", email)
+
+      // 1. Authenticate with Supabase
+      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
+
+      if (authError) throw authError
+      if (!authData.user) throw new Error('Authentication failed')
+
+      // 2. Fetch user's encrypted data
+      const { data: encryptedRecord, error: fetchError } = await supabase
+        .from('encrypted_user_data')
+        .select('encrypted_data, salt, data_version')
+        .eq('user_id', authData.user.id)
+        .single()
+
+      if (fetchError) {
+        // User might not have encrypted data yet (new user or migrating)
+        console.warn("No encrypted data found, creating empty record")
+        const salt = generateSalt()
+        const emptyData = encryptData({}, password)
+
+        await supabase
+          .from('encrypted_user_data')
+          .insert({
+            user_id: authData.user.id,
+            encrypted_data: emptyData,
+            salt: salt,
+            data_version: 1
+          })
+
+        return {
+          user: authData.user,
+          userData: {} as SensitiveUserData,
+          encryptionKey: password,
+          error: null
+        }
+      }
+
+      // 3. Decrypt data client-side using password
+      try {
+        const decryptedData = decryptData<SensitiveUserData>(
+          encryptedRecord.encrypted_data,
+          password
+        )
+
+        console.log("Supabase: Sign-in with decryption successful")
+        return {
+          user: authData.user,
+          userData: decryptedData,
+          encryptionKey: password,
+          error: null
+        }
+      } catch (decryptError) {
+        throw new Error('Failed to decrypt user data - possible data corruption')
+      }
+    } catch (error: any) {
+      console.error("Supabase: Sign-in with decryption failed:", error.message)
+      return { user: null, userData: null, encryptionKey: null, error: error.message }
+    }
+  },
+
+  /**
+   * Unlock session after page refresh (user still logged in but needs to re-decrypt)
+   */
+  async unlockWithPassword(password: string): Promise<{ userData: SensitiveUserData | null; encryptionKey: string | null; error: string | null }> {
+    try {
+      console.log("Supabase: Attempting to unlock with password")
+
+      // 1. Get current session
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) throw new Error('No active session')
+
+      // 2. Fetch encrypted data
+      const { data: encryptedRecord, error: fetchError } = await supabase
+        .from('encrypted_user_data')
+        .select('encrypted_data, salt, data_version')
+        .eq('user_id', session.user.id)
+        .single()
+
+      if (fetchError) throw fetchError
+
+      // 3. Decrypt data
+      const decryptedData = decryptData<SensitiveUserData>(
+        encryptedRecord.encrypted_data,
+        password
+      )
+
+      console.log("Supabase: Unlock successful")
+      return {
+        userData: decryptedData,
+        encryptionKey: password,
+        error: null
+      }
+    } catch (error: any) {
+      console.error("Supabase: Unlock failed:", error.message)
+      return { userData: null, encryptionKey: null, error: 'Failed to unlock - incorrect password' }
+    }
+  },
+
+  /**
+   * Save encrypted user data
+   */
+  async saveEncryptedUserData(
+    userId: string,
+    userData: SensitiveUserData,
+    encryptionKey: string
+  ): Promise<{ error: string | null }> {
+    try {
+      console.log("Supabase: Saving encrypted user data")
+
+      // 1. Encrypt data client-side
+      const encryptedData = encryptData(userData, encryptionKey)
+
+      // 2. Update database
+      const { error } = await supabase
+        .from('encrypted_user_data')
+        .update({
+          encrypted_data: encryptedData,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', userId)
+
+      if (error) throw error
+
+      console.log("Supabase: Encrypted user data saved successfully")
+      return { error: null }
+    } catch (error: any) {
+      console.error("Supabase: Save encrypted data failed:", error.message)
+      return { error: error.message }
+    }
+  },
+
+  /**
+   * Change password and re-encrypt all data
+   */
+  async changePasswordAndReEncrypt(
+    oldPassword: string,
+    newPassword: string
+  ): Promise<{ error: string | null }> {
+    try {
+      console.log("Supabase: Changing password with re-encryption")
+
+      // 1. Get current session
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) throw new Error('No active session')
+
+      // 2. Fetch current encrypted data
+      const { data: encryptedRecord, error: fetchError } = await supabase
+        .from('encrypted_user_data')
+        .select('encrypted_data')
+        .eq('user_id', session.user.id)
+        .single()
+
+      if (fetchError) throw fetchError
+
+      // 3. Re-encrypt with new password
+      const reEncryptedData = reEncryptData(
+        encryptedRecord.encrypted_data,
+        oldPassword,
+        newPassword
+      )
+
+      // 4. Update Supabase auth password
+      const { error: authError } = await supabase.auth.updateUser({
+        password: newPassword
+      })
+
+      if (authError) throw authError
+
+      // 5. Update encrypted data with new encryption
+      const { error: dbError } = await supabase
+        .from('encrypted_user_data')
+        .update({
+          encrypted_data: reEncryptedData,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', session.user.id)
+
+      if (dbError) throw dbError
+
+      console.log("Supabase: Password changed and data re-encrypted successfully")
+      return { error: null }
+    } catch (error: any) {
+      console.error("Supabase: Password change with re-encryption failed:", error.message)
+      return { error: error.message }
+    }
   },
 }

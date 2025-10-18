@@ -79,14 +79,17 @@ const Sidebar: React.FC<SidebarProps> = ({ open, setOpen }) => {
                   </button>
                 </div>
 
-                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2">
-                  <div className="flex h-16 shrink-0 items-center">
-                    <div className="h-8 w-8 bg-gradient-to-r from-[#627EEA] to-[#00B774] rounded-lg flex items-center justify-center text-white font-bold">
-                      🐄
+                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gradient-to-b from-white to-paper-rice px-6 pb-2">
+                  <div className="flex h-16 shrink-0 items-center border-b border-earth-stone/20 pb-4">
+                    <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-cerulean-deep shadow-sm">
+                      <span className="text-2xl">🐄</span>
                     </div>
-                    <span className="ml-3 text-xl font-bold text-gray-900">COW Admin</span>
+                    <div className="ml-3 flex flex-col">
+                      <span className="text-lg font-light text-ink-black">COW</span>
+                      <span className="text-xs font-light text-cerulean-deep">Admin Portal</span>
+                    </div>
                   </div>
-                  
+
                   <nav className="flex flex-1 flex-col">
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                       <li>
@@ -95,16 +98,16 @@ const Sidebar: React.FC<SidebarProps> = ({ open, setOpen }) => {
                             <li key={item.name}>
                               <NavLink
                                 to={item.href}
-                                className={`group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold ${
+                                className={`group flex gap-x-3 rounded-lg p-3 text-sm font-light leading-6 transition-all ${
                                   isActive(item.href)
-                                    ? 'bg-gray-50 text-[#627EEA]'
-                                    : 'text-gray-700 hover:text-[#627EEA] hover:bg-gray-50'
+                                    ? 'bg-cerulean-ice text-cerulean-deep shadow-sm'
+                                    : 'text-ink-charcoal hover:text-cerulean-deep hover:bg-cerulean-ice/50'
                                 }`}
                                 onClick={() => setOpen(false)}
                               >
                                 <item.icon
-                                  className={`h-6 w-6 shrink-0 ${
-                                    isActive(item.href) ? 'text-[#627EEA]' : 'text-gray-400 group-hover:text-[#627EEA]'
+                                  className={`h-5 w-5 shrink-0 ${
+                                    isActive(item.href) ? 'text-cerulean-deep' : 'text-ink-silver group-hover:text-cerulean-deep'
                                   }`}
                                   aria-hidden="true"
                                 />
@@ -116,6 +119,12 @@ const Sidebar: React.FC<SidebarProps> = ({ open, setOpen }) => {
                       </li>
                     </ul>
                   </nav>
+
+                  {/* Earth tone grounding footer - Horizon Principle */}
+                  <div className="mt-auto pt-4 pb-4 border-t-4 border-earth-stone bg-gradient-to-r from-earth-clay/30 to-earth-stone/30 -mx-6 px-6 rounded-t-lg">
+                    <p className="text-xs font-light text-ink-charcoal">Platform Administration</p>
+                    <p className="text-xs font-light text-earth-stone">v0.0.1</p>
+                  </div>
                 </div>
               </Dialog.Panel>
             </Transition.Child>
@@ -125,14 +134,17 @@ const Sidebar: React.FC<SidebarProps> = ({ open, setOpen }) => {
 
       {/* Static sidebar for desktop */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
-          <div className="flex h-16 shrink-0 items-center">
-            <div className="h-8 w-8 bg-gradient-to-r from-[#627EEA] to-[#00B774] rounded-lg flex items-center justify-center text-white font-bold">
-              🐄
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r-2 border-earth-stone/20 bg-gradient-to-b from-white to-paper-rice px-6">
+          <div className="flex h-16 shrink-0 items-center border-b border-earth-stone/20 pb-4">
+            <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-cerulean-deep shadow-sm">
+              <span className="text-2xl">🐄</span>
             </div>
-            <span className="ml-3 text-xl font-bold text-gray-900">COW Admin</span>
+            <div className="ml-3 flex flex-col">
+              <span className="text-lg font-light text-ink-black">COW</span>
+              <span className="text-xs font-light text-cerulean-deep">Admin Portal</span>
+            </div>
           </div>
-          
+
           <nav className="flex flex-1 flex-col">
             <ul role="list" className="flex flex-1 flex-col gap-y-7">
               <li>
@@ -141,15 +153,15 @@ const Sidebar: React.FC<SidebarProps> = ({ open, setOpen }) => {
                     <li key={item.name}>
                       <NavLink
                         to={item.href}
-                        className={`group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold ${
+                        className={`group flex gap-x-3 rounded-lg p-3 text-sm font-light leading-6 transition-all ${
                           isActive(item.href)
-                            ? 'bg-gray-50 text-[#627EEA]'
-                            : 'text-gray-700 hover:text-[#627EEA] hover:bg-gray-50'
+                            ? 'bg-cerulean-ice text-cerulean-deep shadow-sm'
+                            : 'text-ink-charcoal hover:text-cerulean-deep hover:bg-cerulean-ice/50'
                         }`}
                       >
                         <item.icon
-                          className={`h-6 w-6 shrink-0 ${
-                            isActive(item.href) ? 'text-[#627EEA]' : 'text-gray-400 group-hover:text-[#627EEA]'
+                          className={`h-5 w-5 shrink-0 ${
+                            isActive(item.href) ? 'text-cerulean-deep' : 'text-ink-silver group-hover:text-cerulean-deep'
                           }`}
                           aria-hidden="true"
                         />
@@ -161,6 +173,12 @@ const Sidebar: React.FC<SidebarProps> = ({ open, setOpen }) => {
               </li>
             </ul>
           </nav>
+
+          {/* Earth tone grounding footer - Horizon Principle */}
+          <div className="mt-auto pt-4 pb-4 border-t-4 border-earth-stone bg-gradient-to-r from-earth-clay/30 to-earth-stone/30 -mx-6 px-6 rounded-t-lg">
+            <p className="text-xs font-light text-ink-charcoal">Platform Administration</p>
+            <p className="text-xs font-light text-earth-stone">v0.0.1</p>
+          </div>
         </div>
       </div>
     </>

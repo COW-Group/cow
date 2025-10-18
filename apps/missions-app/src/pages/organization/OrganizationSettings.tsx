@@ -14,6 +14,8 @@ import {
 import { useAppTheme } from '../../hooks/useAppTheme';
 import { supabasePermissionsService } from '../../services/supabase-permissions.service';
 import { Database } from '../../lib/supabase';
+import { storageService } from '../../services/storage.service';
+import { FileUpload } from '../../components/common/FileUpload';
 
 type Organization = Database['public']['Tables']['organizations']['Row'];
 
@@ -89,6 +91,46 @@ export function OrganizationSettings() {
       alert(`Failed to save settings: ${error.message}`);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleLogoUpload = async (file: File): Promise<{ success: boolean; url?: string; error?: string }> => {
+    if (!organization) {
+      return { success: false, error: 'No organization selected' };
+    }
+
+    try {
+      // Delete old logo if exists
+      if (formData.avatar_url) {
+        await storageService.deleteOrganizationLogo(organization.id);
+      }
+
+      // Upload new logo
+      const result = await storageService.uploadOrganizationLogo(organization.id, file);
+
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
+      // Update form data
+      setFormData({ ...formData, avatar_url: result.url });
+
+      console.log('✅ Logo uploaded successfully:', result.url);
+
+      // Auto-save to database
+      await supabasePermissionsService.updateOrganization(organization.id, {
+        avatar_url: result.url,
+      });
+
+      console.log('✅ Logo saved to database');
+
+      // Reload organization to show updated logo
+      await loadOrganization();
+
+      return { success: true, url: logoUrl };
+    } catch (error: any) {
+      console.error('Failed to upload logo:', error);
+      return { success: false, error: error.message || 'Failed to upload logo' };
     }
   };
 
@@ -198,31 +240,16 @@ export function OrganizationSettings() {
               <div className="space-y-6">
                 {/* Logo Upload */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-3">
-                    Organization Logo
-                  </label>
-                  <div className="flex items-center space-x-6">
-                    {formData.avatar_url ? (
-                      <img
-                        src={formData.avatar_url}
-                        alt="Organization logo"
-                        className="h-20 w-20 rounded-lg object-cover"
-                      />
-                    ) : (
-                      <div className="h-20 w-20 rounded-lg bg-gray-100 flex items-center justify-center">
-                        <Building2 className="h-8 w-8 text-gray-400" />
-                      </div>
-                    )}
-                    <div>
-                      <button className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50">
-                        <Upload className="w-4 h-4" />
-                        <span>Upload Logo</span>
-                      </button>
-                      <p className="text-xs text-gray-500 mt-2">
-                        Recommended: Square image, at least 200x200px
-                      </p>
-                    </div>
-                  </div>
+                  <FileUpload
+                    currentImageUrl={formData.avatar_url}
+                    onUpload={handleLogoUpload}
+                    maxSize={5 * 1024 * 1024} // 5MB
+                    shape="square"
+                    size="md"
+                    label="Organization Logo"
+                    helperText="Recommended: Square image, at least 200x200px. PNG, JPG, SVG, or WebP format, max 5MB"
+                    acceptedTypes={['image/jpeg', 'image/jpg', 'image/png', 'image/svg+xml', 'image/webp']}
+                  />
                 </div>
 
                 {/* Organization Name */}

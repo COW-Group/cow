@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%; /* cream-25 */
+    --foreground: 222.2 84% 4.9%; /* ink-950 */
+    --card: 0 0% 100%; /* cream-25 */
+    --card-foreground: 222.2 84% 4.9%; /* ink-950 */
+    --popover: 0 0% 100%; /* cream-25 */
+    --popover-foreground: 222.2 84% 4.9%; /* ink-950 */
+    --primary: 222.2 47.4% 11.2%; /* logo-blue */
+    --primary-foreground: 210 40% 98%; /* cream-25 */
+    --secondary: 210 40% 96.1%; /* sage-900 */
+    --secondary-foreground: 222.2 47.4% 11.2%; /* cream-25 */
+    --muted: 210 40% 96.1%; /* ink-50 */
+    --muted-foreground: 215.4 16.3% 46.9%; /* ink-700 */
+    --accent: 210 40% 96.1%; /* ink-50 */
+    --accent-foreground: 222.2 47.4% 11.2%; /* ink-950 */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 214.3 31.8% 91.4%; /* brushed-silver */
+    --input: 214.3 31.8% 91.4%; /* brushed-silver */
+    --ring: 222.2 84% 4.9%; /* logo-blue */
+    --radius: 0.5rem;
+
+    /* Mauna Brand Colors */
+    --cream-25: 39 100% 98%;
+    --cream-50: 39 100% 96%;
+    --cream-100: 39 100% 94%;
+    --ink-50: 210 10% 96%;
+    --ink-100: 210 10% 90%;
+    --ink-200: 210 10% 80%;
+    --ink-300: 210 10% 70%;
+    --ink-400: 210 10% 60%;
+    --ink-500: 210 10% 50%;
+    --ink-600: 210 10% 40%;
+    --ink-700: 210 10% 30%;
+    --ink-800: 210 10% 20%;
+    --ink-900: 210 10% 10%;
+    --ink-950: 210 10% 5%;
+    --logo-blue: 200 80% 50%;
+    --soft-gold: 40 80% 70%;
+    --brushed-silver: 210 15% 75%;
+    --sage-50: 90 20% 95%;
+    --sage-100: 90 20% 90%;
+    --sage-200: 90 20% 80%;
+    --sage-300: 90 20% 70%;
+    --sage-400: 90 20% 60%;
+    --sage-500: 90 20% 50%;
+    --sage-600: 90 20% 40%;
+    --sage-700: 90 20% 30%;
+    --sage-800: 90 20% 20%;
+    --sage-900: 90 20% 10%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-inter, sans-serif);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-montserrat, sans-serif);
+  }
+}
+
+/* Glassmorphism Effect */
+.glassmorphism {
+  background: linear-gradient(135deg,
+    hsla(var(--cream-25), 0.25) 0%,
+    hsla(var(--cream-25), 0.15) 100%
+  );
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid hsla(var(--brushed-silver), 0.2);
+  box-shadow:
+    0 8px 32px hsla(var(--ink-950), 0.12),
+    0 2px 8px hsla(var(--ink-950), 0.08),
+    inset 0 1px 0 hsla(var(--cream-25), 0.8),
+    inset 0 -1px 0 hsla(var(--cream-25), 0.2);
+}
+
+.dark .glassmorphism {
+  background: linear-gradient(135deg,
+    hsla(var(--ink-950), 0.25) 0%,
+    hsla(var(--ink-950), 0.15) 100%
+  );
+  border: 1px solid hsla(var(--ink-800), 0.2);
+  box-shadow:
+    0 8px 32px hsla(var(--ink-950), 0.2),
+    0 2px 8px hsla(var(--ink-950), 0.15),
+    inset 0 1px 0 hsla(var(--cream-25), 0.3),
+    inset 0 -1px 0 hsla(var(--cream-25), 0.1);
+}

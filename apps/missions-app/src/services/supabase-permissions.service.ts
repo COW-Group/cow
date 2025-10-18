@@ -564,8 +564,14 @@ export class SupabasePermissionsService {
       // Get organizations
       const organizations = await this.getUserOrganizations(userId);
 
-      // Get teams
-      const teams = await this.getUserTeams(userId);
+      // Get teams - with error handling
+      let teams: (Team & { memberRole: string })[] = [];
+      try {
+        teams = await this.getUserTeams(userId);
+      } catch (error) {
+        console.error('Error loading teams (will continue without them):', error);
+        teams = [];
+      }
 
       return {
         ...profile,

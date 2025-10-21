@@ -1435,23 +1435,87 @@ export default function HomePage() {
 
       {/* Footer with Warm Stone horizon - where sky meets earth */}
       <footer
-        className="py-12 px-8"
+        className="py-16 px-8"
         style={{
           background: 'linear-gradient(to bottom, rgba(155, 139, 126, 0.15) 0%, rgba(155, 139, 126, 0.25) 100%)',
           borderTop: '2px solid rgba(155, 139, 126, 0.35)'
         }}
       >
-        <div className="max-w-7xl mx-auto text-center">
-          <p
-            className="text-sm font-light"
-            style={{
-              letterSpacing: '0.01em',
-              color: '#6b4423', // Warm earth brown for better contrast with subtle warm stone horizon
-              fontFamily: 'Inter, sans-serif'
-            }}
-          >
-            &copy; 2025 COW Group. All rights reserved.
-          </p>
+        <div className="max-w-7xl mx-auto">
+          {/* Navigation Links */}
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 mb-8">
+            <Link
+              to="/moo"
+              className="text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light"
+              style={{
+                fontSize: '0.9375rem',
+                letterSpacing: '0.01em',
+                fontFamily: 'Inter, sans-serif'
+              }}
+            >
+              Moo
+            </Link>
+            <Link
+              to="/research"
+              className="text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light"
+              style={{
+                fontSize: '0.9375rem',
+                letterSpacing: '0.01em',
+                fontFamily: 'Inter, sans-serif'
+              }}
+            >
+              Research
+            </Link>
+            <a
+              href="https://mauna.mycow.io"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light"
+              style={{
+                fontSize: '0.9375rem',
+                letterSpacing: '0.01em',
+                fontFamily: 'Inter, sans-serif'
+              }}
+            >
+              Mauna
+            </a>
+            <Link
+              to="/missions"
+              className="text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light"
+              style={{
+                fontSize: '0.9375rem',
+                letterSpacing: '0.01em',
+                fontFamily: 'Inter, sans-serif'
+              }}
+            >
+              Missions
+            </Link>
+            <a
+              href="mailto:support@mycow.io"
+              className="text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light"
+              style={{
+                fontSize: '0.9375rem',
+                letterSpacing: '0.01em',
+                fontFamily: 'Inter, sans-serif'
+              }}
+            >
+              Support
+            </a>
+          </div>
+
+          {/* Copyright */}
+          <div className="text-center">
+            <p
+              className="text-sm font-light"
+              style={{
+                letterSpacing: '0.01em',
+                color: '#6b4423', // Warm earth brown for better contrast with subtle warm stone horizon
+                fontFamily: 'Inter, sans-serif'
+              }}
+            >
+              &copy; 2025 COW Group. All rights reserved.
+            </p>
+          </div>
         </div>
       </footer>
 

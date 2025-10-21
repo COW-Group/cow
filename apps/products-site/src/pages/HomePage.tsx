@@ -148,9 +148,9 @@ export default function HomePage() {
 
       {/* Hero Section - Sumi-e Sky + Earth */}
       <section className="relative pt-32 pb-24 px-6 lg:px-8 min-h-screen flex items-center">
-        {/* Background gradient layer - Sumi-e Sky + Earth */}
+        {/* Background gradient layer - Light mode: clean white for text contrast */}
         <div className="absolute inset-0" style={{
-          background: 'linear-gradient(to bottom, #F5F3F0 0%, #e0f2fe 50%, #F5F3F0 100%)' // Light: Rice paper with sky wash
+          background: '#ffffff' // Clean white for better text contrast
         }} />
         <div className="absolute inset-0 dark:block hidden" style={{
           background: 'linear-gradient(to bottom, #0a1628 0%, #0f1d2e 50%, #0a1628 100%)' // Dark: Navy gradient (family's favorite!)

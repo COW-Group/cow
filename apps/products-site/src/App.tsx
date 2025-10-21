@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { CopilotProvider } from './contexts/copilot-context';
 import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
 import OnboardingPage from './pages/OnboardingPage';
@@ -23,8 +24,9 @@ import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (
-    <div className="App">
-      <Routes>
+    <CopilotProvider>
+      <div className="App">
+        <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
         <Route path="/onboarding/country-selection" element={<CountrySelectionPage />} />
@@ -56,7 +58,8 @@ function App() {
           },
         }}
       />
-    </div>
+      </div>
+    </CopilotProvider>
   );
 }
 

@@ -12,7 +12,7 @@ interface CopilotContextType {
 }
 
 const defaultSettings: CopilotSettings = {
-  name: "COW Copilot",
+  name: "Moo",
   enabled: true,
   voice: "default",
 }

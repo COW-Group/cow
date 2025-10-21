@@ -20,6 +20,7 @@ import AuSiriPage from './pages/AuSiriPage';
 import AuSiriAnimationPage from './pages/AuSiriAnimationPage';
 import ResearchCentrePage from './pages/ResearchCentrePage';
 import ResearchArticlePage from './pages/ResearchArticlePage';
+import MooPage from './pages/MooPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
         <Route path="/ausiri-animation" element={<AuSiriAnimationPage />} />
         <Route path="/research" element={<ResearchCentrePage />} />
         <Route path="/research/:slug" element={<ResearchArticlePage />} />
+        <Route path="/moo" element={<MooPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Toaster

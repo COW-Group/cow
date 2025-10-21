@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { motion } from "framer-motion"
 import { ArrowRight, TrendingUp, Shield, Target, Zap, CheckCircle2, Download, ChevronDown } from "lucide-react"
 import { ProductMenu } from "../components/product-menu"
@@ -12,6 +12,7 @@ import { Button } from "../components/ui/button"
 import cowLogo from "../assets/cow-logo.png"
 
 export default function HomePage() {
+  const navigate = useNavigate()
   const [email, setEmail] = useState("")
   const [showAuthModal, setShowAuthModal] = useState(false)
   const [showPWAInstructions, setShowPWAInstructions] = useState(false)
@@ -27,8 +28,7 @@ export default function HomePage() {
   }
 
   const handleOpenChat = (query?: string) => {
-    console.log("Chat opened with query:", query)
-    // TODO: Implement chat modal integration
+    navigate('/moo', { state: { initialQuery: query } })
   }
 
   if (!isClient) {

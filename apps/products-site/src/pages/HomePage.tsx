@@ -315,10 +315,8 @@ export default function HomePage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="group relative rounded-2xl p-12 transition-all duration-500 border overflow-hidden"
+              className="group relative rounded-2xl p-12 transition-all duration-500 border overflow-hidden bg-white dark:bg-gray-800/50 border-gray-200 dark:border-gray-700/50"
               style={{
-                background: 'white',
-                border: '1px solid rgba(0, 0, 0, 0.08)',
                 boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
               }}
             >
@@ -379,10 +377,8 @@ export default function HomePage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="group relative rounded-2xl p-12 transition-all duration-500 border overflow-hidden"
+              className="group relative rounded-2xl p-12 transition-all duration-500 border overflow-hidden bg-white dark:bg-gray-800/50 border-gray-200 dark:border-gray-700/50"
               style={{
-                background: 'white',
-                border: '1px solid rgba(0, 0, 0, 0.08)',
                 boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
               }}
             >
@@ -439,14 +435,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Terra Cotta Horizon Strip with subtle logo color accent */}
+      {/* Terra Cotta Horizon Strip with subtle logo color accent - hidden in dark mode */}
       <div
-        className="w-full"
+        className="w-full dark:hidden"
         style={{
           height: '80px',
           background: 'linear-gradient(135deg, #C9724B 0%, #B86239 100%)',
           borderTop: '3px solid rgba(0, 102, 255, 0.4)', // Deep Cyan logo color thread
           boxShadow: 'inset 0 3px 8px rgba(0, 102, 255, 0.15)' // Subtle Deep Cyan glow
+        }}
+      />
+
+      {/* Dark mode divider - subtle Deep Cyan */}
+      <div
+        className="w-full hidden dark:block"
+        style={{
+          height: '2px',
+          background: 'linear-gradient(to right, transparent 0%, rgba(0, 102, 255, 0.3) 50%, transparent 100%)'
         }}
       />
 
@@ -503,37 +508,25 @@ export default function HomePage() {
               Flagship Assets
             </h3>
             <div className="grid md:grid-cols-3 gap-8 mb-12">
-              {/* Pure Gold Bullion - Flagship with Terra Cotta premium accent */}
+              {/* Pure Gold Bullion - Flagship with Deep Cyan premium accent */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="group relative rounded-2xl p-8 transition-all duration-300"
+                className="group relative rounded-2xl p-8 transition-all duration-300 bg-white dark:bg-gray-800/70 border-2 border-yellow-400/30 dark:border-[#0066FF]/40"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(255, 193, 7, 0.08) 0%, rgba(255, 193, 7, 0.02) 100%)',
-                  border: '2px solid rgba(255, 193, 7, 0.3)',
-                  borderLeft: '4px solid #C77A58' // Terra Cotta premium accent
+                  borderLeftWidth: '4px',
+                  borderLeftColor: '#0066FF' // Deep Cyan logo pop for premium
                 }}
               >
                 {/* Deep Cyan corner accent - logo pop */}
                 <div
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    width: '60px',
-                    height: '60px',
-                    background: 'linear-gradient(135deg, #0066FF 0%, transparent 100%)',
-                    opacity: 0.15,
-                    borderTopRightRadius: '1rem'
-                  }}
+                  className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-[#0066FF]/20 to-transparent dark:from-[#0066FF]/30 dark:to-transparent rounded-tr-2xl"
                 />
                 <div
-                  className="text-xs font-medium px-3 py-1 rounded-full inline-block mb-4"
+                  className="text-xs font-medium px-3 py-1 rounded-full inline-block mb-4 bg-[#0066FF]/10 dark:bg-[#0066FF]/20 text-[#0066FF]"
                   style={{
-                    background: 'rgba(255, 193, 7, 0.2)',
-                    color: '#f59e0b',
                     letterSpacing: '0.02em'
                   }}
                 >
@@ -541,12 +534,12 @@ export default function HomePage() {
                 </div>
                 <h4
                   className="mb-3"
+                  className="text-gray-900 dark:text-gray-100"
                   style={{
                     fontSize: '1.5rem',
                     fontWeight: '500',
                     fontFamily: 'Inter, sans-serif',
-                    letterSpacing: '-0.01em',
-                    color: '#111827'
+                    letterSpacing: '-0.01em'
                   }}
                 >
                   Pure Gold Bullion
@@ -583,33 +576,29 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="group rounded-2xl p-8 transition-all duration-300"
-                style={{
-                  background: 'white',
-                  border: '1px solid rgba(0, 0, 0, 0.08)'
-                }}
+                className="group rounded-2xl p-8 transition-all duration-300 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/50"
               >
                 <h4
                   className="mb-3"
+                  className="text-gray-900 dark:text-gray-100"
                   style={{
                     fontSize: '1.5rem',
                     fontWeight: '500',
                     fontFamily: 'Inter, sans-serif',
-                    letterSpacing: '-0.01em',
-                    color: '#111827'
+                    letterSpacing: '-0.01em'
                   }}
                 >
                   Aviation Assets
                 </h4>
                 <p
                   className="mb-6"
+                  className="text-gray-600 dark:text-gray-300"
                   style={{
                     fontSize: '0.9375rem',
                     fontWeight: '300',
                     fontFamily: 'Inter, sans-serif',
                     lineHeight: '1.6',
-                    letterSpacing: '0.01em',
-                    color: '#6b7280'
+                    letterSpacing: '0.01em'
                   }}
                 >
                   Access commercial aviation economics through fractional asset ownership
@@ -633,33 +622,29 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="group rounded-2xl p-8 transition-all duration-300"
-                style={{
-                  background: 'white',
-                  border: '1px solid rgba(0, 0, 0, 0.08)'
-                }}
+                className="group rounded-2xl p-8 transition-all duration-300 bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/50"
               >
                 <h4
                   className="mb-3"
+                  className="text-gray-900 dark:text-gray-100"
                   style={{
                     fontSize: '1.5rem',
                     fontWeight: '500',
                     fontFamily: 'Inter, sans-serif',
-                    letterSpacing: '-0.01em',
-                    color: '#111827'
+                    letterSpacing: '-0.01em'
                   }}
                 >
                   Real Estate
                 </h4>
                 <p
                   className="mb-6"
+                  className="text-gray-600 dark:text-gray-300"
                   style={{
                     fontSize: '0.9375rem',
                     fontWeight: '300',
                     fontFamily: 'Inter, sans-serif',
                     lineHeight: '1.6',
-                    letterSpacing: '0.01em',
-                    color: '#6b7280'
+                    letterSpacing: '0.01em'
                   }}
                 >
                   Residential and commercial mixed-use properties with long-duration value
@@ -787,7 +772,7 @@ export default function HomePage() {
       </section>
 
       {/* Structured Wealth Programs Section */}
-      <section id="programs" className="py-32 px-8 bg-white">
+      <section id="programs" className="py-32 px-8 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -797,13 +782,12 @@ export default function HomePage() {
             className="mb-20"
           >
             <h2
-              className="mb-6 inline-block"
+              className="mb-6 inline-block text-gray-900 dark:text-gray-100"
               style={{
                 fontSize: 'clamp(2.5rem, 4.5vw, 4rem)',
                 fontWeight: '200',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '-0.025em',
-                color: '#111827',
                 borderBottom: '2px solid rgba(0, 102, 255, 0.2)', // Subtle Deep Cyan accent
                 paddingBottom: '0.5rem'
               }}
@@ -1196,12 +1180,12 @@ export default function HomePage() {
                 </span>
                 <h3
                   className="mb-3"
+                  className="text-gray-900 dark:text-gray-100"
                   style={{
                     fontSize: '1.5rem',
                     fontWeight: '500',
                     fontFamily: 'Inter, sans-serif',
-                    letterSpacing: '-0.01em',
-                    color: '#111827'
+                    letterSpacing: '-0.01em'
                   }}
                 >
                   Visualize Your Flows
@@ -1250,12 +1234,12 @@ export default function HomePage() {
                 </span>
                 <h3
                   className="mb-3"
+                  className="text-gray-900 dark:text-gray-100"
                   style={{
                     fontSize: '1.5rem',
                     fontWeight: '500',
                     fontFamily: 'Inter, sans-serif',
-                    letterSpacing: '-0.01em',
-                    color: '#111827'
+                    letterSpacing: '-0.01em'
                   }}
                 >
                   Orchestrate Performance
@@ -1304,12 +1288,12 @@ export default function HomePage() {
                 </span>
                 <h3
                   className="mb-3"
+                  className="text-gray-900 dark:text-gray-100"
                   style={{
                     fontSize: '1.5rem',
                     fontWeight: '500',
                     fontFamily: 'Inter, sans-serif',
-                    letterSpacing: '-0.01em',
-                    color: '#111827'
+                    letterSpacing: '-0.01em'
                   }}
                 >
                   Optimize Your Cycles
@@ -1334,10 +1318,7 @@ export default function HomePage() {
 
       {/* Early Access Section */}
       <section
-        className="py-32 px-8 relative overflow-hidden"
-        style={{
-          background: 'linear-gradient(to bottom, rgba(201, 184, 168, 0.15), rgba(155, 139, 126, 0.25))'
-        }}
+        className="py-32 px-8 relative overflow-hidden bg-gradient-to-b from-[rgba(201,184,168,0.15)] to-[rgba(155,139,126,0.25)] dark:from-gray-900 dark:to-gray-800"
       >
         <div className="max-w-4xl mx-auto relative z-10">
           <motion.div
@@ -1348,13 +1329,12 @@ export default function HomePage() {
             className="text-center"
           >
             <h2
-              className="mb-6 inline-block"
+              className="mb-6 inline-block text-gray-900 dark:text-gray-100"
               style={{
                 fontSize: 'clamp(2.5rem, 4.5vw, 4rem)',
                 fontWeight: '200',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '-0.025em',
-                color: '#111827',
                 borderBottom: '2px solid rgba(0, 102, 255, 0.2)', // Subtle Deep Cyan accent
                 paddingBottom: '0.5rem'
               }}

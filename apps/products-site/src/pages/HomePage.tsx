@@ -36,7 +36,17 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-[#020617] transition-colors duration-200">
+    <div className="min-h-screen transition-colors duration-200" style={{
+      background: 'var(--mode-bg, #F5F3F0)' // Rice Paper (light) / Navy Deep (dark)
+    }}>
+      <style>{`
+        :root {
+          --mode-bg: #F5F3F0; /* Rice Paper - warm, inviting */
+        }
+        .dark {
+          --mode-bg: #0a1628; /* Navy Deep - family's favorite! */
+        }
+      `}</style>
       {/* Floating Navigation */}
       <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-[85%] max-w-5xl">
         <div
@@ -136,10 +146,15 @@ export default function HomePage() {
         </div>
       </nav>
 
-      {/* Hero Section - MyCOW Gradient Background */}
-      <section className="relative pt-32 pb-24 px-6 lg:px-8 min-h-screen flex items-center bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-[#020617] dark:via-[#0f172a] dark:to-[#020617]">
-        {/* Background gradient layer */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-50 dark:from-[#020617] dark:via-[#0f172a] dark:to-[#020617]" />
+      {/* Hero Section - Sumi-e Sky + Earth */}
+      <section className="relative pt-32 pb-24 px-6 lg:px-8 min-h-screen flex items-center">
+        {/* Background gradient layer - Sumi-e Sky + Earth */}
+        <div className="absolute inset-0" style={{
+          background: 'linear-gradient(to bottom, #F5F3F0 0%, #e0f2fe 50%, #F5F3F0 100%)' // Light: Rice paper with sky wash
+        }} />
+        <div className="absolute inset-0 dark:block hidden" style={{
+          background: 'linear-gradient(to bottom, #0a1628 0%, #0f1d2e 50%, #0a1628 100%)' // Dark: Navy gradient (family's favorite!)
+        }} />
 
         <div className="max-w-7xl mx-auto w-full relative z-10">
           <motion.div className="text-center max-w-5xl mx-auto">
@@ -227,8 +242,16 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* Two Paths to Wealth Section */}
-      <section className="py-32 px-8 bg-white dark:bg-[#020617]">
+      {/* Two Paths to Wealth Section - Soft Clay for earth grounding */}
+      <section className="py-32 px-8" style={{ background: 'var(--mode-section-bg)' }}>
+        <style>{`
+          :root {
+            --mode-section-bg: #C9B8A8; /* Soft Clay - earth grounding */
+          }
+          .dark {
+            --mode-section-bg: #0a1628; /* Navy Deep - family's favorite */
+          }
+        `}</style>
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -344,7 +367,7 @@ export default function HomePage() {
                 <div
                   className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
                   style={{
-                    background: 'linear-gradient(135deg, #8B956D 0%, #6B7553 100%)' // Sage Green
+                    background: 'linear-gradient(135deg, #6B8E6F 0%, #5a7a5c 100%)' // Bamboo Green - nature, vitality
                   }}
                 >
                   <Shield className="w-8 h-8 text-white" />
@@ -378,7 +401,7 @@ export default function HomePage() {
                   href="#programs"
                   className="inline-flex items-center font-medium transition-colors group/link"
                   style={{
-                    color: '#8B956D',
+                    color: '#6B8E6F', // Bamboo Green
                     fontSize: '0.9375rem',
                     letterSpacing: '0.01em'
                   }}
@@ -454,16 +477,17 @@ export default function HomePage() {
               Flagship Assets
             </h3>
             <div className="grid md:grid-cols-3 gap-8 mb-12">
-              {/* Pure Gold Bullion - Flagship */}
+              {/* Pure Gold Bullion - Flagship with Terra Cotta premium accent */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className="group relative rounded-2xl p-8 transition-all duration-300 border-2"
+                className="group relative rounded-2xl p-8 transition-all duration-300"
                 style={{
                   background: 'linear-gradient(135deg, rgba(255, 193, 7, 0.08) 0%, rgba(255, 193, 7, 0.02) 100%)',
-                  border: '2px solid rgba(255, 193, 7, 0.3)'
+                  border: '2px solid rgba(255, 193, 7, 0.3)',
+                  borderLeft: '4px solid #C77A58' // Terra Cotta premium accent
                 }}
               >
                 <div
@@ -1420,12 +1444,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Footer with Warm Stone horizon - where sky meets earth */}
       <footer
         className="py-12 px-8"
         style={{
-          background: '#9B8B7E',
-          borderTop: 'none'
+          background: 'linear-gradient(to bottom, rgba(155, 139, 126, 0.15) 0%, rgba(155, 139, 126, 0.25) 100%)',
+          borderTop: '2px solid rgba(155, 139, 126, 0.35)'
         }}
       >
         <div className="max-w-7xl mx-auto text-center">
@@ -1433,7 +1457,7 @@ export default function HomePage() {
             className="text-sm font-light"
             style={{
               letterSpacing: '0.01em',
-              color: 'rgba(255, 255, 255, 0.9)',
+              color: '#6b4423', // Warm earth brown for better contrast with subtle warm stone horizon
               fontFamily: 'Inter, sans-serif'
             }}
           >

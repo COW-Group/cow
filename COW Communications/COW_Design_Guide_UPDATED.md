@@ -1,677 +1,322 @@
-# COW Group Design Guide
+# COW Design Guide
 
-## Design Philosophy
+## Introduction
 
-**"Clarity through simplicity. Warmth through geometry. Sophistication through restraint."**
+This guide defines COW Group's complete visual design system, including color, typography, spacing, components, and illustrations. It covers both dark and light modes with a unified design philosophy.
 
-Our visual identity reflects the duality of our brand: serious financial engineering delivered with approachable humanity. Every design choice serves both function and feeling.
-
-**The Horizon Principle:** Our signature aesthetic balances aspiration with foundation—cerulean (sky and water) always meets earth (stone, clay, and growth). Never floating, always grounded.
+**Last Updated:** October 21, 2025  
+**Version:** 3.0 (Dark/Light Mode Implementation)
 
 ---
 
-## Logo System
+## Design Philosophy
 
-### Primary Logo
-The COW bull represents:
-- **Strength:** Enduring value and resilience
-- **Movement:** Dynamic optimization and flow
-- **Geometry:** Precision and mathematical elegance
-- **Fluidity:** Adaptability and grace
+### Luminance Layers Principle
 
-**Logo Variations:**
-- Full color (cerulean gradient)
-- Solid cerulean (#007BA7)
-- White (on dark backgrounds)
-- Black (when color not available)
+**"Clear visual hierarchy through intentional luminance and warm foundation."**
 
-### Logo Usage
+Our design system creates clarity through:
+1. **Layered Depth**: Information architecture expressed through luminance levels
+2. **Warm Grounding**: Cool professional tones balanced with earth warmth
+3. **Generous Space**: 60-70% negative space for breathing room
+4. **Signal Clarity**: Accent colors guide attention intentionally
+5. **Dual Expression**: Same principles, optimized for dark and light modes
 
-**Minimum Clear Space:**
-- 2x the height of the bull's horns on all sides
-
-**Minimum Size:**
-- Digital: 32px height
-- Print: 0.5 inches height
-
-**Do's:**
-- ✅ Use on white or cerulean backgrounds
-- ✅ Use on photography with clear space
-- ✅ Maintain aspect ratio always
-- ✅ Use approved file formats
-
-**Don'ts:**
-- ❌ Rotate or skew the logo
-- ❌ Change gradient colors
-- ❌ Add effects (shadows, glows)
-- ❌ Place on busy backgrounds without treatment
-- ❌ Recreate or redraw
+**Core Concept**:
+- **Dark Mode**: Light emerges from depth (cosmos to earth)
+- **Light Mode**: Structure from clarity (sky to foundation)
+- **Both**: Professional sophistication with approachable warmth
 
 ---
 
 ## Color System
 
-### Philosophy: The Horizon
+### Dark Mode Palette
 
-**Cerulean (sky/water) meets Earth (stone/clay/growth).**
-
-This is not decoration—it's who we are. Our color system creates balance between aspiration and foundation, innovation and stability, possibility and reality. Every design should show this relationship.
-
----
-
-### Primary Palette
-
-**Cerulean Blues (Sky & Water)**
-
-Our signature color family. Use cerulean to convey professionalism, trust, and sophisticated innovation.
-
+#### Background Layers
 ```
-Deep Cerulean
-HEX: #007BA7
-RGB: 0, 123, 167
-CMYK: 100, 26, 0, 35
-
-Use: Primary brand color, headers, CTAs, main visual elements, logo
-Context: All professional communications, financial products, institutional content
+Deep Space    #020617  ██████  Base layer, page backgrounds
+Night Sky     #0f172a  ██████  Primary surface, content areas
+Dawn Approach #1e293b  ██████  Elevated elements, cards, modals
+Soft Glow     #334155  ██████  Hover states, interactive feedback
 ```
 
-```
-Cerulean
-HEX: #00A5CF
-RGB: 0, 165, 207
-CMYK: 100, 20, 0, 19
+**Usage Guidelines**:
+- **Deep Space**: Full-page backgrounds, behind all content
+- **Night Sky**: Main content containers, section backgrounds
+- **Dawn Approach**: Elevated UI (cards, dropdowns, tooltips)
+- **Soft Glow**: Hover/active states, temporary highlights
 
-Use: Interactive elements, links, hover states, secondary emphasis
-Context: UI elements, clickable items, navigation
+#### Accent & Signal Colors
 ```
-
-```
-Light Cerulean
-HEX: #4FC3E0
-RGB: 79, 195, 224
-CMYK: 65, 13, 0, 12
-
-Use: Highlights, active states, gentle emphasis
-Context: Life programs, community features, approachable content
+Electric Blue #2563eb  ██████  Primary actions, CTAs, links
+Emerald       #059669  ██████  Success, growth, confirmations
+Cerulean      #00A5CF  ██████  Brand identity, key features
+Gold          #D4AF37  ██████  Premium, value, special moments
 ```
 
-```
-Powder Blue
-HEX: #B0E0E6
-RGB: 176, 224, 230
-CMYK: 23, 3, 0, 10
+**Usage Guidelines**:
+- **Electric Blue**: Primary buttons, main CTAs, interactive links
+- **Emerald**: Success messages, growth metrics, positive confirmations
+- **Cerulean**: Logo, brand headers, brand-defining features
+- **Gold**: Premium features, achievements, special recognition
 
-Use: Subtle backgrounds, cards, section dividers
-Context: Reading experiences, documentation, soft containers
+#### Earth Tones (Warm Grounding - 10-15%)
+```
+Warm Stone    #9B8B7E  ██████  Borders, dividers, subtle structure
+Soft Clay     #C9B8A8  ██████  Warm containers, human touch
+Terra Cotta   #C77A58  ██████  Warm accents, vitality
 ```
 
-```
-Ice Blue
-HEX: #E8F4F8
-RGB: 232, 244, 248
-CMYK: 6, 2, 0, 3
+**Usage Guidelines**:
+- Use sparingly (10-15% of total composition)
+- Provide warmth against cool backgrounds
+- Border/divider elements for structure
+- Subtle background sections when warmth needed
 
-Use: Page backgrounds, containers, breathing room
-Context: Clean layouts, spacious designs
+#### Text Colors
+```
+Primary       #f8fafc  ██████  Headings, high-emphasis content
+Secondary     #cbd5e1  ██████  Body text, standard content
+Tertiary      #94a3b8  ██████  Supporting text, captions
+Disabled      #64748b  ██████  Inactive elements
 ```
 
 ---
 
-### Grounding Palette
+### Light Mode Palette
 
-**Earth Tones (Stone, Clay & Growth)**
-
-These colors ground our cerulean signature in nature's foundation. Use earth tones to provide stability, warmth, and human connection. Essential for creating the "horizon" where aspiration meets reality.
-
-**Stone & Clay (Foundation)**
-
+#### Background Layers
 ```
-Warm Stone
-HEX: #9B8B7E
-RGB: 155, 139, 126
-CMYK: 0, 10, 19, 39
-
-Use: Grounding elements, stability contexts, foundation concepts
-Context: Professional content, stable data visualization, real estate verticals
-Balance: Pair with cerulean for grounded sophistication
+Pure White    #ffffff  ██████  Base layer, page backgrounds
+Pearl         #f8fafc  ██████  Subtle sections, soft distinction
+Rice Paper    #f5f3f0  ██████  Warm alternative, approachable
+Soft Cloud    #f1f5f9  ██████  Elevated elements, cards
 ```
 
-```
-Soft Clay
-HEX: #C9B8A8
-RGB: 201, 184, 168
-CMYK: 0, 8, 16, 21
+**Usage Guidelines**:
+- **Pure White**: Main backgrounds, maximum clarity
+- **Pearl**: Subtle section differentiation, soft distinction
+- **Rice Paper**: Warm sections, community/blog content
+- **Soft Cloud**: Elevated UI, cards, modals
 
-Use: Warm backgrounds, approachability, human contexts
-Context: Life-stage programs, community features, accessible content
-Balance: Pair with light cerulean for warm professionalism
+#### Accent & Signal Colors
 ```
-
-```
-Terra Cotta
-HEX: #C77A58
-RGB: 199, 122, 88
-CMYK: 0, 39, 56, 22
-
-Use: Vitality, warmth, rich earth accents
-Context: Premium features, gold products, warm emphasis
-Balance: Pair with deep cerulean + gold for premium feel
+Electric Blue #2563eb  ██████  Primary actions, CTAs, links
+Emerald       #059669  ██████  Success, growth, confirmations
+Deep Cerulean #007BA7  ██████  Brand identity, headers
+Deep Gold     #B8860B  ██████  Premium features, value
 ```
 
+**Usage Guidelines**:
+- **Electric Blue**: (Same as dark mode)
+- **Emerald**: (Same as dark mode)
+- **Deep Cerulean**: Deeper variant for better contrast on light
+- **Deep Gold**: Deeper variant for better visibility
+
+#### Earth Tones (Warm Grounding - 20-30%)
 ```
-Desert Sand
-HEX: #D4BFA0
-RGB: 212, 191, 160
-CMYK: 0, 10, 25, 17
-
-Use: Soft neutral backgrounds, gentle grounding
-Context: Reading backgrounds, subtle containers
-Balance: Pair with any cerulean shade for warmth
-```
-
-**Botanical (Growth from Earth)**
-
-```
-Bamboo Green
-HEX: #6B8E6F
-RGB: 107, 142, 111
-CMYK: 25, 0, 22, 44
-
-Use: Growth topics, life programs, resilience, renewal
-Context: Education funds, agriculture verticals, growth narratives
-Balance: Pair with cerulean for balanced optimism
+Warm Stone    #9B8B7E  ██████  Structure, footers, borders
+Soft Clay     #C9B8A8  ██████  Warm sections, approachability
+Terra Cotta   #C77A58  ██████  Warm accents, vitality
+Bamboo Green  #6B8E6F  ██████  Growth, life programs
+Desert Sand   #D4BFA0  ██████  Soft neutrals, warmth
 ```
 
-```
-Moss
-HEX: #8A9A7B
-RGB: 138, 154, 123
-CMYK: 10, 0, 20, 40
+**Usage Guidelines**:
+- Use more liberally (20-30% of composition)
+- Provides essential warmth and grounding
+- Footer sections, warm content areas
+- Growth/life program contexts
 
-Use: Subtle natural accents, organic depth
-Context: Supporting elements, background textures
-Balance: Pair with earth tones or cerulean
+#### Text Colors
 ```
-
-```
-Sage
-HEX: #A4AC96
-RGB: 164, 172, 150
-CMYK: 5, 0, 13, 33
-
-Use: Calm earth neutral, subtle grounding
-Context: Neutral backgrounds, soft separators
-Balance: Works with all palettes
+Primary       #0f172a  ██████  Headings, high-emphasis content
+Secondary     #475569  ██████  Body text, standard content
+Tertiary      #64748b  ██████  Supporting text, captions
+Disabled      #94a3b8  ██████  Inactive elements
 ```
 
 ---
 
-### Secondary Palette
+### Color Usage Patterns
 
-**Gold (Precious Moments)**
+#### Primary CTAs (Buttons)
+**Both Modes:**
+```css
+background: #2563eb; /* Electric Blue */
+color: #ffffff;
+padding: 12px 24px;
+border-radius: 8px;
+font-weight: 600;
 
-```
-Deep Gold
-HEX: #B8860B
-RGB: 184, 134, 11
-CMYK: 0, 27, 94, 28
+/* Hover */
+background: #1d4ed8; /* Darker blue */
 
-Use: Premium features, gold vertical, sunrise moments, achievements
-Context: Special emphasis, value indicators, precious metals
-```
+/* Active */
+background: #1e40af; /* Even darker */
 
-```
-Soft Gold
-HEX: #D4AF37
-RGB: 212, 175, 55
-CMYK: 0, 17, 74, 17
-
-Use: Gentle highlights, warmth, success states, premium badges
-Context: Subtle emphasis, elegant accents
+/* Disabled */
+background: #64748b;
+cursor: not-allowed;
 ```
 
----
+#### Secondary Actions
+**Both Modes:**
+```css
+background: transparent;
+border: 2px solid #2563eb;
+color: #2563eb;
+/* (Dark mode text: #2563eb, Light mode text: #2563eb) */
 
-### Neutrals
-
-```
-Ink Black
-HEX: #2C3E50
-RGB: 44, 62, 80
-CMYK: 45, 23, 0, 69
-
-Use: Primary text, headers, strong contrast, traditional ink elements
-```
-
-```
-Soft Charcoal
-HEX: #6B6B6B
-RGB: 107, 107, 107
-CMYK: 0, 0, 0, 58
-
-Use: Secondary text, softer elements, subtle depth
+/* Hover */
+background: rgba(37, 99, 235, 0.1);
 ```
 
+#### Success States
+**Both Modes:**
+```css
+background: #059669; /* Emerald */
+color: #ffffff;
+
+/* Or for inline messages: */
+background: rgba(5, 150, 105, 0.1);
+border-left: 4px solid #059669;
+color: #059669; /* Dark mode: #10b981 for better visibility */
 ```
-Slate
-HEX: #4A5568
-RGB: 74, 85, 104
-CMYK: 29, 18, 0, 59
-
-Use: Tertiary text, captions, metadata
-```
-
-```
-Silver
-HEX: #A0AEC0
-RGB: 160, 174, 192
-CMYK: 17, 9, 0, 25
-
-Use: Disabled states, borders, dividers, subtle UI elements
-```
-
-```
-Rice Paper
-HEX: #F5F3F0
-RGB: 245, 243, 240
-CMYK: 0, 1, 2, 4
-
-Use: Warm backgrounds, organic feel, reading spaces
-```
-
-```
-Pearl
-HEX: #F7FAFC
-RGB: 247, 250, 252
-CMYK: 2, 1, 0, 1
-
-Use: Cool backgrounds, cards on white, subtle containers
-```
-
-```
-Pure White
-HEX: #FFFFFF
-RGB: 255, 255, 255
-
-Use: Primary backgrounds, maximum contrast, clean layouts
-```
-
----
-
-### Semantic Colors
-
-**Success:**
-```
-Forest Green
-HEX: #2D6A4F
-Use: Positive states, growth indicators, confirmations
-```
-
-**Warning:**
-```
-Amber
-HEX: #F59E0B
-Use: Caution, attention needed, alerts
-```
-
-**Error:**
-```
-Burgundy
-HEX: #9B2C2C
-Use: Errors, critical alerts (use sparingly)
-```
-
-**Info:**
-```
-Medium Cerulean (from primary palette)
-Use: Informational callouts, helpful tips
-```
-
----
-
-## The Horizon Principle
-
-**Every COW design should have a "horizon moment" where cerulean meets earth.**
-
-This is our signature aesthetic—the visual embodiment of grounded aspiration. It's not optional decoration; it's who we are.
-
-### What Is a Horizon Moment?
-
-A visual moment where:
-- Sky/water element (cerulean) meets earth/foundation element (warm tones)
-- Two different elements are in relationship, not isolation  
-- Balance between aspiration and grounding is visible
-
-### Creating Horizon Moments
-
-**1. Atmospheric Compositions (Hero Sections)**
-
-```
-┌────────────────────────────────────┐
-│  Top 40%: Cerulean gradient (sky)  │ ← Aspiration
-│                                    │
-├─────── horizon line ─────── ⊙ ────┤ ← Gold sun (optional)
-│                                    │
-│ Bottom 60%: Earth gradient (ground)│ ← Foundation
-└────────────────────────────────────┘
-```
-
-**Use for:** Homepage heroes, major landing pages, atmospheric backgrounds  
-**Feel:** Aspirational but grounded, possibility meeting reality  
-**Balance:** More earth than sky = stability + aspiration
-
-**2. Grounded Elements (Preventing Float)**
-
-```
-   ≈≈≈  ← Cerulean element (icon, logo, concept)
-    │
-  ─────  ← Earth-tone base (grounds it)
-```
-
-**Use for:** Icons, standalone elements, feature cards  
-**Feel:** Supported, stable, connected to foundation  
-**Rule:** Never let cerulean float alone in pure white
-
-**3. Vertical Sections (Layered Grounding)**
-
-```
-┌────────────────────────────────────┐
-│ Cerulean section (sky/content)     │ ← Primary content
-├────────────────────────────────────┤
-│ Earth tone section (ground/footer) │ ← Grounding element
-└────────────────────────────────────┘
-```
-
-**Use for:** Website sections, page layouts, long-form content  
-**Feel:** Content floating on foundation, structured hierarchy  
-**Balance:** Can be 70/30, 60/40, or 50/50 depending on context
-
-**4. Embedded Grounding (Integrated)**
-
-Cerulean primary elements sit ON or IN earth-tone context
-
-**Use for:** Cards on earth backgrounds, buttons, CTAs, UI elements  
-**Feel:** Cerulean elements gain warmth from earth context  
-**Application:** Cerulean button on soft clay background
-
-### Testing for Horizon Moments
-
-**Ask:** "Where does sky meet earth in this design?"
-
-✅ **Good:**
-- Clear visual relationship between cerulean and earth
-- Balance feels intentional, not accidental
-- Neither element dominates inappropriately
-- Warmth and professionalism coexist
-
-❌ **Bad:**
-- Cerulean floating in pure white with no earth grounding anywhere
-- Earth tones used without any cerulean presence
-- Colors present but not in meaningful relationship
-- Design feels cold/ungrounded or heavy/muddy
-
-### Context-Based Balance
-
-**Professional/Financial (Trust + Stability):**
-- 60% cerulean, 40% earth
-- Example: Asset pages, institutional content, financial products
-- Feel: Professional sophistication with warm foundation
-
-**Balanced (Aspiration + Reality):**
-- 50% cerulean, 50% earth
-- Example: Homepage, about page, mission content
-- Feel: Equal parts innovation and stability
-
-**Human/Community (Warmth + Accessibility):**
-- 40% cerulean, 60% earth
-- Example: Life programs, community features, support content
-- Feel: Warm and approachable with professional integrity
-
-**Premium (Value + Rarity):**
-- 30% cerulean, 30% earth, 30% gold, 10% other
-- Example: Gold vertical, premium features, special moments
-- Feel: Precious, valuable, sophisticated
-
----
-
-## Color Usage Guidelines
-
-### Hierarchy
-
-1. **Deep Cerulean** for primary actions and brand focus
-2. **Ink Black** for text and structure  
-3. **Earth Tones** for warmth, grounding, and context
-4. **Gold** for premium and special emphasis
-5. **Neutrals** for support and space
-
-### Ratios (60-30-10 Rule)
-
-**Standard Application:**
-- 60%: Cerulean blues + neutrals (brand identity + structure)
-- 30%: Earth tones OR gold (context-dependent warmth/value)
-- 10%: Emphasis accents (gold, semantic colors, highlights)
-
-### Color Combinations by Purpose
-
-**Financial/Professional:**
-```
-Primary: Deep Cerulean (#007BA7) - 50%
-Support: Warm Stone (#9B8B7E) - 35%
-Accent: Deep Gold (#B8860B) - 15%
-
-Use: Asset pages, institutional content, professional communications
-Mood: Trustworthy, stable, sophisticated
-```
-
-**Growth/Life Programs:**
-```
-Primary: Light Cerulean (#4FC3E0) - 40%
-Support: Soft Clay (#C9B8A8) - 40%
-Accent: Bamboo Green (#6B8E6F) - 20%
-
-Use: Education funds, retirement programs, life-stage content
-Mood: Nurturing, hopeful, grounded optimism
-```
-
-**Community/Engagement:**
-```
-Primary: Powder Blue (#B0E0E6) - 30%
-Support: Rice Paper (#F5F3F0) - 50%
-Accent: Moss (#8A9A7B) - 20%
-
-Use: Blog, community features, social content, accessible communications
-Mood: Calm, inviting, warm accessibility
-```
-
-**Premium/Special:**
-```
-Feature: Deep Cerulean (#007BA7) - 30%
-Feature: Terra Cotta (#C77A58) - 30%
-Feature: Deep Gold (#B8860B) - 30%
-Ground: Warm Stone (#9B8B7E) - 10%
-
-Use: Premium features, gold products, achievements, special moments
-Mood: Precious, rare, valuable, sophisticated
-```
-
-### Accessibility Standards
-
-**All text must meet WCAG AAA standards:**
-
-**On White (#FFFFFF):**
-- ✅ Deep Cerulean (#007BA7) - 5.6:1 (AA Large)
-- ✅ Ink Black (#2C3E50) - 12.6:1 (AAA)
-- ⚠️ Light Cerulean (#4FC3E0) - 2.8:1 (Decorative only)
-- ⚠️ Warm Stone (#9B8B7E) - 3.2:1 (Decorative only)
-
-**On Rice Paper (#F5F3F0):**
-- ✅ Ink Black (#2C3E50) - 11.8:1 (AAA)
-- ✅ Deep Cerulean (#007BA7) - 5.2:1 (AA Large)
-- ⚠️ Bamboo Green (#6B8E6F) - 3.5:1 (Large text only)
-
-**Critical Rule:** Body text must use Ink Black or Deep Cerulean on white/rice paper backgrounds.
 
 ---
 
 ## Typography
 
-### Typeface System
+### Font Families
 
 **Primary Typeface: Inter**
-- Modern, neutral, highly readable
-- Excellent screen rendering
-- Wide range of weights
-- Professional sophistication
+- Weights: 400 (Regular), 500 (Medium), 600 (SemiBold), 700 (Bold)
+- Usage: All UI, body text, headings
+- Rationale: Clean, highly legible, professional, excellent web rendering
 
-**Headlines & Display:**
-```
-Font: Inter
-Weights: 200 (Thin), 300 (Light)
-Use: Page titles, section headers, feature headlines
-Note: Elegant, refined aesthetic with lighter weight for sophistication
-```
+**Monospace: JetBrains Mono**
+- Weights: 400 (Regular), 500 (Medium)
+- Usage: Code, data, numbers, technical content
+- Rationale: Clear distinction for data, excellent readability
 
-**Body & Interface:**
-```
-Font: Inter
-Weights: 300 (Light), 400 (Regular)
-Use: Body text, UI elements, navigation
-Note: Light weight for general text, Regular for emphasis and UI elements
-```
-
-**Data & Code:**
-```
-Font: JetBrains Mono
-Weight: 400 (Regular)
-Use: Numbers, data tables, code snippets, technical content
-```
-
-**Optional Editorial Accent:**
-```
-Font: Spectral or Lora
-Weight: 400 (Regular), 400 Italic
-Use: Pull quotes, vision statements (use sparingly)
-Note: Adds warmth in small doses, never as primary
-```
-
-### Type Scale
-
-```
-Display Large: 64px / 4rem (Line height: 1.1)
-Use: Hero headlines
-
-Display: 48px / 3rem (Line height: 1.2)
-Use: Page titles
-
-H1: 36px / 2.25rem (Line height: 1.3)
-Use: Section headers
-
-H2: 30px / 1.875rem (Line height: 1.3)
-Use: Subsection headers
-
-H3: 24px / 1.5rem (Line height: 1.4)
-Use: Component headers
-
-H4: 20px / 1.25rem (Line height: 1.4)
-Use: Card titles
-
-H5: 18px / 1.125rem (Line height: 1.5)
-Use: Small headers
-
-Body Large: 18px / 1.125rem (Line height: 1.6)
-Use: Lead paragraphs, important UI text
-
-Body: 16px / 1rem (Line height: 1.6)
-Use: Standard body text, UI elements
-
-Body Small: 14px / 0.875rem (Line height: 1.5)
-Use: Captions, secondary information
-
-Caption: 12px / 0.75rem (Line height: 1.4)
-Use: Metadata, footnotes, legal text
-```
-
-### Typography Principles
-
-**Hierarchy:**
-- One Display size per page maximum
-- Use size, weight, and color to create hierarchy
-- Maintain consistent vertical rhythm
-
-**Readability:**
-- Body text: 16px minimum
-- Line length: 60-75 characters optimal
-- Line height: 1.5-1.6 for body text
-- Never fully justify text
-
-**Pairing:**
-- Headlines: Inter Thin (200) or Light (300)
-- Body: Inter Light (300)
-- Emphasis: Inter Regular (400) for emphasis
-- Data: JetBrains Mono
-
-**Whitespace:**
-- Generous spacing between sections
-- Breathing room around headlines
-- Comfortable paragraph spacing
+**Optional Accent: Spectral or Lora**
+- Weights: 400 (Regular), 600 (SemiBold)
+- Usage: Pull quotes, editorial content (sparingly)
+- Rationale: Adds warmth for long-form content
 
 ---
 
-## Spacing & Layout
+### Type Scale
 
-### Spacing Scale (8px Base Unit)
+#### Dark Mode Typography
+```
+Display Large     Inter 700  64px/72px  #f8fafc  Letter-spacing: -2%
+Display           Inter 700  48px/56px  #f8fafc  Letter-spacing: -1.5%
+H1                Inter 700  40px/48px  #f8fafc  Letter-spacing: -1%
+H2                Inter 600  32px/40px  #f8fafc  Letter-spacing: -0.5%
+H3                Inter 600  24px/32px  #cbd5e1  
+H4                Inter 600  20px/28px  #cbd5e1  
+H5                Inter 600  16px/24px  #cbd5e1  
+
+Body Large        Inter 500  18px/28px  #cbd5e1  
+Body              Inter 400  16px/24px  #cbd5e1  
+Body Small        Inter 400  14px/20px  #cbd5e1  
+
+Label             Inter 500  14px/20px  #94a3b8  
+Caption           Inter 400  12px/16px  #94a3b8  
+
+Button            Inter 600  16px/24px  #ffffff  Letter-spacing: 0.5%
+```
+
+#### Light Mode Typography
+```
+Display Large     Inter 700  64px/72px  #0f172a  Letter-spacing: -2%
+Display           Inter 700  48px/56px  #0f172a  Letter-spacing: -1.5%
+H1                Inter 700  40px/48px  #0f172a  Letter-spacing: -1%
+H2                Inter 600  32px/40px  #0f172a  Letter-spacing: -0.5%
+H3                Inter 600  24px/32px  #475569  
+H4                Inter 600  20px/28px  #475569  
+H5                Inter 600  16px/24px  #475569  
+
+Body Large        Inter 500  18px/28px  #475569  
+Body              Inter 400  16px/24px  #475569  
+Body Small        Inter 400  14px/20px  #475569  
+
+Label             Inter 500  14px/20px  #64748b  
+Caption           Inter 400  12px/16px  #64748b  
+
+Button            Inter 600  16px/24px  #ffffff  Letter-spacing: 0.5%
+```
+
+---
+
+### Typography Guidelines
+
+**Hierarchy**:
+- Use size, weight, and color to create clear hierarchy
+- Maximum 3-4 text sizes per page for clarity
+- Consistent spacing between elements
+
+**Readability**:
+- Body text: 16px minimum for accessibility
+- Line height: 1.5-1.75 for body text
+- Line length: 60-80 characters optimal
+- Paragraph spacing: 1.5em between paragraphs
+
+**Contrast**:
+- All text must meet WCAG AAA standards (7:1 for body, 4.5:1 for large)
+- Dark mode primary text: #f8fafc on #0f172a = 15.6:1 ✅
+- Light mode primary text: #0f172a on #ffffff = 15.6:1 ✅
+
+---
+
+## Spacing System
+
+### Base Unit: 4px
+
+Our spacing system uses a base unit of 4px, scaling in multiples for consistency:
 
 ```
-4px   - Tiny gaps, icon spacing
-8px   - Small spacing, button padding
-12px  - Compact spacing
-16px  - Base unit, standard spacing
-24px  - Medium spacing, card padding
-32px  - Section spacing
-48px  - Large spacing between sections
-64px  - Major section breaks
-96px  - Hero spacing
-128px - Page-level spacing
+4px    (0.25rem)   xs      Tight spacing, icon padding
+8px    (0.5rem)    sm      Compact spacing, small elements
+12px   (0.75rem)   md      Default inline spacing
+16px   (1rem)      base    Standard spacing unit
+24px   (1.5rem)    lg      Section spacing, component separation
+32px   (2rem)      xl      Large section spacing
+48px   (3rem)      2xl     Major section breaks
+64px   (4rem)      3xl     Hero spacing, page sections
+96px   (6rem)      4xl     Major page sections
+128px  (8rem)      5xl     Maximum spacing
 ```
 
-### Grid System
+### Spacing Usage
 
-**Desktop (1200px+ container):**
-- 12 column grid
-- 32px gutters
-- 64px margins
+**Component Internal Spacing**:
+```css
+/* Button */
+padding: 12px 24px; /* md horizontal, lg vertical */
 
-**Tablet (768px - 1199px):**
-- 8 column grid
-- 24px gutters
-- 48px margins
+/* Card */
+padding: 24px; /* lg all around */
 
-**Mobile (< 768px):**
-- 4 column grid
-- 16px gutters
-- 24px margins
-
-### Layout Principles
-
-**Maximum Width:**
-- Content: 800px (optimal reading)
-- Dashboard: 1440px (data density)
-- Full-width: Strategic use only
-
-**Vertical Rhythm:**
-- Consistent spacing multipliers (8px base)
-- Align to baseline grid
-- Predictable section breaks
-
-**Z-Index Layers:**
+/* Input Field */
+padding: 12px 16px; /* md vertical, base horizontal */
 ```
-0    - Base content
-10   - Raised cards
-20   - Sticky headers
-30   - Dropdowns, popovers
-40   - Modals, dialogs
-50   - Tooltips
-100  - Toasts, notifications
+
+**Layout Spacing**:
+```css
+/* Between components */
+margin-bottom: 24px; /* lg */
+
+/* Between sections */
+margin-bottom: 64px; /* 3xl */
+
+/* Page margins */
+padding: 24px; /* Mobile */
+padding: 48px; /* Tablet */
+padding: 64px; /* Desktop */
 ```
 
 ---
@@ -680,432 +325,506 @@ Use: Metadata, footnotes, legal text
 
 ### Buttons
 
-**Primary Button:**
-```
-Background: Deep Cerulean (#007BA7)
-Text: White
-Padding: 12px 24px
-Border-radius: 8px
-Font: Inter Medium, 16px
-Hover: Cerulean (#00A5CF)
-Active: Darken 10%
+#### Primary Button
+**Dark Mode:**
+```css
+.button-primary {
+  background: #2563eb;
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  border: none;
+  transition: all 0.2s ease;
+}
 
-Use: Primary actions, key CTAs
-```
+.button-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
 
-**Secondary Button:**
-```
-Background: Transparent
-Border: 2px solid Deep Cerulean
-Text: Deep Cerulean
-Padding: 10px 24px (accounting for border)
-Border-radius: 8px
-Hover: Light cerulean background
-
-Use: Secondary actions, alternative paths
-```
-
-**Ghost Button:**
-```
-Background: Transparent
-Text: Charcoal
-Padding: 12px 24px
-Hover: Pearl background
-
-Use: Tertiary actions, inline actions
+.button-primary:active {
+  transform: translateY(0);
+  background: #1e40af;
+}
 ```
 
-**Button States:**
-- Default: As specified
-- Hover: Smooth transition (200ms)
-- Active: Slightly darker
-- Disabled: 50% opacity, no pointer
-- Loading: Spinner replaces text
-
-### Cards
-
-**Standard Card:**
-```
-Background: White
-Border: 1px solid Silver (#A0AEC0)
-Border-radius: 12px
-Padding: 24px
-Shadow: 0 2px 8px rgba(0,0,0,0.08)
-Hover: Subtle lift (translate Y -2px)
-
-Use: Content containers, feature showcases
+**Light Mode:**
+```css
+/* Same styles, hover shadow adjusted: */
+.button-primary:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
 ```
 
-**Elevated Card:**
-```
-Background: White
-Border: none
-Border-radius: 12px
-Padding: 32px
-Shadow: 0 4px 16px rgba(0,0,0,0.12)
-Hover: Enhanced lift
+#### Secondary Button
+**Both Modes:**
+```css
+.button-secondary {
+  background: transparent;
+  color: #2563eb;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  border: 2px solid #2563eb;
+}
 
-Use: Important features, hero cards
-```
-
-**Subtle Card:**
-```
-Background: Pearl (#F7FAFC)
-Border: none
-Border-radius: 8px
-Padding: 20px
-Shadow: none
-
-Use: Nested content, supporting information
+.button-secondary:hover {
+  background: rgba(37, 99, 235, 0.1);
+}
 ```
 
-**Earth-Grounded Card (Special):**
+#### Success Button
+**Both Modes:**
+```css
+.button-success {
+  background: #059669;
+  color: #ffffff;
+  /* Other styles same as primary */
+}
 ```
-Background: White or Rice Paper
-Border: none
-Border-radius: 12px
-Padding: 24px
-Footer: Warm Stone or Soft Clay accent bar (4px bottom)
-Shadow: 0 2px 8px rgba(0,0,0,0.08)
-
-Use: When "horizon moment" needed in card format
-Feel: Grounded, warm, connected to foundation
-```
-
-### Forms
-
-**Input Fields:**
-```
-Border: 1px solid Silver
-Border-radius: 8px
-Padding: 12px 16px
-Font: Inter Regular, 16px
-Focus: 2px solid Deep Cerulean, remove border
-Error: 2px solid Burgundy
-Success: 2px solid Forest Green
-
-Placeholder: Slate color, 0.6 opacity
-Label: Charcoal, 14px, above input
-Helper text: Slate, 14px, below input
-```
-
-**Select Dropdowns:**
-- Match input field styling
-- Custom arrow icon in cerulean
-- Smooth animation on open/close
-
-**Radio & Checkboxes:**
-- Cerulean when selected
-- 20px touch target minimum
-- Clear focus states
-
-### Navigation
-
-**Primary Navigation:**
-```
-Background: White with subtle shadow
-Height: 72px
-Logo: Left aligned
-Links: Inter Medium, 16px, Charcoal
-Active state: Deep Cerulean underline
-Sticky on scroll
-```
-
-**Secondary Navigation:**
-```
-Background: Ice Blue
-Border-bottom: 1px solid Powder Blue
-Links: Inter Regular, 14px
-Tab-style when applicable
-```
-
-### Data Visualization
-
-**Chart Colors:**
-```
-Primary series: Deep Cerulean
-Secondary: Light Cerulean
-Tertiary: Gold
-Additional: Use analogous blues
-Earth context: Warm Stone backgrounds for grounding
-```
-
-**Principles:**
-- Always label axes
-- Use color + shape for accessibility
-- Consistent chart types across product
-- Tooltips for detailed data
-- Export options available
 
 ---
 
-## Illustration Style
+### Cards
 
-### Visual Language: Ink Painting Minimalism
+#### Standard Card
+**Dark Mode:**
+```css
+.card {
+  background: #1e293b; /* Dawn Approach */
+  border: 1px solid #334155; /* Soft Glow */
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.2s ease;
+}
 
-**Style Characteristics:**
-- Confident, varied-weight brushstrokes
-- Generous negative space (60-70% minimum)
-- Fluid, organic lines suggesting movement
-- Minimal strokes convey essential meaning
-- Subtle ink wash, paper grain texture visible
-- Authentic imperfection, hand-drawn quality
-
-**Color Application:**
-- Primarily cerulean ink tones (various opacities)
-- Gold accents for precious moments
-- Black ink for grounding structure
-- Earth tones for foundation elements
-- Often monochromatic with one accent
-- Watercolor-like transparency and layering
-
-**Subject Matter:**
-- **Flow:** Water, wind, natural movement
-- **Growth:** Bamboo, branches, emergence
-- **Balance:** Mountains and water, horizon dynamics
-- **Transformation:** Seasons, metamorphosis, change
-- **Journey:** Paths, horizons, exploration, discovery
-
-### Illustration Usage
-
-**Hero Sections:**
-- Large, atmospheric ink wash backgrounds
-- Single bold brushstroke elements
-- Horizon lines where sky meets earth
-- Contemplative, aspirational mood
-- Cerulean ink with gold touches
-
-**Feature Cards:**
-- Small, iconic ink illustrations
-- Single concept per illustration (wave, mountain, bamboo, path)
-- 2-4 brushstrokes maximum
-- Clear, recognizable forms
-- Primarily cerulean on white or earth-tone backgrounds
-
-**Empty States:**
-- Gentle, encouraging imagery
-- Single elegant brushstroke
-- Mostly white space
-- Subtle cerulean wash
-- Invites calm, not anxiety
-
-**404/Error Pages:**
-- Playful but calm
-- Contemplative imagery (path diverging, mist lifting)
-- Warm, forgiving tone
-- Clear path forward indicated by illustration flow
-
-### Creating Horizon Moments in Illustrations
-
-**Every illustration should show the sky-earth relationship:**
-
-**Example: Homepage Hero**
-```
-┌─────────────────────────────────────┐
-│ Upper 40%: Cerulean wash (sky)      │ ← Aspiration
-│                                     │
-├────────── horizon ──────── ⊙ ──────┤ ← Gold accent
-│                                     │
-│ Lower 60%: Earth tone wash (ground) │ ← Foundation
-└─────────────────────────────────────┘
-
-Subject: Mountain silhouette at horizon (ink black)
-Feel: Grounded aspiration, standing on earth looking at sky
-Space: 65% negative (combined sky and earth as active space)
+.card:hover {
+  border-color: #475569;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
 ```
 
-**Example: Asset Vertical Icon**
+**Light Mode:**
+```css
+.card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
 ```
-   ≈≈≈  ← Cerulean element (water, sky concept)
-    │
-  ─────  ← Earth-tone base (grounds it)
 
-Strokes: 2-3 total
-Space: 75% white
-Balance: Sky element connected to earth foundation
+#### Featured Card (With Earth Grounding)
+**Dark Mode:**
+```css
+.card-featured {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-bottom: 4px solid #9B8B7E; /* Warm Stone */
+  border-radius: 12px;
+  padding: 24px;
+}
 ```
 
-### Illustration Don'ts
-- ❌ Photorealistic imagery
-- ❌ Stock photo people
-- ❌ Busy, complex scenes
-- ❌ Geometric abstraction (too trendy)
-- ❌ Cute animals or mascots
-- ❌ Cliché finance imagery (graphs, handshakes, buildings)
-- ❌ Digital-looking gradients (should feel hand-drawn)
-- ❌ Perfectly symmetrical compositions
-- ❌ Overworked, fussy details
+**Light Mode:**
+```css
+.card-featured {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-bottom: 4px solid #9B8B7E; /* Warm Stone */
+  border-radius: 12px;
+  padding: 24px;
+}
+```
 
-### Why This Style Works for COW
+---
 
-**Brand Alignment:**
-1. **Distinctive:** While others use geometric tech aesthetics, we use timeless minimalist art
-2. **Sophisticated:** Matches our research rigor and academic credibility
-3. **Accessible:** Universal language of nature, crosses all cultures
-4. **Scalable:** Simple forms work at any size
-5. **Timeless:** Won't look dated in 5 years
-6. **Logo Harmony:** Bull's flowing lines already suggest brushwork
-7. **Values Expression:** Demonstrates patience, intention, respect for essence
+### Input Fields
+
+**Dark Mode:**
+```css
+.input {
+  background: #0f172a; /* Night Sky */
+  border: 1px solid #334155;
+  color: #f8fafc;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #2563eb; /* Electric Blue */
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.input::placeholder {
+  color: #64748b;
+}
+```
+
+**Light Mode:**
+```css
+.input {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.input::placeholder {
+  color: #94a3b8;
+}
+```
+
+---
+
+### Navigation
+
+#### Primary Navigation
+**Dark Mode:**
+```css
+.nav {
+  background: #0f172a;
+  border-bottom: 1px solid #1e293b;
+  padding: 16px 24px;
+}
+
+.nav-link {
+  color: #cbd5e1;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #f8fafc;
+  background: rgba(37, 99, 235, 0.1);
+}
+
+.nav-link.active {
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.15);
+}
+```
+
+**Light Mode:**
+```css
+.nav {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 16px 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.nav-link {
+  color: #475569;
+  padding: 8px 16px;
+  border-radius: 6px;
+}
+
+.nav-link:hover {
+  color: #0f172a;
+  background: rgba(37, 99, 235, 0.05);
+}
+
+.nav-link.active {
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.1);
+}
+```
+
+---
+
+### Alerts & Messages
+
+#### Success Message
+**Both Modes:**
+```css
+.alert-success {
+  background: rgba(5, 150, 105, 0.1);
+  border-left: 4px solid #059669;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+/* Dark mode text */
+[data-theme="dark"] .alert-success {
+  color: #10b981;
+}
+
+/* Light mode text */
+[data-theme="light"] .alert-success {
+  color: #047857;
+}
+```
+
+#### Error Message
+**Both Modes:**
+```css
+.alert-error {
+  background: rgba(239, 68, 68, 0.1);
+  border-left: 4px solid #ef4444;
+  padding: 16px;
+  border-radius: 8px;
+}
+
+/* Dark mode */
+[data-theme="dark"] .alert-error {
+  color: #f87171;
+}
+
+/* Light mode */
+[data-theme="light"] .alert-error {
+  color: #dc2626;
+}
+```
+
+---
+
+## Layout Patterns
+
+### Homepage Hero
+
+**Dark Mode:**
+```css
+.hero-dark {
+  background: linear-gradient(180deg, 
+    #020617 0%,
+    #0f172a 50%,
+    #020617 100%
+  );
+  min-height: 600px;
+  padding: 64px 24px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.hero-dark h1 {
+  color: #f8fafc;
+  font-size: 48px;
+  line-height: 1.2;
+  margin-bottom: 24px;
+}
+
+.hero-dark p {
+  color: #cbd5e1;
+  font-size: 20px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+```
+
+**Light Mode:**
+```css
+.hero-light {
+  background: linear-gradient(180deg, 
+    #E8F4F8 0%,
+    #F5F3F0 60%,
+    #C9B8A8 100%
+  );
+  min-height: 600px;
+  padding: 64px 24px;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.hero-light h1 {
+  color: #0f172a;
+  font-size: 48px;
+  line-height: 1.2;
+  margin-bottom: 24px;
+}
+
+.hero-light p {
+  color: #475569;
+  font-size: 20px;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+```
+
+---
+
+### Content Sections
+
+**Dark Mode:**
+```css
+.section-dark {
+  background: #0f172a;
+  padding: 64px 24px;
+}
+
+.section-dark.elevated {
+  background: #1e293b;
+}
+
+.section-dark.with-grounding::after {
+  content: '';
+  display: block;
+  height: 8px;
+  background: #9B8B7E;
+  margin-top: 32px;
+}
+```
+
+**Light Mode:**
+```css
+.section-light {
+  background: #ffffff;
+  padding: 64px 24px;
+}
+
+.section-light.warm {
+  background: #f5f3f0;
+}
+
+.section-light.with-grounding::after {
+  content: '';
+  display: block;
+  height: 8px;
+  background: #9B8B7E;
+  margin-top: 32px;
+}
+```
+
+---
+
+### Grid System
+
+**12-Column Responsive Grid:**
+```css
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(8, 1fr);
+    gap: 20px;
+  }
+}
+```
 
 ---
 
 ## Iconography
 
-### Icon Style
+### Icon System
 
-**Characteristics:**
-- Line-based, 2px stroke weight
-- Rounded ends and corners
-- 24x24px artboard (scalable)
-- Cerulean color (#007BA7)
-- Subtle, professional
+**Size Scale:**
+```
+16px  Small inline icons, tight UI
+20px  Standard inline icons
+24px  Default UI icons, buttons
+32px  Feature icons, headers
+48px  Large feature icons
+64px  Hero/illustration icons
+```
 
-**Icon Sets to Use:**
-- Heroicons (primary)
-- Lucide (alternative)
-- Custom icons match this style
-
-### Icon Usage
-
-**Sizes:**
-- Small: 16px (inline with text)
-- Medium: 24px (standard UI)
-- Large: 32px (feature highlights)
-- Hero: 48px+ (section headers)
-
-**Color:**
-- Default: Charcoal
-- Interactive: Deep Cerulean
-- Disabled: Silver
-- Success/Error: Semantic colors
-
----
-
-## Photography
-
-### Photography Guidelines
+**Colors:**
+- **Dark Mode**: Use #cbd5e1 for neutral icons, accent colors for branded
+- **Light Mode**: Use #475569 for neutral icons, accent colors for branded
 
 **Style:**
-- Clean, minimal compositions
-- Generous negative space
-- Natural lighting preferred
-- Muted, slightly desaturated
-- Professional, never stock-y
+- Stroke-based (2px stroke weight for 24px icons)
+- Rounded corners (2px radius on corners)
+- Consistent optical size
+- Professional, not playful
 
-**Subjects:**
-- Abstract: Textures, patterns, natural elements
-- Environmental: Architecture, landscapes, materials
-- Avoid: Generic business people, staged scenarios
-
-**Treatment:**
-- Slight cerulean color grade (subtle)
-- Maintain natural feel
-- Can overlay with gradient for hero sections
-- Optional earth-tone grounding overlay
-
-**Usage:**
-- Hero backgrounds with gradient overlay (sky to earth)
-- Section backgrounds with overlay
-- Never use as decoration alone
-- Always maintain horizon principle with overlays
-
----
-
-## Motion & Animation
-
-### Animation Principles
-
-**Purpose-Driven:**
-- Every animation serves feedback or guidance
-- Never animate for decoration alone
-- Respect user preferences (prefers-reduced-motion)
-
-**Timing:**
-- Fast: 150ms (small interactions)
-- Medium: 250ms (transitions)
-- Slow: 400ms (page changes)
-- Ease: cubic-bezier(0.4, 0, 0.2, 1)
-
-### Common Animations
-
-**Hover States:**
-- Scale: 1.02 (subtle)
-- Translate Y: -2px to -4px (lift)
-- Opacity change for ghosts
-- Color transitions
-
-**Page Transitions:**
-- Fade in content: 250ms
-- Stagger child elements: 50ms delay
-- Slide in from bottom: 400ms
-
-**Loading States:**
-- Skeleton screens (pulse animation)
-- Spinners for quick loads
-- Progress bars for known duration
-
-**Micro-interactions:**
-- Button press: Scale 0.98
-- Checkbox check: Draw animation
-- Success: Subtle bounce
-- Error: Small shake
-
-### Animation Don'ts
-- ❌ Excessive bounce or spring
-- ❌ Long durations (>500ms generally)
-- ❌ Animations on every element
-- ❌ Parallax without purpose
-- ❌ Distracting movement
+**Sources:**
+- **Recommended**: Lucide Icons, Heroicons, Phosphor Icons
+- **Custom**: Match stroke weight and corner radius
 
 ---
 
 ## Accessibility
 
-### WCAG AAA Compliance
+### Color Contrast
 
-**Color Contrast:**
-- Body text: 7:1 minimum
-- Large text: 4.5:1 minimum
-- UI components: 3:1 minimum
-- Test with actual users
+**Minimum Standards:**
+- **Body Text**: WCAG AAA (7:1 ratio)
+- **Large Text**: WCAG AA (4.5:1 ratio)
+- **UI Components**: WCAG AA (3:1 ratio)
 
-**Keyboard Navigation:**
-- All interactive elements accessible
-- Clear focus indicators (2px cerulean outline)
-- Logical tab order
-- Skip navigation links
+**Tested Combinations:**
 
-**Screen Readers:**
-- Semantic HTML always
-- ARIA labels where needed
+Dark Mode (passing AAA):
+- #f8fafc on #020617 = 19.3:1 ✅
+- #f8fafc on #0f172a = 15.6:1 ✅
+- #cbd5e1 on #0f172a = 11.2:1 ✅
+
+Light Mode (passing AAA):
+- #0f172a on #ffffff = 15.6:1 ✅
+- #475569 on #ffffff = 9.4:1 ✅
+
+### Keyboard Navigation
+
+**Focus States:**
+```css
+*:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Never remove outlines without replacement */
+```
+
+**Tab Order:**
+- Logical flow (top to bottom, left to right)
+- Skip links for long navigation
+- No tab-index manipulation unless necessary
+
+### Screen Readers
+
+**Semantic HTML:**
+- Use proper heading hierarchy (h1 → h2 → h3)
+- Use semantic elements (<nav>, <main>, <article>)
+- Include ARIA labels when needed
 - Alt text for all images
-- Form labels properly associated
-
-**Responsive:**
-- Mobile-first approach
-- Touch targets: 44x44px minimum
-- Readable at 200% zoom
-- Works without JavaScript (progressive enhancement)
-
-### Inclusive Design
-
-**Language:**
-- Clear, concise writing
-- Avoid jargon (or explain it)
-- Reading level: 8th grade when possible
-- Multiple languages supported
-
-**Forms:**
-- Clear error messages
-- Inline validation
-- No placeholders as labels
-- Auto-fill supported
-
-**Content:**
-- Alternatives for time-based media
-- Captions for videos
-- Transcripts available
-- No autoplay (respect user control)
 
 ---
 
@@ -1113,152 +832,239 @@ Balance: Sky element connected to earth foundation
 
 ### Breakpoints
 
+```css
+/* Mobile First Approach */
+
+/* Extra Small: 0-640px (Mobile) */
+/* Default styles */
+
+/* Small: 641px-768px (Large Mobile) */
+@media (min-width: 641px) { }
+
+/* Medium: 769px-1024px (Tablet) */
+@media (min-width: 769px) { }
+
+/* Large: 1025px-1280px (Desktop) */
+@media (min-width: 1025px) { }
+
+/* Extra Large: 1281px+ (Wide Desktop) */
+@media (min-width: 1281px) { }
 ```
-Mobile: < 768px
-Tablet: 768px - 1023px
-Desktop: 1024px - 1439px
-Large Desktop: 1440px+
+
+### Responsive Typography
+
+```css
+/* Mobile */
+h1 { font-size: 32px; line-height: 1.2; }
+h2 { font-size: 24px; }
+body { font-size: 16px; }
+
+/* Tablet */
+@media (min-width: 769px) {
+  h1 { font-size: 40px; }
+  h2 { font-size: 32px; }
+}
+
+/* Desktop */
+@media (min-width: 1025px) {
+  h1 { font-size: 48px; }
+  h2 { font-size: 36px; }
+  body { font-size: 18px; }
+}
 ```
 
-### Mobile-First Approach
+---
 
-**Philosophy:**
-- Design for mobile first
-- Enhance progressively for larger screens
-- Never hide critical features on mobile
-- Optimize performance for all devices
+## Dark/Light Mode Implementation
 
-**Navigation:**
-- Hamburger menu on mobile
-- Full navigation on desktop
-- Sticky header on all sizes
+### Mode Detection & Toggle
 
-**Typography:**
-- Slightly smaller on mobile (16px body)
-- Generous line height for readability
-- Comfortable tap targets
+**JavaScript:**
+```javascript
+// Detect system preference
+const getPreferredTheme = () => {
+  const stored = localStorage.getItem('theme');
+  if (stored) return stored;
+  
+  return window.matchMedia('(prefers-color-scheme: dark)').matches 
+    ? 'dark' 
+    : 'light';
+};
 
-**Images:**
-- Responsive images (srcset)
-- Lazy loading
-- Optimized formats (WebP with fallbacks)
+// Apply theme
+const applyTheme = (theme) => {
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+};
 
-**Layout:**
-- Single column on mobile
-- Multi-column on desktop
-- Flexible grids
-- No horizontal scrolling
+// Initialize
+applyTheme(getPreferredTheme());
+
+// Listen for system changes
+window.matchMedia('(prefers-color-scheme: dark)')
+  .addEventListener('change', e => {
+    if (!localStorage.getItem('theme')) {
+      applyTheme(e.matches ? 'dark' : 'light');
+    }
+  });
+
+// Toggle function
+const toggleTheme = () => {
+  const current = document.documentElement.getAttribute('data-theme');
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+};
+```
+
+**CSS:**
+```css
+/* Smooth transitions */
+* {
+  transition: background-color 0.3s ease, 
+              color 0.3s ease, 
+              border-color 0.3s ease;
+}
+
+/* Disable transitions on mode change */
+[data-theme-changing] * {
+  transition: none !important;
+}
+```
 
 ---
 
-## Brand Applications
+## Animation & Motion
 
-### Website
+### Principles
 
-**Homepage:**
-- Hero with cerulean-to-earth gradient (horizon moment)
-- Clean navigation with clear hierarchy
-- Feature cards in grid with earth-tone grounding
-- Asset vertical showcase
-- Early access CTA
+1. **Purposeful**: Every animation serves a function
+2. **Fast**: 200-400ms for most UI animations
+3. **Natural**: Ease-out for entrances, ease-in for exits
+4. **Respectful**: Honor `prefers-reduced-motion`
 
-**Product Pages:**
-- Hero per product/program
-- Benefits before features
-- Visual journey showing how it works
-- Horizon moments throughout (grounded design)
-- Clear CTAs
+### Standard Transitions
 
-**About/Mission:**
-- Balance cerulean (aspiration) with earth (foundation)
-- Team/culture humanized with warm earth tones
-- Vision content with horizon imagery
+```css
+/* Hover states */
+transition: all 0.2s ease;
 
-### Marketing Materials
+/* Mode changes */
+transition: background-color 0.3s ease, color 0.3s ease;
 
-**One-Pagers:**
-- Cerulean header with logo
-- Earth-tone grounding footer
-- Generous margins
-- Clear sections
-- Professional typography
+/* Page transitions */
+transition: opacity 0.4s ease, transform 0.4s ease;
+```
 
-**Presentations:**
-- Minimal slides
-- One idea per slide
-- Large, readable text
-- Data visualization when needed
-- White or cerulean backgrounds with earth accents
+### Reduced Motion
 
-### Social Media
-
-**Profile:**
-- Logo as profile picture
-- Cerulean gradient banner with earth-tone grounding
-- Clear bio with link
-
-**Posts:**
-- Clean, branded graphics
-- Consistent cerulean + earth palette
-- Professional tone with warmth
-- Ink painting style illustrations
-- Horizon moments in visual templates
+```css
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+```
 
 ---
 
-## Design Dos & Don'ts
+## Design Testing Checklist
 
-### Do:
-- ✅ Respect the grid
-- ✅ Use generous whitespace
-- ✅ Maintain consistent spacing
-- ✅ Test for accessibility
-- ✅ Design mobile-first
-- ✅ Follow color system (cerulean + earth)
-- ✅ Create horizon moments
-- ✅ Animate with purpose
-- ✅ Keep it simple and grounded
+Before finalizing any design:
 
-### Don't:
-- ❌ Let cerulean float alone without earth grounding
-- ❌ Use gradients without purpose
-- ❌ Mix too many fonts
-- ❌ Ignore the spacing scale
-- ❌ Center-align body text
-- ❌ Use pure black (#000000)
-- ❌ Overcomplicate layouts
-- ❌ Add effects without reason
-- ❌ Copy competitor aesthetics
+**Luminance Hierarchy**:
+- [ ] Can you identify primary → secondary → tertiary in 3 seconds?
+- [ ] Does visual weight match information priority?
 
----
+**Contrast**:
+- [ ] All text meets WCAG AAA standards
+- [ ] Interactive elements clearly distinguishable
+- [ ] Color not sole indicator of information
 
-## Design Resources
+**Mode Testing**:
+- [ ] Works in both dark and light modes (or mode specified)
+- [ ] Illustrations optimized for target background
+- [ ] Proper contrast maintained in both
 
-### Files & Assets
-- Logo package (SVG, PNG, PDF)
-- Icon library (Heroicons + custom)
-- Color swatches (Figma, Sketch, Adobe)
-- Typography scales
-- Component library
-- Illustration templates
+**Warmth**:
+- [ ] Earth tones present for balance (10-15% dark / 20-30% light)
+- [ ] Doesn't feel purely cold/clinical
+- [ ] Approachable while professional
 
-### Tools
-- Figma: Primary design tool
-- Adobe Creative Suite: Illustration/graphics
-- Principle/Framer: Prototyping
-- Optimal Workshop: User testing
+**Spacing**:
+- [ ] Uses spacing system (4px base multiples)
+- [ ] Generous negative space (60%+ white space)
+- [ ] Clear visual breathing room
 
-### Inspiration
-- Anthropic (rigor + warmth)
-- Stripe (clarity + sophistication)
-- Coinbase (accessibility + trust)
-- Linear (speed + elegance)
-- Notion (flexibility + beauty)
+**Accessibility**:
+- [ ] Keyboard navigable
+- [ ] Screen reader friendly
+- [ ] Proper focus states
+- [ ] Semantic HTML
 
 ---
 
-*This design guide evolves with the brand. Updated quarterly with new components, patterns, and learnings.*
+## Brand Assets
 
-**Last Updated:** October 15, 2025
-**Next Review:** January 15, 2026
-**Owner:** Design Team
+### Logo Usage
+
+**Minimum Sizes:**
+- Print: 24mm width
+- Digital: 120px width
+- Favicon: 32px × 32px
+
+**Clear Space:**
+- Minimum clear space = height of "O" in COW on all sides
+
+**Colors:**
+- **Dark Mode**: Cerulean (#00A5CF) or White (#ffffff)
+- **Light Mode**: Deep Cerulean (#007BA7)
+- **Never**: Alter colors, stretch, rotate, add effects
+
+---
+
+## Resources
+
+### Design Tools
+
+**Recommended:**
+- **Figma**: Primary design tool
+- **Adobe XD**: Alternative option
+- **Sketch**: Alternative option
+
+**Plugins:**
+- **Color Contrast Checker**: Ensure accessibility
+- **Unsplash**: Stock photography
+- **Iconify**: Icon library access
+
+### Development Tools
+
+**Frameworks:**
+- **Tailwind CSS**: Utility-first CSS (recommended)
+- **Custom CSS**: Follow guidelines
+
+**Testing:**
+- **WebAIM Contrast Checker**: Color contrast
+- **axe DevTools**: Accessibility testing
+- **Lighthouse**: Performance and accessibility
+
+---
+
+## Contact & Support
+
+**For Design Questions:**
+- Email: design@cow.group
+- Slack: #design-system
+
+**For Brand Questions:**
+- Email: brand@cow.group
+
+**Resources:**
+- Color Palette: COW_Color_Palette_Quick_Reference_UPDATED.md
+- Illustrations: COW_Ink_Painting_Guide_UPDATED.md
+- Voice & Tone: COW_Voice_Tone_Guide.md
+
+---
+
+**Last Updated:** October 21, 2025  
+**Version:** 3.0  
+**Next Review:** January 2026

@@ -1,896 +1,738 @@
-# COW Group Illustration Guide
+# COW Ink Painting & AI Illustration Guide
 
-## Philosophy
+## Overview
 
-**"Every brushstroke with intention. Every space with purpose. Sky meets earth in balance."**
-
-Our illustration style expresses universal reverence for nature through minimalist art—drawing from the confident brushwork of traditional ink painting, the symbolic clarity found across cultures, and the sophisticated accessibility of contemporary illustration. We're not adopting any single tradition; we're expressing timeless wisdom through modern minimalism.
-
-**Our Expression:**
-- Cerulean (sky/water) meets Earth (stone/clay/growth) = The Horizon
-- Minimal strokes convey maximum meaning
-- Negative space as active element
-- Organic authenticity over digital perfection
-- Nature's elements speak universally
+This guide covers COW's illustration system, including techniques for creating minimalist, professional ink-style illustrations using AI generation tools (Grok, Midjourney, DALL-E, etc.) optimized for both dark and light modes.
 
 ---
 
-## Core Principles
+## Core Philosophy
 
-### 1. Minimalism with Meaning
-**Use the minimum strokes to convey maximum meaning.**
+**"Luminous minimalism: Clear signal through generous space."**
 
-- Each brushstroke must earn its place
-- Remove everything unnecessary
-- Simplicity reveals essence
-- One strong stroke beats ten weak ones
-
-### 2. Negative Space as Active Element
-**The empty space is as important as the ink.**
-
-- 60-70% negative space minimum
-- White space gives breathing room
-- Silence amplifies the important
-- Asymmetry creates dynamic balance
-
-### 3. Organic Imperfection
-**Embrace the hand-drawn, the human touch.**
-
-- Not overly polished or "perfect"
-- Visible texture and grain
-- Natural ink bleeds and pools
-- Authentic brushwork, not vector simulation
-
-### 4. Confident Execution
-**Commit to the stroke. Don't overwork.**
-
-- Decisive, confident marks
-- No fussy details or overworking
-- First stroke is often best
-- Suggest rather than define everything
-
-### 5. The Horizon in Every Illustration
-**Cerulean (sky/water) always meets Earth (stone/clay/growth).**
-
-- Never let cerulean float alone
-- Always provide earth grounding
-- Show the relationship between aspiration and foundation
-- Balance creates meaning
+Our illustrations embody:
+- **Minimalism**: 60-70% negative space
+- **Clarity**: Immediate visual comprehension
+- **Professional**: Sophisticated, never playful or casual
+- **Dual-mode**: Optimized versions for dark and light backgrounds
+- **Brand-aligned**: Uses COW color palette consistently
 
 ---
 
-## Color Philosophy
+## Illustration Principles
 
-**The Horizon Palette: Sky Meets Earth**
+### 1. Generous Negative Space (60-70%)
+More empty space than content. Let the eye rest. Let the subject breathe.
 
-Every illustration embodies our signature aesthetic—cerulean meeting earth, aspiration grounded in reality.
+**Why**: Professional sophistication, visual clarity, modern aesthetic
 
----
+### 2. Confident Minimal Forms
+Essential shapes only. No unnecessary detail. Each element serves purpose.
 
-### Cerulean (Sky & Water)
+**Why**: Immediate comprehension, timeless quality, reduced visual noise
 
-```
-Deep Cerulean Ink
-HEX: #007BA7
-Use: Bold strokes, main elements, focal points, water, sky, primary subjects
+### 3. Dual-Mode Optimization
+Every illustration works in its intended mode—dark OR light, with appropriate contrast and tonality.
 
-Cerulean Wash (50% opacity)
-HEX: #007BA7 at 50%
-Use: Background washes, atmospheric effects, mist, soft emphasis
+**Why**: Professional consistency across user preferences, proper accessibility
 
-Light Cerulean Wash (20% opacity)
-HEX: #007BA7 at 20%
-Use: Subtle backgrounds, shadows, depth layers
-```
+### 4. Clear Luminance Hierarchy
+Primary elements are most prominent, secondary elements support, tertiary adds depth.
 
----
+**Why**: Guides user attention, creates visual narrative, maintains clarity
 
-### Earth Tones (Stone, Clay & Growth)
+### 5. Warm Grounding
+Cool tones (blues, cerulean) balanced with warm earth tones for approachability.
 
-**Stone & Clay (Foundation)**
-
-```
-Warm Stone
-HEX: #9B8B7E
-Use: Ground, foundation, canyon walls, stable earth, grounding elements
-
-Soft Clay
-HEX: #C9B8A8
-Use: Warm backgrounds, gentle earth, soft grounding, accessible warmth
-
-Terra Cotta
-HEX: #C77A58
-Use: Rich earth, vitality, warm emphasis, energetic grounding
-
-Desert Sand
-HEX: #D4BFA0
-Use: Soft neutral earth, subtle backgrounds, gentle foundation
-```
-
-**Botanical (Growth from Earth)**
-
-```
-Bamboo Green
-HEX: #6B8E6F
-Use: Growth, life, botanical elements, renewal, resilience
-
-Moss
-HEX: #8A9A7B
-Use: Subtle nature accents, organic depth, soft botanical touches
-
-Sage
-HEX: #A4AC96
-Use: Calm earth neutral, soft grounding, subtle botanical
-```
+**Why**: Prevents cold, unapproachable feeling, adds human touch, brand warmth
 
 ---
 
-### Precious Moments (Gold)
+## Color Philosophy for AI Generation
 
-```
-Deep Gold
-HEX: #B8860B
-Use: Sparingly for precious moments, sunrise, dawn, special emphasis, value
+### Dark Mode Illustrations
+**Background Context**: Deep navy (#0f172a) or deep space (#020617)
 
-Soft Gold (30% opacity)
-HEX: #D4AF37 at 30%
-Use: Gentle highlights, warmth, light breaking through
+**Color Palette**:
 ```
+Primary Elements:
+██████  Cerulean         #00A5CF  (Main subjects, luminous)
+██████  Electric Blue    #2563eb  (Accents, highlights, interactive)
+██████  Emerald          #059669  (Growth, secondary features)
+██████  Gold             #D4AF37  (Premium touches, light sources)
+
+Supporting Elements (10-15%):
+██████  Warm Stone       #9B8B7E  (Grounding, subtle bases)
+██████  Soft Clay        #C9B8A8  (Warm details, human touch)
+```
+
+**Visual Characteristics**:
+- **Lighter values**: Elements lighter than background for visibility
+- **Soft glowing edges**: Gentle luminosity, not harsh neon
+- **Reduced earth tones**: Used sparingly, only where needed for warmth
+- **High contrast**: Clear separation from background
+- **Subtle gradients**: Smooth transitions, avoid hard edges
 
 ---
 
-### Traditional Structure (Black Ink)
+### Light Mode Illustrations
+**Background Context**: White (#ffffff) or rice paper (#f5f3f0)
 
+**Color Palette**:
 ```
-Ink Black
-HEX: #2C3E50
-Use: Grounding elements, structure, traditional ink painting, text, silhouettes
+Primary Elements:
+██████  Deep Cerulean    #007BA7  (Main subjects, structure)
+██████  Electric Blue    #2563eb  (Accents, highlights)
+██████  Emerald          #059669  (Growth, life)
+██████  Deep Gold        #B8860B  (Premium, value)
 
-Soft Charcoal
-HEX: #6B6B6B
-Use: Softer elements, secondary depth, subtle shadows
-
-Black Wash (varied opacity)
-Use: Shadows, depth, atmospheric darkness
+Supporting Elements (20-30%):
+██████  Warm Stone       #9B8B7E  (Grounding, structural base)
+██████  Soft Clay        #C9B8A8  (Warm areas, approachability)
+██████  Terra Cotta      #C77A58  (Warm accents, vitality)
+██████  Bamboo Green     #6B8E6F  (Growth, nature)
 ```
+
+**Visual Characteristics**:
+- **Darker values**: Elements darker than background for contrast
+- **Defined edges**: Confident brushstrokes, clear forms
+- **Stronger earth presence**: More warm tones for balance
+- **Subtle shadows**: Traditional ink wash depth
+- **Clearer details**: More visible definition than dark mode
 
 ---
 
-### Paper/Canvas
+## AI Generation Workflow
 
-```
-Rice Paper (Warm)
-HEX: #F5F3F0
-Use: Warm organic background, earth-grounded feel, natural texture
+### Step 1: Define Your Subject
 
-Pure White
-HEX: #FFFFFF
-Use: Maximum contrast, clean compositions, contemporary feel
+**Determine**:
+- Primary subject (gold mountain, flowing data, growth metaphor)
+- Use case (homepage hero, asset icon, program illustration)
+- Target mode (dark, light, or both)
+- Aspect ratio (16:9 hero, 1:1 icon, 4:3 feature)
 
-Pearl (Cool)
-HEX: #F7FAFC
-Use: Cool backgrounds when cerulean is dominant
-```
+**Example**: "Homepage hero showing gold mountain with ascending sun for premium gold vertical"
 
 ---
 
-## Color Combination Strategies
+### Step 2: Generate Dark Mode Version
 
-### Strategy 1: Sky Dominant (Professional)
-
-**Use when:** Professional contexts, financial products, institutional content, water/aviation verticals
-
+**Grok Prompt Template**:
 ```
-Background: Rice paper or white
-Primary element: Cerulean ink (bold, dominant)
-Ground: Warm stone or soft charcoal (minimal but present)
-Accent: Gold (tiny touch)
-Balance: 70% cerulean, 30% earth/neutral
+Create a minimalist ink wash illustration of [SUBJECT] optimized 
+for a dark navy blue background (hex color #0f172a).
 
-Example: Mountain (cerulean) rising from earth base (warm stone), 
-gold sun at peak. 70% white space.
+Style: Luminous, soft glowing edges, 65% negative space, minimal 
+detail, professional financial services aesthetic, elegant and 
+sophisticated, NOT playful.
 
-Feels: Professional, aspirational, but grounded
+Colors: 
+- Cerulean #00A5CF (main subject, luminous quality)
+- Electric blue #2563eb (accents, highlights)
+- Emerald #059669 (growth elements)
+- Gold #D4AF37 (premium touches)
+- Warm stone #9B8B7E (subtle grounding, use sparingly 10%)
+
+Composition: [DESCRIBE COMPOSITION]
+- [Where primary subject sits]
+- [How elements relate]
+- [What creates focus]
+
+Technical: High resolution, PNG with transparency, soft edges, 
+gentle gradients, professional illustration for financial technology 
+company, zen simplicity, New Yorker magazine quality.
+
+Do not include: Text, logos, decorative borders, busy patterns, 
+cartoonish elements, literal financial symbols.
+```
+
+**Composition Examples**:
+- **Center-weighted**: Main subject in center third, fading to edges
+- **Rule of thirds**: Key element at intersection point
+- **Ascending**: Visual flow from bottom-left to top-right
+- **Radial**: Elements emanating from central point
+
+---
+
+### Step 3: Generate Light Mode Version
+
+**Grok Prompt Template**:
+```
+Create a minimalist ink wash illustration of [SUBJECT] optimized 
+for a white or warm paper background (hex color #ffffff or #f5f3f0).
+
+Style: Confident brushstrokes, 65% negative space, zen simplicity, 
+professional financial services aesthetic, elegant and sophisticated, 
+NOT playful.
+
+Colors: 
+- Deep cerulean #007BA7 (main subject, structure)
+- Electric blue #2563eb (accents)
+- Emerald #059669 (growth)
+- Deep gold #B8860B (premium touches)
+- Warm stone #9B8B7E (grounding, structural base 20-25%)
+- Terra cotta #C77A58 (warm accents)
+
+Composition: [SAME AS DARK MODE]
+- [Maintain same spatial relationships]
+- [Keep visual hierarchy consistent]
+
+Technical: High resolution, PNG with transparency, defined edges, 
+subtle shadows, traditional ink wash depth, professional illustration 
+for financial technology company, zen simplicity, New Yorker quality.
+
+Do not include: Text, logos, decorative borders, busy patterns, 
+cartoonish elements, literal financial symbols.
 ```
 
 ---
 
-### Strategy 2: Balanced Horizon (Core COW)
+### Step 4: Review & Refine
 
-**Use when:** Homepage, balanced themes, life programs, mission content
+**Quality Checklist**:
+- [ ] Works on intended background color?
+- [ ] Sufficient contrast for visibility?
+- [ ] 60-70% negative space maintained?
+- [ ] Colors match specified hex codes?
+- [ ] Professional aesthetic (not playful/casual)?
+- [ ] Appropriate for financial services context?
+- [ ] No text or logos embedded?
+- [ ] Clear subject focus?
+- [ ] Warm grounding present? (10% dark / 20-30% light)
 
-```
-Background: Rice paper
-Upper half: Cerulean wash (sky/atmosphere)
-Lower half: Warm stone/soft clay (earth/ground)
-Elements: Both cerulean and earth tones equally present
-Accent: Gold or bamboo green
-Balance: 50% cerulean, 50% earth
-
-Example: Horizon composition—tree with cerulean sky background 
-and earth-tone trunk, gold leaf touches at branches.
-
-Feels: Balanced, grounded aspiration, sky meeting earth
-```
-
----
-
-### Strategy 3: Earth Dominant (Human-Centered)
-
-**Use when:** Life-stage programs, community content, warm contexts, agriculture verticals
-
-```
-Background: Soft clay or warm stone dominant
-Accent: Cerulean wash or strokes (sky/water element present but supporting)
-Elements: Bamboo green, moss, earth tones lead
-Touch: Gold for warmth
-Balance: 30% cerulean, 70% earth
-
-Example: Desert landscape (earth tones) with cerulean sky sliver, 
-suggesting vast earth grounded by small sky presence.
-
-Feels: Warm, human, approachable, nature-forward
-```
-
----
-
-### Strategy 4: Water Meets Stone (Transformation)
-
-**Use when:** Performance optimization topics, transformation themes, balance concepts
-
-```
-Background: White or rice paper
-Cerulean: Water/flow element (active)
-Warm stone: Solid/stable element (grounding)
-Where they meet: Transformation happens (the horizon)
-Gold: Highlight the meeting point
-Balance: 50% cerulean, 50% earth at contact zone
-
-Example: Water (cerulean) flowing around stone (warm tone), 
-gold at contact point showing transformation moment.
-
-Feels: Dynamic transformation, patient power, natural change
-```
-
----
-
-## Visual Language System
-
-### Primary Subjects
-
-**Natural Elements:**
-These represent our core themes and values:
-
-**Water/Waves:**
-- Flow, movement, adaptability
-- Performance optimization (constant motion)
-- Use: Homepage hero, flow concepts
-- Colors: Cerulean + subtle earth grounding
-
-**Mountains/Horizons:**
-- Long-term perspective, stability
-- Where sky meets earth literally
-- Use: Foundation concepts, vision content
-- Colors: Cerulean sky + earth base + gold sunrise
-
-**Bamboo:**
-- Resilience, growth, flexibility
-- Strength with grace
-- Use: Growth topics, life programs
-- Colors: Bamboo green + cerulean + earth
-
-**Clouds/Mist:**
-- Transformation, emergence
-- Mystery becoming clarity
-- Use: Discovery themes, possibility
-- Colors: Light cerulean washes + earth hints
-
-**Paths/Rivers:**
-- Journey, exploration, progress
-- Forward movement
-- Use: User journeys, program flows
-- Colors: Cerulean path + earth banks
-
-**Trees/Branches:**
-- Diversification, branching possibilities
-- Asset verticals spreading
-- Use: Asset vertical illustrations
-- Colors: Earth trunk + cerulean sky + bamboo green growth
-
----
-
-## Technique Guidelines
-
-### Brushwork
-
-**Stroke Types:**
-
-**Bold Statement Stroke:**
-- Wide, confident sweep
-- Full pressure, tapered ends
-- Use for main elements
-- One stroke, no hesitation
-
-**Delicate Line:**
-- Thin, graceful curve
-- Light pressure, consistent
-- Use for details, refinement
-- Suggests rather than defines
-
-**Wash:**
-- Diluted ink, soft edges
-- Atmospheric background
-- Layered for depth
-- Never uniform or flat
-
-**Texture:**
-- Very subtle, minimal
-- Adds paper grain feel
-- Never decorative alone
-- Supports main composition
-
-### Composition Rules
-
-**Rule of Thirds:**
-- Divide canvas into 3x3 grid
-- Place focal points at intersections
-- Create dynamic tension
-
-**Asymmetrical Balance:**
-- Heavy element on one side
-- Balanced by negative space on other
-- Never centered or symmetrical
-- Creates movement and energy
-
-**Leading Lines:**
-- Guide eye through composition
-- Use natural flow of brushstrokes
-- Create journey for viewer
-- Support reading direction
-
-**Breathing Room:**
-- Never fill entire canvas
-- Leave generous margins
-- Space between elements
-- Let illustration "float" but ground it
-
-**The Horizon:**
-- Every composition should show sky-earth relationship
-- Upper portion: Cerulean (aspiration)
-- Lower portion: Earth tones (foundation)
-- Meeting point: Where meaning happens
+**Common Refinement Prompts**:
+- "Increase negative space to 70%, remove unnecessary details"
+- "Make the cerulean elements more luminous with soft glow"
+- "Add more warm stone grounding at the base"
+- "Simplify forms, reduce detail, more minimal"
+- "Adjust colors to exactly match: [list hex codes]"
+- "Make edges softer and more organic" (dark mode)
+- "Make brushstrokes more confident and defined" (light mode)
+- "Remove [specific unwanted element]"
 
 ---
 
 ## Subject Matter by Use Case
 
-### Homepage Hero
+### Homepage Hero (Large Format, 16:9)
 
-**Theme:** Journey, horizon, emergence
+**Dark Mode Subject Ideas**:
+- **Glowing mountain peak** with stars, gold sun rising, luminous cerulean sky
+- **Ascending path** curving upward, soft light trail, minimal landscape
+- **Radiating wealth** abstract patterns flowing outward, central gold element
+- **Cosmic depth** layers of space, subtle celestial forms, warm earth base
 
-**Recommended Concept: "The Horizon" (Sky Meets Earth)**
+**Light Mode Subject Ideas**:
+- **Mountain with horizon** confident peaks, clear sky-earth meeting, ascending sun
+- **Growth from earth** bamboo or tree emerging, strong earth foundation, life energy
+- **Flowing prosperity** water-like curves, earth-grounded base, forward movement
+- **Architectural strength** minimal structure, solid foundation, aspirational height
 
-```
-Visual Description:
-┌─────────────────────────────────────┐
-│ Top 35%: Cerulean gradient (sky)    │ ← Aspiration (smaller portion)
-│         deep → light cerulean       │
-│                                     │
-├──────── HORIZON LINE ────── ⊙ ─────┤ ← Gold sun (dawn moment)
-│                                     │
-│ Bottom 65%: Earth gradient (ground) │ ← Foundation (larger portion)
-│            clay → stone → terra cotta│
-│                                     │
-└─────────────────────────────────────┘
-
-Brushwork: 
-- Single bold horizontal stroke for horizon
-- Subtle mountain silhouette (ink black) at horizon
-- Very subtle texture in both sky and earth zones
-
-Text Placement: Overlays the horizon zone (where possibility meets reality)
-
-Feeling: Aspirational but GROUNDED
-- Standing on solid earth, looking at open sky
-- More earth than sky = stability + aspiration
-- Gold sun = dawn of new possibilities
-
-Color Balance:
-- Sky: #007BA7 → #B0E0E6 gradient (35% of canvas)
-- Horizon: Soft blend zone (5-10% of canvas)
-- Earth: #C9B8A8 → #9B8B7E → #C77A58 gradient (55-60% of canvas)
-- Gold: #B8860B small sun at horizon
-- Space: 65% combined negative space
-
-This is your signature homepage composition.
-```
-
-**Alternative Options:**
-
-**Version A: Mountain Focus**
-- Large mountain silhouette (ink black)
-- Cerulean sky above, earth-tone base below
-- Gold accent at peak
-- 70% negative space
-
-**Version B: Path Forward**
-- Winding path (single stroke)
-- Cerulean mist ahead, earth path below
-- Invites journey
-- 75% negative space
+**Composition Guidelines**:
+- Primary subject: Center or slightly off-center
+- Visual flow: Bottom-to-top (earth to aspiration)
+- Focal point: Upper-middle third (sun, peak, goal)
+- Grounding: Lower 15-20% earth-toned for stability
 
 ---
 
-### Asset Vertical Icons
+### Asset Vertical Icons (Square, 1:1)
 
-**Theme:** Each asset as unique but grounded expression
+**Gold Vertical**:
+- **Dark**: Luminous gold mountain, cerulean sky glow, minimal stars
+- **Light**: Bold gold peak, warm stone base, confident form, depth shadows
 
-**Core Principle: Every icon must show sky-earth relationship**
+**Aviation Vertical**:
+- **Dark**: Glowing flight path curve, electric blue trail, soft luminous quality
+- **Light**: Confident aircraft silhouette or flight curve, cerulean sky, earth horizon
 
-**Gold Vertical:**
-```
-Icon: Mountain peak touching sky
-- Peak: Cerulean (reaching toward sky/value)
-- Base: Warm stone (grounded foundation)
-- Accent: Gold dot at peak (sunrise/precious)
-- Strokes: 3 (mountain form, base, gold)
-- Space: 75% white
+**Water Vertical**:
+- **Dark**: Flowing cerulean water, gentle ripples, luminous movement
+- **Light**: Bold water flow, earth containment, clear direction, vitality
 
-Feels: Precious metal grounded in earth, reaching toward value
-Balance: Cerulean + earth + gold
-```
+**Art Vertical**:
+- **Dark**: Luminous brushstroke, electric blue accent, creative energy glow
+- **Light**: Confident brush form, gold accent, earth grounding, clear form
 
-**Water Vertical:**
-```
-Icon: Water drop falling to earth
-- Drop: Cerulean (water, sky-born)
-- Landing: Terra cotta ripple (earth receiving water)
-- Strokes: 2 (drop, ripple)
-- Space: 75% white
+**Energy Vertical**:
+- **Dark**: Radiating emerald patterns, electric blue highlights, flow visualization
+- **Light**: Bold energy flow, growth from earth, confident direction
 
-Feels: Sky's gift to earth, natural cycle
-Balance: Cerulean + earth
-```
-
-**Aviation Vertical:**
-```
-Icon: Horizon with bird
-- Sky: Light cerulean wash (upper 40%)
-- Earth: Warm stone line (horizon, lower 60%)
-- Bird: Simple black brushstroke (crossing between)
-- Gold: Tiny sunrise accent
-- Strokes: 4 total
-- Space: 70% white
-
-Feels: Movement between earth and sky, freedom with grounding
-Balance: Cerulean sky + earth horizon
-```
-
-**Solar Vertical:**
-```
-Icon: Sun over earth
-- Sun: Gold circle (energy source)
-- Rays: Cerulean (sky catching light)
-- Ground: Terra cotta line (earth receiving energy)
-- Strokes: 3 (sun, rays suggestion, ground)
-- Space: 70% white
-
-Feels: Energy from above, grounded in earth application
-Balance: Gold + cerulean + earth
-```
-
-**Carbon/Agriculture Vertical:**
-```
-Icon: Plant growing from earth
-- Sprout: Bamboo green (growth)
-- Earth: Terra cotta/warm stone (soil, foundation)
-- Sky: Light cerulean wash (atmosphere above)
-- Strokes: 3 (earth base, sprout, sky suggestion)
-- Space: 70% white
-
-Feels: Life emerging from earth toward sky
-Balance: Earth dominant + cerulean + green
-```
-
-**Real Estate Vertical:**
-```
-Icon: Shelter/roofline
-- Roof: Cerulean (protection from elements, sky-facing)
-- Foundation: Warm stone (grounded, stable)
-- Accent: Gold (hearth, warmth, home)
-- Strokes: 3 (roof line, foundation, accent)
-- Space: 75% white
-
-Feels: Shelter where earth meets sky, stability + protection
-Balance: Cerulean + earth + gold
-```
-
-**Execution for All Icons:**
-- Small format (200x200px to 400x400px)
-- 2-4 brushstrokes maximum
-- Always show cerulean + earth relationship
-- Instantly recognizable
-- Scalable/works at any size
-- Consistent style across verticals
+**Icon Guidelines**:
+- Single clear subject: Immediately recognizable
+- Centered composition: Balanced, stable
+- Minimal elements: 1-3 forms maximum
+- Clear silhouette: Works at small sizes
+- Mode-appropriate: High contrast for visibility
 
 ---
 
-### Feature Cards/Illustrations
+### Life Program Illustrations (Medium, 4:3)
 
-**Theme:** Concept visualization with grounding
+**Retirement Program**:
+- **Dark**: Glowing tree growth, luminous branches, gentle earth glow at roots
+- **Light**: Confident tree with earth grounding, growth upward, warm foundation
 
-**Performance/Optimization:**
+**Education Program**:
+- **Dark**: Ascending steps with soft light, luminous path upward, gentle guide
+- **Light**: Bold ascending forms, clear path, earth base, aspirational direction
+
+**Parental Program**:
+- **Dark**: Protective umbrella or shelter, warm glow, gentle light embrace
+- **Light**: Strong protective form, earth foundation, nurturing presence
+
+**Program Guidelines**:
+- Metaphorical clarity: Subject represents program value
+- Emotional resonance: Warm, hopeful, aspirational
+- Human-centered: Approachable, not cold or technical
+- Clear narrative: Visual story in single image
+
+---
+
+### Blog & Content (Various Sizes)
+
+**Research Articles**:
+- **Dark**: Abstract data flows, subtle patterns, intellectual depth, minimal
+- **Light**: Clear conceptual forms, structured elements, professional insight
+
+**Educational Content**:
+- **Dark**: Illuminated concepts, gentle learning path, supportive light
+- **Light**: Clear teaching forms, step-by-step visual, confident guidance
+
+**Vision Content**:
+- **Dark**: Cosmic possibility, gentle future vision, luminous aspiration
+- **Light**: Bold future forms, clear path forward, earth-grounded optimism
+
+**Content Guidelines**:
+- Support text: Don't compete with written content
+- Conceptual clarity: Metaphor immediately clear
+- Professional tone: Matches article seriousness
+- Scannable: Works in article context, not hero
+
+---
+
+## Technical Specifications
+
+### Resolution & Format
+
+**Homepage Hero**:
+- Resolution: 3840 x 2160 pixels (4K)
+- Format: PNG with transparency
+- File size: <500KB optimized
+- Aspect ratio: 16:9
+
+**Asset Icons**:
+- Resolution: 2048 x 2048 pixels
+- Format: PNG with transparency or SVG
+- File size: <200KB
+- Aspect ratio: 1:1
+
+**Feature Illustrations**:
+- Resolution: 2400 x 1800 pixels
+- Format: PNG with transparency
+- File size: <400KB
+- Aspect ratio: 4:3
+
+**Blog/Content**:
+- Resolution: 1600 x 900 pixels
+- Format: PNG or WebP
+- File size: <250KB
+- Aspect ratio: 16:9 or 4:3
+
+---
+
+### File Naming Convention
+
 ```
-Subject: Water shaping stone (patient transformation)
+[use-case]_[mode]_[subject]_[version].png
 
-Visual:
-- Cerulean water flow (single curved stroke) - top
-- Warm stone (angular shape being worn smooth) - bottom
-- Direction: Water flowing left to right
-- Where they meet: Transformation zone
-- Space: 65% white
-
-Metaphor: Constant optimization (water) transforms static asset (stone)
-Balance: Cerulean (active) + earth (stable)
-Colors: #4FC3E0 + #9B8B7E
-Strokes: 3-4 total
-```
-
-**Long-Duration Value:**
-```
-Subject: Tree rooted in stone
-
-Visual:
-- Tree trunk: Ink black (strong, enduring)
-- Roots: Spreading into warm stone earth
-- Leaves: Bamboo green (minimal, suggested)
-- Sky: Light cerulean wash (background, context)
-- Space: 70% white
-
-Metaphor: Deep roots in solid foundation enable growth
-Balance: Earth dominant (roots, trunk) + cerulean context (sky)
-Colors: #2C3E50 + #9B8B7E + #6B8E6F + #E8F4F8
-Strokes: 5-6 total
-```
-
-**Transformation:**
-```
-Subject: Dawn breaking (darkness to light)
-
-Visual:
-- Lower portion: Terra cotta/warm stone (earth in shadow) - 60%
-- Upper portion: Cerulean (sky lightening) - 40%
-- Horizon: Where they meet (transformation moment)
-- Gold: Small accent (sun breaking through)
-- Space: 60% white/empty
-
-Metaphor: From passive to performing, transformation is natural like dawn
-Balance: Earth base + cerulean aspiration + gold hope
-Colors: #C77A58 → #9B8B7E + #007BA7 → #B0E0E6 + #B8860B
-Strokes: 3-4 (gradient washes + gold accent)
+Examples:
+hero_dark_goldmountain_v1.png
+hero_light_goldmountain_v1.png
+icon_dark_aviation_v2.png
+icon_light_aviation_v2.png
+feature_dark_growth_v1.png
+blog_light_research_v3.png
 ```
 
 ---
 
-### Empty States
+### Image Implementation (HTML/CSS)
 
-**Theme:** Calm invitation, gentle encouragement
-
-**Concept: Path Opening**
-```
-Visual:
-- Single path (one brushstroke, cerulean)
-- Curves gently forward into soft clay background
-- Earth tone base grounds the path
-- Space: 75% white
-
-Message: "Your journey begins here" or "Start exploring"
-Balance: Cerulean path + earth grounding
-Colors: #4FC3E0 + #C9B8A8
-Strokes: 2 total
-Feels: Inviting, not anxious
+**Responsive Dark/Light Switching**:
+```html
+<picture>
+  <source 
+    srcset="/images/hero_dark_goldmountain.png" 
+    media="(prefers-color-scheme: dark)"
+  >
+  <img 
+    src="/images/hero_light_goldmountain.png" 
+    alt="Gold mountain representing premium asset growth"
+  >
+</picture>
 ```
 
----
+**CSS-Based Switching**:
+```css
+.hero-illustration {
+  background-image: url('/images/hero_light_goldmountain.png');
+}
 
-### Error/404 Pages
-
-**Theme:** Lost but calm, playful redirection
-
-**Concept: Two Paths**
-```
-Visual:
-- Two paths diverging (Y shape)
-- One continues forward in bolder cerulean ink
-- Other fades into earth-tone mist
-- Earth base grounds both paths
-- Text: "Let's get you back on track"
-
-Balance: Cerulean (forward path) + earth (grounding + faded option)
-Colors: #007BA7 + #9B8B7E
-Strokes: 3 total
-Feels: Wise guidance, warm redirection (Grandmother energy)
+[data-theme="dark"] .hero-illustration {
+  background-image: url('/images/hero_dark_goldmountain.png');
+}
 ```
 
 ---
 
-## Tools & Techniques
+## Alternative AI Tools
 
-### Physical Method (Preferred)
-**Most authentic minimalist feel**
+### Midjourney
+**Strengths**: High artistic quality, excellent at abstract concepts
+**Prompting**: Similar structure, add "--style raw" for less stylization
 
-**Materials:**
-- Sumi ink or India ink
-- Chinese/Japanese brushes (varied sizes)
-- Rice paper or watercolor paper
-- Ceramic palette for ink dilution
+**Example Prompt**:
+```
+minimalist ink wash illustration of gold mountain, dark navy background, 
+cerulean #00A5CF luminous elements, electric blue #2563eb accents, 
+gold #D4AF37 highlights, 65% negative space, soft glowing edges, 
+professional financial services, zen simplicity, --ar 16:9 --style raw --v 6
+```
 
-**Process:**
-1. Sketch lightly in pencil (optional)
-2. Mix ink to desired opacity
-3. Execute brushstrokes confidently
-4. Let dry completely
-5. Scan at 600dpi minimum
-6. Clean up in Photoshop (minimal)
-7. Preserve texture and imperfection
+### DALL-E 3
+**Strengths**: Precise color control, follows instructions well
+**Prompting**: Be explicit about style, colors, and "NOT" list
 
-**Advantages:**
-- Most authentic
-- Natural texture
-- Organic imperfection
-- Unique every time
+**Example Prompt**:
+```
+Create a minimalist ink wash style illustration of a gold mountain 
+optimized for dark navy blue background (color #0f172a). Use cerulean 
+#00A5CF for luminous mountain elements, electric blue #2563eb for accents, 
+gold #D4AF37 for sun/highlights, and warm stone #9B8B7E sparingly (10%) 
+for grounding. 65% of the image should be empty negative space. Style 
+should be professional, sophisticated, elegant, zen simplicity, similar 
+to New Yorker magazine illustrations. Soft glowing edges, minimal detail, 
+NOT playful or cartoonish. High quality digital art.
+```
 
----
+### Stable Diffusion
+**Strengths**: Open source, customizable, can fine-tune
+**Prompting**: Use style keywords, negative prompts important
 
-### Digital Method
-**For faster iteration or editing**
+**Example Prompt**:
+```
+Positive: minimalist ink wash illustration, gold mountain, dark navy 
+background, cerulean #00A5CF glow, electric blue #2563eb accent, 
+gold #D4AF37 sun, 65% negative space, soft edges, zen simplicity, 
+professional financial aesthetic, high quality, 4k
 
-**Tools:**
-- iPad Pro + Apple Pencil + Procreate
-- Wacom tablet + Adobe Fresco
-- Kyle Webster ink brush sets
-
-**Process:**
-1. Use textured paper background
-2. Select ink brush with natural variation
-3. Practice strokes on separate layer
-4. Execute final strokes decisively
-5. Add texture/grain overlay
-6. Export as high-res PNG
-
-**Important:**
-- Use pressure sensitivity
-- Don't over-edit or "perfect" it
-- Add paper texture
-- Make it feel hand-drawn
-- Embrace happy accidents
+Negative: playful, cartoon, busy, detailed, decorative borders, text, 
+logos, literal symbols, low quality, watermark
+```
 
 ---
 
-### Vector Method (Use Sparingly)
-**Only when absolutely necessary for scaling**
+## Advanced Techniques
 
-**Tools:**
-- Adobe Illustrator
-- Hand-drawn texture overlays
+### Prompt Modifiers for Quality
 
-**Process:**
-1. Start with physical or digital sketch
-2. Trace loosely (not perfectly)
-3. Vary stroke weights
-4. Add texture via overlay
-5. Never use smooth/clean vector look
+**For Sophistication**:
+- "New Yorker magazine illustration quality"
+- "Anthropic-level design sophistication"
+- "Stripe-quality minimal aesthetic"
+- "Enterprise financial services professional"
 
-**Warning:**
-This is last resort. Physical or digital-paint methods are strongly preferred for authenticity.
+**For Minimalism**:
+- "65-70% negative space"
+- "Zen simplicity, essential forms only"
+- "Generous breathing room"
+- "What you remove is as important as what you keep"
 
----
+**For Color Accuracy**:
+- "Exact hex colors: #00A5CF cerulean, #2563eb electric blue..."
+- "Match specified color palette precisely"
+- "No color deviation from provided hex codes"
 
-## Do's and Don'ts
-
-### Do:
-✅ Study traditional ink painting masters
-✅ Practice brushstrokes repeatedly
-✅ Use minimal strokes
-✅ Embrace negative space generously
-✅ Let ink bleed and pool naturally
-✅ Vary line weight and opacity
-✅ Reference nature directly
-✅ Keep it simple and clear
-✅ Make first stroke count
-✅ Preserve hand-drawn quality
-✅ Always show cerulean + earth relationship
-✅ Ground every composition
-
-### Don't:
-❌ Overwork the illustration
-❌ Fill all the space
-❌ Use perfect geometric shapes
-❌ Add decorative flourishes
-❌ Make it too literal
-❌ Use multiple illustration styles
-❌ Forget the horizon principle
-❌ Let cerulean float without earth grounding
-❌ Use vector smoothing tools
-❌ Make it overly symmetrical
+**For Mode Optimization**:
+- Dark: "Optimized for dark navy background, luminous elements, soft glow"
+- Light: "Optimized for white background, confident forms, clear contrast"
 
 ---
 
-## Inspiration & Study
+### Iteration Strategy
 
-### Traditional Ink Painting
+**Version 1: Exploration** (3-5 variations)
+- Test different compositions
+- Try various subject interpretations
+- Experiment with space allocation
+- Generate multiple to compare
 
-**Study these artists for technique (not to copy):**
-- Sesshū Tōyō (landscape minimalism)
-- Qi Baishi (bold simplicity)
-- Hakuin Ekaku (circular paintings, confidence)
+**Version 2: Refinement** (Choose 1-2 best)
+- Adjust colors to exact hex codes
+- Fine-tune negative space (closer to 65%)
+- Refine forms (remove unnecessary details)
+- Optimize for target mode
 
-**Key Takeaways:**
-- One confident stroke > multiple tentative ones
-- Negative space is active, not empty
-- Suggest rather than define
-- Capture essence, not every detail
-
----
-
-### Contemporary Sophistication
-
-**Study these artists for modern execution:**
-- Malika Favre (bold minimalism, clever negative space)
-- Christoph Niemann (conceptual clarity, minimal execution)
-- Yuko Shimizu (ink-based, flowing lines, sophisticated)
-- Bob Staake (playful sophistication, bold color)
-
-**Key Takeaways:**
-- Sophisticated doesn't mean serious
-- One strong concept per image
-- Limited palette = more impact
-- Appeals to intelligent audience
+**Version 3: Finalization** (Polish chosen version)
+- Perfect color matching
+- Ensure professional quality
+- Check all specifications
+- Test on actual backgrounds
+- Optimize file size
 
 ---
 
-### Nature Studies
+## Quality Standards
 
-**Observe these for subject matter:**
-- Ocean wave photography
-- Mountain silhouettes
-- Bamboo growth patterns
-- Horizon lines and atmospheric layers
-- Water flowing around stones
+### Professional Checklist
 
-**Key Takeaways:**
-- Nature shows us minimalism
-- Essential forms are powerful
-- Sky and earth always in relationship
+**Visual Quality**:
+- [ ] Immediately recognizable subject (3-second comprehension)
+- [ ] Clear luminance hierarchy (most important = most prominent)
+- [ ] Professional aesthetic (Anthropic/Stripe quality level)
+- [ ] Appropriate for financial services (serious, trustworthy)
+- [ ] Works at intended size (legible, clear)
 
----
+**Technical Quality**:
+- [ ] High resolution (specified dimensions met)
+- [ ] Proper format (PNG with transparency)
+- [ ] Optimized file size (meets size targets)
+- [ ] No artifacts or compression issues
+- [ ] Clean edges (no pixelation or noise)
 
-## Quality Checklist
+**Brand Alignment**:
+- [ ] Uses specified color palette (exact hex codes)
+- [ ] Maintains COW visual language (minimalist, professional)
+- [ ] Includes warm grounding (10% dark / 20-30% light)
+- [ ] 60-70% negative space achieved
+- [ ] Mode-appropriate (works on target background)
 
-Before finalizing any illustration, verify:
-
-**Minimalism:**
-- [ ] Used minimum strokes necessary?
-- [ ] Removed everything non-essential?
-- [ ] Could I remove anything else?
-
-**Space:**
-- [ ] 60%+ negative space?
-- [ ] Breathing room around elements?
-- [ ] Asymmetrical balance?
-
-**Technique:**
-- [ ] Confident, decisive strokes?
-- [ ] Varied line weight?
-- [ ] Hand-drawn quality preserved?
-- [ ] Natural texture visible?
-
-**Brand:**
-- [ ] Uses cerulean + earth palette?
-- [ ] Shows horizon relationship (sky meets earth)?
-- [ ] Matches overall brand aesthetic?
-- [ ] Appropriate for context?
-
-**Grounding:**
-- [ ] Cerulean not floating alone?
-- [ ] Earth tones provide foundation?
-- [ ] Balance between aspiration and grounding clear?
-- [ ] Horizon moment visible?
-
-**Meaning:**
-- [ ] Clear concept/metaphor?
-- [ ] Serves brand message?
-- [ ] Culturally respectful and universal?
-- [ ] Timeless, not trendy?
+**Accessibility**:
+- [ ] Sufficient contrast (WCAG standards met)
+- [ ] Meaningful alt text provided
+- [ ] Scalable (looks good at all sizes)
+- [ ] Color not sole information carrier
+- [ ] Works for color-blind users
 
 ---
 
-## Working with Illustrators
+## Common Issues & Solutions
 
-### Briefing External Illustrators
+### Issue 1: Too Busy (Not Enough Negative Space)
 
-**Always provide:**
-1. This complete guide
-2. Brand Guide and Design Guide
-3. Specific concept/subject matter
-4. Context and usage
-5. Dimensions and format
-6. Timeline and revisions
+**Problem**: Illustration feels crowded, lacks breathing room
 
-**Emphasize:**
-- Minimalism and negative space
-- Confidence over perfection
-- Cerulean + earth palette (never cerulean alone)
-- Horizon principle (sky meets earth)
-- Natural, organic quality
-- Study reference artists
+**Solution**: 
+```
+Refinement prompt: "Simplify significantly, increase negative 
+space to 70%, remove all non-essential elements, keep only the 
+core subject with minimal supporting forms"
+```
 
-**Request:**
-- 2-3 concept sketches first
-- Pencil/digital rough before final
-- High-res final files
-- Editable source files
-- Usage rights documentation
+### Issue 2: Wrong Colors
 
-### Art Direction Language
+**Problem**: AI didn't use exact hex codes specified
 
-**Good direction:**
-"Create a single-stroke mountain silhouette with cerulean sky (upper 35%) meeting warm stone earth base (lower 65%). Gold accent at peak suggesting dawn. Think confident minimalism meets contemporary sophistication. 70% negative space. Horizon line at lower third where sky meets earth."
+**Solution**:
+```
+Refinement prompt: "Adjust all colors to exactly match these hex 
+codes: cerulean must be exactly #00A5CF, electric blue exactly 
+#2563eb, gold exactly #D4AF37. No color variation or interpretation."
+```
 
-**Bad direction:**
-"Make it look minimalist and pretty with some blue ink stuff and maybe some brown."
+Or use Photoshop/Figma to adjust colors manually post-generation.
 
----
+### Issue 3: Too Playful/Casual
 
-## Expanding the Library
+**Problem**: Style is cartoonish or not professional enough
 
-As COW grows, we'll develop:
+**Solution**:
+```
+Refinement prompt: "Make significantly more professional and 
+sophisticated. Remove any playful elements. Style should match 
+New Yorker magazine illustrations—elegant, minimal, serious. 
+Enterprise financial services aesthetic, NOT consumer app style."
+```
 
-**Phase 1 (Foundation):**
-- Homepage hero illustration (horizon composition)
-- 5-7 asset vertical icons (all earth-grounded)
-- 3 feature card illustrations (showing transformation)
-- Empty state illustration (inviting path)
-- Error page illustration (two paths, gentle redirect)
+### Issue 4: Low Contrast in Target Mode
 
-**Phase 2 (Expansion):**
-- Program category illustrations
-- Social media templates (all with horizon moments)
-- Email header variations
-- Presentation slide options
-- Additional asset vertical icons
+**Problem**: Illustration doesn't show up well on intended background
 
-**Phase 3 (Maturity):**
-- Full illustration library
-- Animation/motion explorations
-- 3D interpretations
-- Physical merchandise applications
-- Environmental graphics
+**Solution**:
+- **Dark mode**: "Increase luminosity of main elements, add soft glowing edges"
+- **Light mode**: "Increase depth and definition, strengthen contrast, darker values"
+
+### Issue 5: Too Detailed
+
+**Problem**: Too much visual information, not minimal enough
+
+**Solution**:
+```
+Refinement prompt: "Reduce detail by 50%, simplify all forms to 
+their essential shapes, remove textures and fine details, focus 
+on bold minimal silhouettes"
+```
 
 ---
 
-## Why This Matters
+## Examples of Good Prompts
 
-**This illustration style makes COW distinctive because:**
+### Dark Mode Homepage Hero: Gold Mountain
 
-1. **Different:** While crypto/fintech uses geometric tech aesthetics, we use timeless minimalist art
-2. **Aligned:** Perfectly expresses our four pillars (minimalism, wisdom, action, rigor)
-3. **Scalable:** Simple forms work at any size
-4. **Timeless:** Won't look dated in 5 years
-5. **Universal:** Speaks across cultures through natural elements
-6. **Premium:** Sophisticated without being pretentious
-7. **Authentic:** Matches the substance of our work
-8. **Grounded:** Horizon principle reinforces our values visually
+```
+Create a minimalist ink wash illustration of a gold mountain peak 
+at night, optimized for a dark navy blue background (hex #0f172a).
 
-**This is not decoration. This is visual expression of who we are.**
+Composition: Mountain peak occupies center-upper third, ascending 
+from bottom. Small gold sun (#D4AF37) rising behind peak at top. 
+Cerulean (#00A5CF) elements in sky creating luminous atmosphere. 
+Subtle warm stone (#9B8B7E) at base (bottom 10%) for grounding. 
+70% of image is empty negative space.
+
+Style: Soft glowing edges on mountain, gentle luminosity, zen 
+simplicity, professional financial services aesthetic, New Yorker 
+magazine quality, sophisticated and elegant, NOT playful.
+
+Colors (exact hex):
+- Mountain outline & highlights: Cerulean #00A5CF (luminous)
+- Sky accents: Electric blue #2563eb
+- Sun: Gold #D4AF37
+- Base grounding: Warm stone #9B8B7E (10% usage)
+
+Technical: 3840x2160 pixels, PNG with transparency, 16:9 aspect 
+ratio, soft gradients, professional illustration.
+
+Do not include: Text, logos, decorative elements, busy patterns, 
+cartoon style, literal financial symbols.
+```
+
+### Light Mode Asset Icon: Aviation
+
+```
+Create a minimalist ink wash illustration of an ascending flight 
+path, optimized for white background.
+
+Composition: Smooth curve starting lower-left ascending to upper-right. 
+Single confident line. Warm stone (#9B8B7E) grounding element at 
+curve origin (bottom 20%). 65% negative space.
+
+Style: Confident brushstroke quality, clear definition, subtle depth 
+through shadows, professional financial services, zen simplicity, 
+New Yorker quality illustration, sophisticated NOT playful.
+
+Colors (exact hex):
+- Main curve: Deep cerulean #007BA7
+- Accent: Electric blue #2563eb
+- Grounding base: Warm stone #9B8B7E (20% usage)
+- Optional subtle earth: Soft clay #C9B8A8
+
+Technical: 2048x2048 pixels, PNG with transparency, 1:1 aspect ratio, 
+defined edges, professional icon.
+
+Do not include: Literal airplane, text, decorative borders, busy 
+patterns, cartoon elements.
+```
 
 ---
 
-*"In art, as in nature, what you leave out is as important as what you include. And aspiration without foundation is just floating."*
+## Brand Integration
+
+### Using Illustrations with Other Brand Elements
+
+**With Cerulean Logo**:
+- Illustration uses cerulean as supporting element, not dominant
+- Logo remains most saturated cerulean on page
+- Illustration provides context, logo provides brand anchor
+
+**With Text Content**:
+- Illustration supports but doesn't overwhelm text
+- Maintains generous white space around text
+- Mode-appropriate contrast for readability
+
+**With Earth Tone Sections**:
+- Illustration can sit on earth-tone background if:
+  - Light mode: Use cooler earth tones (#9B8B7E, not #C77A58)
+  - Dark mode: Best on standard dark backgrounds, not earth
+
+**With Data Visualizations**:
+- Keep illustration minimal if charts are present
+- Use illustration as background element at low opacity
+- Or separate illustration and data visually
 
 ---
 
-**Last Updated:** October 15, 2025
-**Next Review:** January 15, 2026
-**Owner:** Design Team
-**For questions:** design@cow.group
+## Maintenance & Evolution
+
+### Seasonal Variations
+Consider creating seasonal illustration variants while maintaining core brand:
+- **Summer**: Lighter tones, more luminosity
+- **Autumn**: Warmer earth tones (up to 35% in light mode)
+- **Winter**: Cooler tones, more electric blue
+- **Spring**: More emerald/growth tones, renewal energy
+
+### Special Events
+Premium features, launches, milestones can use:
+- More gold accent (up to 25%)
+- Additional luminous quality (dark mode)
+- Celebratory but still professional tone
+
+### A/B Testing
+Test illustration variations:
+- More vs less negative space
+- Different compositions (center vs rule-of-thirds)
+- Color emphasis variations
+- Dark vs light mode performance
+
+---
+
+## Resources & Tools
+
+### AI Generation Platforms:
+- **Grok** (X.com): Fast, good quality, accessible
+- **Midjourney**: Highest artistic quality, via Discord
+- **DALL-E 3**: Precise, via ChatGPT Plus
+- **Stable Diffusion**: Open source, customizable
+
+### Post-Processing Tools:
+- **Photoshop**: Color correction, refinement
+- **Figma**: Vector conversion, color adjustment
+- **ImageOptim**: File size optimization
+- **TinyPNG**: Compression without quality loss
+
+### Color Tools:
+- **Contrast Checker**: WebAIM, Coolors
+- **Hex Picker**: ColorZilla browser extension
+- **Palette Tester**: Figma color blind simulator
+
+---
+
+## Quick Reference
+
+**Dark Mode Illustration**:
+- Background context: #0f172a
+- Primary: Cerulean #00A5CF (luminous)
+- Accents: Electric blue #2563eb, Emerald #059669, Gold #D4AF37
+- Grounding: Warm stone #9B8B7E (10%)
+- Style: Soft glow, luminous, minimal
+
+**Light Mode Illustration**:
+- Background context: #ffffff or #f5f3f0
+- Primary: Deep cerulean #007BA7
+- Accents: Electric blue #2563eb, Emerald #059669, Deep gold #B8860B
+- Grounding: Warm stone #9B8B7E, Terra cotta #C77A58 (20-30%)
+- Style: Confident form, clear edges, minimal
+
+**Both Modes**:
+- 60-70% negative space
+- Professional, never playful
+- Financial services appropriate
+- New Yorker quality
+- Exact color matching
+
+---
+
+**For Questions**: brand@cow.group  
+**Last Updated**: October 21, 2025  
+**See Also**: COW_Design_Guide_UPDATED.md, COW_Color_Palette_Quick_Reference_UPDATED.md

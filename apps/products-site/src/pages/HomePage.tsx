@@ -282,13 +282,12 @@ export default function HomePage() {
             className="text-center mb-20"
           >
             <h2
-              className="mb-6 inline-block"
+              className="mb-6 inline-block text-gray-900 dark:text-gray-100"
               style={{
                 fontSize: 'clamp(2.5rem, 4.5vw, 4rem)',
                 fontWeight: '200',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '-0.025em',
-                color: '#111827',
                 borderBottom: '2px solid rgba(0, 102, 255, 0.2)', // Subtle Deep Cyan accent
                 paddingBottom: '0.5rem'
               }}
@@ -296,13 +295,12 @@ export default function HomePage() {
               Two Flows in Your Financial Ecosystem
             </h2>
             <p
-              className="max-w-3xl mx-auto"
+              className="max-w-3xl mx-auto text-gray-600 dark:text-gray-300"
               style={{
                 fontSize: '1.125rem',
                 fontWeight: '300',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '0.01em',
-                color: '#6b7280',
                 lineHeight: '1.7'
               }}
             >
@@ -463,13 +461,12 @@ export default function HomePage() {
             className="mb-20"
           >
             <h2
-              className="mb-6 inline-block"
+              className="mb-6 inline-block text-gray-900 dark:text-gray-100"
               style={{
                 fontSize: 'clamp(2.5rem, 4.5vw, 4rem)',
                 fontWeight: '200',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '-0.025em',
-                color: '#111827',
                 borderBottom: '2px solid rgba(0, 102, 255, 0.2)', // Subtle Deep Cyan accent
                 paddingBottom: '0.5rem'
               }}
@@ -477,14 +474,13 @@ export default function HomePage() {
               Visualize Your Asset Ecosystem
             </h2>
             <p
-              className="max-w-3xl"
+              className="max-w-3xl text-gray-600 dark:text-gray-300"
               style={{
                 fontSize: '1.125rem',
                 fontWeight: '300',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '0.01em',
-                lineHeight: '1.7',
-                color: '#6b7280'
+                lineHeight: '1.7'
               }}
             >
               Performance-engineered flows across real-world assets. Visualize, orchestrate, and optimize gold, aviation, real estate, and essential markets—each asset creating cycles that compound within your complete financial ecosystem.
@@ -1145,13 +1141,12 @@ export default function HomePage() {
             className="mb-20"
           >
             <h2
-              className="mb-6 inline-block"
+              className="mb-6 inline-block text-gray-900 dark:text-gray-100"
               style={{
                 fontSize: 'clamp(2.5rem, 4.5vw, 4rem)',
                 fontWeight: '200',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '-0.025em',
-                color: '#111827',
                 borderBottom: '2px solid rgba(0, 102, 255, 0.2)', // Subtle Deep Cyan accent
                 paddingBottom: '0.5rem'
               }}
@@ -1159,13 +1154,12 @@ export default function HomePage() {
               Your Wealth Ecosystem in Three Flows
             </h2>
             <p
-              className="max-w-3xl"
+              className="max-w-3xl text-gray-600 dark:text-gray-300"
               style={{
                 fontSize: '1.125rem',
                 fontWeight: '300',
                 fontFamily: 'Inter, sans-serif',
-                letterSpacing: '0.01em',
-                color: '#6b7280'
+                letterSpacing: '0.01em'
               }}
             >
               Visualize, orchestrate, optimize—from vision to achievement
@@ -1214,13 +1208,13 @@ export default function HomePage() {
                 </h3>
               </div>
               <p
+                className="text-gray-600 dark:text-gray-300"
                 style={{
                   fontSize: '0.9375rem',
                   fontWeight: '300',
                   fontFamily: 'Inter, sans-serif',
                   lineHeight: '1.6',
-                  letterSpacing: '0.01em',
-                  color: '#6b7280'
+                  letterSpacing: '0.01em'
                 }}
               >
                 See your complete financial ecosystem. Choose Performance Assets, Life Programs, or combine both flows to create your ideal wealth cycles
@@ -1268,13 +1262,13 @@ export default function HomePage() {
                 </h3>
               </div>
               <p
+                className="text-gray-600 dark:text-gray-300"
                 style={{
                   fontSize: '0.9375rem',
                   fontWeight: '300',
                   fontFamily: 'Inter, sans-serif',
                   lineHeight: '1.6',
-                  letterSpacing: '0.01em',
-                  color: '#6b7280'
+                  letterSpacing: '0.01em'
                 }}
               >
                 Watch your ecosystem flow. Performance-engineered optimization creates continuous cycles of rebalancing and compounding across your complete portfolio
@@ -1322,13 +1316,13 @@ export default function HomePage() {
                 </h3>
               </div>
               <p
+                className="text-gray-600 dark:text-gray-300"
                 style={{
                   fontSize: '0.9375rem',
                   fontWeight: '300',
                   fontFamily: 'Inter, sans-serif',
                   lineHeight: '1.6',
-                  letterSpacing: '0.01em',
-                  color: '#6b7280'
+                  letterSpacing: '0.01em'
                 }}
               >
                 Complete the flow. Track each wealth cycle within your ecosystem with measurable progress, complete transparency, and total control
@@ -1368,14 +1362,13 @@ export default function HomePage() {
               Start Your Wealth Cycles
             </h2>
             <p
-              className="mb-12 max-w-2xl mx-auto"
+              className="mb-12 max-w-2xl mx-auto text-gray-600 dark:text-gray-300"
               style={{
                 fontSize: '1.125rem',
                 fontWeight: '300',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '0.01em',
-                lineHeight: '1.7',
-                color: '#6b7280'
+                lineHeight: '1.7'
               }}
             >
               We're engineering a new financial ecosystem. One you can visualize, orchestrate, and optimize—designed for everyone, not just institutions. Be among the first to experience flow-based wealth architecture.

@@ -167,11 +167,23 @@ export default function HomePage() {
               <h1 className="text-5xl sm:text-7xl lg:text-8xl font-thin text-gray-800 dark:text-gray-100 mb-6 leading-[0.9] tracking-tight">
                 Let's Create Your
                 <br />
-                <span className="bg-gradient-to-r from-blue-600 via-blue-500 to-emerald-500 bg-clip-text text-transparent font-light">
+                <span style={{
+                  background: 'linear-gradient(to right, #0066FF 0%, #0ea5e9 50%, #10b981 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  fontWeight: '300'
+                }}>
                   Cycles of Wealth
                 </span>
               </h1>
-              <div className="w-24 h-px bg-gradient-to-r from-transparent via-blue-600 to-transparent mx-auto mb-8" />
+              {/* Deep Cyan logo divider */}
+              <div style={{
+                width: '120px',
+                height: '2px',
+                background: 'linear-gradient(to right, transparent 0%, #0066FF 50%, transparent 100%)',
+                margin: '0 auto 2rem auto'
+              }} />
             </motion.div>
 
             <motion.p
@@ -181,7 +193,7 @@ export default function HomePage() {
               className="text-xl sm:text-2xl font-light text-gray-600 dark:text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed"
             >
               Visualize, orchestrate, and optimize your complete financial ecosystem through
-              <span className="text-blue-600 font-normal"> intuitive flow-based architecture</span> and
+              <span style={{ color: '#0066FF', fontWeight: '400' }}> intuitive flow-based architecture</span> and
               <span className="text-emerald-600 font-normal"> performance-engineered real world assets</span>.
             </motion.p>
 
@@ -199,7 +211,13 @@ export default function HomePage() {
                 >
                   <Button
                     size="lg"
-                    className="bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white shadow-2xl shadow-blue-500/25 border-0 px-8 py-6 text-lg font-light"
+                    className="text-white shadow-2xl border-0 px-8 py-6 text-lg font-light"
+                    style={{
+                      background: 'linear-gradient(to right, #0066FF, #0080FF)',
+                      boxShadow: '0 25px 50px -12px rgba(0, 102, 255, 0.25)'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #0052CC, #0066FF)'}
+                    onMouseLeave={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #0066FF, #0080FF)'}
                   >
                     Begin Your Journey
                     <ArrowRight className="ml-3 w-5 h-5" />
@@ -307,10 +325,12 @@ export default function HomePage() {
               }}
             >
               <div className="relative z-10">
+                {/* Deep Cyan logo color pop */}
                 <div
                   className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
                   style={{
-                    background: 'linear-gradient(135deg, #007BA7 0%, #005F7F 100%)' // Deep Cerulean
+                    background: 'linear-gradient(135deg, #0066FF 0%, #0052CC 100%)', // Deep Cyan logo pop
+                    boxShadow: '0 8px 16px rgba(0, 102, 255, 0.25)'
                   }}
                 >
                   <TrendingUp className="w-8 h-8 text-white" />
@@ -372,7 +392,8 @@ export default function HomePage() {
                 <div
                   className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
                   style={{
-                    background: 'linear-gradient(135deg, #6B8E6F 0%, #5a7a5c 100%)' // Bamboo Green - nature, vitality
+                    background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', // Emerald green - life, growth
+                    boxShadow: '0 8px 16px rgba(16, 185, 129, 0.25)'
                   }}
                 >
                   <Shield className="w-8 h-8 text-white" />
@@ -406,7 +427,7 @@ export default function HomePage() {
                   href="#programs"
                   className="inline-flex items-center font-medium transition-colors group/link"
                   style={{
-                    color: '#6B8E6F', // Bamboo Green
+                    color: '#10b981', // Emerald green - life, growth
                     fontSize: '0.9375rem',
                     letterSpacing: '0.01em'
                   }}
@@ -499,6 +520,19 @@ export default function HomePage() {
                   borderLeft: '4px solid #C77A58' // Terra Cotta premium accent
                 }}
               >
+                {/* Deep Cyan corner accent - logo pop */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    right: 0,
+                    width: '60px',
+                    height: '60px',
+                    background: 'linear-gradient(135deg, #0066FF 0%, transparent 100%)',
+                    opacity: 0.15,
+                    borderTopRightRadius: '1rem'
+                  }}
+                />
                 <div
                   className="text-xs font-medium px-3 py-1 rounded-full inline-block mb-4"
                   style={{
@@ -1148,7 +1182,10 @@ export default function HomePage() {
             >
               <div
                 className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6"
-                style={{ background: 'linear-gradient(135deg, #007BA7 0%, #005F7F 100%)' }}
+                style={{
+                  background: 'linear-gradient(135deg, #38bdf8 0%, #7dd3fc 100%)', // Sky Blue - lightest logo color
+                  boxShadow: '0 8px 16px rgba(56, 189, 248, 0.2)'
+                }}
               >
                 <Target className="w-10 h-10 text-white" />
               </div>
@@ -1156,8 +1193,8 @@ export default function HomePage() {
                 <span
                   className="inline-block w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-4"
                   style={{
-                    background: 'rgba(0, 123, 167, 0.1)',
-                    color: '#007BA7',
+                    background: 'rgba(56, 189, 248, 0.1)',
+                    color: '#38bdf8',
                     fontWeight: '600'
                   }}
                 >
@@ -1199,7 +1236,10 @@ export default function HomePage() {
             >
               <div
                 className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6"
-                style={{ background: 'linear-gradient(135deg, #007BA7 0%, #005F7F 100%)' }}
+                style={{
+                  background: 'linear-gradient(135deg, #38bdf8 0%, #7dd3fc 100%)', // Sky Blue - lightest logo color
+                  boxShadow: '0 8px 16px rgba(56, 189, 248, 0.2)'
+                }}
               >
                 <Zap className="w-10 h-10 text-white" />
               </div>
@@ -1207,8 +1247,8 @@ export default function HomePage() {
                 <span
                   className="inline-block w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-4"
                   style={{
-                    background: 'rgba(0, 123, 167, 0.1)',
-                    color: '#007BA7',
+                    background: 'rgba(56, 189, 248, 0.1)',
+                    color: '#38bdf8',
                     fontWeight: '600'
                   }}
                 >
@@ -1250,7 +1290,10 @@ export default function HomePage() {
             >
               <div
                 className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6"
-                style={{ background: 'linear-gradient(135deg, #007BA7 0%, #005F7F 100%)' }}
+                style={{
+                  background: 'linear-gradient(135deg, #38bdf8 0%, #7dd3fc 100%)', // Sky Blue - lightest logo color
+                  boxShadow: '0 8px 16px rgba(56, 189, 248, 0.2)'
+                }}
               >
                 <CheckCircle2 className="w-10 h-10 text-white" />
               </div>
@@ -1258,8 +1301,8 @@ export default function HomePage() {
                 <span
                   className="inline-block w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-4"
                   style={{
-                    background: 'rgba(0, 123, 167, 0.1)',
-                    color: '#007BA7',
+                    background: 'rgba(56, 189, 248, 0.1)',
+                    color: '#38bdf8',
                     fontWeight: '600'
                   }}
                 >

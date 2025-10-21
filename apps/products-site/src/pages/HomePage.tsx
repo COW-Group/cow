@@ -344,14 +344,13 @@ export default function HomePage() {
                   Performance Assets
                 </h3>
                 <p
-                  className="mb-8"
+                  className="mb-8 text-gray-600 dark:text-gray-300"
                   style={{
                     fontSize: '1.0625rem',
                     fontWeight: '300',
                     fontFamily: 'Inter, sans-serif',
                     lineHeight: '1.7',
-                    letterSpacing: '0.01em',
-                    color: '#6b7280'
+                    letterSpacing: '0.01em'
                   }}
                 >
                   Flow-based optimization that visualizes and orchestrates your asset performance in real-time. Our algorithms create continuous cycles of rebalancing and compounding across gold, aviation, real estate—engineering your ecosystem to maximize returns while you focus on what matters.
@@ -405,14 +404,13 @@ export default function HomePage() {
                   Life Solutions
                 </h3>
                 <p
-                  className="mb-8"
+                  className="mb-8 text-gray-600 dark:text-gray-300"
                   style={{
                     fontSize: '1.0625rem',
                     fontWeight: '300',
                     fontFamily: 'Inter, sans-serif',
                     lineHeight: '1.7',
-                    letterSpacing: '0.01em',
-                    color: '#6b7280'
+                    letterSpacing: '0.01em'
                   }}
                 >
                   Retirement. Education. Your dream home. Life's biggest milestones flow better when you can visualize and orchestrate them within your complete financial ecosystem. We're engineering programs designed for how you actually live—each creating its own wealth cycle.
@@ -495,13 +493,12 @@ export default function HomePage() {
           {/* Featured Assets */}
           <div className="mb-16">
             <h3
-              className="mb-8"
+              className="mb-8 text-gray-600 dark:text-gray-400"
               style={{
                 fontSize: '0.875rem',
                 fontWeight: '300',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '0.08em',
-                color: '#6b7280',
                 textTransform: 'uppercase'
               }}
             >
@@ -545,14 +542,13 @@ export default function HomePage() {
                   Pure Gold Bullion
                 </h4>
                 <p
-                  className="mb-6"
+                  className="mb-6 text-gray-600 dark:text-gray-300"
                   style={{
                     fontSize: '0.9375rem',
                     fontWeight: '300',
                     fontFamily: 'Inter, sans-serif',
                     lineHeight: '1.7',
-                    letterSpacing: '0.01em',
-                    color: '#6b7280'
+                    letterSpacing: '0.01em'
                   }}
                 >
                   Gold has preserved wealth for millennia. Now visualize it flowing through your ecosystem. Our performance-engineered optimization orchestrates your holdings in continuous cycles—maximizing returns while maintaining the stability you expect from precious metals.
@@ -666,13 +662,12 @@ export default function HomePage() {
 
           {/* Asset Grid */}
           <h3
-            className="mb-8"
+            className="mb-8 text-gray-600 dark:text-gray-400"
             style={{
               fontSize: '0.875rem',
               fontWeight: '300',
               fontFamily: 'Inter, sans-serif',
               letterSpacing: '0.08em',
-              color: '#6b7280',
               textTransform: 'uppercase'
             }}
           >
@@ -748,8 +743,7 @@ export default function HomePage() {
                     fontWeight: '300',
                     fontFamily: 'Inter, sans-serif',
                     lineHeight: '1.6',
-                    letterSpacing: '0.01em',
-                    color: '#6b7280'
+                    letterSpacing: '0.01em'
                   }}
                 >
                   {asset.description}
@@ -801,8 +795,7 @@ export default function HomePage() {
                 fontWeight: '300',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '0.01em',
-                lineHeight: '1.7',
-                color: '#6b7280'
+                lineHeight: '1.7'
               }}
             >
               Retiring with confidence. Sending kids to college. Buying your dream home. Each milestone creates its own cycle within your financial ecosystem. Visualize and optimize these flows with programs engineered for how you actually live—not one-size-fits-all products.
@@ -863,8 +856,7 @@ export default function HomePage() {
                         fontWeight: '300',
                         fontFamily: 'Inter, sans-serif',
                         lineHeight: '1.6',
-                        letterSpacing: '0.01em',
-                        color: '#6b7280'
+                        letterSpacing: '0.01em'
                       }}
                     >
                       {program.description}
@@ -938,8 +930,7 @@ export default function HomePage() {
                         fontWeight: '300',
                         fontFamily: 'Inter, sans-serif',
                         lineHeight: '1.6',
-                        letterSpacing: '0.01em',
-                        color: '#6b7280'
+                        letterSpacing: '0.01em'
                       }}
                     >
                       {program.description}
@@ -1014,8 +1005,7 @@ export default function HomePage() {
                         fontWeight: '300',
                         fontFamily: 'Inter, sans-serif',
                         lineHeight: '1.6',
-                        letterSpacing: '0.01em',
-                        color: '#6b7280'
+                        letterSpacing: '0.01em'
                       }}
                     >
                       {program.description}
@@ -1089,8 +1079,7 @@ export default function HomePage() {
                         fontWeight: '300',
                         fontFamily: 'Inter, sans-serif',
                         lineHeight: '1.6',
-                        letterSpacing: '0.01em',
-                        color: '#6b7280'
+                        letterSpacing: '0.01em'
                       }}
                     >
                       {program.description}
@@ -1389,7 +1378,6 @@ export default function HomePage() {
               <p
                 className="text-sm mt-4"
                 style={{
-                  color: '#6b7280',
                   fontSize: '0.875rem',
                   fontFamily: 'Inter, sans-serif'
                 }}
@@ -1413,10 +1401,10 @@ export default function HomePage() {
                     14+
                   </div>
                   <div
+                    className="text-gray-700 dark:text-gray-300"
                     style={{
                       fontSize: '0.9375rem',
                       fontWeight: '300',
-                      color: '#6b7280',
                       fontFamily: 'Inter, sans-serif'
                     }}
                   >
@@ -1436,10 +1424,10 @@ export default function HomePage() {
                     17+
                   </div>
                   <div
+                    className="text-gray-700 dark:text-gray-300"
                     style={{
                       fontSize: '0.9375rem',
                       fontWeight: '300',
-                      color: '#6b7280',
                       fontFamily: 'Inter, sans-serif'
                     }}
                   >
@@ -1459,10 +1447,10 @@ export default function HomePage() {
                     ∞
                   </div>
                   <div
+                    className="text-gray-700 dark:text-gray-300"
                     style={{
                       fontSize: '0.9375rem',
                       fontWeight: '300',
-                      color: '#6b7280',
                       fontFamily: 'Inter, sans-serif'
                     }}
                   >

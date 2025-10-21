@@ -1,10 +1,11 @@
 import { Link } from "react-router-dom"
 import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
 import { Button } from "../components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { ResearchHeroBackground } from "../components/research-hero-background"
 import { ResearchNavigation } from "../components/research-navigation"
-import { ArrowRight, Search, Filter } from "lucide-react"
+import { ArrowRight, Search, Filter, ChevronDown } from "lucide-react"
 import { allResearch, featuredResearch, researchCategories, researchTags, researchPillars, assetVerticals, getResearchCountByPillar, getResearchCountByVertical, type ResearchArticle } from "../data/research"
 
 export default function ResearchCentrePage() {
@@ -39,59 +40,103 @@ export default function ResearchCentrePage() {
   })
 
   return (
-    <div className="min-h-screen bg-white text-gray-900">
+    <div className="min-h-screen transition-colors duration-200" style={{ background: 'var(--mode-bg)' }}>
+      <style>{`
+        :root {
+          --mode-bg: #F5F3F0; /* Rice Paper - warm, inviting */
+        }
+        .dark {
+          --mode-bg: #0a1628; /* Navy Deep - family's favorite! */
+        }
+      `}</style>
+
       {/* Research Navigation */}
       <ResearchNavigation />
 
-      {/* Hero Section with Cerulean Background */}
-      <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden">
+      {/* Hero Section with Sumi-e Sky + Earth Background */}
+      <section className="relative pt-32 pb-24 px-6 lg:px-8 min-h-screen flex items-center overflow-hidden">
         <ResearchHeroBackground />
 
-        <div className="relative z-10 text-center max-w-7xl mx-auto px-8">
-          <h1
-            className="mb-8 text-white"
-            style={{
-              fontSize: 'clamp(2.5rem, 5.5vw, 5rem)',
-              fontWeight: '200', // Inter Thin - elegant, light aesthetic
-              fontFamily: 'Inter, sans-serif',
-              letterSpacing: '-0.025em',
-              lineHeight: '1.1',
-              marginBottom: '2rem',
-              textShadow: '0 2px 20px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.1)'
-            }}
-          >
-            Pioneering the Science of Self-Optimizing Assets
-          </h1>
-
-          <div className="max-w-4xl mx-auto mb-12">
-            <p
-              className="text-white"
-              style={{
-                fontSize: 'clamp(1.1rem, 2vw, 1.35rem)',
-                fontWeight: '300', // Inter Light
-                fontFamily: 'Inter, sans-serif',
-                letterSpacing: '0.01em',
-                lineHeight: '1.6',
-                textShadow: '0 2px 12px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2)'
-              }}
+        <div className="max-w-7xl mx-auto w-full relative z-10">
+          <motion.div className="text-center max-w-5xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="mb-8"
             >
-              Systematic research into performance engineering across tokenized real-world assets—discovering how algorithmic optimization transforms passive holdings into active wealth builders
-            </p>
-          </div>
+              <h1
+                className="text-5xl sm:text-7xl lg:text-8xl font-thin text-gray-800 dark:text-gray-100 mb-6 leading-[0.9] tracking-tight"
+              >
+                Pioneering the Science of{' '}
+                <span style={{
+                  background: 'linear-gradient(to right, #0066FF 0%, #0ea5e9 50%, #10b981 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  fontWeight: '300'
+                }}>
+                  Self-Optimizing Assets
+                </span>
+              </h1>
+              {/* Deep Cyan logo divider */}
+              <div style={{
+                width: '120px',
+                height: '2px',
+                background: 'linear-gradient(to right, transparent 0%, #0066FF 50%, transparent 100%)',
+                margin: '0 auto 2rem auto'
+              }} />
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-xl sm:text-2xl font-light text-gray-600 dark:text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed"
+            >
+              Systematic research into performance engineering across tokenized real-world assets—discovering how{' '}
+              <span style={{ color: '#0066FF', fontWeight: '400' }}>algorithmic optimization</span> transforms passive holdings into{' '}
+              <span className="text-emerald-600 font-normal">active wealth builders</span>
+            </motion.p>
+          </motion.div>
         </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.8 }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        >
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="flex flex-col items-center text-gray-400 dark:text-gray-500"
+          >
+            <span className="text-sm font-light mb-2">Explore</span>
+            <ChevronDown className="w-5 h-5" />
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* Research Pillar Tabs */}
-      <section className="py-8 px-8" style={{ background: 'rgba(155, 139, 126, 0.08)' }}>
+      <section className="py-8 px-8" style={{ background: 'var(--mode-tabs-bg)' }}>
+        <style>{`
+          :root {
+            --mode-tabs-bg: rgba(155, 139, 126, 0.08);
+          }
+          .dark {
+            --mode-tabs-bg: rgba(0, 102, 255, 0.05);
+          }
+        `}</style>
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-wrap gap-3 justify-center">
             <button
               onClick={() => setSelectedPillar(null)}
-              className="px-6 py-3 rounded-full text-sm font-light transition-all hover:shadow-sm"
+              className="px-6 py-3 rounded-full text-sm font-light transition-all hover:shadow-sm bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
               style={{
-                background: selectedPillar === null ? '#111827' : 'rgba(255, 255, 255, 0.95)',
-                color: selectedPillar === null ? 'white' : '#6b7280',
-                border: '1px solid rgba(0, 0, 0, 0.1)',
+                background: selectedPillar === null ? 'linear-gradient(to right, #0066FF, #0080FF)' : undefined,
+                color: selectedPillar === null ? 'white' : undefined,
                 fontFamily: 'Inter, sans-serif'
               }}
             >
@@ -101,11 +146,10 @@ export default function ResearchCentrePage() {
               <button
                 key={pillar}
                 onClick={() => setSelectedPillar(pillar)}
-                className="px-6 py-3 rounded-full text-sm font-light transition-all hover:border-gray-300 hover:shadow-sm"
+                className="px-6 py-3 rounded-full text-sm font-light transition-all hover:shadow-sm bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300"
                 style={{
-                  background: selectedPillar === pillar ? '#111827' : 'rgba(255, 255, 255, 0.95)',
-                  color: selectedPillar === pillar ? 'white' : '#6b7280',
-                  border: '1px solid rgba(0, 0, 0, 0.1)',
+                  background: selectedPillar === pillar ? 'linear-gradient(to right, #0066FF, #0080FF)' : undefined,
+                  color: selectedPillar === pillar ? 'white' : undefined,
                   fontFamily: 'Inter, sans-serif'
                 }}
               >
@@ -116,20 +160,29 @@ export default function ResearchCentrePage() {
         </div>
       </section>
 
-      {/* Terra Cotta Horizon Strip - The Horizon Principle */}
+      {/* Subtle Horizon Divider - Sumi-e inspired */}
       <div
         className="w-full"
         style={{
-          height: '80px',
-          background: 'linear-gradient(135deg, #C9724B 0%, #B86239 100%)'
+          height: '2px',
+          background: 'var(--mode-horizon-divider)'
         }}
-      />
+      >
+        <style>{`
+          :root {
+            --mode-horizon-divider: linear-gradient(to right, transparent 0%, rgba(155, 139, 126, 0.3) 50%, transparent 100%);
+          }
+          .dark {
+            --mode-horizon-divider: linear-gradient(to right, transparent 0%, rgba(0, 102, 255, 0.3) 50%, transparent 100%);
+          }
+        `}</style>
+      </div>
 
       {/* Featured Papers - Anthropic Style (Simple) */}
-      <section className="py-24 px-8 bg-white">
+      <section className="py-24 px-8 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto">
           <h2
-            className="text-lg font-light mb-12 text-gray-600"
+            className="text-lg font-light mb-12 text-gray-600 dark:text-gray-400"
             style={{
               letterSpacing: '0.02em',
               fontFamily: 'Inter, sans-serif',
@@ -256,21 +309,28 @@ export default function ResearchCentrePage() {
       </section>
 
       {/* 5 Research Pillars Section */}
-      <section className="py-20 px-8" style={{ background: 'rgba(249, 250, 251, 0.4)' }}>
+      <section className="py-20 px-8" style={{ background: 'var(--mode-pillars-bg)' }}>
+        <style>{`
+          :root {
+            --mode-pillars-bg: rgba(249, 250, 251, 0.4);
+          }
+          .dark {
+            --mode-pillars-bg: linear-gradient(135deg, rgba(56, 189, 248, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+          }
+        `}</style>
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
             <h2
-              className="text-4xl font-light mb-4"
+              className="text-4xl font-light mb-4 text-gray-900 dark:text-gray-100"
               style={{
                 letterSpacing: '-0.02em',
-                color: '#111827',
                 fontFamily: 'Inter, sans-serif'
               }}
             >
               Research Focus Areas
             </h2>
             <p
-              className="text-lg font-light text-gray-600"
+              className="text-lg font-light text-gray-600 dark:text-gray-300"
               style={{
                 letterSpacing: '0.01em',
                 fontFamily: 'Inter, sans-serif'
@@ -310,18 +370,13 @@ export default function ResearchCentrePage() {
             ].map(pillar => (
               <div
                 key={pillar.name}
-                className="p-6 rounded-2xl transition-all duration-300 hover:shadow-lg cursor-pointer"
-                style={{
-                  background: 'white',
-                  border: '1px solid rgba(0, 0, 0, 0.08)'
-                }}
+                className="p-6 rounded-2xl transition-all duration-300 hover:shadow-lg cursor-pointer bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/50"
               >
                 <div className="flex items-start justify-between mb-3">
                   <h3
-                    className="text-xl font-light"
+                    className="text-xl font-light text-gray-900 dark:text-gray-100"
                     style={{
                       letterSpacing: '-0.01em',
-                      color: '#111827',
                       lineHeight: '1.3',
                       fontFamily: 'Inter, sans-serif'
                     }}
@@ -329,10 +384,8 @@ export default function ResearchCentrePage() {
                     {pillar.name}
                   </h3>
                   <span
-                    className="text-sm font-medium px-3 py-1 rounded-full"
+                    className="text-sm font-medium px-3 py-1 rounded-full bg-[#0066FF]/10 dark:bg-[#38bdf8]/20 text-[#0066FF] dark:text-[#38bdf8]"
                     style={{
-                      background: 'rgba(59, 130, 246, 0.1)',
-                      color: '#3b82f6',
                       letterSpacing: '0.02em'
                     }}
                   >
@@ -340,7 +393,7 @@ export default function ResearchCentrePage() {
                   </span>
                 </div>
                 <p
-                  className="text-sm font-light text-gray-600"
+                  className="text-sm font-light text-gray-600 dark:text-gray-300"
                   style={{
                     lineHeight: '1.6',
                     letterSpacing: '0.01em',
@@ -356,20 +409,19 @@ export default function ResearchCentrePage() {
       </section>
 
       {/* 8 Asset Verticals Section */}
-      <section className="py-20 px-8 bg-white">
+      <section className="py-20 px-8 bg-white dark:bg-gray-900">
         <div className="max-w-7xl mx-auto">
           <div className="mb-12">
             <h2
-              className="text-4xl font-light mb-4"
+              className="text-4xl font-light mb-4 text-gray-900 dark:text-gray-100"
               style={{
-                letterSpacing: '-0.02em',
-                color: '#111827'
+                letterSpacing: '-0.02em'
               }}
             >
               Asset Verticals
             </h2>
             <p
-              className="text-lg font-light text-gray-600"
+              className="text-lg font-light text-gray-600 dark:text-gray-300"
               style={{ letterSpacing: '0.01em' }}
             >
               Charting new frontiers across eight strategic asset classes—from precious metals to sustainable infrastructure
@@ -422,18 +474,18 @@ export default function ResearchCentrePage() {
             ].map(vertical => (
               <div
                 key={vertical.name}
-                className="p-6 rounded-2xl transition-all duration-300 hover:shadow-lg cursor-pointer"
+                className="p-6 rounded-2xl transition-all duration-300 hover:shadow-lg cursor-pointer bg-white dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700/50"
                 style={{
-                  background: vertical.featured ? 'linear-gradient(135deg, rgba(255, 193, 7, 0.08) 0%, rgba(255, 193, 7, 0.02) 100%)' : 'rgba(249, 250, 251, 0.6)',
-                  border: vertical.featured ? '2px solid rgba(255, 193, 7, 0.3)' : '1px solid rgba(0, 0, 0, 0.06)'
+                  borderColor: vertical.featured ? '#f59e0b' : undefined,
+                  borderWidth: vertical.featured ? '2px' : undefined
                 }}
               >
                 <div className="flex items-start justify-between mb-3">
                   <h3
-                    className="text-lg font-medium"
+                    className="text-lg font-medium text-gray-900 dark:text-gray-100"
                     style={{
                       letterSpacing: '-0.01em',
-                      color: vertical.featured ? '#f59e0b' : '#111827',
+                      color: vertical.featured ? '#f59e0b' : undefined,
                       lineHeight: '1.3'
                     }}
                   >
@@ -443,8 +495,8 @@ export default function ResearchCentrePage() {
                   <span
                     className="text-xs font-medium px-2 py-1 rounded-full"
                     style={{
-                      background: vertical.featured ? 'rgba(255, 193, 7, 0.2)' : 'rgba(59, 130, 246, 0.1)',
-                      color: vertical.featured ? '#f59e0b' : '#3b82f6',
+                      background: vertical.featured ? 'rgba(255, 193, 7, 0.2)' : 'rgba(0, 102, 255, 0.1)',
+                      color: vertical.featured ? '#f59e0b' : '#0066FF',
                       letterSpacing: '0.02em'
                     }}
                   >
@@ -452,7 +504,7 @@ export default function ResearchCentrePage() {
                   </span>
                 </div>
                 <p
-                  className="text-sm font-light text-gray-600"
+                  className="text-sm font-light text-gray-600 dark:text-gray-300"
                   style={{
                     lineHeight: '1.6',
                     letterSpacing: '0.01em'
@@ -467,16 +519,23 @@ export default function ResearchCentrePage() {
       </section>
 
       {/* All Research Section with Filters */}
-      <section className="py-24 px-8">
+      <section className="py-24 px-8" style={{ background: 'var(--mode-browse-bg)' }}>
+        <style>{`
+          :root {
+            --mode-browse-bg: transparent;
+          }
+          .dark {
+            --mode-browse-bg: linear-gradient(to bottom, rgba(0, 102, 255, 0.03) 0%, transparent 100%);
+          }
+        `}</style>
         <div className="max-w-7xl mx-auto">
           {/* Search and Filter Header */}
           <div className="mb-12">
             <div className="flex items-center justify-between mb-8">
               <h2
-                className="text-4xl font-light"
+                className="text-4xl font-light text-gray-900 dark:text-gray-100"
                 style={{
-                  letterSpacing: '-0.02em',
-                  color: '#111827'
+                  letterSpacing: '-0.02em'
                 }}
               >
                 Browse All Papers
@@ -502,13 +561,13 @@ export default function ResearchCentrePage() {
 
             {/* Search Bar */}
             <div className="relative max-w-2xl">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
               <input
                 type="text"
                 placeholder="Search research articles..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:border-blue-500 transition-colors"
+                className="w-full pl-12 pr-4 py-3 rounded-xl border transition-colors bg-white dark:bg-gray-800/50 border-gray-200 dark:border-gray-700/50 text-gray-900 dark:text-gray-100 placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:border-blue-500 focus:outline-none"
                 style={{
                   fontSize: '15px',
                   fontWeight: '300',
@@ -694,28 +753,34 @@ export default function ResearchCentrePage() {
         </div>
       </section>
 
-      {/* Earth-Tone Grounding Section - The Horizon Principle */}
+      {/* Join Research Community Section */}
       <section
         className="py-16 px-8"
         style={{
-          background: 'linear-gradient(to bottom, rgba(201, 184, 168, 0.15), rgba(155, 139, 126, 0.25))', // Soft Clay to Warm Stone gradient
+          background: 'var(--mode-join-bg)'
         }}
       >
+        <style>{`
+          :root {
+            --mode-join-bg: linear-gradient(to bottom, rgba(201, 184, 168, 0.15), rgba(155, 139, 126, 0.25));
+          }
+          .dark {
+            --mode-join-bg: linear-gradient(to bottom, rgba(0, 102, 255, 0.08), rgba(16, 185, 129, 0.08));
+          }
+        `}</style>
         <div className="max-w-7xl mx-auto text-center">
           <h3
-            className="text-2xl font-light mb-4"
+            className="text-2xl font-light mb-4 text-gray-900 dark:text-gray-100"
             style={{
-              letterSpacing: '-0.02em',
-              color: '#111827'
+              letterSpacing: '-0.02em'
             }}
           >
             Join the Research Community
           </h3>
           <p
-            className="text-base font-light mb-8"
+            className="text-base font-light mb-8 text-gray-600 dark:text-gray-300"
             style={{
               letterSpacing: '0.01em',
-              color: '#6b7280',
               maxWidth: '600px',
               margin: '0 auto 2rem'
             }}
@@ -724,35 +789,46 @@ export default function ResearchCentrePage() {
           </p>
           <Button
             size="lg"
+            className="text-white"
             style={{
-              background: '#007BA7', // Deep Cerulean
-              color: 'white',
+              background: 'linear-gradient(to right, #0066FF, #0080FF)',
               borderRadius: '8px',
               padding: '12px 32px',
               fontSize: '16px',
               fontWeight: '500',
               letterSpacing: '0.01em'
             }}
+            onMouseEnter={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #0052CC, #0066FF)'}
+            onMouseLeave={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #0066FF, #0080FF)'}
           >
             Subscribe to Updates
           </Button>
         </div>
       </section>
 
-      {/* Footer - Simple */}
+      {/* Footer - Sumi-e Grounding */}
       <footer
         className="py-12 px-8"
         style={{
-          background: '#9B8B7E', // Warm Stone - earth grounding
-          borderTop: 'none'
+          background: 'var(--mode-footer-bg)',
+          borderTop: '2px solid var(--mode-footer-border)'
         }}
       >
+        <style>{`
+          :root {
+            --mode-footer-bg: linear-gradient(to bottom, rgba(155, 139, 126, 0.15) 0%, rgba(155, 139, 126, 0.25) 100%);
+            --mode-footer-border: rgba(155, 139, 126, 0.35);
+          }
+          .dark {
+            --mode-footer-bg: rgba(0, 102, 255, 0.05);
+            --mode-footer-border: rgba(0, 102, 255, 0.2);
+          }
+        `}</style>
         <div className="max-w-7xl mx-auto text-center">
           <p
-            className="text-sm font-light"
+            className="text-sm font-light text-gray-700 dark:text-gray-300"
             style={{
-              letterSpacing: '0.01em',
-              color: 'rgba(255, 255, 255, 0.9)'
+              letterSpacing: '0.01em'
             }}
           >
             &copy; 2025 COW Group. All rights reserved.

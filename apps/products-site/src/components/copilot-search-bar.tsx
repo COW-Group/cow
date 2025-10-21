@@ -107,28 +107,6 @@ export function CopilotSearchBar({ onOpenChat }: CopilotSearchBarProps) {
 
   return (
     <div className="flex flex-col items-center w-full">
-      {/* Rotating topics - visible when not focused */}
-      {!isFocused && !query && (
-        <div className="mb-3 h-7 flex items-center justify-center">
-          <motion.span
-            key={currentTopicIndex}
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 8 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            className="text-sm font-light tracking-wide"
-            style={{
-              background: 'linear-gradient(to right, #0066FF, #0ea5e9, #10b981)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text'
-            }}
-          >
-            {wealthTopics[currentTopicIndex]}
-          </motion.span>
-        </div>
-      )}
-
       <div
         className={cn(
           "relative w-full flex items-center rounded-full transition-all duration-300",
@@ -146,13 +124,38 @@ export function CopilotSearchBar({ onOpenChat }: CopilotSearchBarProps) {
             : '0 4px 16px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
         }}
       >
+        {/* Custom placeholder with rotating topics */}
+        {!isFocused && !query && (
+          <div className="absolute left-5 pointer-events-none flex items-center gap-1.5">
+            <span className="text-base font-light text-gray-400 dark:text-gray-400">
+              Ask Moo about
+            </span>
+            <motion.span
+              key={currentTopicIndex}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="text-base font-light"
+              style={{
+                background: 'linear-gradient(to right, #0066FF, #0ea5e9, #10b981)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}
+            >
+              {wealthTopics[currentTopicIndex]}
+            </motion.span>
+          </div>
+        )}
+
         <Input
           ref={inputRef}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
-          placeholder={isFocused ? "Type your question..." : "Ask Moo about __________"}
+          placeholder={isFocused ? "Type your question..." : " "}
           className={cn(
             "w-full py-3.5 pl-5 pr-24 rounded-full bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0",
             "text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-400",

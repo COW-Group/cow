@@ -1,5 +1,6 @@
 import type React from "react"
 import { useState, useEffect, useRef } from "react"
+import { motion } from "framer-motion"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
 import { Mic, MicOff, ArrowRight } from "lucide-react"

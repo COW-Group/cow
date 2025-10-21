@@ -242,11 +242,14 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* Two Paths to Wealth Section - Soft Clay for earth grounding */}
+      {/* Subtle Deep Cyan divider - logo color thread */}
+      <div style={{ height: '2px', background: 'linear-gradient(to right, transparent 0%, #0066FF 50%, transparent 100%)', opacity: 0.3 }} />
+
+      {/* Two Paths to Wealth Section - Light with subtle earth warmth */}
       <section className="py-32 px-8" style={{ background: 'var(--mode-section-bg)' }}>
         <style>{`
           :root {
-            --mode-section-bg: #C9B8A8; /* Soft Clay - earth grounding */
+            --mode-section-bg: linear-gradient(to bottom, #ffffff 0%, rgba(201, 184, 168, 0.08) 50%, #ffffff 100%); /* Subtle Soft Clay wash */
           }
           .dark {
             --mode-section-bg: #0a1628; /* Navy Deep - family's favorite */
@@ -261,13 +264,15 @@ export default function HomePage() {
             className="text-center mb-20"
           >
             <h2
-              className="mb-6"
+              className="mb-6 inline-block"
               style={{
                 fontSize: 'clamp(2.5rem, 4.5vw, 4rem)',
                 fontWeight: '200',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '-0.025em',
-                color: '#111827'
+                color: '#111827',
+                borderBottom: '2px solid rgba(0, 102, 255, 0.2)', // Subtle Deep Cyan accent
+                paddingBottom: '0.5rem'
               }}
             >
               Two Flows in Your Financial Ecosystem
@@ -415,12 +420,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Terra Cotta Horizon Strip */}
+      {/* Terra Cotta Horizon Strip with subtle logo color accent */}
       <div
         className="w-full"
         style={{
           height: '80px',
-          background: 'linear-gradient(135deg, #C9724B 0%, #B86239 100%)'
+          background: 'linear-gradient(135deg, #C9724B 0%, #B86239 100%)',
+          borderTop: '3px solid rgba(0, 102, 255, 0.4)', // Deep Cyan logo color thread
+          boxShadow: 'inset 0 3px 8px rgba(0, 102, 255, 0.15)' // Subtle Deep Cyan glow
         }}
       />
 
@@ -435,13 +442,15 @@ export default function HomePage() {
             className="mb-20"
           >
             <h2
-              className="mb-6"
+              className="mb-6 inline-block"
               style={{
                 fontSize: 'clamp(2.5rem, 4.5vw, 4rem)',
                 fontWeight: '200',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '-0.025em',
-                color: '#111827'
+                color: '#111827',
+                borderBottom: '2px solid rgba(0, 102, 255, 0.2)', // Subtle Deep Cyan accent
+                paddingBottom: '0.5rem'
               }}
             >
               Visualize Your Asset Ecosystem
@@ -758,13 +767,15 @@ export default function HomePage() {
             className="mb-20"
           >
             <h2
-              className="mb-6"
+              className="mb-6 inline-block"
               style={{
                 fontSize: 'clamp(2.5rem, 4.5vw, 4rem)',
                 fontWeight: '200',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '-0.025em',
-                color: '#111827'
+                color: '#111827',
+                borderBottom: '2px solid rgba(0, 102, 255, 0.2)', // Subtle Deep Cyan accent
+                paddingBottom: '0.5rem'
               }}
             >
               Orchestrate Life's Wealth Cycles
@@ -1100,13 +1111,15 @@ export default function HomePage() {
             className="mb-20"
           >
             <h2
-              className="mb-6"
+              className="mb-6 inline-block"
               style={{
                 fontSize: 'clamp(2.5rem, 4.5vw, 4rem)',
                 fontWeight: '200',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '-0.025em',
-                color: '#111827'
+                color: '#111827',
+                borderBottom: '2px solid rgba(0, 102, 255, 0.2)', // Subtle Deep Cyan accent
+                paddingBottom: '0.5rem'
               }}
             >
               Your Wealth Ecosystem in Three Flows
@@ -1298,13 +1311,15 @@ export default function HomePage() {
             className="text-center"
           >
             <h2
-              className="mb-6"
+              className="mb-6 inline-block"
               style={{
                 fontSize: 'clamp(2.5rem, 4.5vw, 4rem)',
                 fontWeight: '200',
                 fontFamily: 'Inter, sans-serif',
                 letterSpacing: '-0.025em',
-                color: '#111827'
+                color: '#111827',
+                borderBottom: '2px solid rgba(0, 102, 255, 0.2)', // Subtle Deep Cyan accent
+                paddingBottom: '0.5rem'
               }}
             >
               Start Your Wealth Cycles

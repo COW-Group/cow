@@ -1,18 +1,18 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import { ChevronDown, Coins, Plane, Grid3X3 } from "lucide-react"
+import { Grip, Coins, Plane } from "lucide-react"
 import { useBackgroundDetection } from "@/hooks/useBackgroundDetection"
 
 export function ProductMenu() {
   const [isOpen, setIsOpen] = useState(false)
   const backgroundDetection = useBackgroundDetection()
-  
+
   return (
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-4 py-2 hover:scale-105 transition-all duration-300 adaptive-nav-button ${
-          backgroundDetection.backgroundType === 'light' ? 'light-bg' : 
+        className={`flex items-center justify-center p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-all duration-200 ${
+          backgroundDetection.backgroundType === 'light' ? 'light-bg' :
           backgroundDetection.backgroundType === 'dark' ? 'dark-bg' : ''
         }`}
         onBlur={(e) => {
@@ -21,17 +21,9 @@ export function ProductMenu() {
             setTimeout(() => setIsOpen(false), 150)
           }
         }}
+        aria-label="Products menu"
       >
-        <Grid3X3 className="w-5 h-5" />
-        <span 
-          className="text-sm font-light tracking-wide"
-          style={{ textShadow: '0 1px 2px rgba(0,0,0,0.2)' }}
-        >
-          Products
-        </span>
-        <ChevronDown 
-          className={`w-4 h-4 transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
-        />
+        <Grip className="w-5 h-5 text-gray-600 dark:text-gray-300" />
       </button>
       {isOpen && (
         <div 

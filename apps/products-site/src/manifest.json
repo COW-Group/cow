@@ -4,8 +4,8 @@
   "description": "Performance Real-World Asset Tokens with AI-Powered Wealth Guidance",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#0066FF",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
   "orientation": "portrait-primary",
   "icons": [
     {

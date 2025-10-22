@@ -46,6 +46,31 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    /* PWA Safe Area Support */
+    padding-top: env(safe-area-inset-top);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+  }
+
+  /* Ensure root element fills viewport with safe areas */
+  html, body, #root {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+  }
+
+  /* PWA Status Bar Background - matches app background in both modes */
+  @supports (padding: env(safe-area-inset-top)) {
+    body {
+      background-color: #ffffff; /* Light mode default */
+    }
+
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #0f172a; /* Dark mode - Deep Slate */
+      }
+    }
   }
 
   /* Enhanced text readability classes */

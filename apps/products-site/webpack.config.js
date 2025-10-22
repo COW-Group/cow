@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: './src/main.tsx',
@@ -61,7 +62,24 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',
-      title: 'Cycles of Wealth - Products Site',
+      title: 'Cycles of Wealth - MyCOW',
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'src/manifest.json',
+          to: 'manifest.json'
+        },
+        {
+          from: 'src/service-worker.js',
+          to: 'service-worker.js'
+        },
+        {
+          from: 'src/icons',
+          to: 'icons',
+          noErrorOnMissing: true // Don't fail if icons don't exist yet
+        },
+      ],
     }),
   ],
   devServer: {

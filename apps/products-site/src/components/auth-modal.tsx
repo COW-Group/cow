@@ -111,14 +111,14 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent 
-        className="w-[calc(100vw-32px)] max-w-xs sm:w-[calc(100vw-48px)] sm:max-w-md md:w-[calc(100vw-64px)] md:max-w-lg lg:w-[calc(100vw-80px)] lg:max-w-xl xl:max-w-2xl max-h-[calc(100vh-64px)] text-gray-900 border-0 p-0 overflow-hidden"
+      <DialogContent
+        className="w-[calc(100vw-32px)] max-w-xs sm:w-[calc(100vw-48px)] sm:max-w-md md:w-[calc(100vw-64px)] md:max-w-lg lg:w-[calc(100vw-80px)] lg:max-w-xl xl:max-w-2xl max-h-[calc(100vh-64px)] text-gray-900 dark:text-gray-100 border-0 p-0 overflow-hidden"
         style={{
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%)',
-          backdropFilter: 'blur(24px) saturate(200%)',
-          borderRadius: '2rem',
-          border: '1px solid rgba(203, 213, 225, 0.3)',
-          boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 24px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04)',
+          background: 'var(--modal-bg)',
+          backdropFilter: 'blur(24px) saturate(180%)',
+          borderRadius: '1.5rem',
+          border: '1px solid var(--modal-border)',
+          boxShadow: 'var(--modal-shadow)',
           position: 'fixed',
           top: '50%',
           left: '50%',
@@ -128,19 +128,41 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
           minHeight: 'min-content'
         }}
       >
-        {/* Professional Header - 8-Point Grid System */}
-        <div 
+        <style>{`
+          :root {
+            /* Light Mode - Rice Paper with subtle earth warmth */
+            --modal-bg: linear-gradient(135deg, #ffffff 0%, #F5F3F0 100%);
+            --modal-border: rgba(201, 184, 168, 0.3);
+            --modal-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8),
+                           0 20px 40px rgba(155, 139, 126, 0.15),
+                           0 8px 24px rgba(155, 139, 126, 0.08);
+            --modal-header-bg: linear-gradient(135deg, rgba(245, 243, 240, 0.8) 0%, rgba(255, 255, 255, 0.6) 100%);
+            --modal-header-border: rgba(155, 139, 126, 0.3);
+          }
+          .dark {
+            /* Dark Mode - Navy Deep with subtle cyan glow */
+            --modal-bg: linear-gradient(135deg, #0f1d2e 0%, #0a1628 100%);
+            --modal-border: rgba(56, 189, 248, 0.2);
+            --modal-shadow: inset 0 1px 0 rgba(56, 189, 248, 0.1),
+                           0 20px 40px rgba(0, 0, 0, 0.4),
+                           0 8px 24px rgba(14, 165, 233, 0.1);
+            --modal-header-bg: linear-gradient(135deg, rgba(15, 29, 46, 0.8) 0%, rgba(10, 22, 40, 0.6) 100%);
+            --modal-header-border: rgba(56, 189, 248, 0.2);
+          }
+        `}</style>
+        {/* Professional Header - Horizon Principle */}
+        <div
           className="px-6 sm:px-8 md:px-10 lg:px-12 pt-8 sm:pt-10 md:pt-12 pb-6 sm:pb-8"
           style={{
-            background: 'linear-gradient(135deg, rgba(248, 250, 252, 0.8) 0%, rgba(241, 245, 249, 0.6) 100%)',
-            borderBottom: '1px solid rgba(203, 213, 225, 0.4)'
+            background: 'var(--modal-header-bg)',
+            borderBottom: '1px solid var(--modal-header-border)'
           }}
         >
           <DialogHeader className="space-y-4 text-center">
-            <DialogTitle className="text-2xl sm:text-3xl md:text-4xl text-slate-800 font-light tracking-tight leading-tight">
+            <DialogTitle className="text-2xl sm:text-3xl md:text-4xl text-gray-900 dark:text-gray-100 font-light tracking-tight leading-tight">
               {isResetPassword ? "Reset Password" : isResendConfirmation ? "Resend Confirmation Email" : isLogin ? "Sign In" : "Register"}
             </DialogTitle>
-            <DialogDescription className="text-slate-600 text-base sm:text-lg leading-relaxed font-light max-w-md mx-auto">
+            <DialogDescription className="text-gray-600 dark:text-gray-300 text-base sm:text-lg leading-relaxed font-light max-w-md mx-auto">
               {isResetPassword
                 ? "Enter your email to receive a secure password reset link."
                 : isResendConfirmation
@@ -157,9 +179,9 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
         {isResetPassword ? (
           <form onSubmit={handleResetPasswordSubmit} className="grid gap-6 sm:gap-8 pt-4 sm:pt-6">
             <div className="grid gap-3 sm:gap-4">
-              <Label 
-                htmlFor="reset-email" 
-                className="text-base text-slate-700 font-medium tracking-wide"
+              <Label
+                htmlFor="reset-email"
+                className="text-base text-gray-700 dark:text-gray-300 font-medium tracking-wide"
               >
                 Email Address
               </Label>
@@ -168,7 +190,7 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
                 type="email"
                 value={resetEmail}
                 onChange={(e) => setResetEmail(e.target.value)}
-                className="h-14 border-2 border-slate-200/60 focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900 bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-4 font-light text-lg transition-all duration-300 shadow-sm hover:shadow-md focus:shadow-lg"
+                className="h-14 border-2 border-gray-200 dark:border-gray-700 focus:ring-4 focus:ring-[#38bdf8]/20 dark:focus:ring-[#0ea5e9]/20 focus:border-[#0066FF] dark:focus:border-[#38bdf8] text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-xl px-6 py-4 font-light text-lg transition-all duration-300 shadow-sm hover:shadow-md focus:shadow-lg"
                 style={{
                   boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1)'
                 }}

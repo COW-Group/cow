@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- COW Brand Colors -->
+  <defs>
+    <linearGradient id="skyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#00A5CF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#007BA7;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="earthGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#C9B8A8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9B8B7E;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background - Horizon Principle -->
+  <rect width="512" height="256" fill="url(#skyGrad)" />
+  <rect y="256" width="512" height="256" fill="url(#earthGrad)" />
+
+  <!-- Microphone Icon -->
+  <g transform="translate(256, 256)">
+    <!-- Mic body -->
+    <rect x="-40" y="-100" width="80" height="120" rx="40" fill="#F5F3F0" stroke="#2C3E50" stroke-width="8"/>
+    <!-- Mic stand -->
+    <line x1="0" y1="20" x2="0" y2="80" stroke="#2C3E50" stroke-width="8" stroke-linecap="round"/>
+    <!-- Mic base -->
+    <line x1="-50" y1="80" x2="50" y2="80" stroke="#2C3E50" stroke-width="8" stroke-linecap="round"/>
+    <!-- Mic arc -->
+    <path d="M -70 -40 Q -70 20, 0 20 Q 70 20, 70 -40" fill="none" stroke="#2C3E50" stroke-width="8" stroke-linecap="round"/>
+    <!-- Sound waves -->
+    <path d="M -100 -60 Q -120 -20, -100 20" fill="none" stroke="#B8860B" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+    <path d="M 100 -60 Q 120 -20, 100 20" fill="none" stroke="#B8860B" stroke-width="6" stroke-linecap="round" opacity="0.7"/>
+  </g>
+</svg>

@@ -16,7 +16,7 @@ interface IntentOption {
 }
 
 export const Step2PrimaryIntent: React.FC = () => {
-  const { state, updateState, nextStep } = useComprehensiveOnboarding()
+  const { state, updateState, nextStep, prevStep } = useComprehensiveOnboarding()
   const [selectedIntent, setSelectedIntent] = useState<PrimaryIntent | null>(state.primaryIntent)
   const [isSpeaking, setIsSpeaking] = useState(false)
 
@@ -82,6 +82,11 @@ export const Step2PrimaryIntent: React.FC = () => {
     setSelectedIntent(option.id)
     // Speak about the selected option
     speak(state.guideType, option.audioDescription)
+  }
+
+  const handlePrevious = () => {
+    stop()
+    prevStep()
   }
 
   const handleNext = () => {
@@ -200,20 +205,31 @@ export const Step2PrimaryIntent: React.FC = () => {
           })}
         </div>
 
-        {/* Continue Button */}
+        {/* Navigation Buttons */}
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: selectedIntent ? 1 : 0.5 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.3 }}
-          className="max-w-md mx-auto"
+          className="max-w-2xl mx-auto"
         >
-          <button
-            onClick={handleNext}
-            disabled={!selectedIntent}
-            className="w-full bg-gradient-to-r from-[#0066FF] to-[#2563eb] hover:from-[#2563eb] hover:to-[#059669] text-white font-semibold text-lg py-6 rounded-xl shadow-lg shadow-[#0066FF]/25 hover:shadow-xl hover:shadow-[#2563eb]/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-[#0066FF] disabled:hover:to-[#2563eb]"
-          >
-            Continue
-          </button>
+          <div className="flex gap-4">
+            {/* Previous Button */}
+            <button
+              onClick={handlePrevious}
+              className="flex-shrink-0 px-8 py-6 rounded-xl border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-semibold text-lg hover:border-[#0066FF] hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-all duration-300"
+            >
+              Previous
+            </button>
+
+            {/* Continue Button */}
+            <button
+              onClick={handleNext}
+              disabled={!selectedIntent}
+              className="flex-1 bg-gradient-to-r from-[#0066FF] to-[#2563eb] hover:from-[#2563eb] hover:to-[#059669] text-white font-semibold text-lg py-6 rounded-xl shadow-lg shadow-[#0066FF]/25 hover:shadow-xl hover:shadow-[#2563eb]/30 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:from-[#0066FF] disabled:hover:to-[#2563eb]"
+            >
+              Continue
+            </button>
+          </div>
         </motion.div>
 
         {/* Help Text */}

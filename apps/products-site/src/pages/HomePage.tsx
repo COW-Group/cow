@@ -1694,7 +1694,7 @@ export default function HomePage() {
       </footer>
 
       {/* Modals */}
-      <AuthModal open={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
       <PWAInstallInstructions
         isOpen={showPWAInstructions}
         onClose={() => setShowPWAInstructions(false)}

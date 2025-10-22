@@ -122,7 +122,7 @@ export default function HabitsPage() {
             <div className="flex items-center justify-between">
               {/* Page Title */}
               <h1
-                className="text-3xl sm:text-4xl md:text-5xl font-lora font-extralight text-cream-25 tracking-wider"
+                className="text-3xl sm:text-4xl md:text-5xl font-lora font-extralight text-cream-25 tracking-wider transition-all duration-300 hover:scale-[1.02]"
                 style={{
                   letterSpacing: '0.08em',
                   fontWeight: '200',
@@ -138,7 +138,7 @@ export default function HabitsPage() {
                   variant="ghost"
                   size="icon"
                   onClick={() => setShowHabitsBoard(!showHabitsBoard)}
-                  className="h-10 w-10 rounded-xl text-cream-25 hover:bg-white/20 transition-all duration-300"
+                  className="h-10 w-10 rounded-xl text-cream-25 hover:bg-white/20 transition-all duration-300 hover:scale-110 active:scale-95"
                   style={{
                     background: showHabitsBoard ? 'rgba(255, 255, 255, 0.15)' : 'rgba(255, 255, 255, 0.08)',
                     backdropFilter: 'blur(40px) saturate(200%)',
@@ -146,7 +146,7 @@ export default function HabitsPage() {
                   }}
                   title="Toggle Habits Board"
                 >
-                  <Calendar className="h-5 w-5" />
+                  <Calendar className="h-5 w-5 transition-transform duration-200" />
                 </Button>
               </div>
             </div>
@@ -154,9 +154,9 @@ export default function HabitsPage() {
 
           {/* Habits Board Content */}
           {showHabitsBoard && (
-            <div className="w-full max-w-7xl flex-1">
+            <div className="w-full max-w-7xl flex-1 animate-in fade-in duration-300">
               <Card
-                className="w-full h-full overflow-x-auto border-0 shadow-xl"
+                className="w-full h-full overflow-x-auto border-0 shadow-xl transition-all duration-300 hover:shadow-2xl"
                 style={{
                   background: 'rgba(255, 255, 255, 0.08)',
                   backdropFilter: 'blur(40px) saturate(200%)',
@@ -165,7 +165,7 @@ export default function HabitsPage() {
                   boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 20px 40px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(0, 0, 0, 0.04)'
                 }}
               >
-                <CardContent className="p-4 sm:p-6">
+                <CardContent className="p-4 sm:p-6 transition-all duration-300">
                   <HabitsBoardWrapper />
                 </CardContent>
               </Card>

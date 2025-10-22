@@ -44,7 +44,7 @@ export const Step2PrimaryIntent: React.FC = () => {
       flowType: 'wealth_journey',
       skipWealthJourney: false,
       audioDescription:
-        'Build long-term wealth through personalized planning. We'll guide you through understanding your financial situation, setting goals, and creating a strategy that works for you.',
+        "Build long-term wealth through personalized planning. We'll guide you through understanding your financial situation, setting goals, and creating a strategy that works for you.",
     },
     {
       id: 'invest',

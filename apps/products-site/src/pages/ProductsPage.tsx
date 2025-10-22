@@ -1,416 +1,329 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  ArrowLeft, 
-  TrendingUp, 
-  TrendingDown, 
-  Building2, 
-  Coins, 
-  BarChart3,
-  DollarSign,
-  Users,
-  Activity,
-  Search,
-  Filter
+import { motion } from 'framer-motion';
+import {
+  Coins,
+  Plane,
+  Milk,
+  Wheat,
+  Train,
+  Wine,
+  ArrowRight,
+  Download
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { formatCurrency, formatPercentage } from '@/lib/utils';
-import type { Product } from '@/types';
+import { Card, CardContent } from '@/components/ui/card';
+import { ProductMenu } from '../components/product-menu';
+import { CartDropdown } from '../components/cart-dropdown';
+import { AuthModal } from '../components/auth-modal';
+import { ThemeToggle } from '../components/theme-toggle';
+import { CopilotSearchBar } from '../components/copilot-search-bar';
+import { PWAInstallInstructions } from '../components/pwa-install-instructions';
+import cowLogo from '../assets/cow-logo.png';
 
-const mockProducts: Product[] = [
+// COW Token Products
+const cowProducts = [
   {
-    id: '1',
-    name: 'Manhattan Premium Real Estate',
-    symbol: 'MPR',
-    description: 'Tokenized luxury real estate portfolio in Manhattan featuring Class A commercial and residential properties',
-    type: 'real-estate',
-    currentPrice: 125.50,
-    priceChange24h: 2.35,
-    priceChangePercent24h: 1.91,
-    marketCap: 45000000,
-    volume24h: 890000,
-    totalSupply: 1000000,
-    circulatingSupply: 358400,
-    imageUrl: '/assets/manhattan-real-estate.jpg',
-    isActive: true,
-    createdAt: '2024-01-15T00:00:00Z'
+    id: 'ausiri',
+    name: 'AuSIRI',
+    fullName: 'Gold-Backed Systematic Investment Return Initiative',
+    description: 'Pioneering tokenized gold ownership with retail cycle optimization—flagship vertical exploring fractional bullion through systematic margin compounding',
+    icon: Coins,
+    gradient: 'linear-gradient(135deg, #b45309 0%, #d97706 50%, #f59e0b 100%)',
+    iconBg: 'linear-gradient(to bottom right, #f59e0b, #d97706)',
+    category: 'Gold Vertical',
+    apy: '15-25%',
+    status: 'Pre-Launch',
+    statusColor: '#b45309',
+    statusBg: '#fef3c7',
+    link: '/ausiri',
+    features: ['100% Gold Backed', 'Retail Cycle Optimization', 'Predictable Returns']
   },
   {
-    id: '2',
-    name: 'Gold Reserve Commodity',
-    symbol: 'GRC',
-    description: 'Physical gold reserves backed by certified bullion stored in secure vaults worldwide',
-    type: 'commodities',
-    currentPrice: 89.25,
-    priceChange24h: 4.12,
-    priceChangePercent24h: 4.84,
-    marketCap: 28500000,
-    volume24h: 1200000,
-    totalSupply: 500000,
-    circulatingSupply: 319400,
-    imageUrl: '/assets/gold-commodity.jpg',
-    isActive: true,
-    createdAt: '2024-02-10T00:00:00Z'
+    id: 'auaero',
+    name: 'AuAERO',
+    fullName: 'Gold-Aerospace Enhanced Return Optimization',
+    description: 'Charting new territory in aggressive performance optimization—combining gold stability with commercial aviation returns through financial engineering',
+    icon: Plane,
+    gradient: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%)',
+    iconBg: 'linear-gradient(to bottom right, #3b82f6, #2563eb)',
+    category: 'Aviation Vertical',
+    apy: '25-40%',
+    status: 'Pre-Launch',
+    statusColor: '#1d4ed8',
+    statusBg: '#dbeafe',
+    link: '/auaero',
+    features: ['Hybrid Asset Backing', 'Aviation Performance', 'Aggressive Returns']
   },
   {
-    id: '3',
-    name: 'Tech Giants Index',
-    symbol: 'TGI',
-    description: 'Diversified portfolio of leading technology companies with strong growth potential',
-    type: 'stocks',
-    currentPrice: 256.80,
-    priceChange24h: -8.45,
-    priceChangePercent24h: -3.18,
-    marketCap: 75000000,
-    volume24h: 2100000,
-    totalSupply: 750000,
-    circulatingSupply: 292100,
-    imageUrl: '/assets/tech-stocks.jpg',
-    isActive: true,
-    createdAt: '2024-03-05T00:00:00Z'
+    id: 'dairy',
+    name: 'Dairy',
+    fullName: 'Dairy Production & Distribution Asset Token',
+    description: 'Exploring systematic optimization in dairy supply chains—discovering how tokenization transforms agricultural production through infrastructure ownership',
+    icon: Milk,
+    gradient: 'linear-gradient(135deg, #3b82f6 0%, #60a5fa 50%, #93c5fd 100%)',
+    iconBg: 'linear-gradient(to bottom right, #60a5fa, #3b82f6)',
+    category: 'Agricultural Vertical',
+    apy: '12-18%',
+    status: 'Coming Soon',
+    statusColor: '#1e40af',
+    statusBg: '#dbeafe',
+    link: '/dairy',
+    features: ['Dairy Infrastructure', 'Supply Chain Optimization', 'Steady Income']
   },
   {
-    id: '4',
-    name: 'Green Energy Infrastructure',
-    symbol: 'GEI',
-    description: 'Renewable energy projects including solar, wind, and hydroelectric power installations',
-    type: 'real-estate',
-    currentPrice: 67.90,
-    priceChange24h: 1.85,
-    priceChangePercent24h: 2.80,
-    marketCap: 34000000,
-    volume24h: 650000,
-    totalSupply: 1200000,
-    circulatingSupply: 500800,
-    imageUrl: '/assets/green-energy.jpg',
-    isActive: true,
-    createdAt: '2024-04-12T00:00:00Z'
+    id: 'food',
+    name: 'Food',
+    fullName: 'Food Supply Chain & Agriculture Asset Token',
+    description: 'Navigating agricultural transformation—pioneering tokenized food production with supply chain intelligence and sustainable farming infrastructure',
+    icon: Wheat,
+    gradient: 'linear-gradient(135deg, #16a34a 0%, #22c55e 50%, #4ade80 100%)',
+    iconBg: 'linear-gradient(to bottom right, #22c55e, #16a34a)',
+    category: 'Agricultural Vertical',
+    apy: '10-20%',
+    status: 'Coming Soon',
+    statusColor: '#15803d',
+    statusBg: '#dcfce7',
+    link: '/food',
+    features: ['Food Production', 'Sustainable Agriculture', 'Supply Chain Assets']
   },
   {
-    id: '5',
-    name: 'Treasury Bond Portfolio',
-    symbol: 'TBP',
-    description: 'Diversified US Treasury bonds with varying maturities for stable income generation',
-    type: 'bonds',
-    currentPrice: 102.15,
-    priceChange24h: 0.45,
-    priceChangePercent24h: 0.44,
-    marketCap: 15000000,
-    volume24h: 320000,
-    totalSupply: 300000,
-    circulatingSupply: 146900,
-    imageUrl: '/assets/treasury-bonds.jpg',
-    isActive: true,
-    createdAt: '2024-05-20T00:00:00Z'
+    id: 'aurail',
+    name: 'AuRail',
+    fullName: 'Railway Infrastructure & Operations Asset Token',
+    description: 'Charting the future of rail transportation—discovering systematic optimization in railway operations through infrastructure tokenization',
+    icon: Train,
+    gradient: 'linear-gradient(135deg, #9333ea 0%, #a855f7 50%, #c084fc 100%)',
+    iconBg: 'linear-gradient(to bottom right, #a855f7, #9333ea)',
+    category: 'Infrastructure Vertical',
+    apy: '18-28%',
+    status: 'Coming Soon',
+    statusColor: '#7e22ce',
+    statusBg: '#f3e8ff',
+    link: '/aurail',
+    features: ['Railway Infrastructure', 'Cargo Operations', 'Transportation Network']
   },
   {
-    id: '6',
-    name: 'Silver Precious Metal',
-    symbol: 'SPM',
-    description: 'Physical silver reserves with industrial and investment-grade metals',
-    type: 'commodities',
-    currentPrice: 34.75,
-    priceChange24h: -0.85,
-    priceChangePercent24h: -2.39,
-    marketCap: 12000000,
-    volume24h: 180000,
-    totalSupply: 800000,
-    circulatingSupply: 345300,
-    imageUrl: '/assets/silver-metal.jpg',
-    isActive: true,
-    createdAt: '2024-06-15T00:00:00Z'
+    id: 'sura',
+    name: 'Sura',
+    fullName: 'Premium Whiskey Production & Cask Investment Token',
+    description: 'Pioneering luxury spirits investment—exploring how premium whiskey cask ownership creates predictable wealth through aging optimization',
+    icon: Wine,
+    gradient: 'linear-gradient(135deg, #92400e 0%, #b45309 50%, #d97706 100%)',
+    iconBg: 'linear-gradient(to bottom right, #d97706, #92400e)',
+    category: 'Luxury Assets Vertical',
+    apy: '20-35%',
+    status: 'Coming Soon',
+    statusColor: '#92400e',
+    statusBg: '#fef3c7',
+    link: '/sura',
+    features: ['Premium Cask Ownership', 'Aging Appreciation', 'Luxury Asset Class']
   }
 ];
 
-const typeColors = {
-  'real-estate': 'from-blue-500 to-blue-600',
-  'commodities': 'from-yellow-500 to-yellow-600',
-  'stocks': 'from-green-500 to-green-600',
-  'bonds': 'from-purple-500 to-purple-600'
-};
-
-const typeIcons = {
-  'real-estate': <Building2 className="h-5 w-5" />,
-  'commodities': <Coins className="h-5 w-5" />,
-  'stocks': <BarChart3 className="h-5 w-5" />,
-  'bonds': <Activity className="h-5 w-5" />
-};
-
 export default function ProductsPage() {
-  const [selectedType, setSelectedType] = useState<string>('all');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<'name' | 'price' | 'change' | 'volume'>('name');
+  const [isClient, setIsClient] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showPWAInstructions, setShowPWAInstructions] = useState(false);
 
-  const filteredProducts = mockProducts.filter(product => {
-    if (selectedType !== 'all' && product.type !== selectedType) return false;
-    if (searchTerm && !product.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
-        !product.symbol.toLowerCase().includes(searchTerm.toLowerCase())) return false;
-    return product.isActive;
-  }).sort((a, b) => {
-    switch (sortBy) {
-      case 'price':
-        return b.currentPrice - a.currentPrice;
-      case 'change':
-        return b.priceChangePercent24h - a.priceChangePercent24h;
-      case 'volume':
-        return b.volume24h - a.volume24h;
-      default:
-        return a.name.localeCompare(b.name);
-    }
-  });
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
-  const totalMarketCap = mockProducts.reduce((sum, product) => sum + product.marketCap, 0);
-  const avgChange = mockProducts.reduce((sum, product) => sum + product.priceChangePercent24h, 0) / mockProducts.length;
+  if (!isClient) {
+    return null;
+  }
+
+  const handleOpenChat = (query?: string) => {
+    console.log('Opening chat with query:', query);
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F5E6D3] via-white to-blue-50">
-      {/* Navigation */}
-      <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="glass rounded-full px-6 py-3 flex items-center gap-6">
-          <Link to="/" className="text-xl font-bold font-playfair">
-            COW Products
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link to="/products" className="text-sm text-blue-600 font-medium">
-              Products
+    <div className="min-h-screen transition-colors duration-200" style={{ background: 'var(--mode-bg)' }}>
+      <style>{`
+        :root {
+          --mode-bg: #F5F3F0; /* Rice Paper */
+        }
+        .dark {
+          --mode-bg: #0a1628; /* Navy Deep */
+        }
+      `}</style>
+
+      {/* Floating Navigation */}
+      <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-[85%] max-w-5xl">
+        <div
+          className="px-6 py-3 flex items-center justify-between gap-3 transition-all duration-300 bg-white/90 dark:bg-gray-900/90 border border-white/40 dark:border-gray-700/40"
+          style={{
+            backdropFilter: 'blur(25px) saturate(180%)',
+            borderRadius: '20px',
+            boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)'
+          }}
+        >
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <Link to="/" className="flex items-center gap-2">
+              <img src={cowLogo} alt="COW Logo" className="h-8 w-8 object-contain" />
+              <span className="text-lg font-light tracking-tight text-gray-900 dark:text-gray-100" style={{ letterSpacing: '0.02em', fontWeight: '300' }}>
+                COW
+              </span>
             </Link>
-            <Link to="/dashboard" className="text-sm hover:text-blue-600 transition-colors">
-              Dashboard
-            </Link>
-            <Link to="/missions" className="text-sm hover:text-blue-600 transition-colors">
-              Missions
-            </Link>
+            <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1" />
+            <ProductMenu />
+            <CartDropdown />
+          </div>
+          <div className="hidden lg:flex flex-shrink-0">
+            <div className="w-96">
+              <CopilotSearchBar onOpenChat={handleOpenChat} />
+            </div>
+          </div>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <ThemeToggle />
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button variant="ghost" size="sm" onClick={() => setShowPWAInstructions(true)} className="hidden sm:flex items-center gap-1.5 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-500 transition-colors duration-200 px-2">
+                <Download className="w-4 h-4" />
+                <span className="font-light text-sm">Install</span>
+              </Button>
+            </motion.div>
+            <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1" />
+            <Button variant="outline" size="sm" className="rounded-full text-gray-900 dark:text-gray-100 transition-all duration-300 hidden md:flex" onClick={() => setShowAuthModal(true)} style={{ background: 'rgba(0, 0, 0, 0.03)', border: '1px solid rgba(0, 0, 0, 0.1)', backdropFilter: 'blur(10px)', fontSize: '12px', fontWeight: '300', letterSpacing: '0.01em', padding: '6px 14px', color: '#374151' }}>
+              Sign In
+            </Button>
+            <Button variant="outline" size="sm" className="rounded-full text-gray-700 dark:text-gray-300 transition-all duration-300 hidden lg:flex" style={{ background: 'rgba(0, 0, 0, 0.03)', border: '1px solid rgba(0, 0, 0, 0.1)', backdropFilter: 'blur(10px)', fontSize: '12px', fontWeight: '300', letterSpacing: '0.01em', padding: '6px 14px', color: '#374151' }}>
+              Connect Wallet
+            </Button>
           </div>
         </div>
       </nav>
 
-      {/* Background decoration */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-[#627EEA]/10 to-[#00B774]/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-[#FFB800]/10 to-[#8B4513]/10 rounded-full blur-3xl" />
-      </div>
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      <PWAInstallInstructions isOpen={showPWAInstructions} onClose={() => setShowPWAInstructions(false)} />
 
-      <div className="relative z-10 pt-32 pb-20 px-4">
-        <div className="max-w-7xl mx-auto">
-          <Link to="/" className="inline-flex items-center text-gray-600 hover:text-gray-900 mb-8 transition-colors">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to home
-          </Link>
+      {/* Hero Section */}
+      <section className="relative pt-32 pb-24 px-6 lg:px-8">
+        <div className="absolute inset-0" style={{ background: '#ffffff' }} />
+        <div className="absolute inset-0 dark:block hidden" style={{ background: 'linear-gradient(to bottom, #0a1628 0%, #0f1d2e 50%, #0a1628 100%)' }} />
 
-          {/* Header */}
-          <div className="mb-12">
-            <h1 className="text-4xl font-bold mb-4 page-heading text-gray-900">
-              Performance Real-World Asset Tokens
-            </h1>
-            <p className="text-gray-600 text-lg max-w-3xl">
-              Discover and invest in tokenized real-world assets with transparent performance tracking and institutional-grade security
-            </p>
-          </div>
-
-          {/* Market Overview */}
-          <div className="grid md:grid-cols-4 gap-6 mb-12">
-            <Card className="glass">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm text-gray-600">Total Market Cap</h3>
-                  <DollarSign className="h-4 w-4 text-blue-500" />
-                </div>
-                <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalMarketCap)}</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="glass">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm text-gray-600">Active Products</h3>
-                  <BarChart3 className="h-4 w-4 text-green-500" />
-                </div>
-                <p className="text-2xl font-bold text-gray-900">{mockProducts.length}</p>
-              </CardContent>
-            </Card>
-            
-            <Card className="glass">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm text-gray-600">Average 24h Change</h3>
-                  {avgChange >= 0 ? (
-                    <TrendingUp className="h-4 w-4 text-green-500" />
-                  ) : (
-                    <TrendingDown className="h-4 w-4 text-red-500" />
-                  )}
-                </div>
-                <p className={`text-2xl font-bold ${avgChange >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                  {formatPercentage(avgChange)}
-                </p>
-              </CardContent>
-            </Card>
-            
-            <Card className="glass">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-sm text-gray-600">Total Investors</h3>
-                  <Users className="h-4 w-4 text-purple-500" />
-                </div>
-                <p className="text-2xl font-bold text-gray-900">12,547</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Filters and Search */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-8">
-            <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 glass rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none"
-              />
-            </div>
-            
-            <div className="flex gap-2">
-              {['all', 'real-estate', 'commodities', 'stocks', 'bonds'].map((type) => (
-                <Button
-                  key={type}
-                  variant={selectedType === type ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedType(type)}
-                  className={`capitalize ${
-                    selectedType === type 
-                      ? 'bg-blue-600 text-white' 
-                      : 'border-gray-300 text-gray-600 hover:text-blue-600'
-                  }`}
-                >
-                  {type === 'real-estate' ? 'Real Estate' : type}
-                </Button>
-              ))}
-            </div>
-            
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
-              className="px-4 py-2 glass rounded-lg border border-gray-300 focus:border-blue-500 focus:outline-none"
-            >
-              <option value="name">Sort by Name</option>
-              <option value="price">Sort by Price</option>
-              <option value="change">Sort by Change</option>
-              <option value="volume">Sort by Volume</option>
-            </select>
-          </div>
-
-          {/* Products Grid */}
-          <div className="grid gap-6">
-            {filteredProducts.map((product, index) => (
-              <div key={product.id}>
-                <Card className="glass hover:shadow-lg transition-shadow duration-300">
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center gap-4">
-                        <div className={`p-3 rounded-lg bg-gradient-to-r ${typeColors[product.type]}`}>
-                          <div className="text-white">
-                            {typeIcons[product.type]}
-                          </div>
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-xl font-bold text-gray-900">{product.name}</h3>
-                            <span className="px-2 py-1 text-xs rounded-full bg-gray-200 text-gray-600">
-                              {product.symbol}
-                            </span>
-                            <span className={`px-2 py-1 text-xs rounded-full bg-gradient-to-r ${typeColors[product.type]} text-white`}>
-                              {product.type.replace('-', ' ')}
-                            </span>
-                          </div>
-                          <p className="text-gray-600 text-sm max-w-md">{product.description}</p>
-                        </div>
-                      </div>
-                      
-                      <div className="text-right">
-                        <p className="text-2xl font-bold text-gray-900 mb-1">
-                          {formatCurrency(product.currentPrice)}
-                        </p>
-                        <div className="flex items-center justify-end">
-                          {product.priceChangePercent24h >= 0 ? (
-                            <TrendingUp className="w-4 h-4 text-green-600 mr-1" />
-                          ) : (
-                            <TrendingDown className="w-4 h-4 text-red-600 mr-1" />
-                          )}
-                          <span
-                            className={`text-sm font-semibold ${
-                              product.priceChangePercent24h >= 0 ? "text-green-600" : "text-red-600"
-                            }`}
-                          >
-                            {formatPercentage(product.priceChangePercent24h)}
-                          </span>
-                          <span className="text-gray-500 text-sm ml-2">
-                            ({product.priceChangePercent24h >= 0 ? '+' : ''}{formatCurrency(product.priceChange24h)})
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
-                      <div>
-                        <p className="text-gray-500">Market Cap</p>
-                        <p className="font-semibold text-gray-900">{formatCurrency(product.marketCap)}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500">24h Volume</p>
-                        <p className="font-semibold text-gray-900">{formatCurrency(product.volume24h)}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500">Circulating Supply</p>
-                        <p className="font-semibold text-gray-900">{product.circulatingSupply.toLocaleString()}</p>
-                      </div>
-                      <div>
-                        <p className="text-gray-500">Total Supply</p>
-                        <p className="font-semibold text-gray-900">{product.totalSupply.toLocaleString()}</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4 text-xs text-gray-500">
-                        <span>Created: {new Date(product.createdAt).toLocaleDateString()}</span>
-                        <span className="flex items-center gap-1">
-                          <div className="h-2 w-2 bg-green-500 rounded-full" />
-                          Active
-                        </span>
-                      </div>
-                      
-                      <div className="flex gap-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          className="border-gray-300 text-gray-600 hover:text-blue-600"
-                        >
-                          View Details
-                        </Button>
-                        <Button 
-                          size="sm"
-                          className="bg-blue-600 hover:bg-blue-700 text-white"
-                        >
-                          Invest Now
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+        <div className="max-w-7xl mx-auto w-full relative z-10">
+          <motion.div className="text-center max-w-5xl mx-auto" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}>
+            <div className="mb-8">
+              <div className="flex justify-center mb-6">
+                <span className="text-xs font-medium px-4 py-2 rounded-full inline-block" style={{ background: 'rgba(0, 102, 255, 0.1)', color: '#0066FF', letterSpacing: '0.02em' }}>
+                  PERFORMANCE REAL-WORLD ASSET TOKENS
+                </span>
               </div>
+              <h1 className="text-5xl sm:text-7xl lg:text-8xl font-thin text-gray-800 dark:text-gray-100 mb-6 leading-[0.9] tracking-tight">
+                Discover
+                <br />
+                <span style={{ background: 'linear-gradient(to right, #0066FF 0%, #0ea5e9 50%, #10b981 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', fontWeight: '300' }}>
+                  COW Asset Tokens
+                </span>
+              </h1>
+              <div style={{ width: '120px', height: '2px', background: 'linear-gradient(to right, transparent 0%, #0066FF 50%, transparent 100%)', margin: '0 auto 2rem auto' }} />
+            </div>
+            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="text-xl sm:text-2xl font-light text-gray-600 dark:text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
+              Exploring systematic optimization across{' '}
+              <span style={{ color: '#0066FF', fontWeight: '400' }}>six verticals</span>—from gold and aviation to agriculture, rail, and luxury assets—creating{' '}
+              <span className="text-emerald-600 font-normal">predictable wealth</span> through tokenized real-world assets
+            </motion.p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Horizon Divider */}
+      <div className="w-full" style={{ height: '2px', background: 'linear-gradient(to right, transparent 0%, rgba(0, 102, 255, 0.3) 50%, transparent 100%)' }} />
+
+      {/* Products Grid */}
+      <section className="py-32 px-8 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-16">
+            <h2 className="text-lg font-light mb-4 text-gray-600 dark:text-gray-400" style={{ letterSpacing: '0.02em', textTransform: 'uppercase' }}>
+              Asset Verticals
+            </h2>
+            <h3 className="text-4xl font-light text-gray-900 dark:text-gray-100" style={{ letterSpacing: '-0.02em' }}>
+              Six Paths to Performance Optimization
+            </h3>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {cowProducts.map((product, index) => (
+              <motion.div key={product.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: index * 0.1 }}>
+                <Link to={product.link} className="block group">
+                  <Card className="h-full border-gray-200 dark:border-gray-700/50 bg-white dark:bg-gray-800/50 hover:shadow-2xl transition-all duration-300 overflow-hidden">
+                    <CardContent className="p-0">
+                      {/* Header with Gradient */}
+                      <div className="p-8 pb-6" style={{ background: `${product.gradient}15` }}>
+                        <div className="flex items-start justify-between mb-4">
+                          <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: product.iconBg, boxShadow: `0 8px 24px ${product.statusColor}40` }}>
+                            <product.icon className="w-8 h-8 text-white" />
+                          </div>
+                          <span className="text-xs px-3 py-1.5 rounded-full font-medium" style={{ background: product.statusBg, color: product.statusColor }}>
+                            {product.status}
+                          </span>
+                        </div>
+                        <h3 className="text-2xl font-light mb-2 text-gray-900 dark:text-gray-100" style={{ letterSpacing: '-0.01em' }}>
+                          {product.name}
+                        </h3>
+                        <p className="text-sm font-light mb-1" style={{ color: product.statusColor }}>
+                          {product.category}
+                        </p>
+                      </div>
+
+                      {/* Content */}
+                      <div className="p-8 pt-6">
+                        <p className="text-sm font-light text-gray-600 dark:text-gray-300 mb-6 leading-relaxed" style={{ letterSpacing: '0.01em', minHeight: '4.5rem' }}>
+                          {product.description}
+                        </p>
+
+                        {/* Features */}
+                        <div className="space-y-2 mb-6">
+                          {product.features.map((feature, i) => (
+                            <div key={i} className="flex items-center gap-2 text-sm">
+                              <div className="w-1.5 h-1.5 rounded-full" style={{ background: product.statusColor }} />
+                              <span className="font-light text-gray-600 dark:text-gray-400">{feature}</span>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* APY Badge */}
+                        <div className="flex items-center justify-between mb-6">
+                          <span className="text-xs font-light text-gray-500 dark:text-gray-400">Expected APY</span>
+                          <span className="text-lg font-light" style={{ color: product.statusColor }}>
+                            {product.apy}
+                          </span>
+                        </div>
+
+                        {/* CTA */}
+                        <Button className="w-full group-hover:scale-[1.02] transition-transform duration-300" style={{ background: product.gradient, color: 'white', border: 'none' }}>
+                          <span className="font-light">Explore {product.name}</span>
+                          <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </motion.div>
             ))}
           </div>
-
-          {/* No products message */}
-          {filteredProducts.length === 0 && (
-            <div className="text-center py-12">
-              <Filter className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 mb-2">No products found</h3>
-              <p className="text-gray-500">Try adjusting your search or filters to see more products</p>
-            </div>
-          )}
         </div>
-      </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 px-8" style={{ background: 'var(--mode-footer-bg)', borderTop: '2px solid var(--mode-footer-border)' }}>
+        <style>{`
+          :root {
+            --mode-footer-bg: linear-gradient(to bottom, rgba(155, 139, 126, 0.15) 0%, rgba(155, 139, 126, 0.25) 100%);
+            --mode-footer-border: rgba(155, 139, 126, 0.35);
+          }
+          .dark {
+            --mode-footer-bg: rgba(0, 102, 255, 0.05);
+            --mode-footer-border: rgba(0, 102, 255, 0.2);
+          }
+        `}</style>
+        <div className="max-w-7xl mx-auto text-center">
+          <p className="text-sm font-light text-gray-700 dark:text-gray-300" style={{ letterSpacing: '0.01em' }}>
+            &copy; 2025 COW Group. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -29,8 +29,8 @@ import {
   Step13Regulatory,
 } from './phase-classification'
 
-// Phase 4: Account (to be implemented in future phases)
-// import { Step14AccountSetup } from './phase-account/step14-account-setup'
+// Phase 4: Account
+import { Step14AccountSetup } from './phase-account'
 
 // Placeholder component for steps not yet implemented
 const PlaceholderStep: React.FC<{ stepNumber: number }> = ({ stepNumber }) => {
@@ -107,9 +107,9 @@ const OnboardingContent: React.FC = () => {
       case 13:
         return <Step13Regulatory />
 
-      // Phase 4: Account (Step 14) - to be implemented
+      // Phase 4: Account (Step 14)
       case 14:
-        return <PlaceholderStep stepNumber={currentStep} />
+        return <Step14AccountSetup />
 
       default:
         return <Step1Welcome />

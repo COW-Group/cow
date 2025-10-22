@@ -1442,79 +1442,253 @@ export default function HomePage() {
         }}
       >
         <div className="max-w-7xl mx-auto">
-          {/* Navigation Links */}
-          <div className="flex flex-wrap justify-center gap-x-8 gap-y-4 mb-8">
-            <Link
-              to="/moo"
-              className="text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light"
-              style={{
-                fontSize: '0.9375rem',
-                letterSpacing: '0.01em',
-                fontFamily: 'Inter, sans-serif'
-              }}
-            >
-              Moo
-            </Link>
-            <Link
-              to="/research"
-              className="text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light"
-              style={{
-                fontSize: '0.9375rem',
-                letterSpacing: '0.01em',
-                fontFamily: 'Inter, sans-serif'
-              }}
-            >
-              Research
-            </Link>
-            <a
-              href="https://mauna.mycow.io"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light"
-              style={{
-                fontSize: '0.9375rem',
-                letterSpacing: '0.01em',
-                fontFamily: 'Inter, sans-serif'
-              }}
-            >
-              Mauna
-            </a>
-            <Link
-              to="/missions"
-              className="text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light"
-              style={{
-                fontSize: '0.9375rem',
-                letterSpacing: '0.01em',
-                fontFamily: 'Inter, sans-serif'
-              }}
-            >
-              Missions
-            </Link>
-            <a
-              href="mailto:support@mycow.io"
-              className="text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light"
-              style={{
-                fontSize: '0.9375rem',
-                letterSpacing: '0.01em',
-                fontFamily: 'Inter, sans-serif'
-              }}
-            >
-              Support
-            </a>
+          {/* Footer Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            {/* Products */}
+            <div>
+              <h3
+                className="text-sm font-medium mb-4 text-gray-900 dark:text-gray-100"
+                style={{
+                  letterSpacing: '0.02em',
+                  fontFamily: 'Inter, sans-serif'
+                }}
+              >
+                Products
+              </h3>
+              <div className="space-y-3">
+                <Link
+                  to="/ausiri"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  AuSIRI
+                </Link>
+                <Link
+                  to="/auaero"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  AuAERO
+                </Link>
+                <Link
+                  to="/products"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  All Products
+                </Link>
+              </div>
+            </div>
+
+            {/* Resources */}
+            <div>
+              <h3
+                className="text-sm font-medium mb-4 text-gray-900 dark:text-gray-100"
+                style={{
+                  letterSpacing: '0.02em',
+                  fontFamily: 'Inter, sans-serif'
+                }}
+              >
+                Resources
+              </h3>
+              <div className="space-y-3">
+                <Link
+                  to="/moo"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Moo AI
+                </Link>
+                <Link
+                  to="/research"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Research
+                </Link>
+                <a
+                  href="https://mauna.mycow.io"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Mauna
+                </a>
+                <Link
+                  to="/missions"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Missions
+                </Link>
+              </div>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <h3
+                className="text-sm font-medium mb-4 text-gray-900 dark:text-gray-100"
+                style={{
+                  letterSpacing: '0.02em',
+                  fontFamily: 'Inter, sans-serif'
+                }}
+              >
+                Legal
+              </h3>
+              <div className="space-y-3">
+                <a
+                  href="/terms"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Terms of Service
+                </a>
+                <a
+                  href="/privacy"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Privacy Policy
+                </a>
+                <a
+                  href="/disclosures"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Risk Disclosures
+                </a>
+                <a
+                  href="/regulatory"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Regulatory Info
+                </a>
+              </div>
+            </div>
+
+            {/* Support */}
+            <div>
+              <h3
+                className="text-sm font-medium mb-4 text-gray-900 dark:text-gray-100"
+                style={{
+                  letterSpacing: '0.02em',
+                  fontFamily: 'Inter, sans-serif'
+                }}
+              >
+                Support
+              </h3>
+              <div className="space-y-3">
+                <a
+                  href="mailto:support@mycow.io"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Contact Us
+                </a>
+                <a
+                  href="/help"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Help Center
+                </a>
+                <a
+                  href="/security"
+                  className="block text-gray-700 dark:text-gray-300 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light text-sm"
+                  style={{ fontFamily: 'Inter, sans-serif' }}
+                >
+                  Security
+                </a>
+              </div>
+            </div>
           </div>
 
-          {/* Copyright */}
-          <div className="text-center">
-            <p
-              className="text-sm font-light"
-              style={{
-                letterSpacing: '0.01em',
-                color: '#6b4423', // Warm earth brown for better contrast with subtle warm stone horizon
-                fontFamily: 'Inter, sans-serif'
-              }}
-            >
-              &copy; 2025 COW Group. All rights reserved.
-            </p>
+          {/* Divider */}
+          <div
+            className="w-full mb-8"
+            style={{
+              height: '1px',
+              background: 'linear-gradient(to right, transparent 0%, rgba(155, 139, 126, 0.4) 50%, transparent 100%)'
+            }}
+          />
+
+          {/* Bottom Section: Selectors and Copyright */}
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            {/* Selectors */}
+            <div className="flex flex-wrap items-center gap-4">
+              {/* Country Selector */}
+              <select
+                className="px-4 py-2 rounded-lg bg-white/50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-light text-sm backdrop-blur-sm hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0066FF]/30"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+                defaultValue="US"
+              >
+                <option value="US">🇺🇸 United States</option>
+                <option value="GB">🇬🇧 United Kingdom</option>
+                <option value="EU">🇪🇺 European Union</option>
+                <option value="CA">🇨🇦 Canada</option>
+                <option value="AU">🇦🇺 Australia</option>
+                <option value="SG">🇸🇬 Singapore</option>
+                <option value="JP">🇯🇵 Japan</option>
+                <option value="AE">🇦🇪 UAE</option>
+              </select>
+
+              {/* Currency Selector */}
+              <select
+                className="px-4 py-2 rounded-lg bg-white/50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-light text-sm backdrop-blur-sm hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0066FF]/30"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+                defaultValue="USD"
+              >
+                <option value="USD">$ USD</option>
+                <option value="EUR">€ EUR</option>
+                <option value="GBP">£ GBP</option>
+                <option value="CAD">$ CAD</option>
+                <option value="AUD">$ AUD</option>
+                <option value="SGD">$ SGD</option>
+                <option value="JPY">¥ JPY</option>
+                <option value="AED">د.إ AED</option>
+              </select>
+
+              {/* Language Selector */}
+              <select
+                className="px-4 py-2 rounded-lg bg-white/50 dark:bg-gray-800/50 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-light text-sm backdrop-blur-sm hover:bg-white/80 dark:hover:bg-gray-800/80 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0066FF]/30"
+                style={{ fontFamily: 'Inter, sans-serif' }}
+                defaultValue="en"
+              >
+                <option value="en">English</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="de">Deutsch</option>
+                <option value="ja">日本語</option>
+                <option value="zh">中文</option>
+                <option value="ar">العربية</option>
+              </select>
+            </div>
+
+            {/* Copyright */}
+            <div className="text-center md:text-right">
+              <p
+                className="text-sm font-light"
+                style={{
+                  letterSpacing: '0.01em',
+                  color: '#6b4423', // Warm earth brown for better contrast
+                  fontFamily: 'Inter, sans-serif'
+                }}
+              >
+                &copy; 2025 COW Group. All rights reserved.
+              </p>
+              <p
+                className="text-xs font-light mt-1"
+                style={{
+                  letterSpacing: '0.01em',
+                  color: '#8B7355',
+                  fontFamily: 'Inter, sans-serif'
+                }}
+              >
+                Securities offered subject to regulatory approval
+              </p>
+            </div>
           </div>
         </div>
       </footer>

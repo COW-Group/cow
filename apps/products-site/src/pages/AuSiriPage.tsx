@@ -4,12 +4,21 @@ import { motion } from "framer-motion";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { useCart } from "../contexts/cart-context";
-import { ResearchNavigation } from "../components/research-navigation";
-import { ArrowRight, TrendingUp, Shield, Zap, ChevronDown, Coins, RefreshCcw } from "lucide-react";
+import { ProductMenu } from "../components/product-menu";
+import { CartDropdown } from "../components/cart-dropdown";
+import { AuthModal } from "../components/auth-modal";
+import { ThemeToggle } from "../components/theme-toggle";
+import { CopilotSearchBar } from "../components/copilot-search-bar";
+import { PWAInstallInstructions } from "../components/pwa-install-instructions";
+import { Milestones } from "../components/milestones";
+import { ArrowRight, TrendingUp, Shield, Zap, ChevronDown, Coins, RefreshCcw, Download } from "lucide-react";
+import cowLogo from "../assets/cow-logo.png";
 
 export default function AuSiriPage() {
   const { addToCart } = useCart();
   const [isClient, setIsClient] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showPWAInstructions, setShowPWAInstructions] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -29,6 +38,10 @@ export default function AuSiriPage() {
     });
   };
 
+  const handleOpenChat = (query?: string) => {
+    console.log("Opening chat with query:", query);
+  };
+
   return (
     <div className="min-h-screen transition-colors duration-200" style={{ background: 'var(--mode-bg)' }}>
       <style>{`
@@ -40,8 +53,113 @@ export default function AuSiriPage() {
         }
       `}</style>
 
-      {/* Research Navigation */}
-      <ResearchNavigation />
+      {/* Floating Navigation */}
+      <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-[85%] max-w-5xl">
+        <div
+          className="px-6 py-3 flex items-center justify-between gap-3 transition-all duration-300 bg-white/90 dark:bg-gray-900/90 border border-white/40 dark:border-gray-700/40"
+          style={{
+            backdropFilter: 'blur(25px) saturate(180%)',
+            borderRadius: '20px',
+            boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)'
+          }}
+        >
+          {/* Left: Logo + Products + Cart */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <Link to="/" className="flex items-center gap-2">
+              <img
+                src={cowLogo}
+                alt="COW Logo"
+                className="h-8 w-8 object-contain"
+              />
+              <span
+                className="text-lg font-light tracking-tight text-gray-900 dark:text-gray-100"
+                style={{
+                  letterSpacing: '0.02em',
+                  fontWeight: '300'
+                }}
+              >
+                COW
+              </span>
+            </Link>
+
+            <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1" />
+
+            <ProductMenu />
+            <CartDropdown />
+          </div>
+
+          {/* Center: Search Bar */}
+          <div className="hidden lg:flex flex-shrink-0">
+            <div className="w-96">
+              <CopilotSearchBar onOpenChat={handleOpenChat} />
+            </div>
+          </div>
+
+          {/* Right: Actions */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <ThemeToggle />
+
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowPWAInstructions(true)}
+                className="hidden sm:flex items-center gap-1.5 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-500 transition-colors duration-200 px-2"
+              >
+                <Download className="w-4 h-4" />
+                <span className="font-light text-sm">Install</span>
+              </Button>
+            </motion.div>
+
+            <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1" />
+
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full text-gray-900 dark:text-gray-100 transition-all duration-300 hidden md:flex"
+              onClick={() => setShowAuthModal(true)}
+              style={{
+                background: 'rgba(0, 0, 0, 0.03)',
+                border: '1px solid rgba(0, 0, 0, 0.1)',
+                backdropFilter: 'blur(10px)',
+                fontSize: '12px',
+                fontWeight: '300',
+                letterSpacing: '0.01em',
+                padding: '6px 14px',
+                color: '#374151'
+              }}
+            >
+              Sign In
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="rounded-full text-gray-700 dark:text-gray-300 transition-all duration-300 hidden lg:flex"
+              style={{
+                background: 'rgba(0, 0, 0, 0.03)',
+                border: '1px solid rgba(0, 0, 0, 0.1)',
+                backdropFilter: 'blur(10px)',
+                fontSize: '12px',
+                fontWeight: '300',
+                letterSpacing: '0.01em',
+                padding: '6px 14px',
+                color: '#374151'
+              }}
+            >
+              Connect Wallet
+            </Button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Auth Modal */}
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+
+      {/* PWA Install Instructions */}
+      <PWAInstallInstructions
+        isOpen={showPWAInstructions}
+        onClose={() => setShowPWAInstructions(false)}
+      />
 
       {/* Hero Section with Sumi-e Sky + Earth Background */}
       <section className="relative pt-32 pb-24 px-6 lg:px-8 min-h-screen flex items-center overflow-hidden">
@@ -535,6 +653,9 @@ export default function AuSiriPage() {
           </div>
         </div>
       </section>
+
+      {/* Milestones / Timeline Section */}
+      <Milestones tokenType="ausiri" />
 
       {/* CTA Section */}
       <section

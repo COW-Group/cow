@@ -22,9 +22,12 @@ import {
   Step10RiskStress,
 } from './phase-wealth'
 
-// Phase 3: Classification (to be implemented in future phases)
-// import { Step11InvestorType } from './phase-classification/step11-investor-type'
-// ... etc
+// Phase 3: Classification
+import {
+  Step11InvestorType,
+  Step12InvestmentProfile,
+  Step13Regulatory,
+} from './phase-classification'
 
 // Phase 4: Account (to be implemented in future phases)
 // import { Step14AccountSetup } from './phase-account/step14-account-setup'
@@ -96,11 +99,13 @@ const OnboardingContent: React.FC = () => {
       case 10:
         return <Step10RiskStress />
 
-      // Phase 3: Classification (Steps 11-13) - to be implemented
+      // Phase 3: Classification (Steps 11-13)
       case 11:
+        return <Step11InvestorType />
       case 12:
+        return <Step12InvestmentProfile />
       case 13:
-        return <PlaceholderStep stepNumber={currentStep} />
+        return <Step13Regulatory />
 
       // Phase 4: Account (Step 14) - to be implemented
       case 14:

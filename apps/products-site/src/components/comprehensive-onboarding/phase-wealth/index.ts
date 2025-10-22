@@ -1,0 +1,8 @@
+export { Step3AgeExperience } from './step3-age-experience'
+export { Step4WealthClassStage } from './step4-wealth-class-stage'
+export { Step5LifeGoals } from './step5-life-goals'
+export { Step6CashFlow } from './step6-cash-flow'
+export { Step7SkillsQuadrant } from './step7-skills-quadrant'
+export { Step8FinancialFreedom } from './step8-financial-freedom'
+export { Step9Location } from './step9-location'
+export { Step10RiskStress } from './step10-risk-stress'

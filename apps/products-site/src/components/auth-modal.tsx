@@ -208,13 +208,15 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
                 {successMessage}
               </div>
             )}
-            <Button 
-              type="submit" 
-              className="w-full h-14 sm:h-16 rounded-2xl border-0 text-lg sm:text-xl font-medium tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl focus:shadow-2xl transform hover:scale-[1.02] focus:scale-[1.02]"
+            <Button
+              type="submit"
+              className="w-full h-14 sm:h-16 rounded-xl border-0 text-lg sm:text-xl font-medium tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl focus:shadow-2xl transform hover:scale-[1.02] focus:scale-[1.02] text-white"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                boxShadow: '0 4px 20px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-              }} 
+                background: 'linear-gradient(to right, #0066FF, #0080FF)',
+                boxShadow: '0 8px 24px rgba(0, 102, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #0052CC, #0066FF)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #0066FF, #0080FF)'}
               disabled={loading}
             >
               {loading ? <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" /> : null}
@@ -224,9 +226,9 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
         ) : isResendConfirmation ? (
           <form onSubmit={handleResendConfirmationSubmit} className="grid gap-6 sm:gap-8 pt-4 sm:pt-6">
             <div className="grid gap-3 sm:gap-4">
-              <Label 
-                htmlFor="resend-email" 
-                className="text-base text-slate-700 font-medium tracking-wide"
+              <Label
+                htmlFor="resend-email"
+                className="text-base text-gray-700 dark:text-gray-300 font-medium tracking-wide"
               >
                 Email Address
               </Label>
@@ -235,7 +237,7 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
                 type="email"
                 value={resendEmail}
                 onChange={(e) => setResendEmail(e.target.value)}
-                className="h-14 border-2 border-slate-200/60 focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900 bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-4 font-light text-lg transition-all duration-300 shadow-sm hover:shadow-md focus:shadow-lg"
+                className="h-14 border-2 border-gray-200 dark:border-gray-700 focus:ring-4 focus:ring-[#38bdf8]/20 dark:focus:ring-[#0ea5e9]/20 focus:border-[#0066FF] dark:focus:border-[#38bdf8] text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-xl px-6 py-4 font-light text-lg transition-all duration-300 shadow-sm hover:shadow-md focus:shadow-lg"
                 style={{
                   boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1)'
                 }}
@@ -244,22 +246,24 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
               />
             </div>
             {error && (
-              <div className="p-3 rounded-xl text-sm text-center bg-red-50/80 text-red-800 border-2 border-red-200/60 backdrop-blur-sm font-medium shadow-sm">
+              <div className="p-3 rounded-xl text-sm text-center bg-red-50/80 dark:bg-red-900/30 text-red-800 dark:text-red-200 border-2 border-red-200/60 dark:border-red-800/40 backdrop-blur-sm font-medium shadow-sm">
                 {error}
               </div>
             )}
             {successMessage && (
-              <div className="p-3 rounded-xl text-sm text-center bg-green-50/80 text-green-800 border-2 border-green-200/60 backdrop-blur-sm font-medium shadow-sm">
+              <div className="p-3 rounded-xl text-sm text-center bg-emerald-50/80 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-200 border-2 border-emerald-200/60 dark:border-emerald-800/40 backdrop-blur-sm font-medium shadow-sm">
                 {successMessage}
               </div>
             )}
-            <Button 
-              type="submit" 
-              className="w-full h-14 sm:h-16 rounded-2xl border-0 text-lg sm:text-xl font-medium tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl focus:shadow-2xl transform hover:scale-[1.02] focus:scale-[1.02]"
+            <Button
+              type="submit"
+              className="w-full h-14 sm:h-16 rounded-xl border-0 text-lg sm:text-xl font-medium tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl focus:shadow-2xl transform hover:scale-[1.02] focus:scale-[1.02] text-white"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                boxShadow: '0 4px 20px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-              }} 
+                background: 'linear-gradient(to right, #0066FF, #0080FF)',
+                boxShadow: '0 8px 24px rgba(0, 102, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #0052CC, #0066FF)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #0066FF, #0080FF)'}
               disabled={loading}
             >
               {loading ? <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" /> : null}
@@ -269,9 +273,9 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
         ) : (
           <form onSubmit={handleAuthSubmit} className="grid gap-6 sm:gap-8 pt-4 sm:pt-6">
             <div className="grid gap-3 sm:gap-4">
-              <Label 
-                htmlFor="email" 
-                className="text-base text-slate-700 font-medium tracking-wide"
+              <Label
+                htmlFor="email"
+                className="text-base text-gray-700 dark:text-gray-300 font-medium tracking-wide"
               >
                 Email Address
               </Label>
@@ -280,7 +284,7 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="h-14 border-2 border-slate-200/60 focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900 bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-4 font-light text-lg transition-all duration-300 shadow-sm hover:shadow-md focus:shadow-lg"
+                className="h-14 border-2 border-gray-200 dark:border-gray-700 focus:ring-4 focus:ring-[#38bdf8]/20 dark:focus:ring-[#0ea5e9]/20 focus:border-[#0066FF] dark:focus:border-[#38bdf8] text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-xl px-6 py-4 font-light text-lg transition-all duration-300 shadow-sm hover:shadow-md focus:shadow-lg"
                 style={{
                   boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1)'
                 }}
@@ -289,9 +293,9 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
               />
             </div>
             <div className="grid gap-3 sm:gap-4">
-              <Label 
-                htmlFor="password" 
-                className="text-base text-slate-700 font-medium tracking-wide"
+              <Label
+                htmlFor="password"
+                className="text-base text-gray-700 dark:text-gray-300 font-medium tracking-wide"
               >
                 Password
               </Label>
@@ -300,7 +304,7 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="h-14 border-2 border-slate-200/60 focus:ring-4 focus:ring-amber-500/20 focus:border-amber-500 text-slate-900 bg-white/90 backdrop-blur-sm rounded-2xl px-6 py-4 font-light text-lg transition-all duration-300 shadow-sm hover:shadow-md focus:shadow-lg"
+                className="h-14 border-2 border-gray-200 dark:border-gray-700 focus:ring-4 focus:ring-[#38bdf8]/20 dark:focus:ring-[#0ea5e9]/20 focus:border-[#0066FF] dark:focus:border-[#38bdf8] text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800/50 backdrop-blur-sm rounded-xl px-6 py-4 font-light text-lg transition-all duration-300 shadow-sm hover:shadow-md focus:shadow-lg"
                 style={{
                   boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1)'
                 }}
@@ -309,17 +313,19 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
               />
             </div>
             {error && (
-              <div className="p-3 rounded-xl text-sm text-center bg-red-50/80 text-red-800 border-2 border-red-200/60 backdrop-blur-sm font-medium shadow-sm">
+              <div className="p-3 rounded-xl text-sm text-center bg-red-50/80 dark:bg-red-900/30 text-red-800 dark:text-red-200 border-2 border-red-200/60 dark:border-red-800/40 backdrop-blur-sm font-medium shadow-sm">
                 {error}
               </div>
             )}
-            <Button 
-              type="submit" 
-              className="w-full h-14 sm:h-16 rounded-2xl border-0 text-lg sm:text-xl font-medium tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl focus:shadow-2xl transform hover:scale-[1.02] focus:scale-[1.02]"
+            <Button
+              type="submit"
+              className="w-full h-14 sm:h-16 rounded-xl border-0 text-lg sm:text-xl font-medium tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl focus:shadow-2xl transform hover:scale-[1.02] focus:scale-[1.02] text-white"
               style={{
-                background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                boxShadow: '0 4px 20px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
-              }} 
+                background: 'linear-gradient(to right, #0066FF, #0080FF)',
+                boxShadow: '0 8px 24px rgba(0, 102, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #0052CC, #0066FF)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #0066FF, #0080FF)'}
               disabled={loading}
             >
               {loading ? <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" /> : null}
@@ -328,19 +334,29 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
           </form>
         )}
         
-        {/* Professional Footer - 8-Point Grid System */}
-        <div 
+        {/* Professional Footer - Horizon Principle */}
+        <div
           className="text-center px-6 sm:px-8 md:px-10 lg:px-12 py-4 sm:py-6 mt-2 sm:mt-4"
           style={{
-            background: 'linear-gradient(135deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 100%)',
-            borderTop: '1px solid rgba(255,255,255,0.06)'
+            background: 'var(--modal-footer-bg)',
+            borderTop: '1px solid var(--modal-footer-border)'
           }}
         >
+          <style>{`
+            :root {
+              --modal-footer-bg: linear-gradient(135deg, rgba(201, 184, 168, 0.05) 0%, rgba(155, 139, 126, 0.03) 100%);
+              --modal-footer-border: rgba(155, 139, 126, 0.15);
+            }
+            .dark {
+              --modal-footer-bg: linear-gradient(135deg, rgba(56, 189, 248, 0.03) 0%, rgba(14, 165, 233, 0.02) 100%);
+              --modal-footer-border: rgba(56, 189, 248, 0.1);
+            }
+          `}</style>
           {isResetPassword || isResendConfirmation ? (
             <Button
               variant="link"
               onClick={isResetPassword ? toggleResetPassword : toggleResendConfirmation}
-              className="p-0 h-auto text-slate-600 hover:text-slate-900 transition-colors duration-200 font-light"
+              className="p-0 h-auto text-gray-600 dark:text-gray-400 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 font-light"
             >
               ← Back to {isLogin ? "Sign In" : "Register"}
             </Button>
@@ -348,12 +364,12 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
             <>
               {isLogin ? (
                 <div className="space-y-4 sm:space-y-6 text-sm sm:text-base">
-                  <div className="text-gray-500 font-light">
+                  <div className="text-gray-500 dark:text-gray-400 font-light">
                     Don't have an account?{" "}
                     <Button
                       variant="link"
                       onClick={toggleMode}
-                      className="p-0 h-auto text-slate-600 hover:text-slate-900 transition-colors duration-200 font-medium underline tracking-wide"
+                      className="p-0 h-auto text-[#0066FF] dark:text-[#38bdf8] hover:text-[#0052CC] dark:hover:text-[#0ea5e9] transition-colors duration-200 font-medium underline tracking-wide"
                     >
                       Register here
                     </Button>
@@ -362,14 +378,14 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
                     <Button
                       variant="link"
                       onClick={toggleResetPassword}
-                      className="p-0 h-auto text-slate-500 hover:text-slate-700 transition-colors duration-200 text-xs sm:text-sm font-light transition-colors duration-200 tracking-wide"
+                      className="p-0 h-auto text-gray-500 dark:text-gray-400 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 text-xs sm:text-sm font-light tracking-wide"
                     >
                       Forgot Password?
                     </Button>
                     <Button
                       variant="link"
                       onClick={toggleResendConfirmation}
-                      className="p-0 h-auto text-slate-500 hover:text-slate-700 transition-colors duration-200 text-xs sm:text-sm font-light transition-colors duration-200 tracking-wide"
+                      className="p-0 h-auto text-gray-500 dark:text-gray-400 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 text-xs sm:text-sm font-light tracking-wide"
                     >
                       Resend Confirmation Email
                     </Button>
@@ -377,12 +393,12 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
                 </div>
               ) : (
                 <div className="space-y-4 sm:space-y-6 text-sm sm:text-base">
-                  <div className="text-gray-500 font-light">
+                  <div className="text-gray-500 dark:text-gray-400 font-light">
                     Already have an account?{" "}
                     <Button
                       variant="link"
                       onClick={toggleMode}
-                      className="p-0 h-auto text-slate-600 hover:text-slate-900 transition-colors duration-200 font-medium underline tracking-wide"
+                      className="p-0 h-auto text-[#0066FF] dark:text-[#38bdf8] hover:text-[#0052CC] dark:hover:text-[#0ea5e9] transition-colors duration-200 font-medium underline tracking-wide"
                     >
                       Sign in here
                     </Button>
@@ -390,7 +406,7 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
                   <Button
                     variant="link"
                     onClick={toggleResendConfirmation}
-                    className="p-0 h-auto text-slate-500 hover:text-slate-700 transition-colors duration-200 text-xs sm:text-sm font-light transition-colors duration-200 tracking-wide"
+                    className="p-0 h-auto text-gray-500 dark:text-gray-400 hover:text-[#0066FF] dark:hover:text-[#38bdf8] transition-colors duration-200 text-xs sm:text-sm font-light tracking-wide"
                   >
                     Resend Confirmation Email
                   </Button>

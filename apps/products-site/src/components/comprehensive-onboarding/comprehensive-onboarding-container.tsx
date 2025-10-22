@@ -10,9 +10,17 @@ import { ComprehensiveProgressBar } from './comprehensive-progress-bar'
 import { Step1Welcome } from './phase-welcome/step1-welcome'
 import { Step2PrimaryIntent } from './phase-welcome/step2-primary-intent'
 
-// Phase 2: Wealth Journey (to be implemented in future phases)
-// import { Step3AgeExperience } from './phase-wealth/step3-age-experience'
-// ... etc
+// Phase 2: Wealth Journey
+import {
+  Step3AgeExperience,
+  Step4WealthClassStage,
+  Step5LifeGoals,
+  Step6CashFlow,
+  Step7SkillsQuadrant,
+  Step8FinancialFreedom,
+  Step9Location,
+  Step10RiskStress,
+} from './phase-wealth'
 
 // Phase 3: Classification (to be implemented in future phases)
 // import { Step11InvestorType } from './phase-classification/step11-investor-type'
@@ -70,16 +78,23 @@ const OnboardingContent: React.FC = () => {
       case 2:
         return <Step2PrimaryIntent />
 
-      // Phase 2: Wealth Journey (Steps 3-10) - to be implemented
+      // Phase 2: Wealth Journey (Steps 3-10)
       case 3:
+        return <Step3AgeExperience />
       case 4:
+        return <Step4WealthClassStage />
       case 5:
+        return <Step5LifeGoals />
       case 6:
+        return <Step6CashFlow />
       case 7:
+        return <Step7SkillsQuadrant />
       case 8:
+        return <Step8FinancialFreedom />
       case 9:
+        return <Step9Location />
       case 10:
-        return <PlaceholderStep stepNumber={currentStep} />
+        return <Step10RiskStress />
 
       // Phase 3: Classification (Steps 11-13) - to be implemented
       case 11:

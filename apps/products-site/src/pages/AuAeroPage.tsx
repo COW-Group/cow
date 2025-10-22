@@ -1,321 +1,608 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { useCart } from "../contexts/cart-context";
-import { useAuthContext } from "../lib/auth-context";
-import { useWeb3 } from "../contexts/web3-context";
-import { ProductMenu } from "../components/product-menu";
-import { CartDropdown } from "../components/cart-dropdown";
-import { AuthModal } from "../components/auth-modal";
-import { Milestones } from "../components/milestones";
-import { ArrowLeft, DollarSign, BarChart, ShieldCheck, Plane } from "lucide-react";
+import { ResearchNavigation } from "../components/research-navigation";
+import { ArrowRight, Plane, Shield, Zap, ChevronDown, TrendingUp, BarChart } from "lucide-react";
 
 export default function AuAeroPage() {
   const { addToCart } = useCart();
-  const { auth, signOut } = useAuthContext();
-  const { isConnected, address, connectWallet, disconnectWallet, error, clearError } = useWeb3();
-  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
 
   const handleAddToCart = (amount: number) => {
     addToCart({
       id: `auaero-${Date.now()}`,
       name: `AuAERO Token (${amount.toLocaleString()})`,
-      description: "Gold and commercial airline asset-backed token",
+      description: "Dual-asset backed token with gold stability and aviation performance optimization",
       price: amount,
       link: "/auaero",
     });
   };
 
-  const handleConnectWallet = async () => {
-    try {
-      console.log("Attempting to connect wallet");
-      await connectWallet();
-      console.log("Wallet connected successfully");
-    } catch (err: any) {
-      console.error("Failed to connect wallet:", err);
-      alert(`Failed to connect wallet: ${err.message}`);
-    }
-  };
-
-  const handleDisconnectWallet = () => {
-    try {
-      console.log("Disconnecting wallet");
-      disconnectWallet();
-      console.log("Wallet disconnected successfully");
-    } catch (err) {
-      console.error("Failed to disconnect wallet:", err);
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-black text-white">
-      {/* Navigation */}
-      <nav className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-        <div className="bg-black/80 backdrop-blur-md rounded-full px-6 py-3 flex items-center gap-6 border border-gray-800">
-          <Link to="/" className="text-xl font-bold">
-            COW
-          </Link>
-          <ProductMenu />
-          <CartDropdown />
-          <div className="flex items-center gap-3">
-            {auth.isAuthenticated ? (
-              <>
-                <Link to="/dashboard">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-full border-gray-600 text-white hover:bg-gray-800 bg-transparent"
-                  >
-                    Dashboard
-                  </Button>
-                </Link>
-                <button onClick={signOut} className="text-sm text-gray-400 hover:text-white">
-                  Sign Out
-                </button>
-              </>
-            ) : (
-              <Button
-                variant="outline"
-                size="sm"
-                className="rounded-full border-gray-600 text-white hover:bg-gray-800 bg-transparent"
-                onClick={() => setShowAuthModal(true)}
-              >
-                Sign In
-              </Button>
-            )}
-            {isConnected ? (
-              <>
-                <Plane className="h-5 w-5 text-gray-400" />
-                <div className="h-2 w-2 rounded-full bg-green-500" />
-                <span className="text-sm text-gray-400">
-                  {address?.slice(0, 6)}...{address?.slice(-4)}
-                </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="rounded-full border-gray-600 text-white hover:bg-gray-800 bg-transparent"
-                  onClick={handleDisconnectWallet}
-                >
-                  Disconnect
-                </Button>
-              </>
-            ) : (
-              <Button
-                variant="outline"
-                size="sm"
-                className="rounded-full border-gray-600 text-white hover:bg-gray-800 bg-transparent"
-                onClick={handleConnectWallet}
-              >
-                <Plane className="h-5 w-5" />
-                <div className="h-2 w-2 rounded-full ml-2 bg-red-500" />
-              </Button>
-            )}
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen transition-colors duration-200" style={{ background: 'var(--mode-bg)' }}>
+      <style>{`
+        :root {
+          --mode-bg: #F5F3F0; /* Rice Paper - warm, inviting */
+        }
+        .dark {
+          --mode-bg: #0a1628; /* Navy Deep - family's favorite! */
+        }
+      `}</style>
 
-      {/* Auth Modal */}
-      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      {/* Research Navigation */}
+      <ResearchNavigation />
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 to-black">
-        <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
-          <h1 className="text-6xl md:text-8xl font-bold mb-6 text-blue-300">AuAERO</h1>
-          <p className="text-xl md:text-2xl text-gray-300 mb-12 max-w-2xl mx-auto">
-            Gold and commercial airline asset-backed token with aggressive performance optimization.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
-              className="bg-blue-500 text-white hover:bg-blue-600"
-              onClick={() => handleAddToCart(5000)}
+      {/* Hero Section with Sumi-e Sky + Earth Background */}
+      <section className="relative pt-32 pb-24 px-6 lg:px-8 min-h-screen flex items-center overflow-hidden">
+        {/* Background gradient layer */}
+        <div className="absolute inset-0" style={{
+          background: '#ffffff'
+        }} />
+        <div className="absolute inset-0 dark:block hidden" style={{
+          background: 'linear-gradient(to bottom, #0a1628 0%, #0f1d2e 50%, #0a1628 100%)'
+        }} />
+
+        <div className="max-w-7xl mx-auto w-full relative z-10">
+          <motion.div className="text-center max-w-5xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="mb-8"
             >
-              Pre-order AuAERO
-            </Button>
-            <Link to="/auaero-whitepaper">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-blue-600 text-blue-300 hover:bg-blue-900 bg-transparent"
-              >
-                View Whitepaper
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+              {/* Aviation vertical badge */}
+              <div className="flex justify-center mb-6">
+                <span
+                  className="text-xs font-medium px-4 py-2 rounded-full inline-block"
+                  style={{
+                    background: 'rgba(37, 99, 235, 0.1)',
+                    color: '#2563eb',
+                    letterSpacing: '0.02em'
+                  }}
+                >
+                  AVIATION PERFORMANCE VERTICAL
+                </span>
+              </div>
 
-      {/* Overview Section */}
-      <section className="pt-20 pb-20 px-4 bg-black">
-        <div className="max-w-6xl mx-auto">
-          <Link to="/" className="inline-flex items-center text-gray-400 hover:text-white mb-8">
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to tokens
-          </Link>
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <p className="text-blue-400 text-sm uppercase tracking-wider mb-4">OVERVIEW</p>
-              <h2 className="text-5xl font-bold mb-6">AuAERO</h2>
-              <p className="text-xl text-gray-300 mb-8 leading-relaxed">
-                AuAERO stands for Gold-Aerospace Enhanced Return Optimization - COW's most aggressive performance token
-                backed by both gold reserves and commercial passenger airline assets with advanced business optimization
-                strategies.
-              </p>
-              <p className="text-gray-400 mb-8 leading-relaxed">
-                This hybrid token combines the stability of gold backing with the high-growth potential of optimized
-                commercial aviation assets. Through sophisticated financial engineering, business problem-solving, and
-                operational optimization, AuAERO delivers aggressive compounding returns while maintaining asset
-                security through diversified backing.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
+              <h1 className="text-5xl sm:text-7xl lg:text-8xl font-thin text-gray-800 dark:text-gray-100 mb-6 leading-[0.9] tracking-tight">
+                Pioneering
+                <br />
+                <span style={{
+                  background: 'linear-gradient(to right, #2563eb 0%, #3b82f6 50%, #60a5fa 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                  fontWeight: '300'
+                }}>
+                  Aerospace-Enhanced Assets
+                </span>
+              </h1>
+              {/* Sky Blue divider */}
+              <div style={{
+                width: '120px',
+                height: '2px',
+                background: 'linear-gradient(to right, transparent 0%, #2563eb 50%, transparent 100%)',
+                margin: '0 auto 2rem auto'
+              }} />
+            </motion.div>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="text-xl sm:text-2xl font-light text-gray-600 dark:text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed"
+            >
+              Exploring aggressive performance optimization in{' '}
+              <span style={{ color: '#2563eb', fontWeight: '400' }}>commercial aviation assets</span>—discovering how{' '}
+              <span className="text-emerald-600 font-normal">dual-asset backing</span> creates enhanced returns through financial engineering
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
+            >
+              <motion.div
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+              >
                 <Button
                   size="lg"
-                  className="bg-blue-500 text-white hover:bg-blue-600"
+                  className="text-white shadow-2xl border-0 px-8 py-6 text-lg font-light"
+                  style={{
+                    background: 'linear-gradient(to right, #2563eb, #3b82f6)',
+                    boxShadow: '0 25px 50px -12px rgba(37, 99, 235, 0.25)'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #1d4ed8, #2563eb)'}
+                  onMouseLeave={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #2563eb, #3b82f6)'}
                   onClick={() => handleAddToCart(5000)}
                 >
-                  Pre-order AuAERO
+                  Join Waitlist
+                  <ArrowRight className="ml-3 w-5 h-5" />
                 </Button>
-                <Link to="/auaero-whitepaper">
+              </motion.div>
+              <Link to="/auaero-whitepaper">
+                <motion.div
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                >
                   <Button
-                    size="lg"
                     variant="outline"
-                    className="border-blue-600 text-blue-300 hover:bg-blue-900 bg-transparent"
+                    size="lg"
+                    className="px-8 py-6 text-lg font-light border-gray-200 dark:border-gray-700 hover:border-[#2563eb] dark:hover:border-[#60a5fa] hover:text-[#2563eb] dark:hover:text-[#60a5fa] transition-all duration-300"
                   >
                     View Whitepaper
+                    <ArrowRight className="ml-3 w-5 h-5" />
                   </Button>
-                </Link>
+                </motion.div>
+              </Link>
+            </motion.div>
+          </motion.div>
+        </div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 0.8 }}
+          className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+        >
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="flex flex-col items-center text-gray-400 dark:text-gray-500"
+          >
+            <span className="text-sm font-light mb-2">Explore</span>
+            <ChevronDown className="w-5 h-5" />
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* Subtle Horizon Divider - Blue accent */}
+      <div
+        className="w-full"
+        style={{
+          height: '2px',
+          background: 'linear-gradient(to right, transparent 0%, rgba(37, 99, 235, 0.3) 50%, transparent 100%)'
+        }}
+      />
+
+      {/* What is AuAERO Section */}
+      <section className="py-32 px-8 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <h2
+                className="text-lg font-light mb-4 text-gray-600 dark:text-gray-400"
+                style={{
+                  letterSpacing: '0.02em',
+                  textTransform: 'uppercase'
+                }}
+              >
+                What is AuAERO
+              </h2>
+              <h3
+                className="text-4xl sm:text-5xl font-light mb-6 text-gray-900 dark:text-gray-100"
+                style={{
+                  letterSpacing: '-0.02em',
+                  lineHeight: '1.2'
+                }}
+              >
+                Gold-Aerospace Enhanced Return Optimization
+              </h3>
+              <p
+                className="text-lg font-light text-gray-600 dark:text-gray-300 mb-6 leading-relaxed"
+                style={{ letterSpacing: '0.01em' }}
+              >
+                Charting new territory in{' '}
+                <span style={{ color: '#2563eb', fontWeight: '400' }}>aggressive performance optimization</span>—combining gold stability with commercial aviation asset returns through sophisticated financial engineering and operational excellence.
+              </p>
+              <p
+                className="text-base font-light text-gray-600 dark:text-gray-300 mb-8 leading-relaxed"
+                style={{ letterSpacing: '0.01em' }}
+              >
+                Each AuAERO token represents diversified backing from both physical gold reserves and optimized commercial airline assets—creating enhanced return potential through dual-revenue streams while maintaining downside protection through precious metal allocation.
+              </p>
+
+              {/* Key Metrics */}
+              <div className="grid grid-cols-2 gap-6 mb-8">
+                <div>
+                  <div className="text-3xl font-light text-[#2563eb] dark:text-[#60a5fa] mb-1">Hybrid</div>
+                  <div className="text-sm font-light text-gray-600 dark:text-gray-400">Gold + Aviation</div>
+                </div>
+                <div>
+                  <div className="text-3xl font-light text-emerald-600 dark:text-emerald-500 mb-1">25-40%</div>
+                  <div className="text-sm font-light text-gray-600 dark:text-gray-400">Expected APY</div>
+                </div>
               </div>
             </div>
+
+            {/* Visual */}
             <div className="relative">
-              <div className="w-80 h-80 mx-auto bg-gradient-to-br from-blue-400/30 to-blue-600/30 rounded-full flex items-center justify-center border border-blue-500/50">
-                <Plane className="h-32 w-32 text-blue-400" />
-              </div>
-              <div className="absolute -bottom-4 -right-4 bg-black/80 backdrop-blur-md rounded-2xl p-6 border border-gray-800">
-                <h3 className="font-bold mb-2">AuAERO Token</h3>
-                <p className="text-sm text-gray-400 mb-4">Starting at $5,000 minimum</p>
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Asset backing:</span>
-                    <span>Gold + Aviation</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Expected APY:</span>
-                    <span className="text-blue-400">25-40%</span>
-                  </div>
-                </div>
+              <div
+                className="w-full h-96 rounded-2xl flex items-center justify-center border-2"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%)',
+                  borderColor: 'rgba(37, 99, 235, 0.2)'
+                }}
+              >
+                <Plane className="h-32 w-32 text-[#2563eb] dark:text-[#60a5fa]" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Key Features */}
-      <section className="py-20 px-4 bg-gray-900/50">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Key Features of AuAERO</h2>
-            <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-              Experience a new paradigm of asset-backed tokens designed for aggressive growth and security.
+      {/* How It Works Section */}
+      <section className="py-32 px-8" style={{ background: 'var(--mode-how-bg)' }}>
+        <style>{`
+          :root {
+            --mode-how-bg: rgba(249, 250, 251, 0.4);
+          }
+          .dark {
+            --mode-how-bg: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, transparent 100%);
+          }
+        `}</style>
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-20 text-center">
+            <h2
+              className="text-4xl sm:text-5xl font-light mb-6 text-gray-900 dark:text-gray-100"
+              style={{
+                letterSpacing: '-0.02em'
+              }}
+            >
+              Navigating Dual-Asset Performance Optimization
+            </h2>
+            <p
+              className="text-lg font-light text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
+              style={{ letterSpacing: '0.01em' }}
+            >
+              Three integrated flows create aggressive returns—combining gold stability, aviation performance, and financial engineering excellence
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="bg-gray-800/50 border-gray-700 text-white">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <DollarSign className="h-6 w-6 text-blue-400" /> Gold Backed
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300">
-                  Each AuAERO token is partially backed by physical gold, providing a stable foundation.
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="bg-gray-800/50 border-gray-700 text-white">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Plane className="h-6 w-6 text-blue-400" /> Airline Assets
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300">
-                  Leverages commercial airline assets for aggressive performance optimization.
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="bg-gray-800/50 border-gray-700 text-white">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart className="h-6 w-6 text-blue-400" /> Aggressive Performance
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300">
-                  Advanced financial engineering maximizes asset performance and returns.
-                </p>
-              </CardContent>
-            </Card>
-            <Card className="bg-gray-800/50 border-gray-700 text-white">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <ShieldCheck className="h-6 w-6 text-blue-400" /> Enhanced Security
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-gray-300">
-                  Secured by physical gold and optimized aviation assets with transparent auditing.
-                </p>
-              </CardContent>
-            </Card>
+
+          <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center"
+            >
+              <div
+                className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6"
+                style={{
+                  background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)',
+                  boxShadow: '0 8px 16px rgba(37, 99, 235, 0.2)'
+                }}
+              >
+                <Shield className="w-10 h-10 text-white" />
+              </div>
+              <div className="mb-4">
+                <span
+                  className="inline-block w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-4"
+                  style={{
+                    background: 'rgba(37, 99, 235, 0.1)',
+                    color: '#2563eb',
+                    fontWeight: '600'
+                  }}
+                >
+                  1
+                </span>
+                <h3
+                  className="mb-3 text-gray-900 dark:text-gray-100"
+                  style={{
+                    fontSize: '1.5rem',
+                    fontWeight: '500',
+                    fontFamily: 'Inter, sans-serif',
+                    letterSpacing: '-0.01em'
+                  }}
+                >
+                  Diversified Asset Acquisition
+                </h3>
+              </div>
+              <p
+                className="text-gray-600 dark:text-gray-300"
+                style={{
+                  fontSize: '0.9375rem',
+                  fontWeight: '300',
+                  fontFamily: 'Inter, sans-serif',
+                  lineHeight: '1.6',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                Token proceeds acquire strategic portfolio of physical gold and high-performing commercial airline assets—creating diversified backing with dual revenue potential
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-center"
+            >
+              <div
+                className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6"
+                style={{
+                  background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)',
+                  boxShadow: '0 8px 16px rgba(37, 99, 235, 0.2)'
+                }}
+              >
+                <TrendingUp className="w-10 h-10 text-white" />
+              </div>
+              <div className="mb-4">
+                <span
+                  className="inline-block w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-4"
+                  style={{
+                    background: 'rgba(37, 99, 235, 0.1)',
+                    color: '#2563eb',
+                    fontWeight: '600'
+                  }}
+                >
+                  2
+                </span>
+                <h3
+                  className="mb-3 text-gray-900 dark:text-gray-100"
+                  style={{
+                    fontSize: '1.5rem',
+                    fontWeight: '500',
+                    fontFamily: 'Inter, sans-serif',
+                    letterSpacing: '-0.01em'
+                  }}
+                >
+                  Operational Excellence Engineering
+                </h3>
+              </div>
+              <p
+                className="text-gray-600 dark:text-gray-300"
+                style={{
+                  fontSize: '0.9375rem',
+                  fontWeight: '300',
+                  fontFamily: 'Inter, sans-serif',
+                  lineHeight: '1.6',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                Expert teams employ sophisticated financial engineering and business optimization strategies—maximizing aviation asset performance through operational improvements and problem-solving
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="text-center"
+            >
+              <div
+                className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6"
+                style={{
+                  background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)',
+                  boxShadow: '0 8px 16px rgba(37, 99, 235, 0.2)'
+                }}
+              >
+                <BarChart className="w-10 h-10 text-white" />
+              </div>
+              <div className="mb-4">
+                <span
+                  className="inline-block w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-4"
+                  style={{
+                    background: 'rgba(37, 99, 235, 0.1)',
+                    color: '#2563eb',
+                    fontWeight: '600'
+                  }}
+                >
+                  3
+                </span>
+                <h3
+                  className="mb-3 text-gray-900 dark:text-gray-100"
+                  style={{
+                    fontSize: '1.5rem',
+                    fontWeight: '500',
+                    fontFamily: 'Inter, sans-serif',
+                    letterSpacing: '-0.01em'
+                  }}
+                >
+                  Aggressive Value Compounding
+                </h3>
+              </div>
+              <p
+                className="text-gray-600 dark:text-gray-300"
+                style={{
+                  fontSize: '0.9375rem',
+                  fontWeight: '300',
+                  fontFamily: 'Inter, sans-serif',
+                  lineHeight: '1.6',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                Generated returns from optimized aviation operations compound into token value—creating aggressive 25-40% APY through dual-stream performance while maintaining gold downside protection
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Performance Projections */}
-      <section className="py-20 px-4">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">Performance Projections</h2>
+      {/* Key Features Grid */}
+      <section className="py-32 px-8 bg-white dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-16">
+            <h2
+              className="text-lg font-light mb-4 text-gray-600 dark:text-gray-400"
+              style={{
+                letterSpacing: '0.02em',
+                textTransform: 'uppercase'
+              }}
+            >
+              Aviation Vertical Features
+            </h2>
+            <h3
+              className="text-4xl font-light text-gray-900 dark:text-gray-100"
+              style={{ letterSpacing: '-0.02em' }}
+            >
+              Discovering Aggressive Performance in Aviation
+            </h3>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                icon: Shield,
+                title: "Hybrid Asset Backing",
+                description: "Diversified backing combines gold stability with aviation growth—balancing downside protection through precious metals with upside potential from optimized operations"
+              },
+              {
+                icon: Plane,
+                title: "Commercial Aviation Assets",
+                description: "Strategic portfolio of passenger airline assets—optimized for performance through operational excellence, financial engineering, and business problem-solving"
+              },
+              {
+                icon: TrendingUp,
+                title: "Aggressive Performance",
+                description: "Sophisticated optimization strategies maximize aviation returns—targeting 25-40% expected APY through dual-stream revenue generation and compounding mechanics"
+              },
+              {
+                icon: BarChart,
+                title: "Financial Engineering",
+                description: "Advanced techniques optimize asset performance—employing business transformation strategies to unlock value in commercial aviation operations"
+              },
+              {
+                icon: Shield,
+                title: "Gold Downside Protection",
+                description: "Precious metal allocation provides stability—gold backing creates floor value while aviation assets drive upside performance"
+              },
+              {
+                icon: Zap,
+                title: "Enhanced Returns",
+                description: "Dual-asset structure enables aggressive compounding—aviation optimization generates margins while gold provides portfolio ballast and security"
+              }
+            ].map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+              >
+                <Card className="h-full border-gray-200 dark:border-gray-700/50 bg-white dark:bg-gray-800/50 hover:shadow-lg transition-all duration-300">
+                  <CardHeader>
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center mb-4"
+                      style={{
+                        background: 'rgba(37, 99, 235, 0.1)'
+                      }}
+                    >
+                      <feature.icon className="w-6 h-6 text-[#2563eb] dark:text-[#60a5fa]" />
+                    </div>
+                    <CardTitle
+                      className="text-xl font-light text-gray-900 dark:text-gray-100"
+                      style={{
+                        letterSpacing: '-0.01em'
+                      }}
+                    >
+                      {feature.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p
+                      className="text-sm font-light text-gray-600 dark:text-gray-300"
+                      style={{
+                        lineHeight: '1.6',
+                        letterSpacing: '0.01em'
+                      }}
+                    >
+                      {feature.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Performance Scenarios Section */}
+      <section className="py-32 px-8" style={{ background: 'var(--mode-scenarios-bg)' }}>
+        <style>{`
+          :root {
+            --mode-scenarios-bg: rgba(249, 250, 251, 0.4);
+          }
+          .dark {
+            --mode-scenarios-bg: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
+          }
+        `}</style>
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-16 text-center">
+            <h2
+              className="text-4xl font-light mb-6 text-gray-900 dark:text-gray-100"
+              style={{ letterSpacing: '-0.02em' }}
+            >
+              Performance Optimization Scenarios
+            </h2>
+            <p
+              className="text-lg font-light text-gray-600 dark:text-gray-300"
+              style={{ letterSpacing: '0.01em' }}
+            >
+              Projected returns across conservative and aggressive asset allocation strategies
+            </p>
+          </div>
+
           <div className="grid md:grid-cols-2 gap-8">
-            <Card className="bg-gradient-to-br from-blue-400/10 to-blue-600/10 border-blue-500/30">
+            <Card className="border-[#2563eb]/30 dark:border-[#60a5fa]/30 bg-gradient-to-br from-blue-50/50 dark:from-blue-950/30 to-transparent">
               <CardHeader>
-                <CardTitle>Conservative Scenario</CardTitle>
+                <CardTitle className="text-2xl font-light text-gray-900 dark:text-gray-100">
+                  Conservative Optimization
+                </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Annual Return:</span>
-                    <span className="text-blue-400">25-30%</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Risk Level:</span>
-                    <span>Moderate</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Asset Allocation:</span>
-                    <span>60% Gold, 40% Aviation</span>
-                  </div>
+              <CardContent className="space-y-6">
+                <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
+                  <span className="text-gray-600 dark:text-gray-400 font-light">Expected APY:</span>
+                  <span className="text-2xl font-light text-[#2563eb] dark:text-[#60a5fa]">25-30%</span>
+                </div>
+                <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
+                  <span className="text-gray-600 dark:text-gray-400 font-light">Asset Allocation:</span>
+                  <span className="font-light text-gray-900 dark:text-gray-100">60% Gold, 40% Aviation</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600 dark:text-gray-400 font-light">Risk Profile:</span>
+                  <span className="font-light text-gray-900 dark:text-gray-100">Moderate</span>
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-gradient-to-br from-green-400/10 to-green-600/10 border-green-500/30">
+
+            <Card className="border-emerald-500/30 bg-gradient-to-br from-emerald-50/50 dark:from-emerald-950/30 to-transparent">
               <CardHeader>
-                <CardTitle>Aggressive Scenario</CardTitle>
+                <CardTitle className="text-2xl font-light text-gray-900 dark:text-gray-100">
+                  Aggressive Optimization
+                </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Annual Return:</span>
-                    <span className="text-green-400">35-40%</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Risk Level:</span>
-                    <span>Higher</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-400">Asset Allocation:</span>
-                    <span>40% Gold, 60% Aviation</span>
-                  </div>
+              <CardContent className="space-y-6">
+                <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
+                  <span className="text-gray-600 dark:text-gray-400 font-light">Expected APY:</span>
+                  <span className="text-2xl font-light text-emerald-600 dark:text-emerald-500">35-40%</span>
+                </div>
+                <div className="flex justify-between items-center pb-3 border-b border-gray-200 dark:border-gray-700">
+                  <span className="text-gray-600 dark:text-gray-400 font-light">Asset Allocation:</span>
+                  <span className="font-light text-gray-900 dark:text-gray-100">40% Gold, 60% Aviation</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600 dark:text-gray-400 font-light">Risk Profile:</span>
+                  <span className="font-light text-gray-900 dark:text-gray-100">Higher</span>
                 </div>
               </CardContent>
             </Card>
@@ -323,77 +610,104 @@ export default function AuAeroPage() {
         </div>
       </section>
 
-      {/* How it Works */}
-      <section className="py-20 px-4">
+      {/* CTA Section */}
+      <section
+        className="py-32 px-8"
+        style={{
+          background: 'var(--mode-cta-bg)'
+        }}
+      >
+        <style>{`
+          :root {
+            --mode-cta-bg: linear-gradient(to bottom, rgba(201, 184, 168, 0.15), rgba(37, 99, 235, 0.08));
+          }
+          .dark {
+            --mode-cta-bg: linear-gradient(to bottom, rgba(37, 99, 235, 0.08), rgba(59, 130, 246, 0.08));
+          }
+        `}</style>
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-4">How AuAERO Works</h2>
-          <p className="text-gray-400 text-lg mb-12">
-            A simplified explanation of the mechanics behind AuAERO's value and growth.
+          <h2
+            className="text-4xl sm:text-5xl font-light mb-6 text-gray-900 dark:text-gray-100"
+            style={{
+              letterSpacing: '-0.02em'
+            }}
+          >
+            Join the AuAERO Waitlist
+          </h2>
+          <p
+            className="text-lg font-light mb-12 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto"
+            style={{
+              letterSpacing: '0.01em',
+              lineHeight: '1.7'
+            }}
+          >
+            Experience aggressive performance optimization through dual-asset backing—pioneering aviation excellence with gold stability
           </p>
-          <div className="space-y-8">
-            <div className="flex flex-col md:flex-row items-center gap-8 bg-gray-900/50 p-8 rounded-xl border border-gray-800">
-              <div className="flex-shrink-0 text-blue-400 text-5xl font-bold">1</div>
-              <div className="text-left">
-                <h3 className="text-2xl font-bold mb-2">Asset Acquisition</h3>
-                <p className="text-gray-300">
-                  Funds from AuAERO token sales are strategically invested in a diversified portfolio of physical gold
-                  and high-performing commercial airline assets.
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col md:flex-row items-center gap-8 bg-gray-900/50 p-8 rounded-xl border border-gray-800">
-              <div className="flex-shrink-0 text-blue-400 text-5xl font-bold">2</div>
-              <div className="text-left">
-                <h3 className="text-2xl font-bold mb-2">Performance Optimization</h3>
-                <p className="text-gray-300">
-                  Our expert team actively manages the asset portfolio, employing advanced financial engineering
-                  techniques to maximize returns and optimize performance.
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-col md:flex-row items-center gap-8 bg-gray-900/50 p-8 rounded-xl border border-gray-800">
-              <div className="flex-shrink-0 text-blue-400 text-5xl font-bold">3</div>
-              <div className="text-left">
-                <h3 className="text-2xl font-bold mb-2">Token Value Growth</h3>
-                <p className="text-gray-300">
-                  The value generated from the optimized assets directly contributes to the growth of the AuAERO token,
-                  providing holders with aggressive compounding returns.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Milestones */}
-      <Milestones tokenType="auaero" />
-
-      {/* Call to Action */}
-      <section className="py-20 px-4 bg-blue-900/30 text-center">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold mb-6">Ready for Aggressive Growth?</h2>
-          <p className="text-xl text-blue-200 mb-8">
-            Experience the power of dual-asset backing with optimized aviation performance.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button
               size="lg"
-              className="bg-blue-500 text-white hover:bg-blue-600"
+              className="text-white px-10 py-7 text-lg font-medium"
+              style={{
+                background: 'linear-gradient(to right, #2563eb, #3b82f6)',
+                boxShadow: '0 8px 24px rgba(37, 99, 235, 0.3)'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #1d4ed8, #2563eb)'}
+              onMouseLeave={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #2563eb, #3b82f6)'}
               onClick={() => handleAddToCart(5000)}
             >
-              Add $5,000 to Cart
+              Join Waitlist ($5,000)
             </Button>
             <Button
-              size="lg"
               variant="outline"
-              className="border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-black bg-transparent"
+              size="lg"
+              className="px-10 py-7 text-lg font-light border-[#2563eb] dark:border-[#3b82f6] text-[#2563eb] dark:text-[#60a5fa] hover:bg-[#2563eb]/10 dark:hover:bg-[#3b82f6]/10"
               onClick={() => handleAddToCart(10000)}
             >
-              Add $10,000 to Cart
+              Premium Entry ($10,000)
             </Button>
           </div>
+
+          <p
+            className="text-sm font-light mt-8 text-gray-600 dark:text-gray-400"
+            style={{
+              letterSpacing: '0.01em'
+            }}
+          >
+            Minimum investment: $5,000 • Expected launch: Q3 2025
+          </p>
         </div>
       </section>
+
+      {/* Footer - Sumi-e Grounding */}
+      <footer
+        className="py-12 px-8"
+        style={{
+          background: 'var(--mode-footer-bg)',
+          borderTop: '2px solid var(--mode-footer-border)'
+        }}
+      >
+        <style>{`
+          :root {
+            --mode-footer-bg: linear-gradient(to bottom, rgba(155, 139, 126, 0.15) 0%, rgba(155, 139, 126, 0.25) 100%);
+            --mode-footer-border: rgba(155, 139, 126, 0.35);
+          }
+          .dark {
+            --mode-footer-bg: rgba(37, 99, 235, 0.05);
+            --mode-footer-border: rgba(37, 99, 235, 0.2);
+          }
+        `}</style>
+        <div className="max-w-7xl mx-auto text-center">
+          <p
+            className="text-sm font-light text-gray-700 dark:text-gray-300"
+            style={{
+              letterSpacing: '0.01em'
+            }}
+          >
+            &copy; 2025 COW Group. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

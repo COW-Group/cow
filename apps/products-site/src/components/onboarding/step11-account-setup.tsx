@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Phone, Mail, Crown, Sparkles, MapPin, UserPlus, LogIn } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useNavigate } from "react-router-dom"
 import { useGuideSpeech } from "@/hooks/use-guide-speech"
 
 export const Step11AccountSetup: React.FC = () => {
@@ -41,7 +41,7 @@ export const Step11AccountSetup: React.FC = () => {
   const [isPremium, setIsPremium] = useState(state.isPremium)
   const [agreeToTerms, setAgreeToTerms] = useState(false)
   const [showJourneyMap, setShowJourneyMap] = useState(false)
-  const router = useRouter()
+  const navigate = useNavigate()
 
   const isAuthenticated = state.isAuthenticated
 
@@ -50,7 +50,7 @@ export const Step11AccountSetup: React.FC = () => {
     if (typeof window !== "undefined") {
       localStorage.setItem("onboarding_return_step", "11")
     }
-    router.push("/auth/signup")
+    navigate("/auth/signup")
   }
 
   const handleSignIn = () => {
@@ -58,7 +58,7 @@ export const Step11AccountSetup: React.FC = () => {
     if (typeof window !== "undefined") {
       localStorage.setItem("onboarding_return_step", "11")
     }
-    router.push("/auth/signin")
+    navigate("/auth/signin")
   }
 
   const handleComplete = () => {

@@ -26,8 +26,8 @@ export function ProductMenu() {
         <Grip className="w-5 h-5 text-gray-600 dark:text-gray-300" />
       </button>
       {isOpen && (
-        <div 
-          className="absolute top-full mt-3 right-0 w-96 border-0 overflow-hidden"
+        <div
+          className="absolute top-full mt-3 right-0 w-96 border-0 overflow-y-auto max-h-[calc(100vh-120px)]"
           style={{
             background: 'rgba(255, 255, 255, 0.95)',
             backdropFilter: 'blur(20px) saturate(180%)',

@@ -5,6 +5,7 @@ import { CopilotProvider } from './contexts/copilot-context';
 import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
 import OnboardingPage from './pages/OnboardingPage';
+import CompleteProfilePage from './pages/CompleteProfilePage';
 import CountrySelectionPage from './pages/CountrySelectionPage';
 import InvestorClassificationPage from './pages/InvestorClassificationPage';
 import UserTypeSelectionPage from './pages/UserTypeSelectionPage';
@@ -18,6 +19,10 @@ import AuAeroPage from './pages/AuAeroPage';
 import AuAeroWhitepaperPage from './pages/AuAeroWhitepaperPage';
 import AuSiriPage from './pages/AuSiriPage';
 import AuSiriAnimationPage from './pages/AuSiriAnimationPage';
+import DairyPage from './pages/DairyPage';
+import FoodPage from './pages/FoodPage';
+import AuRailPage from './pages/AuRailPage';
+import SuraPage from './pages/SuraPage';
 import ResearchCentrePage from './pages/ResearchCentrePage';
 import ResearchArticlePage from './pages/ResearchArticlePage';
 import MooPage from './pages/MooPage';
@@ -30,6 +35,7 @@ function App() {
         <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
+        <Route path="/complete-profile" element={<CompleteProfilePage />} />
         <Route path="/onboarding/country-selection" element={<CountrySelectionPage />} />
         <Route path="/onboarding/investor-classification" element={<InvestorClassificationPage />} />
         <Route path="/onboarding/user-type" element={<UserTypeSelectionPage />} />
@@ -44,6 +50,10 @@ function App() {
         <Route path="/auaero-whitepaper" element={<AuAeroWhitepaperPage />} />
         <Route path="/ausiri" element={<AuSiriPage />} />
         <Route path="/ausiri-animation" element={<AuSiriAnimationPage />} />
+        <Route path="/dairy" element={<DairyPage />} />
+        <Route path="/food" element={<FoodPage />} />
+        <Route path="/aurail" element={<AuRailPage />} />
+        <Route path="/sura" element={<SuraPage />} />
         <Route path="/research" element={<ResearchCentrePage />} />
         <Route path="/research/:slug" element={<ResearchArticlePage />} />
         <Route path="/moo" element={<MooPage />} />

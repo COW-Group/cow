@@ -1,6 +1,6 @@
 import React from 'react'
-import { ComprehensiveOnboardingContainer } from '@/components/comprehensive-onboarding'
+import { SimpleOnboardingContainer } from '@/components/simple-onboarding'
 
 export default function OnboardingPage() {
-  return <ComprehensiveOnboardingContainer />
+  return <SimpleOnboardingContainer />
 }

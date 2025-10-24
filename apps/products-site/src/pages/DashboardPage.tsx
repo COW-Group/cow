@@ -192,8 +192,8 @@ export default function DashboardPage() {
           <ProductMenu />
           <CartDropdown />
           <div className="flex items-center gap-4">
-            {/* Onboarding Button */}
-            <Link to="/onboarding">
+            {/* Complete Profile Button (KYC Flow) */}
+            <Link to="/complete-profile">
               <Button
                 variant="outline"
                 size="sm"

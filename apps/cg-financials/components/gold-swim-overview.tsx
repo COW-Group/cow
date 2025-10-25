@@ -95,7 +95,7 @@ export default function GoldSwimOverview({
             <div className="group">
               <Label htmlFor="totalUnitSubscription" className="text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-blue-600" />
-                Total Unit Subscription
+                Enter your Desired Investment
               </Label>
               <div className="relative mt-3">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-xl blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
@@ -118,9 +118,6 @@ export default function GoldSwimOverview({
                   )}
                 </div>
               </div>
-              <p className="text-xs text-gray-600 mt-2 ml-1 italic">
-                Enter your desired unit investment amount
-              </p>
             </div>
 
             {/* Initial Investment - CALCULATED */}

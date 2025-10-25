@@ -1,6 +1,5 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useGoldPriceContext } from "@/contexts/gold-price-context"
 import {
   calculateSpotPriceEUR,
@@ -29,11 +28,11 @@ export default function ExitPriceCalculation() {
   const exitPriceUSD = exitPriceEUR * eurUsdRate
 
   return (
-    <Card className="border-blue-200 shadow-lg">
-      <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
-        <CardTitle className="text-3xl font-bold text-blue-700">Exit Price Calculation</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-0">
+    <div className="border-2 border-blue-200 bg-white shadow-lg rounded-lg overflow-hidden">
+      <div className="px-4 sm:px-6 py-4 sm:py-6 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
+        <h2 className="text-2xl font-bold text-blue-700">Exit Price Calculation</h2>
+      </div>
+      <div className="px-4 sm:px-6 py-4 sm:py-6">
         <div className="space-y-4">
           {/* Formula Section */}
           <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-4 border-2 border-blue-200">
@@ -77,7 +76,7 @@ export default function ExitPriceCalculation() {
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

@@ -1,6 +1,5 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useGoldPriceContext } from "@/contexts/gold-price-context"
 import {
   calculateInitialMarginPerContract,
@@ -13,22 +12,23 @@ import {
 } from "@/lib/gold-calculations"
 
 export default function MarginCalculation() {
-  const { futuresPrice, spotAsk, loading } = useGoldPriceContext()
+  const { futuresPrice, spotAsk, eurExchangeRate, loading } = useGoldPriceContext()
 
   // Use live price or fallback to default
   const spotPriceUSD = futuresPrice || DEFAULT_PARAMETERS.spotPriceUSD
   const goldSpotAsk = spotAsk || 4030.00
+  const exchangeRate = eurExchangeRate || 1.2
   const { contractPriceEUR, totalContracts, contractSize, marginRequirement, eurUsdRate } = DEFAULT_PARAMETERS
 
   // Calculate derived values
-  const spotPriceEUR = calculateSpotPriceEUR(spotPriceUSD, eurUsdRate)
+  const spotPriceEUR = calculateSpotPriceEUR(spotPriceUSD, exchangeRate)
   // Current Futures Price/Unit (1/100th Gram) - using new formula
   const futuresPricePerHundredthGramUSD = ((spotPriceUSD + 1.00) / (31.1034768 * 100)) + 0.10
-  const futuresPricePerHundredthGramEUR = futuresPricePerHundredthGramUSD * eurUsdRate // EUR value is 1.2x USD value
+  const futuresPricePerHundredthGramEUR = futuresPricePerHundredthGramUSD * exchangeRate // EUR value is exchangeRate x USD value
   const contractNotionalValue = futuresPricePerHundredthGramEUR * (31.1034768 * 100) // Contract Notional Value (Entry Price per oz)
   // Cash Margin Investment: ((Prevailing Gold Spot Ask -- 1 oz)/31.1034768)+18.1)*31.1034768*100/3 for 100 Oz
   const cashMarginPer100OzUSD = ((goldSpotAsk / 31.1034768) + 18.1) * 31.1034768 * 100 / 3
-  const cashMarginPer100OzEUR = cashMarginPer100OzUSD / 1.2 // EUR value is USD divided by 1.2
+  const cashMarginPer100OzEUR = cashMarginPer100OzUSD / exchangeRate
   const cashMarginPerHundredthGramUSD = cashMarginPer100OzUSD / (100 * 31.1034768 * 100)
   const cashMarginPerHundredthGramEUR = cashMarginPer100OzEUR / (100 * 31.1034768 * 100)
   const initialMarginPerUnit = cashMarginPerHundredthGramEUR
@@ -42,11 +42,11 @@ export default function MarginCalculation() {
   const totalInitialMargin = calculateTotalInitialMargin(contractPriceEUR, totalContracts, contractSize, marginRequirement)
 
   return (
-    <Card className="border-blue-200 shadow-lg">
-      <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
-        <CardTitle className="text-3xl font-bold text-blue-700">Margin Calculation</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-0">
+    <div className="border-2 border-blue-200 bg-white shadow-lg rounded-lg overflow-hidden">
+      <div className="px-4 sm:px-6 py-4 sm:py-6 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
+        <h2 className="text-2xl font-bold text-blue-700">Margin Calculation</h2>
+      </div>
+      <div className="px-4 sm:px-6 py-4 sm:py-6">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
@@ -97,7 +97,7 @@ export default function MarginCalculation() {
           </table>
         </div>
         <p className="mt-3 text-xs text-gray-600 italic">*rounded ≈ € 10,000,000 including sundry expenses.</p>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

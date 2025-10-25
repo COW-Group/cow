@@ -30,7 +30,7 @@ export default function LoginPage() {
         password,
       })
       if (error) throw error
-      router.push("/dashboard")
+      router.push("/dashboard/mygold")
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : "An error occurred")
     } finally {
@@ -84,7 +84,7 @@ export default function LoginPage() {
                     />
                   </div>
                   {error && <p className="text-xs sm:text-sm text-red-500 bg-red-50 p-2 sm:p-3 rounded">{error}</p>}
-                  <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 h-11 text-base" disabled={isLoading}>
+                  <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white h-11 text-base" disabled={isLoading}>
                     {isLoading ? "Signing in..." : "Sign In"}
                   </Button>
                 </div>

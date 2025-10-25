@@ -1,6 +1,5 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useGoldPriceContext } from "@/contexts/gold-price-context"
 import {
   calculateSpotPriceEUR,
@@ -18,43 +17,44 @@ import {
 } from "@/lib/gold-calculations"
 
 export default function SummaryTable() {
-  const { futuresPrice, spotAsk, loading } = useGoldPriceContext()
+  const { futuresPrice, spotAsk, eurExchangeRate, loading } = useGoldPriceContext()
 
   // Use live price or fallback to default
   const spotPriceUSD = futuresPrice || DEFAULT_PARAMETERS.spotPriceUSD
+  const exchangeRate = eurExchangeRate || 1.2
   const { eurUsdRate, contractPriceEUR, totalContracts, contractSize, compoundingRate, period } = DEFAULT_PARAMETERS
 
   // Calculate derived values
   // Use live gold spot ask or fallback to default
   const liveSpotAsk = spotAsk || 4030.00
   const prevailingSpotAskUSD = liveSpotAsk / 31.1034768 / 100 // Prevailing Gold Spot Ask -- 1/100th Gram in USD
-  const prevailingSpotAskEUR = liveSpotAsk / eurUsdRate / 31.1034768 / 100 // Prevailing Gold Spot Ask -- 1/100th Gram in EUR
-  const spotPriceEUR = calculateSpotPriceEUR(spotPriceUSD, eurUsdRate)
+  const prevailingSpotAskEUR = liveSpotAsk / exchangeRate / 31.1034768 / 100 // Prevailing Gold Spot Ask -- 1/100th Gram in EUR
+  const spotPriceEUR = calculateSpotPriceEUR(spotPriceUSD, exchangeRate)
   // Current Futures Price/Unit (1/100th Gram) - using new formula
   const futuresPricePerHundredthGramUSD = ((spotPriceUSD + 1.00) / (31.1034768 * 100)) + 0.10
-  const futuresPricePerHundredthGramEUR = futuresPricePerHundredthGramUSD / 1.2 // EUR value is USD divided by 1.2
+  const futuresPricePerHundredthGramEUR = futuresPricePerHundredthGramUSD / exchangeRate
   // Contract Notional Value (P₀) = Current Futures Price × (1.03263^Contract Term)
   const contractNotionalValueUSD = futuresPricePerHundredthGramUSD * Math.pow(1.03263, period)
-  const contractNotionalValueEUR = contractNotionalValueUSD / 1.2 // EUR value is USD divided by 1.2
+  const contractNotionalValueEUR = contractNotionalValueUSD / exchangeRate
   const entryPriceEUR = contractNotionalValueEUR // Using Contract Notional Value (P₀)
   const entryPriceUSD = contractNotionalValueUSD // Using Contract Notional Value (P₀)
   const goldSpotAskPerHundredthGramEUR = prevailingSpotAskEUR // Use Prevailing Gold Spot Ask for exit price calculation
   const exitPriceEUR = calculateExitPrice(goldSpotAskPerHundredthGramEUR, compoundingRate, period) // Match Exit Price Calculation section
-  const exitPriceUSD = exitPriceEUR * eurUsdRate
+  const exitPriceUSD = exitPriceEUR * exchangeRate
   const totalOunces = calculateTotalOunces(totalContracts, contractSize)
   const totalUnitsBought = 2250000000 // 2.25B Units - Total Units Bought from Margin Calculation
   const contractValue = entryPriceEUR * totalUnitsBought // Entry Price per Unit × Units
   const contractValueUSD = entryPriceUSD * totalUnitsBought // Entry Price per Unit × Units
   // Cash Margin Investment: ((Prevailing Gold Spot Ask -- 1 oz)/31.1034768)+18.1)*31.1034768*100/3 for 100 Oz
   const cashMarginPer100OzUSD = ((liveSpotAsk / 31.1034768) + 18.1) * 31.1034768 * 100 / 3
-  const cashMarginPer100OzEUR = cashMarginPer100OzUSD / 1.2 // EUR value is USD divided by 1.2
+  const cashMarginPer100OzEUR = cashMarginPer100OzUSD / exchangeRate
   const cashMarginPerHundredthGramUSD = cashMarginPer100OzUSD / (100 * 31.1034768 * 100)
   const cashMarginPerHundredthGramEUR = cashMarginPer100OzEUR / (100 * 31.1034768 * 100)
   const initialMarginPerUnit = cashMarginPerHundredthGramEUR
   const totalCashMargin = initialMarginPerUnit * totalUnitsBought // Total Cash Margin from Margin Calculation
   // MyCow's Cash Margin to the Exchange: $19,980 per 100 Oz
   const mycowMarginPer100OzUSD = 19980
-  const mycowMarginPer100OzEUR = mycowMarginPer100OzUSD / 1.2 // EUR value is USD divided by 1.2
+  const mycowMarginPer100OzEUR = mycowMarginPer100OzUSD / exchangeRate
   // Number of Contracts calculation
   const totalUnitsOfferedInOz = totalUnitsBought / (31.1034768 * 100)
   const ouncesPerStandardContract = 100
@@ -82,11 +82,11 @@ export default function SummaryTable() {
   }
 
   return (
-    <Card className="border-blue-200 shadow-lg">
-      <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
-        <CardTitle className="text-3xl font-bold text-blue-700">Summary Table</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-0">
+    <div className="border-2 border-blue-200 bg-white shadow-lg rounded-lg overflow-hidden">
+      <div className="px-4 sm:px-6 py-4 sm:py-6 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
+        <h2 className="text-2xl font-bold text-blue-700">Summary Table</h2>
+      </div>
+      <div className="px-4 sm:px-6 py-4 sm:py-6">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
@@ -211,7 +211,7 @@ export default function SummaryTable() {
             )}
           </p>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

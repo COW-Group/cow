@@ -1,6 +1,5 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useGoldPriceContext } from "@/contexts/gold-price-context"
 import {
   calculateSpotPriceEUR,
@@ -19,28 +18,29 @@ import {
 } from "@/lib/gold-calculations"
 
 export default function ContractValueGain() {
-  const { futuresPrice, spotAsk, loading } = useGoldPriceContext()
+  const { futuresPrice, spotAsk, eurExchangeRate, loading } = useGoldPriceContext()
 
   // Use live price or fallback to default
   const spotPriceUSD = futuresPrice || DEFAULT_PARAMETERS.spotPriceUSD
   const goldSpotAsk = spotAsk || 4030.00
+  const exchangeRate = eurExchangeRate || 1.2
   const { eurUsdRate, contractPriceEUR, totalContracts, contractSize, compoundingRate, period, marginRequirement } =
     DEFAULT_PARAMETERS
 
   // Calculate derived values
-  const spotPriceEUR = calculateSpotPriceEUR(spotPriceUSD, eurUsdRate)
+  const spotPriceEUR = calculateSpotPriceEUR(spotPriceUSD, exchangeRate)
   // Current Futures Price/Unit (1/100th Gram) - using new formula
   const futuresPricePerHundredthGramUSD = ((spotPriceUSD + 1.00) / (31.1034768 * 100)) + 0.10
-  const futuresPricePerHundredthGramEUR = futuresPricePerHundredthGramUSD / 1.2 // EUR value is USD divided by 1.2
+  const futuresPricePerHundredthGramEUR = futuresPricePerHundredthGramUSD / exchangeRate
   // Contract Notional Value (P₀) = Current Futures Price × (1.03263^Contract Term)
   const contractNotionalValueUSD = futuresPricePerHundredthGramUSD * Math.pow(1.03263, period)
-  const contractNotionalValueEUR = contractNotionalValueUSD / 1.2 // EUR value is USD divided by 1.2
+  const contractNotionalValueEUR = contractNotionalValueUSD / exchangeRate
   // Prevailing Gold Spot Ask -- 1/100th Gram (used for exit price calculation)
   const goldSpotAskPerHundredthGramUSD = goldSpotAsk / 31.1034768 / 100
-  const goldSpotAskPerHundredthGramEUR = goldSpotAsk / eurUsdRate / 31.1034768 / 100
+  const goldSpotAskPerHundredthGramEUR = goldSpotAsk / exchangeRate / 31.1034768 / 100
   // Exit Price = Prevailing Gold Spot Ask (1/100th Gram) × (1 + r)^t
   const exitPriceEUR = calculateExitPrice(goldSpotAskPerHundredthGramEUR, compoundingRate, period)
-  const exitPriceUSD = exitPriceEUR * eurUsdRate
+  const exitPriceUSD = exitPriceEUR * exchangeRate
   const totalOunces = calculateTotalOunces(totalContracts, contractSize)
   const contractValue = calculateContractValue(contractPriceEUR, totalOunces)
   const exitValue = calculateExitValue(exitPriceEUR, totalOunces)
@@ -49,13 +49,13 @@ export default function ContractValueGain() {
   const totalUnitsBought = 1000
   // Cash Margin Investment: ((Prevailing Gold Spot Ask -- 1 oz)/31.1034768)+18.1)*31.1034768*100/3 for 100 Oz
   const cashMarginPer100OzUSD = ((goldSpotAsk / 31.1034768) + 18.1) * 31.1034768 * 100 / 3
-  const cashMarginPer100OzEUR = cashMarginPer100OzUSD / 1.2 // EUR value is USD divided by 1.2
+  const cashMarginPer100OzEUR = cashMarginPer100OzUSD / exchangeRate
   const cashMarginPerHundredthGramUSD = cashMarginPer100OzUSD / (100 * 31.1034768 * 100)
   const cashMarginPerHundredthGramEUR = cashMarginPer100OzEUR / (100 * 31.1034768 * 100)
   // MyCow's Cash Margin to the Exchange: $19,980 per 100 Oz
   const mycowMarginPer100Oz = 19980
   const mycowMarginPerHundredthGramUSD = mycowMarginPer100Oz / (100 * 31.1034768 * 100)
-  const mycowMarginPerHundredthGramEUR = mycowMarginPer100Oz / eurUsdRate / (100 * 31.1034768 * 100)
+  const mycowMarginPerHundredthGramEUR = mycowMarginPer100Oz / exchangeRate / (100 * 31.1034768 * 100)
   const totalCashMargin = mycowMarginPerHundredthGramEUR * totalUnitsBought
   const marginInvested = mycowMarginPerHundredthGramEUR // Using MyCow's Margin per Unit (1/100th Gram)
   const roi = (investorGain / marginInvested) * 100 // ROI as percentage (using Investor Gain)
@@ -66,11 +66,11 @@ export default function ContractValueGain() {
   const cagr = calculateCAGR(investorGain / marginInvested, period)
 
   return (
-    <Card className="border-blue-200 shadow-lg">
-      <CardHeader className="pb-4 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
-        <CardTitle className="text-3xl font-bold text-blue-700">Contract Value and Gain</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-0">
+    <div className="border-2 border-blue-200 bg-white shadow-lg rounded-lg overflow-hidden">
+      <div className="px-4 sm:px-6 py-4 sm:py-6 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
+        <h2 className="text-2xl font-bold text-blue-700">Contract Value and Gain</h2>
+      </div>
+      <div className="px-4 sm:px-6 py-4 sm:py-6">
         <div className="overflow-x-auto">
           <table className="w-full border-collapse">
             <thead>
@@ -179,7 +179,7 @@ export default function ContractValueGain() {
             )}
           </p>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

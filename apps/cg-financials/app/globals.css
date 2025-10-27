@@ -40,8 +40,8 @@
 }
 
 @theme inline {
-  --font-sans: "Geist Sans", system-ui, -apple-system, sans-serif;
-  --font-mono: "Geist Mono", "Courier New", monospace;
+  --font-sans: var(--font-poppins), system-ui, -apple-system, sans-serif;
+  --font-mono: "Courier New", monospace;
 
   /* MyCow.io Blue Theme */
   --color-background: 255 255 255;

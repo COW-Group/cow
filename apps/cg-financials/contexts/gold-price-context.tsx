@@ -7,6 +7,8 @@ interface GoldPriceData {
   futuresUpdated: number
   spotAsk: number
   spotAskTimestamp: string
+  eurExchangeRate: number
+  eurExchangeRateTimestamp: string
 }
 
 interface GoldPriceContextType {
@@ -14,6 +16,8 @@ interface GoldPriceContextType {
   futuresUpdated: number | null
   spotAsk: number | null
   spotAskTimestamp: string | null
+  eurExchangeRate: number | null
+  eurExchangeRateTimestamp: string | null
   loading: boolean
   error: string | null
   refetch: () => void
@@ -56,7 +60,10 @@ export function GoldPriceProvider({ children }: { children: ReactNode }) {
 
       // Use fallback data if fetch failed
       let futuresData = { price: 2700.00, updated: Math.floor(Date.now() / 1000) }
-      let spotAskData = { rate: { ask: 4030.00 }, timestamp: new Date().toISOString() }
+      let spotAskData = {
+        gold_spot: { rate: { ask: 4030.00 }, timestamp: new Date().toISOString() },
+        exch_rate: { status: "fallback", base: "USD", currencies: { EUR: 1.2 }, timestamp: new Date().toISOString() }
+      }
 
       if (futuresResponse && futuresResponse.ok) {
         try {
@@ -88,8 +95,10 @@ export function GoldPriceProvider({ children }: { children: ReactNode }) {
       const combinedData = {
         futuresPrice: futuresData.price ? Math.round(futuresData.price * 100) / 100 : futuresData.price,
         futuresUpdated: futuresData.updated,
-        spotAsk: spotAskData.rate?.ask || 4030.00,
-        spotAskTimestamp: spotAskData.timestamp || new Date().toISOString()
+        spotAsk: spotAskData.gold_spot?.rate?.ask || 4030.00,
+        spotAskTimestamp: spotAskData.gold_spot?.timestamp || new Date().toISOString(),
+        eurExchangeRate: spotAskData.exch_rate?.currencies?.EUR || 1.2,
+        eurExchangeRateTimestamp: spotAskData.exch_rate?.timestamp || new Date().toISOString()
       }
 
       console.log("[Gold Price Context] Combined data:", combinedData)
@@ -109,7 +118,9 @@ export function GoldPriceProvider({ children }: { children: ReactNode }) {
         futuresPrice: 2700.00,
         futuresUpdated: Math.floor(Date.now() / 1000),
         spotAsk: 4030.00,
-        spotAskTimestamp: new Date().toISOString()
+        spotAskTimestamp: new Date().toISOString(),
+        eurExchangeRate: 1.2,
+        eurExchangeRateTimestamp: new Date().toISOString()
       })
     } finally {
       setLoading(false)
@@ -127,6 +138,8 @@ export function GoldPriceProvider({ children }: { children: ReactNode }) {
         futuresUpdated: priceData?.futuresUpdated || null,
         spotAsk: priceData?.spotAsk || null,
         spotAskTimestamp: priceData?.spotAskTimestamp || null,
+        eurExchangeRate: priceData?.eurExchangeRate || null,
+        eurExchangeRateTimestamp: priceData?.eurExchangeRateTimestamp || null,
         loading,
         error,
         refetch: fetchPrices,

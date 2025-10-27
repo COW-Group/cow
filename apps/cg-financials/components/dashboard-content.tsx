@@ -58,7 +58,7 @@ export default function DashboardContent({ userEmail }: DashboardContentProps) {
 
   return (
     <GoldPriceProvider>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-50">
+      <div className="min-h-screen bg-white">
         <DashboardHeader userEmail={userEmail} />
 
         {/* Breadcrumb Navigation */}
@@ -94,7 +94,7 @@ export default function DashboardContent({ userEmail }: DashboardContentProps) {
           <div className="lg:hidden mb-4">
             <Button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white flex items-center justify-between"
+              className="w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white flex items-center justify-between shadow-md"
             >
               <div className="flex items-center gap-2">
                 <Menu className="h-4 w-4" />
@@ -117,12 +117,12 @@ export default function DashboardContent({ userEmail }: DashboardContentProps) {
                           }}
                           className={`w-full flex items-center gap-3 px-4 py-3 transition-all ${
                             activeSection === section.id
-                              ? "bg-blue-600 text-white"
-                              : "text-gray-700 hover:bg-blue-50"
+                              ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white"
+                              : "text-gray-700 hover:bg-gradient-to-r hover:from-cyan-50 hover:to-blue-50"
                           }`}
                         >
                           <Icon className="h-5 w-5 flex-shrink-0" />
-                          <span className="text-sm font-medium">{section.label}</span>
+                          <span className="text-sm font-normal">{section.label}</span>
                         </button>
                       </li>
                     )
@@ -137,16 +137,16 @@ export default function DashboardContent({ userEmail }: DashboardContentProps) {
             <aside className="hidden lg:block w-80 flex-shrink-0">
               <nav className="bg-white rounded-lg shadow-lg border border-blue-200 overflow-hidden">
                 {/* Title */}
-                <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4">
+                <div className="bg-gradient-to-r from-blue-600 to-cyan-500 p-4">
                   <div className="flex items-center justify-between mb-2">
                     <h2 className="text-2xl font-bold text-white">
                       MyCow.io
                     </h2>
-                    <span className="text-sm font-semibold text-purple-200 bg-white/20 px-2.5 py-1 rounded-full">
+                    <span className="text-sm font-semibold text-white bg-white/25 px-2.5 py-1 rounded-full shadow-sm">
                       SiriZ31
                     </span>
                   </div>
-                  <p className="text-xs font-medium text-blue-100 tracking-wide uppercase">
+                  <p className="text-xs font-medium text-cyan-50 tracking-wide uppercase">
                     Gold Futures Trading Financials
                   </p>
                 </div>
@@ -163,8 +163,8 @@ export default function DashboardContent({ userEmail }: DashboardContentProps) {
                             onClick={() => setActiveSection(section.id)}
                             className={`group w-full flex items-center gap-2.5 px-3 py-2 rounded-lg transition-all duration-200 ${
                               isActive
-                                ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md shadow-blue-500/20"
-                                : "text-gray-700 hover:bg-white hover:shadow-sm bg-transparent"
+                                ? "bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-md shadow-cyan-500/30"
+                                : "text-gray-700 hover:bg-gradient-to-r hover:from-cyan-50 hover:to-blue-50 hover:shadow-sm bg-transparent"
                             }`}
                           >
                             <div className={`flex items-center justify-center w-7 h-7 rounded-md transition-all ${
@@ -176,7 +176,7 @@ export default function DashboardContent({ userEmail }: DashboardContentProps) {
                                 isActive ? "text-white" : "text-blue-600"
                               }`} />
                             </div>
-                            <span className={`text-xs font-semibold flex-1 text-left ${
+                            <span className={`text-xs font-normal flex-1 text-left ${
                               isActive ? "text-white" : "text-gray-800 group-hover:text-blue-600"
                             }`}>
                               {section.label}

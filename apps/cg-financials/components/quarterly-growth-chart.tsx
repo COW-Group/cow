@@ -1,35 +1,48 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useMemo } from "react"
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
+import { useGoldPriceContext } from "@/contexts/gold-price-context"
+import { calculateAllQuarters, FinancialModelParams } from "@/lib/gold-swim-calculations"
 
-const chartData = [
-  { quarter: 1, investment: 3.375, realizableGain: 1.397, totalGold: 40.46, sourcingCost: 117.29 },
-  { quarter: 2, investment: 4.542, realizableGain: 1.844, totalGold: 53.10, sourcingCost: 119.61 },
-  { quarter: 3, investment: 6.084, realizableGain: 2.422, totalGold: 69.37, sourcingCost: 121.97 },
-  { quarter: 4, investment: 8.112, realizableGain: 3.167, totalGold: 90.20, sourcingCost: 124.38 },
-  { quarter: 5, investment: 10.766, realizableGain: 4.121, totalGold: 116.75, sourcingCost: 126.84 },
-  { quarter: 6, investment: 14.224, realizableGain: 5.339, totalGold: 150.46, sourcingCost: 129.35 },
-  { quarter: 7, investment: 18.709, realizableGain: 6.886, totalGold: 193.04, sourcingCost: 131.91 },
-  { quarter: 8, investment: 24.499, realizableGain: 8.842, totalGold: 246.62, sourcingCost: 134.51 },
-  { quarter: 9, investment: 31.944, realizableGain: 11.306, totalGold: 313.72, sourcingCost: 137.17 },
-  { quarter: 10, investment: 41.475, realizableGain: 14.393, totalGold: 397.42, sourcingCost: 139.88 },
-  { quarter: 11, investment: 53.623, realizableGain: 18.247, totalGold: 501.38, sourcingCost: 142.65 },
-  { quarter: 12, investment: 69.044, realizableGain: 23.038, totalGold: 629.97, sourcingCost: 145.47 },
-]
+interface QuarterlyGrowthChartProps {
+  initialInvestment: number
+  modelParams?: FinancialModelParams
+}
 
-export default function QuarterlyGrowthChart() {
+export default function QuarterlyGrowthChart({ initialInvestment, modelParams }: QuarterlyGrowthChartProps) {
+  const { spotAsk, eurExchangeRate } = useGoldPriceContext()
+
+  // Convert USD to EUR with dynamic exchange rate
+  const exchangeRate = eurExchangeRate || 1.2
+  const spotPriceEUR = spotAsk ? spotAsk / exchangeRate : 3434.67
+
+  // Calculate all quarters dynamically based on live price, user input, and model parameters
+  const quarterlyData = useMemo(() => {
+    return calculateAllQuarters(spotPriceEUR, initialInvestment, 25, modelParams)
+  }, [spotPriceEUR, initialInvestment, modelParams])
+
+  // Transform data for charts with appropriate units
+  const chartData = useMemo(() => {
+    return quarterlyData.map(row => ({
+      quarter: row.quarter,
+      investment: row.investmentBalanceBeginning / 1000000, // Convert to millions
+      realizableGain: row.realizableGainEnd / 1000000, // Convert to millions (Gross Gain)
+      totalGold: (row.revenueGrams + (row.investibleGainNetTax / row.sourcingCostEnd)) / 1000, // Convert to thousands of grams
+      sourcingCost: row.sourcingCostBeginning, // Keep in euros (Cost/g column)
+    }))
+  }, [quarterlyData])
   return (
     <div className="space-y-6">
       {/* Investment & Realizable Gain Growth */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Investment Balance & Realizable Gain Growth</CardTitle>
-          <CardDescription>
-            Quarterly progression showing compound growth (values in billions €)
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+      <div className="border-2 border-blue-200 bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="px-4 sm:px-6 py-4 sm:py-6 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
+          <h2 className="text-xl font-bold text-gray-900">Investment Balance & Realizable Gain Growth</h2>
+          <p className="text-gray-600 text-sm mt-1">
+            Quarterly progression showing compound growth (values in millions €)
+          </p>
+        </div>
+        <div className="px-4 sm:px-6 py-4 sm:py-6">
           <ResponsiveContainer width="100%" height={350}>
             <AreaChart data={chartData}>
               <defs>
@@ -49,11 +62,11 @@ export default function QuarterlyGrowthChart() {
                 className="text-xs"
               />
               <YAxis
-                label={{ value: 'Billions €', angle: -90, position: 'insideLeft' }}
+                label={{ value: 'Millions €', angle: -90, position: 'insideLeft' }}
                 className="text-xs"
               />
               <Tooltip
-                formatter={(value: number) => `€${value.toFixed(2)}B`}
+                formatter={(value: number) => `€${value.toFixed(2)}M`}
                 labelFormatter={(label) => `Quarter ${label}`}
               />
               <Legend />
@@ -75,18 +88,18 @@ export default function QuarterlyGrowthChart() {
               />
             </AreaChart>
           </ResponsiveContainer>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Gold Accumulation */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Gold Accumulation Over Time</CardTitle>
-          <CardDescription>
-            Total gold holdings in millions of grams
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+      <div className="border-2 border-blue-200 bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="px-4 sm:px-6 py-4 sm:py-6 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
+          <h2 className="text-xl font-bold text-gray-900">Gold Accumulation Over Time</h2>
+          <p className="text-gray-600 text-sm mt-1">
+            Total gold holdings in thousands of grams
+          </p>
+        </div>
+        <div className="px-4 sm:px-6 py-4 sm:py-6">
           <ResponsiveContainer width="100%" height={300}>
             <AreaChart data={chartData}>
               <defs>
@@ -102,11 +115,11 @@ export default function QuarterlyGrowthChart() {
                 className="text-xs"
               />
               <YAxis
-                label={{ value: 'Million Grams', angle: -90, position: 'insideLeft' }}
+                label={{ value: 'Thousand Grams', angle: -90, position: 'insideLeft' }}
                 className="text-xs"
               />
               <Tooltip
-                formatter={(value: number) => `${value.toFixed(2)}M grams`}
+                formatter={(value: number) => `${value.toFixed(2)}K grams`}
                 labelFormatter={(label) => `Quarter ${label}`}
               />
               <Legend />
@@ -120,18 +133,18 @@ export default function QuarterlyGrowthChart() {
               />
             </AreaChart>
           </ResponsiveContainer>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* Sourcing Cost Trend */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Sourcing Cost per Gram Trend</CardTitle>
-          <CardDescription>
-            Cost increases at 1.977% per quarter (in €)
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
+      <div className="border-2 border-blue-200 bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="px-4 sm:px-6 py-4 sm:py-6 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
+          <h2 className="text-xl font-bold text-gray-900">Sourcing Cost per Gram Trend</h2>
+          <p className="text-gray-600 text-sm mt-1">
+            Cost increases at 1.977% per quarter
+          </p>
+        </div>
+        <div className="px-4 sm:px-6 py-4 sm:py-6">
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-gray-300" />
@@ -141,12 +154,11 @@ export default function QuarterlyGrowthChart() {
                 className="text-xs"
               />
               <YAxis
-                label={{ value: 'Cost per Gram (€)', angle: -90, position: 'insideLeft' }}
+                label={{ value: 'EUR', angle: -90, position: 'insideLeft' }}
                 className="text-xs"
-                domain={[115, 150]}
               />
               <Tooltip
-                formatter={(value: number) => `€${value.toFixed(2)}/g`}
+                formatter={(value: number) => `€${value.toFixed(2)}`}
                 labelFormatter={(label) => `Quarter ${label}`}
               />
               <Legend />
@@ -160,8 +172,8 @@ export default function QuarterlyGrowthChart() {
               />
             </LineChart>
           </ResponsiveContainer>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   )
 }

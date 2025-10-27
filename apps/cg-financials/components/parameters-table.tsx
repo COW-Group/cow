@@ -1,6 +1,5 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useGoldPriceContext } from "@/contexts/gold-price-context"
 import {
   calculateSpotPriceEUR,
@@ -14,29 +13,30 @@ import {
 } from "@/lib/gold-calculations"
 
 export default function ParametersTable() {
-  const { futuresPrice, spotAsk, loading } = useGoldPriceContext()
+  const { futuresPrice, spotAsk, eurExchangeRate, loading } = useGoldPriceContext()
 
   // Use live price or fallback to default
   const spotPriceUSD = futuresPrice || DEFAULT_PARAMETERS.spotPriceUSD
   const goldSpotAsk = spotAsk || 4030.00
+  const exchangeRate = eurExchangeRate || 1.2
   const { eurUsdRate, contractPriceEUR, totalContracts, contractSize, compoundingRate, period, marginRequirement } =
     DEFAULT_PARAMETERS
 
   // Calculate derived values
-  const spotPriceEUR = calculateSpotPriceEUR(spotPriceUSD, eurUsdRate)
-  const contractPriceUSD = calculateContractPriceUSD(contractPriceEUR, eurUsdRate)
+  const spotPriceEUR = calculateSpotPriceEUR(spotPriceUSD, exchangeRate)
+  const contractPriceUSD = calculateContractPriceUSD(contractPriceEUR, exchangeRate)
   const totalOunces = calculateTotalOunces(totalContracts, contractSize)
   const exitPriceEUR = calculateExitPrice(spotPriceEUR, compoundingRate, period)
-  const exitPriceUSD = exitPriceEUR * eurUsdRate
+  const exitPriceUSD = exitPriceEUR * exchangeRate
   // Current Futures Price/Unit (1/100th Gram) - using new formula
   const futuresPricePerHundredthGramUSD = ((spotPriceUSD + 1.00) / (31.1034768 * 100)) + 0.10
-  const futuresPricePerHundredthGramEUR = futuresPricePerHundredthGramUSD / 1.2 // EUR value is USD divided by 1.2
+  const futuresPricePerHundredthGramEUR = futuresPricePerHundredthGramUSD / exchangeRate
   // Contract Notional Value (P₀) = Current Futures Price × (1.03263^Contract Term)
   const contractNotionalValueUSD = futuresPricePerHundredthGramUSD * Math.pow(1.03263, period)
-  const contractNotionalValueEUR = contractNotionalValueUSD / 1.2 // EUR value is USD divided by 1.2
+  const contractNotionalValueEUR = contractNotionalValueUSD / exchangeRate
   // Cash Margin Investment: ((Prevailing Gold Spot Ask -- 1 oz)/31.1034768)+18.1)*31.1034768*100/3 for 100 Oz
   const cashMarginPer100OzUSD = ((goldSpotAsk / 31.1034768) + 18.1) * 31.1034768 * 100 / 3
-  const cashMarginPer100OzEUR = cashMarginPer100OzUSD / 1.2 // EUR value is USD divided by 1.2
+  const cashMarginPer100OzEUR = cashMarginPer100OzUSD / exchangeRate
   const cashMarginPerHundredthGramUSD = cashMarginPer100OzUSD / (100 * 31.1034768 * 100)
   const cashMarginPerHundredthGramEUR = cashMarginPer100OzEUR / (100 * 31.1034768 * 100)
   // MyCow's Cash Margin to the Exchange: $19,980 per 100 Oz
@@ -50,11 +50,11 @@ export default function ParametersTable() {
   console.log(contractNotionalValueUSD, ",", Math.pow(1.03263, 6))
 
   return (
-    <Card className="border-blue-200 shadow-lg">
-      <CardHeader className="pb-3 sm:pb-4 px-4 sm:px-6 py-4 sm:py-6 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
-        <CardTitle className="text-2xl sm:text-3xl font-bold text-blue-700">Assumptions</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-0 px-0 sm:px-6 pb-4 sm:pb-6">
+    <div className="border-2 border-blue-200 bg-white shadow-lg rounded-lg overflow-hidden">
+      <div className="px-4 sm:px-6 py-4 sm:py-6 bg-gradient-to-r from-blue-50 to-cyan-50 border-b border-blue-100">
+        <h2 className="text-2xl sm:text-2xl font-bold text-blue-700">Assumptions</h2>
+      </div>
+      <div className="px-0 sm:px-6 py-4 sm:py-6">
         <div className="overflow-x-auto px-4 sm:px-0">
           <table className="w-full border-collapse min-w-[600px]">
             <thead>
@@ -215,8 +215,8 @@ export default function ParametersTable() {
             </tbody>
           </table>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }
 console.log('Total Units: 2.25B')

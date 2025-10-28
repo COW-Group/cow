@@ -7,7 +7,7 @@ import { CreateItemModal } from '../workspace/CreateItemModal';
 import { MaunAppMarketplace } from '../apps/MaunAppMarketplace';
 import { MaunAppLauncher } from '../apps/MaunAppLauncher';
 import { useMaunAppsStore } from '../../store/maun-apps.store';
-import { VantaBackground } from '../background/VantaBackground';
+import { COWBackground } from '../background/COWBackground';
 
 export function RootLayout() {
   const [currentWorkspaceId, setCurrentWorkspaceId] = useState<string>('');
@@ -17,9 +17,9 @@ export function RootLayout() {
 
   return (
     <div className="min-h-screen">
-      {/* Vanta.js Background */}
+      {/* COW Sumi-e Sky + Earth Background */}
       <div className="fixed inset-0 z-0">
-        <VantaBackground />
+        <COWBackground />
       </div>
 
       {/* AppHeader removed - navigation now in sidebar */}

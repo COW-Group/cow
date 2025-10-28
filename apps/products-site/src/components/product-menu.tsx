@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import { Grip, Coins, Plane, Milk, Wheat, Train, Wine } from "lucide-react"
+import { Grip, Coins, Plane, Milk, Wheat, Train, Wine, TrendingUp, DollarSign } from "lucide-react"
 import { useBackgroundDetection } from "@/hooks/useBackgroundDetection"
 
 export function ProductMenu() {
@@ -54,9 +54,9 @@ export function ProductMenu() {
 
           {/* Products Grid */}
           <div className="p-6 space-y-4">
-            <Link 
-              to="/ausiri" 
-              className="block group" 
+            <Link
+              to="/gold"
+              className="block group"
               onClick={() => setIsOpen(false)}
             >
               <div 
@@ -93,16 +93,16 @@ export function ProductMenu() {
                       </div>
                       <div>
                         <h3 className="font-light text-base tracking-tight text-gray-900 mb-1">
-                          AuSIRI
+                          Gold
                         </h3>
-                        <span 
+                        <span
                           className="text-xs px-3 py-1 rounded-full font-medium"
                           style={{
                             background: 'rgb(251, 243, 201)',
                             color: 'rgb(180, 83, 9)'
                           }}
                         >
-                          Pre-Launch
+                          Flagship Vertical
                         </span>
                       </div>
                     </div>

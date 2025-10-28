@@ -6,6 +6,7 @@
  */
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import type { Database } from './types';
 
 /**
  * Configuration options for Supabase client
@@ -56,7 +57,7 @@ const DEFAULT_AUTH_CONFIG = {
  * });
  * ```
  */
-export function createSupabaseClient(config?: SupabaseConfig): SupabaseClient {
+export function createSupabaseClient(config?: SupabaseConfig): SupabaseClient<Database> {
   const url = config?.url ||
               process.env.NEXT_PUBLIC_SUPABASE_URL ||
               process.env.REACT_APP_SUPABASE_URL ||
@@ -74,7 +75,7 @@ export function createSupabaseClient(config?: SupabaseConfig): SupabaseClient {
     );
   }
 
-  return createClient(url, key, {
+  return createClient<Database>(url, key, {
     auth: {
       ...DEFAULT_AUTH_CONFIG,
       ...config?.options?.auth,
@@ -104,3 +105,28 @@ export const supabase = createSupabaseClient();
  * Re-export Supabase types for convenience
  */
 export type { SupabaseClient } from '@supabase/supabase-js';
+
+/**
+ * Re-export Database type and table types for convenience
+ */
+export type { Database } from './types';
+
+// Convenient type exports for all tables
+export type Profile = Database['public']['Tables']['profiles']['Row'];
+export type Product = Database['public']['Tables']['products']['Row'];
+export type ProductTier = Database['public']['Tables']['product_tiers']['Row'];
+export type Order = Database['public']['Tables']['orders']['Row'];
+export type OrderItem = Database['public']['Tables']['order_items']['Row'];
+export type CartItem = Database['public']['Tables']['cart_items']['Row'];
+export type Asset = Database['public']['Tables']['assets']['Row'];
+export type Goal = Database['public']['Tables']['goals']['Row'];
+export type Campaign = Database['public']['Tables']['campaigns']['Row'];
+export type CampaignParticipant = Database['public']['Tables']['campaign_participants']['Row'];
+export type Subscription = Database['public']['Tables']['subscriptions']['Row'];
+export type KYCApplication = Database['public']['Tables']['kyc_applications']['Row'];
+export type SupportTicket = Database['public']['Tables']['support_tickets']['Row'];
+export type SupportMessage = Database['public']['Tables']['support_messages']['Row'];
+export type Company = Database['public']['Tables']['companies']['Row'];
+export type Team = Database['public']['Tables']['teams']['Row'];
+export type PaymentTransaction = Database['public']['Tables']['payment_transactions']['Row'];
+export type AuditLog = Database['public']['Tables']['audit_log']['Row'];

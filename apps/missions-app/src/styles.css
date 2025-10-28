@@ -5,24 +5,125 @@
 
 @layer base {
   :root {
-    /* Professional Inter font stack */
+    /* COW Sumi-e Sky + Earth Color System */
     --font-system: 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+
+    /* Cyan Sky Spectrum */
+    --cyan-deep: #0066FF;
+    --cyan-cerulean: #00A5CF;
+    --cyan-bright: #0ea5e9;
+    --cyan-sky: #38bdf8;
+
+    /* Earth Tones */
+    --earth-stone: #9B8B7E;
+    --earth-clay: #C9B8A8;
+    --earth-terracotta: #C77A58;
+    --earth-sand: #D4BFA0;
+
+    /* Bamboo & Emerald (Growth) */
+    --bamboo: #6B8E6F;
+    --emerald-bright: #10b981;
+    --emerald-light: #059669;
+
+    /* Interactive */
+    --button-blue: #2563eb;
+    --button-hover: #1d4ed8;
+
+    /* Gold */
+    --gold-bright: #fbbf24;
+    --gold-deep: #b45309;
+
+    /* Dark Mode (Navy) */
+    --navy-deep: #0a1628;
+    --navy-medium: #0f1d2e;
+    --navy-slate800: #1e293b;
+    --navy-slate700: #334155;
+
+    /* Light Mode */
+    --rice-paper: #F5F3F0;
+    --cream: #fefce8;
+    --white: #ffffff;
+
+    /* Text Colors Dark Mode */
+    --text-primary: #f8fafc;
+    --text-secondary: #e2e8f0;
+    --text-tertiary: #cbd5e1;
+    --text-muted: #94a3b8;
+  }
+
+  /* Light Mode Variables */
+  :root:not(.dark) {
+    /* Light Mode Text Colors */
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-tertiary: #64748b;
+    --text-muted: #94a3b8;
+
+    /* Light Mode Backgrounds */
+    --bg-base: #F5F3F0;
+    --bg-elevated: #ffffff;
+    --bg-section: #C9B8A8;
+
+    /* Interactive colors for light mode */
+    --emerald-primary: #059669;
+    --gold-primary: #b45309;
+  }
+
+  /* Dark Mode Variables */
+  .dark {
+    /* Keep dark mode text colors */
+    --text-primary: #f8fafc;
+    --text-secondary: #e2e8f0;
+    --text-tertiary: #cbd5e1;
+    --text-muted: #94a3b8;
+
+    /* Dark Mode Backgrounds */
+    --bg-base: #0a1628;
+    --bg-elevated: #0f1d2e;
+    --bg-section: #1e293b;
+
+    /* Interactive colors for dark mode */
+    --emerald-primary: #10b981;
+    --gold-primary: #fbbf24;
   }
 
   * {
-    border-color: rgb(31 41 55); /* dark theme fallback */
+    border-color: var(--navy-slate800);
   }
 
+  .dark * {
+    border-color: var(--navy-slate800);
+  }
+
+  :root:not(.dark) * {
+    border-color: #e2e8f0;
+  }
+
+  /* Dark Mode Body */
+  .dark body {
+    background: linear-gradient(to bottom,
+      var(--navy-deep) 0%,
+      var(--navy-medium) 50%,
+      var(--navy-deep) 100%
+    );
+    color: var(--text-primary);
+  }
+
+  /* Light Mode Body - Rice Paper + Earth Gradient */
   body {
-    background-color: var(--theme-bg-primary, #000);
-    color: var(--theme-text-primary, #fff);
+    background: linear-gradient(180deg,
+      #E8F4F8 0%,      /* Sky wash */
+      #F5F3F0 60%,     /* Rice paper */
+      #C9B8A8 100%     /* Soft clay horizon */
+    );
+    color: var(--text-primary);
     font-family: var(--font-system);
     font-weight: 400;
     line-height: 1.6;
     letter-spacing: -0.01em;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition: background 0.3s ease, color 0.3s ease;
   }
 
   html, body, #root {
@@ -131,52 +232,150 @@
 }
 
 @layer components {
+  /* COW Button System */
   .btn {
-    @apply inline-flex items-center justify-center rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-600 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-black backdrop-blur-md;
+    @apply inline-flex items-center justify-center rounded-lg text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none backdrop-blur-md;
   }
 
+  /* Primary Button - COW Button Blue */
   .btn-primary {
-    @apply btn bg-yellow-400 text-black hover:bg-yellow-300 h-10 py-2 px-6;
+    @apply btn h-10 py-2 px-6;
+    background: var(--button-blue);
+    color: white;
+    border: none;
   }
 
+  .btn-primary:hover {
+    background: var(--button-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  /* Secondary Button - Earth Grounded */
   .btn-secondary {
-    @apply btn bg-gray-900/50 text-white hover:bg-gray-800 border border-gray-800 h-10 py-2 px-6;
+    @apply btn h-10 py-2 px-6;
+    background: transparent;
+    color: var(--cyan-bright);
+    border: 2px solid var(--cyan-bright);
   }
 
+  .btn-secondary:hover {
+    background: rgba(14, 165, 233, 0.1);
+    border-color: var(--cyan-cerulean);
+  }
+
+  /* Success Button - Emerald Growth */
+  .btn-success {
+    @apply btn h-10 py-2 px-6;
+    background: var(--emerald-bright);
+    color: white;
+  }
+
+  .btn-success:hover {
+    background: var(--emerald-light);
+    transform: translateY(-1px);
+  }
+
+  /* Ghost Button */
   .btn-ghost {
-    @apply btn hover:bg-gray-900/50 hover:text-white h-10 py-2 px-6;
+    @apply btn h-10 py-2 px-6;
+    background: transparent;
+    color: var(--text-secondary);
   }
 
+  .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+  }
+
+  /* Outline Button with Earth Tone */
   .btn-outline {
-    @apply btn border border-gray-600 hover:bg-gray-800 hover:text-white bg-transparent h-10 py-2 px-6;
+    @apply btn h-10 py-2 px-6;
+    background: transparent;
+    color: var(--text-primary);
+    border: 2px solid var(--earth-stone);
   }
 
+  .btn-outline:hover {
+    background: rgba(155, 139, 126, 0.1);
+    border-color: var(--earth-clay);
+  }
+
+  /* COW Card with Earth Grounding */
   .card {
-    @apply rounded-2xl border border-gray-800 bg-gray-900/50 text-white shadow-sm backdrop-blur-md;
+    @apply rounded-2xl border text-white shadow-sm backdrop-blur-md;
+    background: var(--navy-slate800);
+    border-color: var(--navy-slate700);
+    border-bottom: 3px solid var(--earth-stone);
   }
 
+  .card:hover {
+    border-bottom-color: var(--earth-terracotta);
+  }
+
+  /* Input with Navy Background */
   .input {
-    @apply flex h-10 w-full rounded-lg border border-gray-800 bg-gray-900/50 backdrop-blur-md px-3 py-2 text-sm text-white ring-offset-black file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+    @apply flex h-10 w-full rounded-lg px-3 py-2 text-sm backdrop-blur-md;
+    background: var(--navy-medium);
+    border: 1px solid var(--navy-slate700);
+    color: var(--text-primary);
   }
 
+  .input:focus {
+    outline: none;
+    border-color: var(--cyan-bright);
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+  }
+
+  .input::placeholder {
+    color: var(--text-muted);
+  }
+
+  /* Sidebar Nav with Cyan Accents */
   .sidebar-nav-item {
-    @apply flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-400 transition-all hover:bg-gray-900/50 hover:text-white;
+    @apply flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all;
+    color: var(--text-tertiary);
+  }
+
+  .sidebar-nav-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
   }
 
   .sidebar-nav-item.active {
-    @apply bg-gray-900/50 text-white border border-gray-800;
+    background: rgba(14, 165, 233, 0.15);
+    color: var(--cyan-bright);
+    border-left: 3px solid var(--cyan-cerulean);
   }
 
+  /* Kanban Column with Earth Horizon */
   .kanban-column {
-    @apply min-h-96 w-80 rounded-2xl bg-gray-900/50 backdrop-blur-md border border-gray-800 p-4;
+    @apply min-h-96 w-80 rounded-2xl backdrop-blur-md p-4;
+    background: var(--navy-slate800);
+    border: 1px solid var(--navy-slate700);
+    border-bottom: 2px solid var(--earth-stone);
   }
 
+  /* Task Card with Bamboo Accent */
   .task-card {
-    @apply rounded-2xl bg-gray-900/50 backdrop-blur-md p-4 shadow-sm border border-gray-800 cursor-pointer hover:shadow-lg hover:bg-gray-800/50 transition-all;
+    @apply rounded-2xl backdrop-blur-md p-4 shadow-sm cursor-pointer transition-all;
+    background: var(--navy-slate800);
+    border: 1px solid var(--navy-slate700);
+  }
+
+  .task-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    background: var(--navy-slate700);
+    border-left: 3px solid var(--bamboo);
   }
 
   .task-card.dragging {
-    @apply rotate-3 scale-105 shadow-2xl border-gray-600;
+    @apply rotate-3 scale-105 shadow-2xl;
+    border-color: var(--cyan-bright);
   }
 }
 
@@ -191,48 +390,52 @@
   }
 }
 
-/* Clean Glass Effects */
+/* COW Glass Effects - Sumi-e Sky + Earth */
 .glass-header {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(10, 22, 40, 0.6);  /* Navy deep */
   backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(14, 165, 233, 0.15);  /* Cyan accent */
+  border-bottom: 1px solid rgba(155, 139, 126, 0.2);  /* Earth horizon */
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(15, 29, 46, 0.5);  /* Navy medium */
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(51, 65, 85, 0.3);  /* Navy slate */
+  border-bottom: 2px solid rgba(155, 139, 126, 0.25);  /* Earth grounding */
 }
 
-/* Apple Liquid Glass Sidebar with Adaptive Text Readability */
+/* COW Liquid Glass Sidebar - Sumi-e Sky + Earth */
 .liquid-glass-sidebar {
   background: linear-gradient(135deg,
-    rgba(0, 0, 0, 0.4) 0%,
-    rgba(0, 0, 0, 0.3) 50%,
-    rgba(0, 0, 0, 0.25) 100%
+    rgba(10, 22, 40, 0.5) 0%,    /* Navy deep tint */
+    rgba(15, 29, 46, 0.4) 50%,   /* Navy medium tint */
+    rgba(10, 22, 40, 0.35) 100%  /* Navy deep tint */
   );
   backdrop-filter: blur(40px) saturate(180%) contrast(120%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(14, 165, 233, 0.15);  /* Cyan accent border */
+  border-bottom: 2px solid rgba(155, 139, 126, 0.3);  /* Earth grounding */
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.25),
-    0 2px 16px rgba(0, 0, 0, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+    0 8px 32px rgba(10, 22, 40, 0.4),
+    0 2px 16px rgba(0, 165, 207, 0.08),
+    inset 0 1px 0 rgba(14, 165, 233, 0.1),
+    inset 0 0 0 1px rgba(10, 22, 40, 0.2);
   transition: all 0.3s cubic-bezier(0.23, 1, 0.320, 1);
 }
 
 .liquid-glass-sidebar:hover {
   background: linear-gradient(135deg,
-    rgba(0, 0, 0, 0.45) 0%,
-    rgba(0, 0, 0, 0.35) 50%,
-    rgba(0, 0, 0, 0.3) 100%
+    rgba(10, 22, 40, 0.6) 0%,
+    rgba(15, 29, 46, 0.5) 50%,
+    rgba(10, 22, 40, 0.45) 100%
   );
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(14, 165, 233, 0.25);
+  border-bottom: 2px solid rgba(199, 122, 88, 0.4);  /* Terracotta on hover */
   box-shadow:
-    0 12px 48px rgba(0, 0, 0, 0.3),
-    0 4px 24px rgba(0, 0, 0, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+    0 12px 48px rgba(10, 22, 40, 0.5),
+    0 4px 24px rgba(0, 165, 207, 0.12),
+    inset 0 1px 0 rgba(14, 165, 233, 0.15),
+    inset 0 0 0 1px rgba(10, 22, 40, 0.25);
 }
 
 /* Liquid Glass Header Section */
@@ -303,12 +506,12 @@
   box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
 
-/* Apple Liquid Glass Primary Button */
+/* COW Liquid Glass Primary Button - Button Blue */
 .liquid-button-primary {
   background: linear-gradient(135deg,
-    rgba(59, 130, 246, 0.8) 0%,
-    rgba(147, 51, 234, 0.8) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+    rgba(37, 99, 235, 0.9) 0%,      /* Button blue */
+    rgba(14, 165, 233, 0.85) 100%); /* Cyan bright */
+  border: 1px solid rgba(14, 165, 233, 0.3);
   backdrop-filter: blur(20px) saturate(180%);
   color: white;
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -316,11 +519,11 @@
 
 .liquid-button-primary:hover {
   background: linear-gradient(135deg,
-    rgba(59, 130, 246, 0.9) 0%,
-    rgba(147, 51, 234, 0.9) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+    rgba(29, 78, 216, 1) 0%,        /* Button hover */
+    rgba(0, 165, 207, 0.95) 100%);  /* Cerulean */
+  border: 1px solid rgba(0, 165, 207, 0.5);
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 32px rgba(14, 165, 233, 0.4);
 }
 
 /* Apple Liquid Glass Secondary Button */
@@ -383,21 +586,23 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-/* Gradient animations for Vanta.js fallback */
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+/* COW Static Navy Gradient Background - No Vanta.js */
+.navy-gradient-bg {
+  background: linear-gradient(to bottom,
+    var(--navy-deep) 0%,
+    var(--navy-medium) 50%,
+    var(--navy-deep) 100%
+  );
+  background-attachment: fixed;
 }
 
-.vanta-fallback {
-  animation: gradientShift 15s ease infinite;
+.light-gradient-bg {
+  background: linear-gradient(180deg,
+    #E8F4F8 0%,
+    #F5F3F0 60%,
+    #C9B8A8 100%
+  );
+  background-attachment: fixed;
 }
 
 /* Apple Dynamic Color Adaptation System */

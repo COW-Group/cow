@@ -17,12 +17,14 @@ import MissionsPage from './pages/MissionsPage';
 import ProductsPage from './pages/ProductsPage';
 import AuAeroPage from './pages/AuAeroPage';
 import AuAeroWhitepaperPage from './pages/AuAeroWhitepaperPage';
-import AuSiriPage from './pages/AuSiriPage';
+import GoldPage from './pages/GoldPage';
 import AuSiriAnimationPage from './pages/AuSiriAnimationPage';
 import DairyPage from './pages/DairyPage';
 import FoodPage from './pages/FoodPage';
 import AuRailPage from './pages/AuRailPage';
 import SuraPage from './pages/SuraPage';
+import GoldSwimPage from './pages/GoldSwimPage';
+import SiriZ31Page from './pages/SiriZ31Page';
 import ResearchCentrePage from './pages/ResearchCentrePage';
 import ResearchArticlePage from './pages/ResearchArticlePage';
 import MooPage from './pages/MooPage';
@@ -48,12 +50,15 @@ function App() {
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/auaero" element={<AuAeroPage />} />
         <Route path="/auaero-whitepaper" element={<AuAeroWhitepaperPage />} />
-        <Route path="/ausiri" element={<AuSiriPage />} />
+        <Route path="/gold" element={<GoldPage />} />
+        <Route path="/ausiri" element={<GoldPage />} />
         <Route path="/ausiri-animation" element={<AuSiriAnimationPage />} />
         <Route path="/dairy" element={<DairyPage />} />
         <Route path="/food" element={<FoodPage />} />
         <Route path="/aurail" element={<AuRailPage />} />
         <Route path="/sura" element={<SuraPage />} />
+        <Route path="/gold-swim" element={<GoldSwimPage />} />
+        <Route path="/siriz31" element={<SiriZ31Page />} />
         <Route path="/research" element={<ResearchCentrePage />} />
         <Route path="/research/:slug" element={<ResearchArticlePage />} />
         <Route path="/moo" element={<MooPage />} />

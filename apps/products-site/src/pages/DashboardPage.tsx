@@ -1,172 +1,160 @@
-import React, { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { Link } from "react-router-dom"
-import { Button } from "../components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
-import { Badge } from "../components/ui/badge"
-import { useAuthContext } from "../lib/auth-context"
-import { useWeb3 } from "../contexts/web3-context"
-import { ProductMenu } from "../components/product-menu"
-import { CartDropdown } from "../components/cart-dropdown"
+import React, { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Badge } from '@/components/ui/badge'
 import {
   TrendingUp,
   TrendingDown,
+  DollarSign,
   Coins,
   Plane,
-  Wallet,
-  User,
-  DollarSign,
   BarChart3,
   PieChart,
-  FileText,
+  Target,
   Shield,
+  Star,
+  Zap,
   ArrowUpRight,
   ArrowDownRight,
-  Clock,
+  Plus,
   CheckCircle,
-  Target
-} from "lucide-react"
-import { AuthModal } from "../components/auth-modal"
-
-interface Holding {
-  id: string
-  tokenType: "founder" | "asset"
-  tokenName: string
-  amount: number
-  currentValue: number
-  performance: number
-  createdAt: string
-}
-
-// Mock database service for demo
-const mockDatabaseService = {
-  async fetchHoldings(userId: string): Promise<Holding[]> {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500))
-    return [
-      {
-        id: "1",
-        tokenType: "asset" as const,
-        tokenName: "AuSIRI",
-        amount: 5000,
-        currentValue: 5750,
-        performance: 15.0,
-        createdAt: "2024-01-15T00:00:00Z",
-      },
-      {
-        id: "2",
-        tokenType: "asset" as const,
-        tokenName: "AuAERO",
-        amount: 10000,
-        currentValue: 12500,
-        performance: 25.0,
-        createdAt: "2024-02-20T00:00:00Z",
-      }
-    ]
-  }
-}
+  Award,
+  User,
+  Wallet
+} from 'lucide-react'
+import { useAuthContext } from '@/lib/auth-context'
+import { useWeb3 } from '@/contexts/web3-context'
+import { useCart } from '@/contexts/cart-context'
+import { HeroBackground } from '@/components/hero-background'
+import { ProductMenu } from '@/components/product-menu'
+import { CartDropdown } from '@/components/cart-dropdown'
+import { supabase, type Product, type ProductTier } from "@cow/supabase-client"
 
 export default function DashboardPage() {
-  const { auth, loading, signOut } = useAuthContext()
-  const { isConnected, address, connectWallet, disconnectWallet, error, clearError } = useWeb3()
+  const { auth, signOut } = useAuthContext()
+  const { isConnected, address, connectWallet, disconnectWallet } = useWeb3()
+  const { addToCart } = useCart()
   const navigate = useNavigate()
-  const [mounted, setMounted] = useState(false)
-  const [showAuthModal, setShowAuthModal] = useState(false)
-  const [holdings, setHoldings] = useState<Holding[]>([])
+  const [isClient, setIsClient] = useState(false)
+
+  // Products state
+  const [goldSwimProduct, setGoldSwimProduct] = useState<Product | null>(null)
+  const [siriZ31Product, setSiriZ31Product] = useState<Product | null>(null)
+  const [siriZ31Tiers, setSiriZ31Tiers] = useState<ProductTier[]>([])
+  const [loadingProducts, setLoadingProducts] = useState(true)
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  useEffect(() => {
-    console.log("Dashboard auth check:", { mounted, loading, isAuthenticated: auth.isAuthenticated, user: auth.user })
-    const timeoutId = setTimeout(() => {
-      if (mounted && !loading && !auth.isAuthenticated) {
-        console.log("Redirecting to home - user not authenticated")
-        navigate("/")
-      }
-    }, 100)
-
-    return () => clearTimeout(timeoutId)
-  }, [auth.isAuthenticated, loading, mounted, navigate])
-
-  useEffect(() => {
-    if (!mounted) return
-    if (error) {
-      console.error("Web3Context error details:", error)
-      clearError()
+    setIsClient(true)
+    if (!auth.isAuthenticated) {
+      navigate('/')
+    } else {
+      // Fetch products when authenticated
+      fetchProducts()
     }
-  }, [mounted, error, clearError])
+  }, [auth.isAuthenticated, navigate])
 
-  useEffect(() => {
-    if (!mounted || !auth.isAuthenticated || !auth.user?.id) return
-    const fetchHoldings = async () => {
-      try {
-        console.log("Fetching holdings for user:", auth.user?.id)
-        const fetchedHoldings = await mockDatabaseService.fetchHoldings(auth.user!.id)
-        setHoldings(fetchedHoldings)
-        console.log("Holdings fetched successfully:", fetchedHoldings)
-      } catch (err) {
-        console.error("Failed to fetch holdings:", err)
-      }
-    }
-    fetchHoldings()
-  }, [mounted, auth.isAuthenticated, auth.user?.id])
-
-  const handleConnectWallet = async () => {
-    if (!mounted) return
+  const fetchProducts = async () => {
     try {
-      console.log("Attempting to connect wallet")
-      await connectWallet()
-      console.log("Wallet connected successfully")
-    } catch (err: any) {
-      console.error("Failed to connect wallet:", err)
-      alert(`Failed to connect wallet: ${err.message}`)
+      // Fetch GOLD SWIM product
+      const { data: goldSwim, error: goldSwimError } = await supabase
+        .from('products')
+        .select('*')
+        .eq('slug', 'gold-swim')
+        .eq('is_active', true)
+        .single()
+
+      if (!goldSwimError && goldSwim) {
+        setGoldSwimProduct(goldSwim)
+      }
+
+      // Fetch SIRI Z31 product
+      const { data: siriZ31, error: siriZ31Error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('slug', 'siri-z31')
+        .eq('is_active', true)
+        .single()
+
+      if (!siriZ31Error && siriZ31) {
+        setSiriZ31Product(siriZ31)
+
+        // Fetch SIRI Z31 tiers
+        const { data: tiers, error: tiersError } = await supabase
+          .from('product_tiers')
+          .select('*')
+          .eq('product_id', siriZ31.id)
+          .eq('is_active', true)
+          .order('price', { ascending: true })
+
+        if (!tiersError && tiers) {
+          setSiriZ31Tiers(tiers)
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error)
+    } finally {
+      setLoadingProducts(false)
     }
   }
 
-  const handleDisconnectWallet = () => {
-    try {
-      console.log("Disconnecting wallet")
-      disconnectWallet()
-      console.log("Wallet disconnected successfully")
-    } catch (err) {
-      console.error("Failed to disconnect wallet:", err)
-    }
+  const handleAddToCart = (product: Product, amount: number, tier?: ProductTier) => {
+    const itemName = tier
+      ? `${product.name} - ${tier.name} ($${tier.price}/mo)`
+      : `${product.name} ($${amount.toLocaleString()})`
+
+    addToCart({
+      id: `${product.slug}-${tier?.id || Date.now()}`,
+      name: itemName,
+      description: product.description || "",
+      price: tier ? Number(tier.price) : amount,
+      link: "/gold",
+    })
   }
 
-  if (!mounted || loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: '#F5F3F0' }}>
-        <div className="text-center">
-          <div
-            className="w-8 h-8 border-2 border-t-transparent rounded-full animate-spin mx-auto mb-4"
-            style={{ borderColor: '#007BA7' }}
-          ></div>
-          <p style={{ color: '#6b7280', fontFamily: 'Inter, sans-serif', fontWeight: '300' }}>
-            Loading your dashboard...
-          </p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!auth.isAuthenticated) {
+  if (!isClient) {
     return null
   }
 
-  const safeHoldings = Array.isArray(holdings) ? holdings : []
-  const founderHoldings = safeHoldings.filter(holding => holding.tokenType === "founder")
-  const assetHoldings = safeHoldings.filter(holding => holding.tokenType === "asset")
-  const totalValue = safeHoldings.reduce((sum, holding) => sum + holding.currentValue, 0)
-  const totalInvested = safeHoldings.reduce((sum, holding) => sum + holding.amount, 0)
-  const totalGains = totalValue - totalInvested
-  const totalPerformance = totalInvested > 0 ? (totalGains / totalInvested) * 100 : 0
+  const portfolioData = {
+    totalValue: 285000,
+    todayChange: 3420,
+    todayChangePercent: 1.22,
+    yearlyReturn: 23.4,
+    holdings: [
+      {
+        symbol: 'AuSIRI',
+        name: 'Gold Reserve Token',
+        value: 171000,
+        quantity: 34000,
+        price: 5.032,
+        change: 0.086,
+        changePercent: 1.74,
+        allocation: 60
+      },
+      {
+        symbol: 'AuAERO',
+        name: 'Aerospace Hybrid Token',
+        value: 114000,
+        quantity: 4532,
+        price: 25.16,
+        change: -0.42,
+        changePercent: -1.64,
+        allocation: 40
+      }
+    ]
+  }
 
   return (
-    <div className="min-h-screen" style={{ background: '#ffffff' }}>
-      {/* Floating Navigation with Onboarding Button */}
+    <div className="min-h-screen bg-gray-50">
+      {/* Hero Background */}
+      <div className="fixed inset-0 z-0">
+        <HeroBackground />
+        <div className="absolute inset-0 bg-black/10"></div>
+      </div>
+
+      {/* Floating Navigation with Complete Profile */}
       <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
         <div
           className="px-8 py-4 flex items-center gap-8 transition-all duration-300"
@@ -237,7 +225,7 @@ export default function DashboardPage() {
                   variant="outline"
                   size="sm"
                   className="rounded-full transition-all duration-300"
-                  onClick={handleDisconnectWallet}
+                  onClick={disconnectWallet}
                   style={{
                     background: 'rgba(0, 0, 0, 0.03)',
                     border: '1px solid rgba(0, 0, 0, 0.1)',
@@ -257,7 +245,7 @@ export default function DashboardPage() {
                 variant="outline"
                 size="sm"
                 className="rounded-full transition-all duration-300"
-                onClick={handleConnectWallet}
+                onClick={connectWallet}
                 style={{
                   background: 'rgba(0, 0, 0, 0.03)',
                   border: '1px solid rgba(0, 0, 0, 0.1)',
@@ -277,678 +265,441 @@ export default function DashboardPage() {
         </div>
       </nav>
 
-      {/* Auth Modal */}
-      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
+      {/* Main Dashboard Content */}
+      <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pt-32">
 
-      {/* Hero with Horizon Gradient */}
-      <section className="relative overflow-hidden" style={{ minHeight: '400px' }}>
-        {/* Horizon Principle: Sky meets Earth */}
-        <div className="absolute inset-0">
-          {/* Sky - Top 45% */}
-          <div
-            className="absolute top-0 left-0 right-0"
-            style={{
-              height: '45%',
-              background: 'linear-gradient(to bottom, #007BA7, #B0E0E6)'
-            }}
-          />
-          {/* Earth - Bottom 55% */}
-          <div
-            className="absolute bottom-0 left-0 right-0"
-            style={{
-              height: '55%',
-              background: 'linear-gradient(to bottom, #C9B8A8, #9B8B7E)'
-            }}
-          />
-        </div>
-
-        {/* Text positioned at horizon line (45% mark) - first line sits on horizon */}
-        <div className="absolute z-10 left-0 right-0 px-8" style={{ top: '45%' }}>
-          <div className="max-w-7xl mx-auto">
-          <h1
-            className="text-white mb-4"
-            style={{
-              fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-              fontWeight: '200',
-              fontFamily: 'Inter, sans-serif',
-              letterSpacing: '-0.025em',
-              lineHeight: '1.1',
-              textShadow: '0 2px 20px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.1)',
-              marginTop: 'calc(-0.6 * clamp(2.5rem, 5vw, 4rem))'
-            }}
-          >
-            Welcome back, {auth.profile?.name || "Investor"}
-          </h1>
-          <p
-            className="text-white max-w-2xl"
-            style={{
-              fontSize: 'clamp(1rem, 1.5vw, 1.25rem)',
-              fontWeight: '300',
-              fontFamily: 'Inter, sans-serif',
-              letterSpacing: '0.01em',
-              lineHeight: '1.6',
-              textShadow: '0 2px 12px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2)'
-            }}
-          >
-            Your investments are working for you. Here's how they're performing today.
+        {/* Header */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-4xl font-light text-gray-900">Investment Portfolio</h1>
+            <div className="flex items-center space-x-4">
+              <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
+                <CheckCircle className="w-3 h-3 mr-1" />
+                Active
+              </Badge>
+              <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-100">
+                <Award className="w-3 h-3 mr-1" />
+                Verified
+              </Badge>
+            </div>
+          </div>
+          <p className="text-xl text-gray-600 font-light">
+            Professional investment tools and asset management for your portfolio
           </p>
-          </div>
         </div>
-      </section>
 
-      <div className="max-w-7xl mx-auto px-8 py-16">
-        {/* Portfolio Overview Cards */}
-        <div className="mb-12">
-          <h2
-            className="mb-8"
-            style={{
-              fontSize: '0.875rem',
-              fontWeight: '300',
-              fontFamily: 'Inter, sans-serif',
-              letterSpacing: '0.08em',
-              color: '#6b7280',
-              textTransform: 'uppercase'
-            }}
-          >
-            Portfolio Snapshot
-          </h2>
-          <div className="grid md:grid-cols-4 gap-6">
-            <div
-              className="rounded-2xl p-8 transition-all duration-300"
-              style={{
-                background: 'white',
-                border: '1px solid rgba(0, 0, 0, 0.08)',
-                borderBottom: '4px solid #9B8B7E', // Warm Stone grounding
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-              }}
-            >
-              <h3
-                className="mb-2"
-                style={{
-                  fontSize: '0.875rem',
-                  fontWeight: '300',
-                  fontFamily: 'Inter, sans-serif',
-                  letterSpacing: '0.01em',
-                  color: '#6b7280'
-                }}
-              >
-                Total Value
-              </h3>
-              <p
-                style={{
-                  fontSize: '2rem',
-                  fontWeight: '200',
-                  fontFamily: 'Inter, sans-serif',
-                  color: '#111827'
-                }}
-              >
-                ${totalValue.toLocaleString()}
-              </p>
-            </div>
-            <div
-              className="rounded-2xl p-8 transition-all duration-300"
-              style={{
-                background: 'white',
-                border: '1px solid rgba(0, 0, 0, 0.08)',
-                borderBottom: '4px solid #9B8B7E',
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-              }}
-            >
-              <h3
-                className="mb-2"
-                style={{
-                  fontSize: '0.875rem',
-                  fontWeight: '300',
-                  fontFamily: 'Inter, sans-serif',
-                  letterSpacing: '0.01em',
-                  color: '#6b7280'
-                }}
-              >
-                Invested
-              </h3>
-              <p
-                style={{
-                  fontSize: '2rem',
-                  fontWeight: '200',
-                  fontFamily: 'Inter, sans-serif',
-                  color: '#111827'
-                }}
-              >
-                ${totalInvested.toLocaleString()}
-              </p>
-            </div>
-            <div
-              className="rounded-2xl p-8 transition-all duration-300"
-              style={{
-                background: 'white',
-                border: '1px solid rgba(0, 0, 0, 0.08)',
-                borderBottom: '4px solid #9B8B7E',
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-              }}
-            >
-              <h3
-                className="mb-2"
-                style={{
-                  fontSize: '0.875rem',
-                  fontWeight: '300',
-                  fontFamily: 'Inter, sans-serif',
-                  letterSpacing: '0.01em',
-                  color: '#6b7280'
-                }}
-              >
-                Total Returns
-              </h3>
-              <p
-                style={{
-                  fontSize: '2rem',
-                  fontWeight: '200',
-                  fontFamily: 'Inter, sans-serif',
-                  color: totalGains >= 0 ? '#8B956D' : '#C9724B'
-                }}
-              >
-                ${totalGains.toLocaleString()}
-              </p>
-            </div>
-            <div
-              className="rounded-2xl p-8 transition-all duration-300"
-              style={{
-                background: 'white',
-                border: '1px solid rgba(0, 0, 0, 0.08)',
-                borderBottom: '4px solid #9B8B7E',
-                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-              }}
-            >
-              <h3
-                className="mb-2"
-                style={{
-                  fontSize: '0.875rem',
-                  fontWeight: '300',
-                  fontFamily: 'Inter, sans-serif',
-                  letterSpacing: '0.01em',
-                  color: '#6b7280'
-                }}
-              >
-                Performance
-              </h3>
-              <div className="flex items-center">
-                {totalPerformance >= 0 ? (
-                  <TrendingUp className="w-5 h-5 mr-2" style={{ color: '#8B956D' }} />
-                ) : (
-                  <TrendingDown className="w-5 h-5 mr-2" style={{ color: '#C9724B' }} />
-                )}
-                <p
-                  style={{
-                    fontSize: '2rem',
-                    fontWeight: '200',
-                    fontFamily: 'Inter, sans-serif',
-                    color: totalPerformance >= 0 ? '#8B956D' : '#C9724B'
-                  }}
-                >
-                  {totalPerformance.toFixed(1)}%
-                </p>
+        {/* Performance Overview Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <Card className="bg-white/90 backdrop-blur-xl border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 mb-1">Portfolio Value</p>
+                  <p className="text-3xl font-light text-gray-900">${portfolioData.totalValue.toLocaleString()}</p>
+                </div>
+                <DollarSign className="h-8 w-8 text-green-600" />
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white/90 backdrop-blur-xl border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 mb-1">Today's Return</p>
+                  <div className="flex items-center">
+                    <p className="text-2xl font-light text-green-600 mr-2">
+                      +${portfolioData.todayChange.toLocaleString()}
+                    </p>
+                    <ArrowUpRight className="h-4 w-4 text-green-600" />
+                  </div>
+                  <p className="text-sm text-green-600">+{portfolioData.todayChangePercent}%</p>
+                </div>
+                <TrendingUp className="h-8 w-8 text-green-600" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white/90 backdrop-blur-xl border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 mb-1">Annual Return</p>
+                  <p className="text-2xl font-light text-amber-600">{portfolioData.yearlyReturn}%</p>
+                  <p className="text-sm text-gray-600">vs 7.2% market avg</p>
+                </div>
+                <Target className="h-8 w-8 text-amber-600" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white/90 backdrop-blur-xl border-gray-200/50 shadow-lg hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 mb-1">Performance Rank</p>
+                  <p className="text-2xl font-light text-blue-600">Top 15%</p>
+                  <p className="text-sm text-gray-600">Among investors</p>
+                </div>
+                <Star className="h-8 w-8 text-blue-600" />
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Dashboard Tabs */}
-        <Tabs defaultValue="portfolio" className="space-y-8">
-          <TabsList
-            className="rounded-xl p-1"
-            style={{
-              background: 'rgba(255, 255, 255, 0.9)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(0, 0, 0, 0.08)',
-              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-            }}
-          >
-            <TabsTrigger
-              value="portfolio"
-              style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}
-            >
-              Portfolio
-            </TabsTrigger>
-            <TabsTrigger
-              value="analytics"
-              style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}
-            >
-              Analytics
-            </TabsTrigger>
-            <TabsTrigger
-              value="reports"
-              style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}
-            >
-              Reports
-            </TabsTrigger>
-            <TabsTrigger
-              value="allocations"
-              style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}
-            >
-              Allocations
-            </TabsTrigger>
+        <Tabs defaultValue="portfolio" className="space-y-6">
+          <TabsList className="bg-white/90 backdrop-blur-xl border border-gray-200/50 p-1 shadow-sm">
+            <TabsTrigger value="portfolio" className="font-medium">Portfolio</TabsTrigger>
+            <TabsTrigger value="opportunities" className="font-medium">Opportunities</TabsTrigger>
+            <TabsTrigger value="analytics" className="font-medium">Analytics</TabsTrigger>
+            <TabsTrigger value="strategies" className="font-medium">Strategies</TabsTrigger>
           </TabsList>
 
           {/* Portfolio Tab */}
           <TabsContent value="portfolio">
-            <div className="space-y-8">
-              <h2
-                className="mb-6"
-                style={{
-                  fontSize: 'clamp(1.875rem, 3vw, 2.5rem)',
-                  fontWeight: '200',
-                  fontFamily: 'Inter, sans-serif',
-                  letterSpacing: '-0.025em',
-                  color: '#111827'
-                }}
-              >
-                Your Performance Assets
-              </h2>
-          {assetHoldings.length === 0 ? (
-            <div
-              className="rounded-2xl p-16 text-center"
-              style={{
-                background: 'rgba(249, 250, 251, 0.6)',
-                border: '1px solid rgba(0, 0, 0, 0.08)'
-              }}
-            >
-              <Coins className="w-16 h-16 mx-auto mb-6" style={{ color: '#C9B8A8' }} />
-              <h3
-                className="mb-3"
-                style={{
-                  fontSize: '1.5rem',
-                  fontWeight: '300',
-                  fontFamily: 'Inter, sans-serif',
-                  letterSpacing: '-0.01em',
-                  color: '#111827'
-                }}
-              >
-                Ready to start building?
-              </h3>
-              <p
-                className="mb-8 max-w-xl mx-auto"
-                style={{
-                  fontSize: '1.0625rem',
-                  fontWeight: '300',
-                  fontFamily: 'Inter, sans-serif',
-                  lineHeight: '1.7',
-                  letterSpacing: '0.01em',
-                  color: '#6b7280'
-                }}
-              >
-                Begin your journey with performance-engineered assets. Gold that optimizes itself. Aviation that compounds. Real estate that works for you.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link to="/ausiri">
-                  <Button
-                    className="rounded-xl transition-all duration-300"
-                    style={{
-                      background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
-                      color: 'white',
-                      fontSize: '1rem',
-                      fontWeight: '500',
-                      padding: '12px 24px',
-                      fontFamily: 'Inter, sans-serif',
-                      border: 'none'
-                    }}
-                  >
-                    Explore Gold
-                  </Button>
-                </Link>
-                <Link to="/auaero">
-                  <Button
-                    variant="outline"
-                    className="rounded-xl transition-all duration-300"
-                    style={{
-                      background: 'transparent',
-                      border: '1px solid rgba(0, 123, 167, 0.3)',
-                      color: '#007BA7',
-                      fontSize: '1rem',
-                      fontWeight: '500',
-                      padding: '12px 24px',
-                      fontFamily: 'Inter, sans-serif'
-                    }}
-                  >
-                    Explore Aviation
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          ) : (
             <div className="grid gap-6">
-              {assetHoldings.map((holding) => (
-                <div
-                  key={holding.id}
-                  className="rounded-2xl p-8 transition-all duration-300"
-                  style={{
-                    background: 'white',
-                    border: '1px solid rgba(0, 0, 0, 0.08)',
-                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-                  }}
-                >
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center">
-                      {holding.tokenName === "AuSIRI" ? (
-                        <Coins className="w-10 h-10 mr-4" style={{ color: '#f59e0b' }} />
-                      ) : (
-                        <Plane className="w-10 h-10 mr-4" style={{ color: '#007BA7' }} />
-                      )}
-                      <div>
-                        <h3
-                          style={{
-                            fontSize: '1.5rem',
-                            fontWeight: '500',
-                            fontFamily: 'Inter, sans-serif',
-                            letterSpacing: '-0.01em',
-                            color: '#111827'
-                          }}
-                        >
-                          {holding.tokenName}
-                        </h3>
-                        <p
-                          style={{
-                            fontSize: '0.875rem',
-                            fontWeight: '300',
-                            fontFamily: 'Inter, sans-serif',
-                            color: '#6b7280'
-                          }}
-                        >
-                          Acquired {new Date(holding.createdAt).toLocaleDateString('en-US', {
-                            month: 'long',
-                            day: 'numeric',
-                            year: 'numeric'
-                          })}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p
-                        style={{
-                          fontSize: '2rem',
-                          fontWeight: '200',
-                          fontFamily: 'Inter, sans-serif',
-                          color: '#111827'
-                        }}
-                      >
-                        ${holding.currentValue.toLocaleString()}
-                      </p>
-                      <div className="flex items-center justify-end">
-                        {holding.performance >= 0 ? (
-                          <TrendingUp className="w-4 h-4 mr-1" style={{ color: '#8B956D' }} />
-                        ) : (
-                          <TrendingDown className="w-4 h-4 mr-1" style={{ color: '#C9724B' }} />
-                        )}
-                        <span
-                          style={{
-                            fontSize: '0.875rem',
-                            fontWeight: '500',
-                            fontFamily: 'Inter, sans-serif',
-                            color: holding.performance >= 0 ? '#8B956D' : '#C9724B'
-                          }}
-                        >
-                          {holding.performance.toFixed(1)}%
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-3 gap-6">
-                    <div>
-                      <p
-                        style={{
-                          fontSize: '0.875rem',
-                          fontWeight: '300',
-                          fontFamily: 'Inter, sans-serif',
-                          color: '#6b7280',
-                          marginBottom: '4px'
-                        }}
-                      >
-                        Initial Investment
-                      </p>
-                      <p
-                        style={{
-                          fontSize: '1.125rem',
-                          fontWeight: '500',
-                          fontFamily: 'Inter, sans-serif',
-                          color: '#111827'
-                        }}
-                      >
-                        ${holding.amount.toLocaleString()}
-                      </p>
-                    </div>
-                    <div>
-                      <p
-                        style={{
-                          fontSize: '0.875rem',
-                          fontWeight: '300',
-                          fontFamily: 'Inter, sans-serif',
-                          color: '#6b7280',
-                          marginBottom: '4px'
-                        }}
-                      >
-                        Current Value
-                      </p>
-                      <p
-                        style={{
-                          fontSize: '1.125rem',
-                          fontWeight: '500',
-                          fontFamily: 'Inter, sans-serif',
-                          color: '#111827'
-                        }}
-                      >
-                        ${holding.currentValue.toLocaleString()}
-                      </p>
-                    </div>
-                    <div>
-                      <p
-                        style={{
-                          fontSize: '0.875rem',
-                          fontWeight: '300',
-                          fontFamily: 'Inter, sans-serif',
-                          color: '#6b7280',
-                          marginBottom: '4px'
-                        }}
-                      >
-                        Total Returns
-                      </p>
-                      <p
-                        style={{
-                          fontSize: '1.125rem',
-                          fontWeight: '500',
-                          fontFamily: 'Inter, sans-serif',
-                          color: (holding.currentValue - holding.amount) >= 0 ? '#8B956D' : '#C9724B'
-                        }}
-                      >
-                        ${(holding.currentValue - holding.amount).toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-            </div>
-          </TabsContent>
 
-          {/* Analytics Tab */}
-          <TabsContent value="analytics">
-            <div className="space-y-8">
-              <h2
-                className="mb-6"
-                style={{
-                  fontSize: 'clamp(1.875rem, 3vw, 2.5rem)',
-                  fontWeight: '200',
-                  fontFamily: 'Inter, sans-serif',
-                  letterSpacing: '-0.025em',
-                  color: '#111827'
-                }}
-              >
-                Performance Analytics
-              </h2>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card
-                  className="rounded-2xl"
-                  style={{
-                    background: 'white',
-                    border: '1px solid rgba(0, 0, 0, 0.08)',
-                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-                  }}
-                >
-                  <CardHeader>
-                    <CardTitle style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}>
-                      Returns Overview
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex justify-between items-center py-3 border-b" style={{ borderColor: 'rgba(0, 0, 0, 0.06)' }}>
-                      <span style={{ fontSize: '0.875rem', color: '#6b7280', fontFamily: 'Inter, sans-serif' }}>
-                        7-Day Return
-                      </span>
-                      <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#8B956D', fontFamily: 'Inter, sans-serif' }}>
-                        +2.4%
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-3 border-b" style={{ borderColor: 'rgba(0, 0, 0, 0.06)' }}>
-                      <span style={{ fontSize: '0.875rem', color: '#6b7280', fontFamily: 'Inter, sans-serif' }}>
-                        30-Day Return
-                      </span>
-                      <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#8B956D', fontFamily: 'Inter, sans-serif' }}>
-                        +8.7%
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-3 border-b" style={{ borderColor: 'rgba(0, 0, 0, 0.06)' }}>
-                      <span style={{ fontSize: '0.875rem', color: '#6b7280', fontFamily: 'Inter, sans-serif' }}>
-                        90-Day Return
-                      </span>
-                      <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#8B956D', fontFamily: 'Inter, sans-serif' }}>
-                        +18.2%
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center py-3">
-                      <span style={{ fontSize: '0.875rem', color: '#6b7280', fontFamily: 'Inter, sans-serif' }}>
-                        All-Time Return
-                      </span>
-                      <span style={{ fontSize: '0.875rem', fontWeight: '600', color: '#8B956D', fontFamily: 'Inter, sans-serif' }}>
-                        +{totalPerformance.toFixed(1)}%
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card
-                  className="rounded-2xl"
-                  style={{
-                    background: 'white',
-                    border: '1px solid rgba(0, 0, 0, 0.08)',
-                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-                  }}
-                >
-                  <CardHeader>
-                    <CardTitle style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}>
-                      Risk Metrics
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-3">
-                      <div className="flex justify-between text-sm">
-                        <span style={{ color: '#6b7280', fontFamily: 'Inter, sans-serif' }}>Portfolio Volatility</span>
-                        <span style={{ fontWeight: '600', fontFamily: 'Inter, sans-serif' }}>Low</span>
-                      </div>
-                      <div className="w-full rounded-full h-2" style={{ background: '#e5e7eb' }}>
-                        <div className="rounded-full h-2" style={{ width: '28%', background: '#8B956D' }}></div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <div className="flex justify-between text-sm">
-                        <span style={{ color: '#6b7280', fontFamily: 'Inter, sans-serif' }}>Diversification Score</span>
-                        <span style={{ fontWeight: '600', color: '#8B956D', fontFamily: 'Inter, sans-serif' }}>Good</span>
-                      </div>
-                      <div className="w-full rounded-full h-2" style={{ background: '#e5e7eb' }}>
-                        <div className="rounded-full h-2" style={{ width: '72%', background: '#8B956D' }}></div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <div className="flex justify-between text-sm">
-                        <span style={{ color: '#6b7280', fontFamily: 'Inter, sans-serif' }}>Performance Stability</span>
-                        <span style={{ fontWeight: '600', color: '#8B956D', fontFamily: 'Inter, sans-serif' }}>High</span>
-                      </div>
-                      <div className="w-full rounded-full h-2" style={{ background: '#e5e7eb' }}>
-                        <div className="rounded-full h-2" style={{ width: '85%', background: '#8B956D' }}></div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-          </TabsContent>
-
-          {/* Reports Tab */}
-          <TabsContent value="reports">
-            <div className="space-y-8">
-              <h2
-                className="mb-6"
-                style={{
-                  fontSize: 'clamp(1.875rem, 3vw, 2.5rem)',
-                  fontWeight: '200',
-                  fontFamily: 'Inter, sans-serif',
-                  letterSpacing: '-0.025em',
-                  color: '#111827'
-                }}
-              >
-                Account Reports
-              </h2>
-
-              <Card
-                className="rounded-2xl"
-                style={{
-                  background: 'white',
-                  border: '1px solid rgba(0, 0, 0, 0.08)',
-                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-                }}
-              >
-                <CardHeader>
-                  <CardTitle style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <FileText className="w-5 h-5" />
-                    Available Reports
+              {/* Holdings with Advanced Metrics */}
+              <Card className="bg-white/90 backdrop-blur-xl border-gray-200/50 shadow-lg">
+                <CardHeader className="border-b border-gray-200/50">
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5" />
+                    Holdings Analysis
                   </CardTitle>
                 </CardHeader>
+                <CardContent className="p-0">
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-gray-50/80">
+                        <tr>
+                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Asset</th>
+                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Holdings</th>
+                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current Price</th>
+                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Market Value</th>
+                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">24h Performance</th>
+                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Yield (APY)</th>
+                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {portfolioData.holdings.map((holding) => (
+                          <tr key={holding.symbol} className="hover:bg-gray-50/50">
+                            <td className="px-6 py-4">
+                              <div className="flex items-center">
+                                {holding.symbol === 'AuSIRI' ? (
+                                  <Coins className="h-8 w-8 text-amber-600 mr-3" />
+                                ) : (
+                                  <Plane className="h-8 w-8 text-orange-600 mr-3" />
+                                )}
+                                <div>
+                                  <div className="text-sm font-medium text-gray-900">{holding.symbol}</div>
+                                  <div className="text-sm text-gray-500">{holding.name}</div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="text-sm text-gray-900 font-medium">
+                                {holding.quantity.toLocaleString()}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                {holding.allocation}% allocation
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-900">
+                              ${holding.price.toFixed(3)}
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="text-sm font-medium text-gray-900">
+                                ${holding.value.toLocaleString()}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className={`flex items-center ${holding.changePercent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                {holding.changePercent >= 0 ? (
+                                  <ArrowUpRight className="h-4 w-4 mr-1" />
+                                ) : (
+                                  <ArrowDownRight className="h-4 w-4 mr-1" />
+                                )}
+                                <span className="text-sm font-medium">
+                                  {Math.abs(holding.changePercent)}%
+                                </span>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className="text-sm font-medium text-green-600">
+                                {holding.symbol === 'AuSIRI' ? '18.2%' : '24.7%'}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="flex items-center space-x-2">
+                                <Button size="sm" variant="outline" className="text-xs">
+                                  Buy More
+                                </Button>
+                                <Button size="sm" variant="outline" className="text-xs">
+                                  Rebalance
+                                </Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Quick Actions */}
+              <div className="grid md:grid-cols-3 gap-6">
+                <Card className="bg-gradient-to-r from-amber-50 to-amber-100 border-amber-200 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                  <CardContent className="p-6 text-center">
+                    <Plus className="h-8 w-8 text-amber-600 mx-auto mb-3" />
+                    <h3 className="font-semibold text-gray-900 mb-2">Increase Position</h3>
+                    <p className="text-sm text-gray-600 mb-4">Add to your existing holdings</p>
+                    <Button size="sm" className="bg-amber-600 hover:bg-amber-700">
+                      Invest More
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                  <CardContent className="p-6 text-center">
+                    <PieChart className="h-8 w-8 text-blue-600 mx-auto mb-3" />
+                    <h3 className="font-semibold text-gray-900 mb-2">Rebalance Portfolio</h3>
+                    <p className="text-sm text-gray-600 mb-4">Optimize your allocation</p>
+                    <Button size="sm" variant="outline" className="border-blue-300 text-blue-700">
+                      Rebalance
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200 hover:shadow-lg transition-all duration-300 cursor-pointer">
+                  <CardContent className="p-6 text-center">
+                    <Zap className="h-8 w-8 text-green-600 mx-auto mb-3" />
+                    <h3 className="font-semibold text-gray-900 mb-2">Auto-Invest</h3>
+                    <p className="text-sm text-gray-600 mb-4">Set up recurring investments</p>
+                    <Button size="sm" variant="outline" className="border-green-300 text-green-700">
+                      Setup Auto
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* Opportunities Tab */}
+          <TabsContent value="opportunities">
+            <div className="space-y-6">
+              <Card className="bg-white/90 backdrop-blur-xl border-gray-200/50 shadow-lg">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Star className="w-5 h-5 text-amber-500" />
+                    Investment Opportunities
+                  </CardTitle>
+                  <p className="text-sm text-gray-600">Exclusive access to new and limited offerings</p>
+                </CardHeader>
                 <CardContent>
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid gap-6">
                     {[
-                      { name: 'Monthly Performance Statement', date: '2025-09-01', status: 'Ready' },
-                      { name: 'Quarterly Portfolio Summary', date: '2025-08-31', status: 'Ready' },
-                      { name: 'Tax Statement', date: '2024-12-31', status: 'Ready' },
-                      { name: 'Asset Holdings Detail', date: '2025-09-10', status: 'Ready' },
-                      { name: 'Transaction History', date: '2025-09-01', status: 'Ready' },
-                      { name: 'Annual Report', date: '2024-12-31', status: 'Ready' }
-                    ].map((report) => (
-                      <div
-                        key={report.name}
-                        className="p-6 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-md"
-                        style={{
-                          border: '1px solid rgba(0, 0, 0, 0.08)',
-                          background: 'white'
-                        }}
-                      >
-                        <div className="flex items-start justify-between mb-3">
-                          <h4 style={{ fontWeight: '500', fontSize: '0.875rem', color: '#111827', fontFamily: 'Inter, sans-serif' }}>
-                            {report.name}
-                          </h4>
-                          <Badge
-                            style={{
-                              background: '#8B956D',
-                              color: 'white',
-                              fontSize: '0.75rem',
-                              fontFamily: 'Inter, sans-serif'
-                            }}
-                          >
-                            {report.status}
-                          </Badge>
+                      {
+                        name: 'AuREAL - Real Estate Token',
+                        description: 'Commercial real estate backed by premium properties',
+                        minInvestment: '$25,000',
+                        expectedAPY: '15-20%',
+                        status: 'Pre-Launch',
+                        timeLeft: '14 days',
+                        riskLevel: 'Medium',
+                        allocation: 'Limited to 500 investors'
+                      },
+                      {
+                        name: 'AuENERGY - Renewable Energy',
+                        description: 'Solar and wind farm revenue sharing tokens',
+                        minInvestment: '$50,000',
+                        expectedAPY: '18-25%',
+                        status: 'Private Sale',
+                        timeLeft: '7 days',
+                        riskLevel: 'Medium-High',
+                        allocation: 'Limited to 200 investors'
+                      },
+                      {
+                        name: 'AuTECH - Technology Assets',
+                        description: 'AI and quantum computing infrastructure tokens',
+                        minInvestment: '$100,000',
+                        expectedAPY: '25-35%',
+                        status: 'Coming Soon',
+                        timeLeft: '30 days',
+                        riskLevel: 'High',
+                        allocation: 'Institutional + Accredited only'
+                      }
+                    ].map((opportunity) => (
+                      <Card key={opportunity.name} className="border-2 border-gray-200 hover:border-amber-300 transition-all duration-300">
+                        <CardContent className="p-6">
+                          <div className="flex items-start justify-between mb-4">
+                            <div>
+                              <h3 className="font-semibold text-lg text-gray-900 mb-1">{opportunity.name}</h3>
+                              <p className="text-gray-600 text-sm">{opportunity.description}</p>
+                            </div>
+                            <Badge className={`${
+                              opportunity.status === 'Pre-Launch' ? 'bg-amber-100 text-amber-800' :
+                              opportunity.status === 'Private Sale' ? 'bg-blue-100 text-blue-800' :
+                              'bg-gray-100 text-gray-800'
+                            }`}>
+                              {opportunity.status}
+                            </Badge>
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-4 mb-4">
+                            <div className="space-y-2">
+                              <div className="flex justify-between">
+                                <span className="text-sm text-gray-600">Min Investment:</span>
+                                <span className="text-sm font-medium">{opportunity.minInvestment}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-sm text-gray-600">Expected APY:</span>
+                                <span className="text-sm font-medium text-green-600">{opportunity.expectedAPY}</span>
+                              </div>
+                            </div>
+                            <div className="space-y-2">
+                              <div className="flex justify-between">
+                                <span className="text-sm text-gray-600">Risk Level:</span>
+                                <span className="text-sm font-medium">{opportunity.riskLevel}</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-sm text-gray-600">Time Left:</span>
+                                <span className="text-sm font-medium text-amber-600">{opportunity.timeLeft}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="bg-amber-50 p-3 rounded-lg mb-4">
+                            <p className="text-xs text-amber-800">
+                              <Shield className="w-3 h-3 inline mr-1" />
+                              {opportunity.allocation}
+                            </p>
+                          </div>
+
+                          <div className="flex gap-3">
+                            <Button className="flex-1 bg-amber-600 hover:bg-amber-700">
+                              Reserve Allocation
+                            </Button>
+                            <Button variant="outline" className="flex-1">
+                              Learn More
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Performance Analytics Tab */}
+          <TabsContent value="analytics">
+            <div className="grid gap-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <Card className="bg-white/90 backdrop-blur-xl border-gray-200/50 shadow-lg">
+                  <CardHeader>
+                    <CardTitle>Performance Metrics</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                      <span className="text-sm text-gray-600">Total Return (YTD)</span>
+                      <span className="text-sm font-semibold text-green-600">+23.4%</span>
+                    </div>
+                    <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                      <span className="text-sm text-gray-600">Sharpe Ratio</span>
+                      <span className="text-sm font-semibold text-gray-900">2.87</span>
+                    </div>
+                    <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                      <span className="text-sm text-gray-600">Alpha (vs S&P 500)</span>
+                      <span className="text-sm font-semibold text-green-600">+8.2%</span>
+                    </div>
+                    <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                      <span className="text-sm text-gray-600">Beta</span>
+                      <span className="text-sm font-semibold text-gray-900">0.34</span>
+                    </div>
+                    <div className="flex justify-between items-center py-2 border-b border-gray-100">
+                      <span className="text-sm text-gray-600">Max Drawdown</span>
+                      <span className="text-sm font-semibold text-red-600">-4.1%</span>
+                    </div>
+                    <div className="flex justify-between items-center py-2">
+                      <span className="text-sm text-gray-600">Calmar Ratio</span>
+                      <span className="text-sm font-semibold text-gray-900">5.71</span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-white/90 backdrop-blur-xl border-gray-200/50 shadow-lg">
+                  <CardHeader>
+                    <CardTitle>Risk Analysis</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Portfolio Volatility</span>
+                        <span className="font-semibold">12.4%</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="bg-green-500 h-2 rounded-full" style={{ width: '25%' }}></div>
+                      </div>
+                      <p className="text-xs text-green-600">Low volatility compared to crypto markets</p>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Correlation to Gold</span>
+                        <span className="font-semibold">0.76</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="bg-amber-500 h-2 rounded-full" style={{ width: '76%' }}></div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex justify-between text-sm">
+                        <span className="text-gray-600">Correlation to S&P 500</span>
+                        <span className="font-semibold">0.23</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div className="bg-blue-500 h-2 rounded-full" style={{ width: '23%' }}></div>
+                      </div>
+                      <p className="text-xs text-blue-600">Low correlation provides diversification</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <Card className="bg-white/90 backdrop-blur-xl border-gray-200/50 shadow-lg">
+                <CardHeader>
+                  <CardTitle>Benchmark Comparison</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {[
+                      { name: 'Your Portfolio', value: 23.4, color: 'bg-amber-500' },
+                      { name: 'Gold ETF (GLD)', value: 14.2, color: 'bg-yellow-500' },
+                      { name: 'S&P 500', value: 11.8, color: 'bg-blue-500' },
+                      { name: 'Real Estate (REITs)', value: 8.6, color: 'bg-green-500' },
+                      { name: 'Bonds (AGG)', value: 2.1, color: 'bg-gray-500' }
+                    ].map((benchmark) => (
+                      <div key={benchmark.name} className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3 flex-1">
+                          <div className={`w-4 h-4 rounded ${benchmark.color}`}></div>
+                          <span className="text-sm font-medium text-gray-900">{benchmark.name}</span>
                         </div>
-                        <p style={{ fontSize: '0.75rem', color: '#6b7280', fontFamily: 'Inter, sans-serif' }}>
-                          {report.date}
-                        </p>
+                        <div className="flex items-center space-x-3">
+                          <div className="w-32 bg-gray-200 rounded-full h-2">
+                            <div
+                              className={`h-2 rounded-full ${benchmark.color}`}
+                              style={{ width: `${Math.min((benchmark.value / 25) * 100, 100)}%` }}
+                            ></div>
+                          </div>
+                          <span className="text-sm font-semibold text-gray-900 w-12 text-right">
+                            {benchmark.value}%
+                          </span>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -957,147 +708,114 @@ export default function DashboardPage() {
             </div>
           </TabsContent>
 
-          {/* Allocations Tab */}
-          <TabsContent value="allocations">
-            <div className="space-y-8">
-              <h2
-                className="mb-6"
-                style={{
-                  fontSize: 'clamp(1.875rem, 3vw, 2.5rem)',
-                  fontWeight: '200',
-                  fontFamily: 'Inter, sans-serif',
-                  letterSpacing: '-0.025em',
-                  color: '#111827'
-                }}
-              >
-                Strategic Allocations
-              </h2>
-
-              <Card
-                className="rounded-2xl"
-                style={{
-                  background: 'white',
-                  border: '1px solid rgba(0, 0, 0, 0.08)',
-                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-                }}
-              >
+          {/* Investment Strategies Tab */}
+          <TabsContent value="strategies">
+            <div className="space-y-6">
+              <Card className="bg-white/90 backdrop-blur-xl border-gray-200/50 shadow-lg">
                 <CardHeader>
-                  <CardTitle style={{ fontFamily: 'Inter, sans-serif', fontWeight: '500' }}>
-                    Recommended Portfolio Allocations
-                  </CardTitle>
-                  <p style={{ fontSize: '0.875rem', color: '#6b7280', fontFamily: 'Inter, sans-serif' }}>
-                    Choose a strategy that aligns with your investment goals
-                  </p>
+                  <CardTitle>Recommended Investment Strategies</CardTitle>
+                  <p className="text-sm text-gray-600">Sophisticated allocation strategies based on your risk profile and investment goals</p>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid md:grid-cols-3 gap-6">
+                  <div className="grid gap-6">
                     {[
                       {
-                        name: 'Conservative',
-                        description: 'Capital preservation focused',
-                        allocations: { gold: 70, aviation: 30 },
-                        expectedReturn: '8-12%',
-                        riskLevel: 'Low'
+                        name: 'Wealth Preservation Plus',
+                        description: 'Conservative strategy with enhanced yield generation',
+                        allocation: { ausiri: 75, auaero: 25 },
+                        expectedReturn: '15-20%',
+                        riskLevel: 'Low-Medium',
+                        features: ['Capital protection focus', 'Steady income generation', 'Low volatility', 'Inflation hedge'],
+                        suitableFor: 'Risk-averse investors'
                       },
                       {
-                        name: 'Balanced',
-                        description: 'Growth with stability',
-                        allocations: { gold: 60, aviation: 40 },
-                        expectedReturn: '12-18%',
+                        name: 'Balanced Growth',
+                        description: 'Optimal risk-adjusted returns with diversification',
+                        allocation: { ausiri: 60, auaero: 40 },
+                        expectedReturn: '20-28%',
                         riskLevel: 'Medium',
+                        features: ['Balanced risk-return', 'Active rebalancing', 'Growth potential', 'Diversified exposure'],
+                        suitableFor: 'Growth-oriented investors',
                         recommended: true
                       },
                       {
-                        name: 'Growth',
-                        description: 'Maximum performance',
-                        allocations: { gold: 40, aviation: 60 },
-                        expectedReturn: '18-25%',
-                        riskLevel: 'Medium-High'
+                        name: 'Aggressive Performance',
+                        description: 'Maximum growth potential for qualified investors',
+                        allocation: { ausiri: 40, auaero: 60 },
+                        expectedReturn: '25-35%',
+                        riskLevel: 'Medium-High',
+                        features: ['High growth potential', 'Active management', 'Performance focus', 'Higher volatility'],
+                        suitableFor: 'Sophisticated risk-tolerant investors'
                       }
-                    ].map((allocation) => (
-                      <div
-                        key={allocation.name}
-                        className="p-6 rounded-2xl transition-all duration-300"
-                        style={{
-                          border: allocation.recommended ? '2px solid #f59e0b' : '1px solid rgba(0, 0, 0, 0.08)',
-                          background: allocation.recommended ? 'rgba(245, 158, 11, 0.05)' : 'white'
-                        }}
-                      >
-                        {allocation.recommended && (
-                          <Badge
-                            className="mb-3"
-                            style={{
-                              background: '#f59e0b',
-                              color: 'white',
-                              fontFamily: 'Inter, sans-serif'
-                            }}
-                          >
-                            Recommended
-                          </Badge>
-                        )}
-                        <h3 style={{ fontWeight: '600', fontSize: '1.125rem', marginBottom: '8px', fontFamily: 'Inter, sans-serif' }}>
-                          {allocation.name}
-                        </h3>
-                        <p style={{ fontSize: '0.875rem', color: '#6b7280', marginBottom: '16px', fontFamily: 'Inter, sans-serif' }}>
-                          {allocation.description}
-                        </p>
-
-                        <div className="space-y-4 mb-4">
-                          <div>
-                            <div className="flex justify-between mb-2">
-                              <span style={{ fontSize: '0.875rem', fontFamily: 'Inter, sans-serif' }}>Gold (AuSIRI)</span>
-                              <span style={{ fontSize: '0.875rem', fontWeight: '500', fontFamily: 'Inter, sans-serif' }}>
-                                {allocation.allocations.gold}%
-                              </span>
+                    ].map((strategy) => (
+                      <Card key={strategy.name} className={`border-2 transition-all duration-300 ${
+                        strategy.recommended
+                          ? 'border-amber-500 bg-amber-50'
+                          : 'border-gray-200 hover:border-gray-300'
+                      }`}>
+                        <CardContent className="p-6">
+                          <div className="flex items-start justify-between mb-4">
+                            <div>
+                              <h3 className="font-semibold text-lg text-gray-900 mb-1">{strategy.name}</h3>
+                              <p className="text-gray-600 text-sm mb-2">{strategy.description}</p>
+                              <p className="text-xs text-gray-500">{strategy.suitableFor}</p>
                             </div>
-                            <div className="w-full rounded-full h-2" style={{ background: '#e5e7eb' }}>
-                              <div
-                                className="rounded-full h-2"
-                                style={{ width: `${allocation.allocations.gold}%`, background: '#f59e0b' }}
-                              ></div>
+                            {strategy.recommended && (
+                              <Badge className="bg-amber-500 text-white">Recommended</Badge>
+                            )}
+                          </div>
+
+                          <div className="grid md:grid-cols-2 gap-6 mb-6">
+                            <div>
+                              <h4 className="font-medium text-gray-900 mb-3">Asset Allocation</h4>
+                              <div className="space-y-3">
+                                <div className="flex justify-between items-center">
+                                  <span className="text-sm">AuSIRI (Gold)</span>
+                                  <span className="text-sm font-medium">{strategy.allocation.ausiri}%</span>
+                                </div>
+                                <div className="w-full bg-gray-200 rounded-full h-2">
+                                  <div className="bg-amber-500 h-2 rounded-full" style={{ width: `${strategy.allocation.ausiri}%` }}></div>
+                                </div>
+
+                                <div className="flex justify-between items-center">
+                                  <span className="text-sm">AuAERO (Aerospace)</span>
+                                  <span className="text-sm font-medium">{strategy.allocation.auaero}%</span>
+                                </div>
+                                <div className="w-full bg-gray-200 rounded-full h-2">
+                                  <div className="bg-orange-500 h-2 rounded-full" style={{ width: `${strategy.allocation.auaero}%` }}></div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div>
+                              <h4 className="font-medium text-gray-900 mb-3">Strategy Features</h4>
+                              <ul className="space-y-2">
+                                {strategy.features.map((feature, index) => (
+                                  <li key={index} className="flex items-center text-sm text-gray-600">
+                                    <CheckCircle className="w-3 h-3 text-green-500 mr-2 flex-shrink-0" />
+                                    {feature}
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-4 mb-4 p-4 bg-gray-50 rounded-lg">
+                            <div className="text-center">
+                              <div className="text-lg font-semibold text-gray-900">{strategy.expectedReturn}</div>
+                              <div className="text-xs text-gray-600">Expected Annual Return</div>
+                            </div>
+                            <div className="text-center">
+                              <div className="text-lg font-semibold text-gray-900">{strategy.riskLevel}</div>
+                              <div className="text-xs text-gray-600">Risk Level</div>
                             </div>
                           </div>
 
-                          <div>
-                            <div className="flex justify-between mb-2">
-                              <span style={{ fontSize: '0.875rem', fontFamily: 'Inter, sans-serif' }}>Aviation (AuAERO)</span>
-                              <span style={{ fontSize: '0.875rem', fontWeight: '500', fontFamily: 'Inter, sans-serif' }}>
-                                {allocation.allocations.aviation}%
-                              </span>
-                            </div>
-                            <div className="w-full rounded-full h-2" style={{ background: '#e5e7eb' }}>
-                              <div
-                                className="rounded-full h-2"
-                                style={{ width: `${allocation.allocations.aviation}%`, background: '#007BA7' }}
-                              ></div>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="border-t pt-4 space-y-2" style={{ borderColor: 'rgba(0, 0, 0, 0.08)' }}>
-                          <div className="flex justify-between text-sm">
-                            <span style={{ color: '#6b7280', fontFamily: 'Inter, sans-serif' }}>Expected Return</span>
-                            <span style={{ fontWeight: '500', fontFamily: 'Inter, sans-serif' }}>{allocation.expectedReturn}</span>
-                          </div>
-                          <div className="flex justify-between text-sm">
-                            <span style={{ color: '#6b7280', fontFamily: 'Inter, sans-serif' }}>Risk Level</span>
-                            <span style={{ fontWeight: '500', fontFamily: 'Inter, sans-serif' }}>{allocation.riskLevel}</span>
-                          </div>
-                        </div>
-
-                        <Button
-                          className="w-full mt-4 rounded-xl"
-                          style={{
-                            background: allocation.recommended ? '#007BA7' : 'transparent',
-                            color: allocation.recommended ? 'white' : '#007BA7',
-                            border: allocation.recommended ? 'none' : '1px solid #007BA7',
-                            fontFamily: 'Inter, sans-serif',
-                            fontWeight: '500'
-                          }}
-                        >
-                          Apply Strategy
-                        </Button>
-                      </div>
+                          <Button className="w-full" variant={strategy.recommended ? 'default' : 'outline'}>
+                            {strategy.recommended ? 'Apply Recommended Strategy' : 'Apply Strategy'}
+                          </Button>
+                        </CardContent>
+                      </Card>
                     ))}
                   </div>
                 </CardContent>
@@ -1105,29 +823,7 @@ export default function DashboardPage() {
             </div>
           </TabsContent>
         </Tabs>
-      </div>
-
-      {/* Footer with Earth-Tone Grounding */}
-      <footer
-        className="py-12 px-8"
-        style={{
-          background: '#9B8B7E',
-          borderTop: 'none'
-        }}
-      >
-        <div className="max-w-7xl mx-auto text-center">
-          <p
-            className="text-sm font-light"
-            style={{
-              letterSpacing: '0.01em',
-              color: 'rgba(255, 255, 255, 0.9)',
-              fontFamily: 'Inter, sans-serif'
-            }}
-          >
-            &copy; 2025 COW Group. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      </main>
     </div>
   )
 }

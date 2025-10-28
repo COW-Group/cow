@@ -1,6 +1,8 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env.local') });
 
 module.exports = {
   entry: './src/main.tsx',
@@ -63,6 +65,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       title: 'Cycles of Wealth - MyCOW',
+    }),
+    new webpack.DefinePlugin({
+      'process.env.NEXT_PUBLIC_SUPABASE_URL': JSON.stringify(process.env.NEXT_PUBLIC_SUPABASE_URL),
+      'process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY': JSON.stringify(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
+      'process.env.REACT_APP_SUPABASE_URL': JSON.stringify(process.env.NEXT_PUBLIC_SUPABASE_URL),
+      'process.env.REACT_APP_SUPABASE_ANON_KEY': JSON.stringify(process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY),
     }),
     new CopyWebpackPlugin({
       patterns: [

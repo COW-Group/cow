@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react"
+import { supabase, type Profile } from "@cow/supabase-client"
+import type { User } from "@supabase/supabase-js"
 
 interface AuthUser {
   id: string
@@ -8,12 +10,14 @@ interface AuthUser {
   }
 }
 
-interface UserProfile {
+// Use the Profile type from Supabase, extending it with legacy fields for compatibility
+interface UserProfile extends Partial<Profile> {
   id: string
   name: string | null
   email: string
   avatar_url?: string
   created_at: string
+  // Legacy fields for backwards compatibility
   user_type?: 'accredited_investor' | 'international_investor' | 'institutional_investor' | 'retail_investor'
   investment_experience?: 'beginner' | 'intermediate' | 'advanced' | 'professional'
   primary_interest?: 'wealth_preservation' | 'income_generation' | 'growth' | 'diversification'
@@ -81,68 +85,132 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Check for existing authentication on app load
   useEffect(() => {
-    const checkAuthState = () => {
+    const checkAuthState = async () => {
       try {
-        const savedAuth = localStorage.getItem('cow_auth_state')
-        if (savedAuth) {
-          const authState = JSON.parse(savedAuth)
-          setAuth(authState)
+        const { data: { session } } = await supabase.auth.getSession()
+
+        if (session?.user) {
+          // Fetch user profile from database
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', session.user.id)
+            .single()
+
+          const authUser: AuthUser = {
+            id: session.user.id,
+            email: session.user.email || '',
+            user_metadata: session.user.user_metadata
+          }
+
+          const userProfile: UserProfile = profile ? {
+            ...profile,
+            name: profile.name || session.user.user_metadata.full_name || null,
+            email: session.user.email || '',
+            avatar_url: profile.avatar_url || session.user.user_metadata.avatar_url,
+            created_at: profile.created_at || new Date().toISOString()
+          } : {
+            id: session.user.id,
+            name: session.user.user_metadata.full_name || null,
+            email: session.user.email || '',
+            created_at: new Date().toISOString()
+          }
+
+          updateAuth({ user: authUser, profile: userProfile, isAuthenticated: true })
         }
       } catch (error) {
-        console.warn('Failed to load auth state from localStorage:', error)
-        localStorage.removeItem('cow_auth_state')
+        console.warn('Failed to load auth state:', error)
       } finally {
         setLoading(false)
       }
     }
 
     checkAuthState()
+
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', session.user.id)
+          .single()
+
+        const authUser: AuthUser = {
+          id: session.user.id,
+          email: session.user.email || '',
+          user_metadata: session.user.user_metadata
+        }
+
+        const userProfile: UserProfile = profile ? {
+          ...profile,
+          name: profile.name || session.user.user_metadata.full_name || null,
+          email: session.user.email || '',
+          avatar_url: profile.avatar_url || session.user.user_metadata.avatar_url,
+          created_at: profile.created_at || new Date().toISOString()
+        } : {
+          id: session.user.id,
+          name: session.user.user_metadata.full_name || null,
+          email: session.user.email || '',
+          created_at: new Date().toISOString()
+        }
+
+        updateAuth({ user: authUser, profile: userProfile, isAuthenticated: true })
+      } else if (event === 'SIGNED_OUT') {
+        updateAuth({ user: null, profile: null, isAuthenticated: false })
+      }
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
   }, [])
 
   const signInWithPassword = async (email: string, password: string) => {
     setLoading(true)
     setError(null)
     try {
-      // Mock authentication for demo - simulate existing user with profile
-      const mockUser: AuthUser = {
-        id: 'mock-user-id',
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        user_metadata: { full_name: 'Demo User' }
-      }
-      
-      // Simulate different user types based on email domain
-      let userType: UserProfile['user_type'] = 'retail_investor'
-      let investmentExperience: UserProfile['investment_experience'] = 'intermediate'
-      let needsOnboarding = false
+        password
+      })
 
-      if (email.includes('institutional') || email.includes('fund')) {
-        userType = 'institutional_investor'
-        investmentExperience = 'professional'
-      } else if (email.includes('accredited') || email.includes('private')) {
-        userType = 'accredited_investor'
-        investmentExperience = 'advanced'
-      } else if (email.includes('eu') || email.includes('europe')) {
-        userType = 'international_investor'
-      }
+      if (error) throw error
 
-      const mockProfile: UserProfile = {
-        id: 'mock-user-id',
-        name: 'Demo User',
-        email,
-        created_at: new Date().toISOString(),
-        user_type: userType,
-        investment_experience: investmentExperience,
-        primary_interest: 'diversification',
-        compliance_status: {
-          kyc_verified: true,
-          accredited_verified: userType === 'accredited_investor' || userType === 'institutional_investor',
-          mifid_assessment_completed: userType === 'international_investor',
-          region: email.includes('eu') ? 'eu' : 'us'
+      if (data.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', data.user.id)
+          .single()
+
+        const authUser: AuthUser = {
+          id: data.user.id,
+          email: data.user.email || '',
+          user_metadata: data.user.user_metadata
         }
+
+        const userProfile: UserProfile = profile ? {
+          ...profile,
+          name: profile.name || data.user.user_metadata.full_name || null,
+          email: data.user.email || '',
+          avatar_url: profile.avatar_url || data.user.user_metadata.avatar_url,
+          created_at: profile.created_at || new Date().toISOString()
+        } : {
+          id: data.user.id,
+          name: data.user.user_metadata.full_name || null,
+          email: data.user.email || '',
+          created_at: new Date().toISOString()
+        }
+
+        updateAuth({ user: authUser, profile: userProfile, isAuthenticated: true })
+
+        // Check if user needs onboarding (no profile data)
+        const needsOnboarding = !profile
+        return { needsOnboarding }
       }
-      
-      updateAuth({ user: mockUser, profile: mockProfile, isAuthenticated: true })
-      return { needsOnboarding }
+
+      return { needsOnboarding: false }
     } catch (err: any) {
       setError(err.message || "Sign-in failed")
       throw err
@@ -155,29 +223,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true)
     setError(null)
     try {
-      // Mock signup for demo - new users need onboarding
-      const mockUser: AuthUser = {
-        id: 'mock-user-id',
+      const { data, error } = await supabase.auth.signUp({
         email,
-        user_metadata: { full_name: 'New User' }
-      }
-      const mockProfile: UserProfile = {
-        id: 'mock-user-id',
-        name: 'New User',
-        email,
-        created_at: new Date().toISOString(),
-        // New users start with minimal profile - will be completed during onboarding
-        user_type: undefined,
-        investment_experience: undefined,
-        primary_interest: undefined,
-        compliance_status: {
-          kyc_verified: false,
-          accredited_verified: false,
-          mifid_assessment_completed: false,
-          region: 'us' // Default, will be updated during onboarding
+        password,
+        options: {
+          data: {
+            full_name: email.split('@')[0] // Use email prefix as default name
+          }
         }
+      })
+
+      if (error) throw error
+
+      if (data.user) {
+        // Create profile entry
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert({
+            id: data.user.id,
+            email: data.user.email || '',
+            name: email.split('@')[0],
+            role: 'investor' // Default role
+          })
+
+        if (profileError) {
+          console.warn('Failed to create profile:', profileError)
+        }
+
+        const authUser: AuthUser = {
+          id: data.user.id,
+          email: data.user.email || '',
+          user_metadata: data.user.user_metadata
+        }
+
+        const userProfile: UserProfile = {
+          id: data.user.id,
+          name: email.split('@')[0],
+          email: data.user.email || '',
+          created_at: new Date().toISOString()
+        }
+
+        updateAuth({ user: authUser, profile: userProfile, isAuthenticated: true })
+        return { needsOnboarding: true } // New users need onboarding
       }
-      updateAuth({ user: mockUser, profile: mockProfile, isAuthenticated: true })
+
       return { needsOnboarding: true }
     } catch (err: any) {
       setError(err.message || "Sign-up failed")
@@ -191,6 +280,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true)
     setError(null)
     try {
+      const { error } = await supabase.auth.signOut()
+      if (error) throw error
+
       updateAuth({ user: null, profile: null, isAuthenticated: false })
       localStorage.removeItem('cow_auth_state')
     } catch (err: any) {
@@ -205,7 +297,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true)
     setError(null)
     try {
-      console.log("Password reset requested for:", email)
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`
+      })
+      if (error) throw error
     } catch (err: any) {
       setError(err.message || "Failed to send password reset email")
       throw err
@@ -218,7 +313,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true)
     setError(null)
     try {
-      console.log("Confirmation email resent to:", email)
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email
+      })
+      if (error) throw error
     } catch (err: any) {
       setError(err.message || "Failed to resend confirmation email")
       throw err
@@ -231,10 +330,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(true)
     setError(null)
     try {
-      if (auth.profile) {
-        const updatedProfile = { ...auth.profile, ...profileUpdates }
-        const newAuthState = { ...auth, profile: updatedProfile }
-        updateAuth(newAuthState)
+      if (auth.user) {
+        // Update profile in database
+        const { error } = await supabase
+          .from('profiles')
+          .update(profileUpdates)
+          .eq('id', auth.user.id)
+
+        if (error) throw error
+
+        // Update local state
+        if (auth.profile) {
+          const updatedProfile = { ...auth.profile, ...profileUpdates }
+          const newAuthState = { ...auth, profile: updatedProfile }
+          updateAuth(newAuthState)
+        }
       }
     } catch (err: any) {
       setError(err.message || "Failed to update profile")
@@ -245,25 +355,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const getDashboardRoute = () => {
-    // Users without user_type go to default dashboard
-    // After onboarding, they'll be routed to type-specific dashboard
-    if (!auth.profile?.user_type) {
-      return '/dashboard'
-    }
+    // All users now use the unified professional dashboard
+    return '/dashboard'
 
-    // Route to different dashboard variants based on user type (after onboarding)
-    switch (auth.profile.user_type) {
-      case 'institutional_investor':
-        return '/dashboard/institutional'
-      case 'accredited_investor':
-        return '/dashboard/accredited'
-      case 'international_investor':
-        return '/dashboard/international'
-      case 'retail_investor':
-        return '/dashboard/retail'
-      default:
-        return '/dashboard'
-    }
+    // NOTE: Type-specific dashboards still exist at:
+    // - /dashboard/institutional
+    // - /dashboard/accredited
+    // - /dashboard/international
+    // - /dashboard/retail
+    // But all users are routed to the default /dashboard which uses the professional design
   }
 
   return (

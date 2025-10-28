@@ -1,113 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Zap, Target, Users, BarChart3, Shield, Building, Rocket, TrendingUp, Globe, CheckCircle, Star } from 'lucide-react';
+import { ArrowRight, Zap, Target, Users, BarChart3, Shield, Building, Rocket, TrendingUp, Globe, CheckCircle, Star, ChevronDown } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { Button } from '../components/ui/Button';
 import { Modal } from '../components/ui/Modal';
 import { supabase } from '@cow/supabase-client';
-
-// Hero Background Component (similar to products-site)
-function MissionsHeroBackground() {
-  const elementRef = useRef<HTMLDivElement>(null);
-  const vantaRef = useRef<any>(null);
-  const [fallback, setFallback] = useState(false);
-
-  useEffect(() => {
-    let mounted = true;
-
-    const loadVanta = async () => {
-      try {
-        if (typeof window === "undefined") return;
-
-        // Load Three.js if not already loaded
-        if (!(window as any).THREE) {
-          await new Promise<void>((resolve, reject) => {
-            const script = document.createElement("script");
-            script.src = "https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js";
-            script.onload = () => {
-              console.log("Three.js loaded successfully.");
-              resolve();
-            };
-            script.onerror = () => reject(new Error("Failed to load Three.js"));
-            document.head.appendChild(script);
-          });
-        }
-
-        // Load Vanta.js
-        if (!(window as any).VANTA) {
-          await new Promise<void>((resolve, reject) => {
-            const script = document.createElement("script");
-            script.src = "https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js";
-            script.onload = () => {
-              console.log("Vanta.js loaded successfully.");
-              resolve();
-            };
-            script.onerror = () => reject(new Error("Failed to load Vanta.js"));
-            document.head.appendChild(script);
-          });
-        }
-
-        // Mission-focused color scheme - corporate blues and golds
-        const getMissionSettings = () => ({
-          backgroundColor: 0x1e40af,  // Deep blue
-          skyColor: 0x3b82f6,         // Bright blue
-          cloudShadowColor: 0x1e293b, // Dark slate
-          sunColor: 0xfbbf24,         // Amber/gold
-          speed: 0.4,
-          sunlightColor: 0xfef3c7     // Light amber
-        });
-
-        if (mounted && elementRef.current && (window as any).VANTA?.CLOUDS) {
-          const settings = getMissionSettings();
-          vantaRef.current = (window as any).VANTA.CLOUDS({
-            el: elementRef.current,
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.0,
-            minWidth: 200.0,
-            ...settings
-          });
-          console.log("Vanta.js CLOUDS effect initialized with mission settings:", settings);
-        }
-      } catch (error) {
-        console.warn("Vanta.js failed to load, using fallback:", error);
-        if (mounted) {
-          setFallback(true);
-        }
-      }
-    };
-
-    loadVanta();
-
-    return () => {
-      mounted = false;
-      if (vantaRef.current?.destroy) {
-        try {
-          vantaRef.current.destroy();
-          console.log("Vanta effect destroyed.");
-        } catch (error) {
-          console.warn("Error destroying Vanta effect:", error);
-        }
-      }
-    };
-  }, []);
-
-  return (
-    <div
-      ref={elementRef}
-      className={`absolute inset-0 ${fallback ? "missions-fallback" : ""}`}
-      style={
-        fallback
-          ? {
-              background: "linear-gradient(135deg, #1e40af 0%, #3b82f6 25%, #60a5fa 50%, #3b82f6 75%, #1e40af 100%)",
-              backgroundSize: "400% 400%",
-              animation: "gradientShift 15s ease infinite",
-            }
-          : undefined
-      }
-    />
-  );
-}
+import { COWHeroBackground } from '../components/background/COWBackground';
+import { ThemeToggle } from '../components/theme/ThemeToggle';
+import cowLogo from '../assets/cow-logo.png';
 
 export function LandingPage() {
   const navigate = useNavigate();
@@ -298,23 +198,34 @@ export function LandingPage() {
             boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)'
           }}
         >
-          <div
-            className="text-xl font-light tracking-tight flex items-center gap-2"
-            style={{
-              color: '#1f2937',
-              letterSpacing: '0.02em',
-              fontWeight: '300'
-            }}
-          >
-            <Rocket className="h-5 w-5" />
-            Missions
+          <div className="flex items-center gap-2">
+            <img
+              src={cowLogo}
+              alt="COW Communications"
+              className="h-8 w-auto"
+            />
+            <span
+              className="text-xl font-light tracking-tight"
+              style={{
+                color: '#1f2937',
+                letterSpacing: '0.02em',
+                fontWeight: '300'
+              }}
+            >
+              Missions
+            </span>
           </div>
 
           <div className="flex items-center gap-4">
+            {/* Theme Toggle */}
+            <ThemeToggle size="sm" />
+
+            <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-1" />
+
             <Button
               variant="outline"
               size="sm"
-              className="rounded-full text-gray-700 transition-all duration-300"
+              className="rounded-full text-gray-700 dark:text-gray-300 transition-all duration-300"
               style={{
                 background: 'rgba(0, 0, 0, 0.03)',
                 border: '1px solid rgba(0, 0, 0, 0.1)',
@@ -332,7 +243,7 @@ export function LandingPage() {
             <Button
               variant="outline"
               size="sm"
-              className="rounded-full text-gray-700 transition-all duration-300"
+              className="rounded-full text-gray-700 dark:text-gray-300 transition-all duration-300"
               style={{
                 background: 'rgba(0, 0, 0, 0.03)',
                 border: '1px solid rgba(0, 0, 0, 0.1)',
@@ -351,86 +262,102 @@ export function LandingPage() {
         </div>
       </nav>
 
-      {/* Hero Section - Apple Engineering Precision */}
+      {/* Hero Section - COW Sumi-e Sky + Earth */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <MissionsHeroBackground />
+        <COWHeroBackground />
 
-        {/* Content Architecture */}
+        {/* Content with Motion */}
         <div className="relative z-10 text-center max-w-7xl mx-auto px-8">
-          {/* Apple Typography Engineering */}
-          <h1
-            className="mb-12 text-white"
-            style={{
-              fontSize: 'clamp(4.5rem, 9vw, 9.5rem)',
-              fontWeight: '200',
-              letterSpacing: '-0.025em',
-              lineHeight: '0.82',
-              marginBottom: '3rem',
-              textShadow: '0 2px 20px rgba(0, 0, 0, 0.3), 0 1px 4px rgba(0, 0, 0, 0.1)'
-            }}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="mb-8"
           >
-            Mission Execution
-          </h1>
+            {/* Exciting Gradient Headline */}
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-thin mb-6 leading-[0.9] tracking-tight" style={{ color: 'var(--text-primary)' }}>
+              Orchestrate the Future of{' '}
+              <span style={{
+                background: 'linear-gradient(to right, var(--cyan-deep) 0%, var(--cyan-bright) 50%, var(--emerald-bright) 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                fontWeight: '300'
+              }}>
+                Mission Execution
+              </span>
+            </h1>
 
-          {/* Simplified Product Description */}
-          <div className="max-w-4xl mx-auto mb-16">
-            <p
-              className="text-white"
-              style={{
-                fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)',
-                fontWeight: '300',
-                letterSpacing: '0.01em',
-                lineHeight: '1.4',
-                textShadow: '0 2px 12px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2)'
-              }}
-            >
-              Enterprise mission management platform designed for Cycles of Wealth companies, verticals, and tokenized programs.
+            {/* COW Deep Cyan Divider */}
+            <div style={{
+              width: '120px',
+              height: '2px',
+              background: 'linear-gradient(to right, transparent 0%, var(--cyan-deep) 50%, transparent 100%)',
+              margin: '0 auto 2rem auto'
+            }} />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="max-w-4xl mx-auto mb-16"
+          >
+            <p className="text-xl sm:text-2xl font-light mb-12 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
+              Systematic coordination across{' '}
+              <span style={{ color: 'var(--cyan-deep)', fontWeight: '400' }}>tokenized verticals</span>
+              {' '}and portfolio companies—transforming complex{' '}
+              <span style={{ color: 'var(--emerald-primary)', fontWeight: '400' }}>multi-entity initiatives</span> into executable reality.
             </p>
 
-            {/* Category Creator Data Points */}
-            <div className="mt-12 flex flex-wrap items-center justify-center gap-8 text-white/90">
+            {/* Success Metrics */}
+            <div className="mt-12 flex flex-wrap items-center justify-center gap-8" style={{ color: 'var(--text-secondary)' }}>
               {successMetrics.map((metric, index) => (
                 <React.Fragment key={metric.label}>
                   <div className="text-center">
-                    <div className="text-2xl font-light" style={{ letterSpacing: '0.02em', textShadow: '0 1px 3px rgba(0, 0, 0, 0.3)' }}>
+                    <div className="text-2xl font-light" style={{ letterSpacing: '0.02em' }}>
                       {metric.number}
                     </div>
-                    <div className="text-sm text-white/70" style={{ letterSpacing: '0.01em' }}>
+                    <div className="text-sm" style={{ letterSpacing: '0.01em', color: 'var(--text-tertiary)' }}>
                       {metric.label}
                     </div>
                   </div>
                   {index < successMetrics.length - 1 && (
-                    <div className="w-px h-8 bg-white/20"></div>
+                    <div className="w-px h-8 opacity-20" style={{ backgroundColor: 'var(--text-tertiary)' }}></div>
                   )}
                 </React.Fragment>
               ))}
             </div>
-          </div>
+          </motion.div>
 
-          {/* Institutional CTA Framework */}
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-16 max-w-4xl mx-auto">
-            {/* Access Mission Platform */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-16 max-w-4xl mx-auto"
+          >
+            {/* Access Mission Platform - COW Button Blue */}
             <button
               className="group relative px-8 py-4 font-medium transition-all duration-300"
               style={{
-                background: 'rgba(255, 255, 255, 0.95)',
-                border: '1px solid rgba(0, 0, 0, 0.1)',
+                background: 'var(--button-blue)',
+                border: '1px solid var(--cyan-bright)',
                 borderRadius: '12px',
                 fontSize: '1rem',
                 fontWeight: '500',
                 letterSpacing: '0.01em',
-                color: '#1f2937',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.05)'
+                color: 'var(--white)',
+                boxShadow: '0 4px 16px rgba(37, 99, 235, 0.3), 0 1px 4px rgba(37, 99, 235, 0.2)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 1)';
+                e.currentTarget.style.background = 'var(--button-hover)';
                 e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.15), 0 2px 8px rgba(0, 0, 0, 0.08)';
+                e.currentTarget.style.boxShadow = '0 8px 24px rgba(37, 99, 235, 0.4), 0 2px 8px rgba(37, 99, 235, 0.3)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.95)';
+                e.currentTarget.style.background = 'var(--button-blue)';
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.05)';
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(37, 99, 235, 0.3), 0 1px 4px rgba(37, 99, 235, 0.2)';
               }}
               onClick={() => setShowSignUpModal(true)}
             >
@@ -440,25 +367,27 @@ export function LandingPage() {
               </span>
             </button>
 
-            {/* Schedule Enterprise Demo */}
+            {/* Schedule Enterprise Demo - COW Cyan Accent */}
             <button
               className="group relative px-8 py-4 font-medium transition-all duration-300"
               style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
+                background: 'transparent',
+                border: '1px solid var(--cyan-bright)',
                 borderRadius: '12px',
                 fontSize: '1rem',
                 fontWeight: '400',
                 letterSpacing: '0.01em',
-                color: 'white',
+                color: 'var(--text-primary)',
                 backdropFilter: 'blur(10px)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
+                e.currentTarget.style.background = 'var(--cyan-bright)';
+                e.currentTarget.style.color = 'var(--white)';
                 e.currentTarget.style.transform = 'translateY(-2px)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = 'var(--text-primary)';
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
               onClick={handleDemoLogin}
@@ -468,7 +397,25 @@ export function LandingPage() {
                 <Globe className="w-4 h-4 transition-transform group-hover:rotate-12" />
               </span>
             </button>
-          </div>
+          </motion.div>
+
+          {/* Scroll Indicator */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 0.8 }}
+            className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+          >
+            <motion.div
+              animate={{ y: [0, 8, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="flex flex-col items-center"
+              style={{ color: 'var(--text-tertiary)' }}
+            >
+              <span className="text-sm font-light mb-2">Explore</span>
+              <ChevronDown className="w-5 h-5" />
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 

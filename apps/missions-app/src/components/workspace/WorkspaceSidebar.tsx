@@ -53,6 +53,7 @@ import { ThemeToggle } from '../theme/ThemeToggle';
 import { useAuth } from '../../hooks/useAuth';
 import { useAuth as useAuthContext } from '../../contexts/AuthContext';
 import { OrganizationSwitcher } from '../organization/OrganizationSwitcher';
+import cowLogo from '../../assets/cow-logo.png';
 
 interface WorkspaceSidebarProps {
   currentWorkspaceId?: string;
@@ -503,6 +504,30 @@ export function WorkspaceSidebar({
       sidebarCollapsed ? 'w-16' : 'w-64'
     }`}>
       <div className="flex flex-col h-full p-4">
+        {/* COW Logo Header */}
+        <div className="mb-4">
+          {!sidebarCollapsed ? (
+            <div className="flex items-center gap-2 px-2">
+              <img
+                src={cowLogo}
+                alt="COW Communications"
+                className="h-8 w-auto"
+              />
+              <span className="text-lg font-light" style={{ color: 'var(--text-primary)' }}>
+                Missions
+              </span>
+            </div>
+          ) : (
+            <div className="flex justify-center">
+              <img
+                src={cowLogo}
+                alt="COW Communications"
+                className="h-8 w-auto"
+              />
+            </div>
+          )}
+        </div>
+
         {/* Collapse/Expand Toggle Button */}
         <div className="flex items-center justify-between mb-4">
           {!sidebarCollapsed && (

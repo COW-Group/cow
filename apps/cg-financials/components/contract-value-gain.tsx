@@ -52,15 +52,15 @@ export default function ContractValueGain() {
   const cashMarginPer100OzEUR = cashMarginPer100OzUSD / exchangeRate
   const cashMarginPerHundredthGramUSD = cashMarginPer100OzUSD / (100 * 31.1034768 * 100)
   const cashMarginPerHundredthGramEUR = cashMarginPer100OzEUR / (100 * 31.1034768 * 100)
-  // MyCow's Cash Margin to the Exchange: $19,980 per 100 Oz
-  const mycowMarginPer100Oz = 19980
+  // MyCow's Cash Margin to the Exchange: $21,960 per 100 Oz
+  const mycowMarginPer100Oz = 21960
   const mycowMarginPerHundredthGramUSD = mycowMarginPer100Oz / (100 * 31.1034768 * 100)
   const mycowMarginPerHundredthGramEUR = mycowMarginPer100Oz / exchangeRate / (100 * 31.1034768 * 100)
   const totalCashMargin = mycowMarginPerHundredthGramEUR * totalUnitsBought
   const marginInvested = mycowMarginPerHundredthGramEUR // Using MyCow's Margin per Unit (1/100th Gram)
   const roi = (investorGain / marginInvested) * 100 // ROI as percentage (using Investor Gain)
   const marginInvestedUSD = mycowMarginPerHundredthGramUSD
-  const investorGainUSD = investorGain * eurUsdRate
+  const investorGainUSD = investorGain * exchangeRate
   const roiUSD = (investorGainUSD / marginInvestedUSD) * 100 // ROI in USD
   const roiEUR = (investorGain / marginInvested) * 100 // ROI in EUR
   const cagr = calculateCAGR(investorGain / marginInvested, period)
@@ -112,7 +112,7 @@ export default function ContractValueGain() {
                   Exit Value − Contract Value
                 </td>
                 <td className="px-3 py-1.5 text-sm border border-blue-100">
-                  {loading ? <span className="text-gray-400">Loading...</span> : formatUSD(totalGain * eurUsdRate, 6)}
+                  {loading ? <span className="text-gray-400">Loading...</span> : formatUSD(totalGain * exchangeRate, 6)}
                 </td>
                 <td className="px-3 py-1.5 text-sm border border-blue-100">
                   {loading ? <span className="text-gray-400">Loading...</span> : formatEUR(totalGain, 6)}
@@ -124,7 +124,7 @@ export default function ContractValueGain() {
                   (2/3) × Total Gain
                 </td>
                 <td className="px-3 py-1.5 text-sm border border-blue-100">
-                  {loading ? <span className="text-gray-400">Loading...</span> : formatUSD((totalGain * 2/3) * eurUsdRate, 6)}
+                  {loading ? <span className="text-gray-400">Loading...</span> : formatUSD((totalGain * 2/3) * exchangeRate, 6)}
                 </td>
                 <td className="px-3 py-1.5 text-sm border border-blue-100">
                   {loading ? <span className="text-gray-400">Loading...</span> : formatEUR(totalGain * 2/3, 6)}

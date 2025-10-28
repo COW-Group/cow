@@ -39,8 +39,8 @@ export default function ParametersTable() {
   const cashMarginPer100OzEUR = cashMarginPer100OzUSD / exchangeRate
   const cashMarginPerHundredthGramUSD = cashMarginPer100OzUSD / (100 * 31.1034768 * 100)
   const cashMarginPerHundredthGramEUR = cashMarginPer100OzEUR / (100 * 31.1034768 * 100)
-  // MyCow's Cash Margin to the Exchange: $19,980 per 100 Oz
-  const mycowMarginPer100Oz = 19980
+  // MyCow's Cash Margin to the Exchange: $21,960 per 100 Oz
+  const mycowMarginPer100Oz = 21960
   const mycowMarginPerHundredthGram = mycowMarginPer100Oz / (100 * 31.1034768 * 100)
   const totalUnitsOffered = 2250000000 // 2.25B Units
   const totalUnitsOfferedInOz = totalUnitsOffered / (31.1034768 * 100)
@@ -75,7 +75,7 @@ export default function ParametersTable() {
               </tr>
               <tr>
                 <td className="px-3 py-1.5 text-sm border border-blue-100">EUR / USD exchange rate</td>
-                <td className="px-3 py-1.5 text-sm border border-blue-100" colSpan={2}>{eurUsdRate.toFixed(2)}</td>
+                <td className="px-3 py-1.5 text-sm border border-blue-100" colSpan={2}>{exchangeRate.toFixed(2)}</td>
               </tr>
               <tr>
                 <td className="px-3 py-1.5 text-sm border border-blue-100">Annual compounding rate</td>
@@ -94,7 +94,7 @@ export default function ParametersTable() {
                   {loading ? (
                     <span className="text-gray-400">Loading...</span>
                   ) : (
-                    formatEUR(goldSpotAsk / eurUsdRate, 2)
+                    formatEUR(goldSpotAsk / exchangeRate, 2)
                   )}
                 </td>
               </tr>
@@ -111,7 +111,7 @@ export default function ParametersTable() {
                   {loading ? (
                     <span className="text-gray-400">Loading...</span>
                   ) : (
-                    formatEUR(goldSpotAsk / eurUsdRate / 31.1034768 / 100, 6)
+                    formatEUR(goldSpotAsk / exchangeRate / 31.1034768 / 100, 6)
                   )}
                 </td>
               </tr>
@@ -193,7 +193,7 @@ export default function ParametersTable() {
                   {formatUSD(mycowMarginPer100Oz, 0)} per 100 oz <strong>OR</strong><br></br>{formatUSD(mycowMarginPerHundredthGram, 6)} per 1/100th of a gram
                 </td>
                 <td className="px-3 py-1.5 text-sm border border-blue-100">
-                  {formatEUR(mycowMarginPer100Oz / eurUsdRate, 0)} per 100 oz <strong>OR</strong><br></br>{formatEUR(mycowMarginPerHundredthGram / eurUsdRate, 6)} per 1/100th of a gram
+                  {formatEUR(mycowMarginPer100Oz / exchangeRate, 0)} per 100 oz <strong>OR</strong><br></br>{formatEUR(mycowMarginPerHundredthGram / exchangeRate, 6)} per 1/100th of a gram
                 </td>
               </tr>
               <tr>

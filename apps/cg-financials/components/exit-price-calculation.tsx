@@ -11,21 +11,22 @@ import {
 } from "@/lib/gold-calculations"
 
 export default function ExitPriceCalculation() {
-  const { futuresPrice, spotAsk, loading } = useGoldPriceContext()
+  const { futuresPrice, spotAsk, eurExchangeRate, loading } = useGoldPriceContext()
 
   // Use live price or fallback to default
   const spotPriceUSD = futuresPrice || DEFAULT_PARAMETERS.spotPriceUSD
   const goldSpotAsk = spotAsk || 4030.00
+  const exchangeRate = eurExchangeRate || 1.2
   const { eurUsdRate, compoundingRate, period } = DEFAULT_PARAMETERS
 
   // Calculate derived values
-  const spotPriceEUR = calculateSpotPriceEUR(spotPriceUSD, eurUsdRate)
+  const spotPriceEUR = calculateSpotPriceEUR(spotPriceUSD, exchangeRate)
   // Prevailing Gold Spot Ask -- 1/100th Gram (this is P₀ for exit price calculation)
   const goldSpotAskPerHundredthGramUSD = goldSpotAsk / 31.1034768 / 100
-  const goldSpotAskPerHundredthGramEUR = goldSpotAsk / eurUsdRate / 31.1034768 / 100
+  const goldSpotAskPerHundredthGramEUR = goldSpotAsk / exchangeRate / 31.1034768 / 100
   // Exit Price = Prevailing Gold Spot Ask (1/100th Gram) × (1 + r)^t
   const exitPriceEUR = calculateExitPrice(goldSpotAskPerHundredthGramEUR, compoundingRate, period)
-  const exitPriceUSD = exitPriceEUR * eurUsdRate
+  const exitPriceUSD = exitPriceEUR * exchangeRate
 
   return (
     <div className="border-2 border-blue-200 bg-white shadow-lg rounded-lg overflow-hidden">

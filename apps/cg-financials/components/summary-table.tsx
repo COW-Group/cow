@@ -52,8 +52,8 @@ export default function SummaryTable() {
   const cashMarginPerHundredthGramEUR = cashMarginPer100OzEUR / (100 * 31.1034768 * 100)
   const initialMarginPerUnit = cashMarginPerHundredthGramEUR
   const totalCashMargin = initialMarginPerUnit * totalUnitsBought // Total Cash Margin from Margin Calculation
-  // MyCow's Cash Margin to the Exchange: $19,980 per 100 Oz
-  const mycowMarginPer100OzUSD = 19980
+  // MyCow's Cash Margin to the Exchange: $21,960 per 100 Oz
+  const mycowMarginPer100OzUSD = 21960
   const mycowMarginPer100OzEUR = mycowMarginPer100OzUSD / exchangeRate
   // Number of Contracts calculation
   const totalUnitsOfferedInOz = totalUnitsBought / (31.1034768 * 100)
@@ -63,9 +63,9 @@ export default function SummaryTable() {
   const marginInvestedUSD = mycowMarginPer100OzUSD * numberOfContracts
   const marginInvested = mycowMarginPer100OzEUR * numberOfContracts // EUR value is USD divided by 1.2
   const exitValue = exitPriceEUR * totalUnitsBought // Exit Price EUR × Total Units Bought
-  const exitValueUSD = exitValue * eurUsdRate
+  const exitValueUSD = exitValue * exchangeRate
   const totalGain = exitValue - contractValue // Contract value end - Contract value start
-  const totalGainUSD = totalGain * eurUsdRate
+  const totalGainUSD = totalGain * exchangeRate
   const investorShare = totalGain * (2/3) // Investor Share = 2/3 of Total Gain
   const investorShareUSD = totalGainUSD * (2/3) // Investor Share USD = 2/3 of Total Gain USD
   const cowGroupShare = totalGain * (1/3) // Cow Group Share = 1/3 of Total Gain

@@ -5,19 +5,28 @@ import { Button } from "@/components/ui/button"
 import { useGoldPriceContext } from "@/contexts/gold-price-context"
 import { calculateAllQuarters, FinancialModelParams } from "@/lib/gold-swim-calculations"
 
+type Currency = 'EUR' | 'USD'
+
 interface QuarterlyProjectionTableProps {
   initialInvestment: number
   totalUnitSubscription: number
   modelParams?: FinancialModelParams
+  selectedCurrency?: Currency
 }
 
-export default function QuarterlyProjectionTable({ initialInvestment, totalUnitSubscription, modelParams }: QuarterlyProjectionTableProps) {
+export default function QuarterlyProjectionTable({ initialInvestment, totalUnitSubscription, modelParams, selectedCurrency = 'EUR' }: QuarterlyProjectionTableProps) {
   const { spotAsk, eurExchangeRate, loading } = useGoldPriceContext()
   const [showAll, setShowAll] = useState(false)
 
   // Convert USD to EUR with dynamic exchange rate
   const exchangeRate = eurExchangeRate || 1.2
   const spotPriceEUR = spotAsk ? spotAsk / exchangeRate : 3434.67
+
+  // Currency conversion helpers
+  const toDisplayCurrency = (eurValue: number) => {
+    return selectedCurrency === 'USD' ? eurValue * exchangeRate : eurValue
+  }
+  const getCurrencySymbol = () => selectedCurrency === 'USD' ? '$' : '€'
 
   // Calculate all quarters dynamically based on live price, user input, and model parameters
   const quarterlyData = useMemo(() => {
@@ -26,15 +35,17 @@ export default function QuarterlyProjectionTable({ initialInvestment, totalUnitS
 
   const displayData = showAll ? quarterlyData : quarterlyData.slice(0, 6)
 
-  const formatCurrency = (value: number) => {
+  const formatCurrency = (eurValue: number) => {
+    const value = toDisplayCurrency(eurValue)
+    const symbol = getCurrencySymbol()
     if (value >= 1000000000) {
-      return `€${(value / 1000000000).toFixed(2)}B`
+      return `${symbol}${(value / 1000000000).toFixed(2)}B`
     } else if (value >= 1000000) {
-      return `€${(value / 1000000).toFixed(2)}M`
+      return `${symbol}${(value / 1000000).toFixed(2)}M`
     } else if (value >= 1000) {
-      return `€${(value / 1000).toFixed(2)}K`
+      return `${symbol}${(value / 1000).toFixed(2)}K`
     }
-    return `€${value.toFixed(2)}`
+    return `${symbol}${value.toFixed(2)}`
   }
 
   const formatNumber = (value: number) => {
@@ -76,7 +87,7 @@ export default function QuarterlyProjectionTable({ initialInvestment, totalUnitS
             <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-4 border-2 border-cyan-300 shadow-md">
               <p className="text-xs font-semibold text-blue-700 mb-2">Total Gold Accumulated</p>
               <p className="text-2xl font-bold text-blue-800">
-                {quarterlyData[24] ? formatNumber(quarterlyData[24].revenueGrams + (quarterlyData[24].investibleGainNetTax / quarterlyData[24].sourcingCostEnd)) : 0}
+                {quarterlyData[24] ? `${((quarterlyData[24].revenueGrams + (quarterlyData[24].investibleGainNetTax / quarterlyData[24].sourcingCostEnd)) / 1000000).toFixed(2)}M` : 0}
               </p>
               <p className="text-xs text-cyan-700 mt-1 font-medium">grams at Q25</p>
             </div>
@@ -90,14 +101,14 @@ export default function QuarterlyProjectionTable({ initialInvestment, totalUnitS
             <div className="bg-gradient-to-br from-blue-100 to-cyan-100 rounded-lg p-4 border-2 border-cyan-400 shadow-md">
               <p className="text-xs font-semibold text-blue-800 mb-2">ROI %</p>
               <p className="text-2xl font-bold text-blue-900">
-                {quarterlyData[24] ? ((quarterlyData[24].cumulativeROI / quarterlyData[0].investmentBalanceBeginning) * 100).toFixed(2) : 0}%
+                {quarterlyData[24] ? Math.round((quarterlyData[24].cumulativeROI / quarterlyData[0].investmentBalanceBeginning) * 100).toLocaleString('en-US') : 0}%
               </p>
               <p className="text-xs text-cyan-700 mt-1 font-medium">Return on investment at Q25</p>
             </div>
             <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-lg p-3 border-2 border-indigo-300 shadow-md">
               <p className="text-xs font-semibold text-indigo-700 mb-1">ROI % on Total Inv</p>
               <p className="text-xl font-bold text-indigo-800">
-                {quarterlyData[24] ? ((quarterlyData[24].cumulativeROI / totalUnitSubscription) * 100).toFixed(2) : 0}%
+                {quarterlyData[24] ? Math.round((quarterlyData[24].cumulativeROI / totalUnitSubscription) * 100).toLocaleString('en-US') : 0}%
               </p>
               <p className="text-xs text-indigo-600 mt-1 font-medium">vs Desired Investment</p>
             </div>
@@ -124,7 +135,7 @@ export default function QuarterlyProjectionTable({ initialInvestment, totalUnitS
                   <th className="text-center py-2 px-2 font-semibold text-white border-l border-l-blue-500 w-[120px]">Qtr End Cost/g</th>
                   <th className="text-center py-2 px-2 font-semibold text-white border-l border-l-blue-500 w-[120px]">New Grams</th>
                   <th className="text-center py-2 px-2 font-semibold text-white border-l border-l-blue-500 w-[120px]">Total Gold</th>
-                  <th className="text-center py-2 px-2 font-semibold text-white border-l border-l-blue-500 w-[120px]">Qtr End Market €/g</th>
+                  <th className="text-center py-2 px-2 font-semibold text-white border-l border-l-blue-500 w-[120px]">Qtr End Market {getCurrencySymbol()}/g</th>
                   <th className="text-center py-2 px-2 font-semibold text-white border-l border-l-blue-500 w-[120px]">Expected Gross Value</th>
                   <th className="text-center py-2 px-2 font-semibold text-white border-l border-l-blue-500 w-[120px]">Storage Cost</th>
                   <th className="text-center py-2 px-2 font-semibold text-white border-l border-l-blue-500 w-[120px]">Insurance Cost</th>
@@ -155,15 +166,15 @@ export default function QuarterlyProjectionTable({ initialInvestment, totalUnitS
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{row.investmentBalanceNetInitialMarkup > 0 ? formatCurrency(row.investmentBalanceNetInitialMarkup) : '-'}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatCurrency(row.transactionBrokerage)}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatCurrency(row.investmentForSourcing)}</td>
-                    <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">€{row.sourcingCostBeginning.toFixed(2)}</td>
+                    <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{getCurrencySymbol()}{(toDisplayCurrency(row.sourcingCostBeginning)).toFixed(2)}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatNumber(row.revenueGrams)}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatCurrency(row.margin)}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatCurrency(row.operatingExp)}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatCurrency(row.quarterlyGains)}</td>
-                    <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">€{row.sourcingCostEnd.toFixed(2)}</td>
+                    <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{getCurrencySymbol()}{(toDisplayCurrency(row.sourcingCostEnd)).toFixed(2)}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatNumber(row.newGramsPurchasable)}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatNumber(row.totalGramsEnd)}</td>
-                    <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">€{row.marketPriceEnd.toFixed(2)}</td>
+                    <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{getCurrencySymbol()}{(toDisplayCurrency(row.marketPriceEnd)).toFixed(2)}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatCurrency(row.grossValueEnd)}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatCurrency(row.storageCost)}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatCurrency(row.insuranceCost)}</td>
@@ -173,7 +184,7 @@ export default function QuarterlyProjectionTable({ initialInvestment, totalUnitS
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatCurrency(row.investibleGainNetTax)}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatNumber(row.investibleGainNetTax / row.sourcingCostEnd)}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatNumber(row.revenueGrams + (row.investibleGainNetTax / row.sourcingCostEnd))}</td>
-                    <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">€{Math.min(row.marketPriceEnd, row.sourcingCostEnd).toFixed(2)}</td>
+                    <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{getCurrencySymbol()}{(toDisplayCurrency(Math.min(row.marketPriceEnd, row.sourcingCostEnd))).toFixed(2)}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatCurrency(row.qtrEndTotalValue)}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{formatCurrency(row.cumulativeROI)}</td>
                     <td className="text-right py-1.5 px-2 text-gray-700 w-[120px]">{((row.cumulativeROI / quarterlyData[0].investmentBalanceBeginning) * 100).toFixed(2)}%</td>

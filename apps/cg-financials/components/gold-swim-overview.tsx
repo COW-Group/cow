@@ -1,13 +1,15 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { TrendingUp, Calculator, Hash, Scale, Settings, Info, Sparkles, DollarSign, Percent, Clock, CheckCircle2 } from "lucide-react"
+import { TrendingUp, Calculator, Hash, Scale, Settings, Info, Sparkles, DollarSign, Percent, Clock, CheckCircle2, RotateCcw } from "lucide-react"
 import { useGoldPriceContext } from "@/contexts/gold-price-context"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
 import { PARAMETERS, FINANCIAL_MODELS, FinancialModelParams } from "@/lib/gold-swim-calculations"
 
 type ModelType = 'conservative' | 'moderate' | 'optimistic' | 'custom'
+type Currency = 'EUR' | 'USD'
 
 interface GoldSwimOverviewProps {
   initialInvestment: number
@@ -18,6 +20,8 @@ interface GoldSwimOverviewProps {
   modelParams: FinancialModelParams
   onModelChange: (model: ModelType) => void
   onParamChange: (paramName: keyof FinancialModelParams, value: number) => void
+  selectedCurrency: Currency
+  onCurrencyChange: (currency: Currency) => void
 }
 
 export default function GoldSwimOverview({
@@ -28,42 +32,86 @@ export default function GoldSwimOverview({
   selectedModel,
   modelParams,
   onModelChange,
-  onParamChange
+  onParamChange,
+  selectedCurrency,
+  onCurrencyChange
 }: GoldSwimOverviewProps) {
   const { spotAsk, eurExchangeRate, loading } = useGoldPriceContext()
 
-  // Use live LBMA Gold Spot Ask price (convert USD to EUR with dynamic exchange rate)
+  // Use live LBMA Gold Spot Ask price (keep original USD, convert to EUR)
   const exchangeRate = eurExchangeRate || 1.2
-  const spotPriceEUR = spotAsk ? spotAsk / exchangeRate : 3434.67
+  const spotPriceUSD = spotAsk || 4121.00
+  const spotPriceEUR = spotPriceUSD / exchangeRate
 
-  // Local state for input field
-  const [inputValue, setInputValue] = useState<string>(totalUnitSubscription.toFixed(2))
+  // Currency conversion helpers
+  const toDisplayCurrency = (eurValue: number) => {
+    return selectedCurrency === 'USD' ? eurValue * exchangeRate : eurValue
+  }
+  const getCurrencySymbol = () => selectedCurrency === 'USD' ? '$' : '€'
+  const formatCurrencyValue = (eurValue: number, decimals: number = 2) => {
+    const displayValue = toDisplayCurrency(eurValue)
+    return displayValue.toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals })
+  }
 
-  // Sync input value when totalUnitSubscription changes from external source
+  // Track if user has customized the value
+  const [hasCustomValue, setHasCustomValue] = useState(false)
+
+  // Track if user has ever changed the field (to show/hide helper text)
+  const [hasEverChanged, setHasEverChanged] = useState(false)
+
+  // Local state for input field (display value in selected currency)
+  const getDisplayValue = () => {
+    // If no custom value, always show the default in current currency
+    if (!hasCustomValue) {
+      return toDisplayCurrency(defaultTotalUnitSubscription)
+    }
+    // Otherwise show the custom value in current currency
+    return toDisplayCurrency(totalUnitSubscription)
+  }
+
+  const [inputValue, setInputValue] = useState<string>(getDisplayValue().toFixed(2))
+
+  // Sync input value when totalUnitSubscription, currency, or default changes
   useEffect(() => {
-    setInputValue(totalUnitSubscription.toFixed(2))
-  }, [totalUnitSubscription])
+    setInputValue(getDisplayValue().toFixed(2))
+  }, [totalUnitSubscription, defaultTotalUnitSubscription, selectedCurrency, exchangeRate, hasCustomValue])
 
   // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value)
+    setHasCustomValue(true)
+    setHasEverChanged(true)
   }
 
   // Handle input blur - parse and update parent state
   const handleInputBlur = () => {
     const parsed = parseFloat(inputValue)
     if (!isNaN(parsed) && parsed > 0) {
-      // If the value is different from default, set as custom
-      if (Math.abs(parsed - defaultTotalUnitSubscription) > 0.01) {
-        onTotalUnitSubscriptionChange(parsed)
-      } else {
+      // Convert input value to EUR if in USD
+      const eurValue = selectedCurrency === 'USD' ? parsed / exchangeRate : parsed
+      // Check if the value is close to default (within 1%)
+      const tolerance = defaultTotalUnitSubscription * 0.01
+      if (Math.abs(eurValue - defaultTotalUnitSubscription) < tolerance) {
         // If it matches default, reset to null (use default)
         onTotalUnitSubscriptionChange(null)
+        setHasCustomValue(false)
+      } else {
+        // Set as custom value
+        onTotalUnitSubscriptionChange(eurValue)
+        setHasCustomValue(true)
       }
     } else {
       // Invalid input, reset to current value
-      setInputValue(totalUnitSubscription.toFixed(2))
+      setInputValue(getDisplayValue().toFixed(2))
     }
+  }
+
+  // Handle reset to default
+  const handleReset = () => {
+    onTotalUnitSubscriptionChange(null)
+    setHasCustomValue(false)
+    setHasEverChanged(false)
+    setInputValue(toDisplayCurrency(defaultTotalUnitSubscription).toFixed(2))
   }
 
   // Number of Units = (Initial Investment Amount) / (((Live Gold Spot Ask Price) / 31.1034768 + 15) / (1 - Transaction Brokerage)) × 100
@@ -85,6 +133,38 @@ export default function GoldSwimOverview({
 
   return (
     <div className="space-y-8">
+      {/* Currency Toggle */}
+      <div className="bg-gradient-to-br from-white to-indigo-50/30 rounded-lg shadow-lg border border-indigo-200 p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-lg font-bold text-gray-900 mb-1">Display Currency</h3>
+            <p className="text-sm text-gray-600">Choose your preferred currency for viewing calculations</p>
+          </div>
+          <div className="flex gap-2 bg-gray-100 p-1 rounded-lg">
+            <button
+              onClick={() => onCurrencyChange('EUR')}
+              className={`px-6 py-2 rounded-md font-semibold text-sm transition-all ${
+                selectedCurrency === 'EUR'
+                  ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-md'
+                  : 'text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              EUR (€)
+            </button>
+            <button
+              onClick={() => onCurrencyChange('USD')}
+              className={`px-6 py-2 rounded-md font-semibold text-sm transition-all ${
+                selectedCurrency === 'USD'
+                  ? 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white shadow-md'
+                  : 'text-gray-600 hover:bg-gray-200'
+              }`}
+            >
+              USD ($)
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Investment Calculator Section */}
       <div className="bg-gradient-to-br from-white to-blue-50/30 rounded-lg shadow-xl border border-blue-200/50 overflow-hidden">
         <div className="bg-gradient-to-r from-blue-600 to-cyan-500 px-6 py-5">
@@ -103,10 +183,23 @@ export default function GoldSwimOverview({
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Total Unit Subscription - EDITABLE */}
             <div className="group">
-              <Label htmlFor="totalUnitSubscription" className="text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-blue-600" />
-                Enter your Desired Investment
-              </Label>
+              <div className="flex items-center justify-between mb-2">
+                <Label htmlFor="totalUnitSubscription" className="text-sm font-bold text-gray-700 flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-blue-600" />
+                  Enter your Desired Investment ({selectedCurrency})
+                </Label>
+                {hasCustomValue && (
+                  <Button
+                    onClick={handleReset}
+                    variant="outline"
+                    size="sm"
+                    className="h-7 px-2 text-xs gap-1 hover:bg-blue-50 hover:text-blue-700 hover:border-blue-300"
+                  >
+                    <RotateCcw className="h-3 w-3" />
+                    Reset
+                  </Button>
+                )}
+              </div>
               <div className="relative mt-3">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg blur opacity-20 group-hover:opacity-30 transition-opacity"></div>
                 <div className="relative bg-white rounded-lg border-2 border-blue-300 p-4 shadow-lg hover:shadow-xl transition-all">
@@ -114,7 +207,7 @@ export default function GoldSwimOverview({
                     <div className="h-12 w-full bg-gradient-to-r from-blue-200 to-cyan-200 animate-pulse rounded-lg" />
                   ) : (
                     <div className="flex items-baseline gap-2">
-                      <span className="text-xs font-semibold text-gray-500">EUR</span>
+                      <span className="text-xs font-semibold text-gray-500">{selectedCurrency}</span>
                       <Input
                         id="totalUnitSubscription"
                         type="number"
@@ -128,6 +221,11 @@ export default function GoldSwimOverview({
                   )}
                 </div>
               </div>
+              {!hasEverChanged && (
+                <p className="text-xs text-blue-600 mt-2 ml-1 font-medium">
+                  Default gold investment set to 250g
+                </p>
+              )}
             </div>
 
             {/* Initial Investment - CALCULATED */}
@@ -144,9 +242,9 @@ export default function GoldSwimOverview({
                   ) : (
                     <>
                       <div className="flex items-baseline gap-2 mb-2">
-                        <span className="text-xs font-semibold text-gray-500">EUR</span>
+                        <span className="text-xs font-semibold text-gray-500">{selectedCurrency}</span>
                         <div className="text-2xl font-bold text-emerald-700">
-                          {initialInvestment.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          {formatCurrencyValue(initialInvestment)}
                         </div>
                       </div>
                       <p className="text-xs text-emerald-600 font-medium">25% allocated to physical gold</p>
@@ -173,9 +271,9 @@ export default function GoldSwimOverview({
                   ) : (
                     <>
                       <div className="flex items-baseline gap-2 mb-2">
-                        <span className="text-xs font-semibold text-gray-500">EUR</span>
+                        <span className="text-xs font-semibold text-gray-500">{selectedCurrency}</span>
                         <div className="text-2xl font-bold text-cyan-700">
-                          {spotPriceEUR.toFixed(2)}
+                          {selectedCurrency === 'USD' ? spotPriceUSD.toFixed(2) : spotPriceEUR.toFixed(2)}
                         </div>
                         <span className="text-xs font-semibold text-gray-500">/oz</span>
                       </div>
@@ -188,7 +286,7 @@ export default function GoldSwimOverview({
                 </div>
               </div>
               <p className="text-xs text-gray-500 mt-2 ml-1">
-                Source: LBMA API (USD → EUR conversion)
+                Source: LBMA API{selectedCurrency === 'EUR' ? ' (USD → EUR conversion)' : ''}
               </p>
             </div>
           </div>
@@ -236,7 +334,7 @@ export default function GoldSwimOverview({
                   <div className="space-y-1 text-xs">
                     <div className="flex justify-between">
                       <span className="text-gray-500">Margin/gram:</span>
-                      <span className="font-semibold">€{model.params.marginPerGram.toFixed(2)}</span>
+                      <span className="font-semibold">{getCurrencySymbol()}{(model.params.marginPerGram * (selectedCurrency === 'USD' ? exchangeRate : 1)).toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-500">Operating Exp:</span>
@@ -321,7 +419,7 @@ export default function GoldSwimOverview({
               ) : (
                 <>
                   <div className="text-2xl font-bold text-rose-700 mb-1">
-                    €{markupAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    {getCurrencySymbol()}{formatCurrencyValue(markupAmount)}
                   </div>
                   <p className="text-xs text-rose-600 font-medium">Quarter 1 only</p>
                 </>
@@ -350,13 +448,17 @@ export default function GoldSwimOverview({
             <div className="bg-white rounded-lg p-4 border-l-4 border-cyan-500 shadow-sm hover:shadow-md transition-all">
               <Label htmlFor="marginPerGram" className="text-xs font-semibold text-gray-700 mb-2 block">Margin/Gram</Label>
               <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">€</span>
+                <span className="text-sm text-gray-600">{getCurrencySymbol()}</span>
                 <Input
                   id="marginPerGram"
                   type="number"
                   step="0.01"
-                  value={marginPerGram}
-                  onChange={(e) => onParamChange('marginPerGram', parseFloat(e.target.value) || 0)}
+                  value={(marginPerGram * (selectedCurrency === 'USD' ? exchangeRate : 1)).toFixed(2)}
+                  onChange={(e) => {
+                    const displayValue = parseFloat(e.target.value) || 0
+                    const eurValue = selectedCurrency === 'USD' ? displayValue / exchangeRate : displayValue
+                    onParamChange('marginPerGram', eurValue)
+                  }}
                   className="text-base font-bold text-cyan-700 border-cyan-300 focus:border-cyan-500"
                 />
               </div>

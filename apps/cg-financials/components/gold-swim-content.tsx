@@ -31,6 +31,10 @@ function GoldSwimContentInner({ userEmail }: GoldSwimContentProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { spotAsk, eurExchangeRate } = useGoldPriceContext()
 
+  // Currency State
+  type Currency = 'EUR' | 'USD'
+  const [selectedCurrency, setSelectedCurrency] = useState<Currency>('EUR')
+
   // Financial Model State
   type ModelType = 'conservative' | 'moderate' | 'optimistic' | 'custom'
   const [selectedModel, setSelectedModel] = useState<ModelType>('moderate')
@@ -79,12 +83,14 @@ function GoldSwimContentInner({ userEmail }: GoldSwimContentProps) {
             modelParams={modelParams}
             onModelChange={handleModelChange}
             onParamChange={handleParamChange}
+            selectedCurrency={selectedCurrency}
+            onCurrencyChange={setSelectedCurrency}
           />
         )
       case "charts":
         return <QuarterlyGrowthChart initialInvestment={initialInvestment} modelParams={modelParams} />
       case "table":
-        return <QuarterlyProjectionTable initialInvestment={initialInvestment} totalUnitSubscription={totalUnitSubscription} modelParams={modelParams} />
+        return <QuarterlyProjectionTable initialInvestment={initialInvestment} totalUnitSubscription={totalUnitSubscription} modelParams={modelParams} selectedCurrency={selectedCurrency} />
       default:
         return <GoldSwimOverviewSection />
     }

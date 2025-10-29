@@ -31,7 +31,7 @@ export function OfferingDisclaimer() {
                 Prospective investors should carefully consider investment objectives, risks, charges, expenses, and suitability before making any investment decision. You should consult with qualified tax, legal, and financial advisers before making any investment decision.
               </p>
               <p className="font-medium">
-                Securities offered by <strong>My Gold Grams Inc</strong>. Technology services provided by <strong>COW Technologies</strong>.
+                <strong>My Gold Grams Inc.</strong> is an independent company and is not a subsidiary, affiliate, or related entity of <strong>COW Technologies, Inc.</strong> COW Technologies provides technology services to My Gold Grams Inc. pursuant to a software licensing and services agreement. My Gold Grams Inc., as the issuer, is solely responsible for the securities offerings and all related regulatory compliance.
               </p>
               <p className="text-[10px] text-amber-700 dark:text-amber-300 mt-3">
                 For additional information and complete disclosures, please visit our investor relations page or contact investor.relations@mycow.io

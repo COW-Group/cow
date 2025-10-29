@@ -906,11 +906,6 @@ function GoldPageInner() {
             </p>
           </div>
 
-          {/* Legal Disclaimer */}
-          <div className="mb-12 max-w-4xl mx-auto">
-            <OfferingDisclaimer />
-          </div>
-
           {loadingProducts ? (
             <div className="text-center py-12">
               <div className="inline-block w-8 h-8 border-4 border-[#b45309] border-t-transparent rounded-full animate-spin"></div>
@@ -1133,6 +1128,11 @@ function GoldPageInner() {
           >
             Structured investment products delivering systematic gold exposure through retailing margins and futures positioning
           </p>
+
+          {/* Legal Disclaimer */}
+          <div className="mt-16 max-w-4xl mx-auto">
+            <OfferingDisclaimer />
+          </div>
         </div>
       </section>
 

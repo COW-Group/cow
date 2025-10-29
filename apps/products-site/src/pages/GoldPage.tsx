@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { useCart } from "../contexts/cart-context";
+import { GoldPriceProvider, useGoldPriceContext } from "../contexts/gold-price-context";
 import { ProductMenu } from "../components/product-menu";
 import { CartDropdown } from "../components/cart-dropdown";
 import { AuthModal } from "../components/auth-modal";
@@ -11,12 +12,15 @@ import { ThemeToggle } from "../components/theme-toggle";
 import { CopilotSearchBar } from "../components/copilot-search-bar";
 import { PWAInstallInstructions } from "../components/pwa-install-instructions";
 import { Milestones } from "../components/milestones";
-import { ArrowRight, TrendingUp, Shield, Zap, ChevronDown, Coins, RefreshCcw, Download, DollarSign, Sparkles } from "lucide-react";
+import { OfferingDisclaimer } from "../components/offering-disclaimer";
+import { ArrowRight, TrendingUp, Shield, Zap, ChevronDown, Coins, RefreshCcw, Download, DollarSign, Sparkles, FileText } from "lucide-react";
 import cowLogo from "../assets/cow-logo.png";
-import { supabase, type Product, type ProductTier } from "@cow/supabase-client";
+import { supabase, type Product } from "@cow/supabase-client";
+import { calculateGoldSwimUnitPrice, calculateSiriZ31UnitPrice, formatCurrency } from "../lib/gold-price-calculations";
 
-export default function GoldPage() {
+function GoldPageInner() {
   const { addToCart } = useCart();
+  const { spotAsk, eurExchangeRate, loading: priceLoading } = useGoldPriceContext();
   const [isClient, setIsClient] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showPWAInstructions, setShowPWAInstructions] = useState(false);
@@ -32,7 +36,6 @@ export default function GoldPage() {
   // Products state
   const [goldSwimProduct, setGoldSwimProduct] = useState<Product | null>(null);
   const [siriZ31Product, setSiriZ31Product] = useState<Product | null>(null);
-  const [siriZ31Tiers, setSiriZ31Tiers] = useState<ProductTier[]>([]);
   const [loadingProducts, setLoadingProducts] = useState(true);
 
   const VALID_INVITE_CODE = "cow-swim-z31-gold";
@@ -77,22 +80,6 @@ export default function GoldPage() {
         console.error('Error fetching SIRI Z31:', siriZ31Error);
       } else {
         setSiriZ31Product(siriZ31);
-
-        // Fetch SIRI Z31 tiers
-        if (siriZ31) {
-          const { data: tiers, error: tiersError } = await supabase
-            .from('product_tiers')
-            .select('*')
-            .eq('product_id', siriZ31.id)
-            .eq('is_active', true)
-            .order('price', { ascending: true });
-
-          if (tiersError) {
-            console.error('Error fetching SIRI Z31 tiers:', tiersError);
-          } else {
-            setSiriZ31Tiers(tiers || []);
-          }
-        }
       }
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -131,21 +118,19 @@ export default function GoldPage() {
     }, 2000);
   };
 
-  const handleAddToCart = (product: Product, amount: number, tier?: ProductTier) => {
+  const handleAddToCart = (product: Product, amount: number) => {
     if (!hasAccess) {
       setShowInviteModal(true);
       return;
     }
 
-    const itemName = tier
-      ? `${product.name} - ${tier.name} ($${tier.price}/mo)`
-      : `${product.name} ($${amount.toLocaleString()})`;
+    const itemName = `${product.name} (${formatCurrency(amount, 'EUR')})`;
 
     addToCart({
-      id: `${product.slug}-${tier?.id || Date.now()}`,
+      id: `${product.slug}-${Date.now()}`,
       name: itemName,
       description: product.description || "",
-      price: tier ? Number(tier.price) : amount,
+      price: amount,
       link: "/gold",
     });
   };
@@ -628,14 +613,14 @@ export default function GoldPage() {
                 className="text-lg font-light text-gray-600 dark:text-gray-300 mb-6 leading-relaxed"
                 style={{ letterSpacing: '0.01em' }}
               >
-                Institutional-grade tools democratizing access to{' '}
+                Institutional-grade investment products democratizing access to{' '}
                 <span style={{ color: '#b45309', fontWeight: '400' }}>gold retailing margins and futures opportunities</span>—our flagship vertical translating complex precious metal operations into systematic investment frameworks for wealth generation.
               </p>
               <p
                 className="text-base font-light text-gray-600 dark:text-gray-300 mb-8 leading-relaxed"
                 style={{ letterSpacing: '0.01em' }}
               >
-                Gold SWIM projects compounding returns from €1.00/gram retail margins over quarterly cycles, while SiriZ31 calculates optimal entry and exit points for futures positions—delivering transparent, repeatable strategies for building wealth through precious metals.
+                GOLD SWIM captures compounding returns from €1.00/gram retail margins over quarterly cycles, while SIRI Z31 provides futures-hedged gold exposure with systematic positioning—two distinct investment products delivering transparent, repeatable strategies for building wealth through precious metals.
               </p>
 
               {/* Key Metrics */}
@@ -685,13 +670,13 @@ export default function GoldPage() {
                 letterSpacing: '-0.02em'
               }}
             >
-              Professional Gold Investment Tools
+              Strategic Gold Investment Products
             </h2>
             <p
               className="text-lg font-light text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
               style={{ letterSpacing: '0.01em' }}
             >
-              Two systematic approaches—quarterly retailing projections and futures trading analysis for predictable wealth management
+              Two structured investment opportunities—quarterly retailing margins and futures-hedged positions for systematic wealth generation
             </p>
           </div>
 
@@ -917,8 +902,13 @@ export default function GoldPage() {
               Choose Your Gold Strategy
             </h3>
             <p className="text-lg font-light text-gray-600 dark:text-gray-300 max-w-3xl mx-auto" style={{ letterSpacing: '0.01em' }}>
-              Two professional tools for gold investment—each optimized for different strategies within our flagship vertical
+              Two structured investment products—each engineered for specific strategies within our flagship gold vertical
             </p>
+          </div>
+
+          {/* Legal Disclaimer */}
+          <div className="mb-12 max-w-4xl mx-auto">
+            <OfferingDisclaimer />
           </div>
 
           {loadingProducts ? (
@@ -954,15 +944,21 @@ export default function GoldPage() {
                           <span className="text-emerald-600 dark:text-emerald-500 font-medium">{goldSwimProduct.projected_annual_return}%</span>
                         </div>
                       )}
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-600 dark:text-gray-400 font-light">Base Price</span>
-                        <span className="text-gray-900 dark:text-gray-100 font-medium">${goldSwimProduct.base_price}</span>
-                      </div>
-                      {goldSwimProduct.min_investment && (
-                        <div className="flex items-center justify-between text-sm">
-                          <span className="text-gray-600 dark:text-gray-400 font-light">Minimum</span>
-                          <span className="text-gray-900 dark:text-gray-100 font-medium">${goldSwimProduct.min_investment.toLocaleString()}</span>
-                        </div>
+                      {spotAsk && eurExchangeRate && (
+                        <>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600 dark:text-gray-400 font-light">Unit Price (Live)</span>
+                            <span className="text-gray-900 dark:text-gray-100 font-medium">
+                              {priceLoading ? 'Loading...' : formatCurrency(calculateGoldSwimUnitPrice(spotAsk, eurExchangeRate), 'EUR')}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600 dark:text-gray-400 font-light">Min. Investment (1 unit)</span>
+                            <span className="text-gray-900 dark:text-gray-100 font-medium">
+                              {priceLoading ? 'Loading...' : formatCurrency(calculateGoldSwimUnitPrice(spotAsk, eurExchangeRate), 'EUR')}
+                            </span>
+                          </div>
+                        </>
                       )}
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-600 dark:text-gray-400 font-light">Status</span>
@@ -980,9 +976,13 @@ export default function GoldPage() {
                       <Button
                         className="w-full text-white"
                         style={{ background: 'linear-gradient(to right, #b45309, #d97706)' }}
-                        onClick={() => handleAddToCart(goldSwimProduct, goldSwimProduct.min_investment || 5000)}
+                        onClick={() => {
+                          // TODO: Link to offering documents portal
+                          alert('Please contact investor.relations@mycow.io to receive the official Offering Documents.')
+                        }}
                       >
-                        Add to Cart
+                        <FileText className="mr-2 w-4 h-4" />
+                        View Offering Documents
                       </Button>
                     </div>
                   </CardContent>
@@ -1010,44 +1010,51 @@ export default function GoldPage() {
                       {siriZ31Product.description}
                     </p>
 
-                    {/* Subscription Tiers */}
-                    {siriZ31Tiers.length > 0 && (
-                      <div className="pt-4 space-y-2">
-                        <p className="text-xs text-gray-500 dark:text-gray-400 font-medium text-center mb-2">SUBSCRIPTION TIERS</p>
-                        {siriZ31Tiers.map((tier) => (
-                          <div key={tier.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-3 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
-                            <div className="flex items-center justify-between mb-2">
-                              <span className="text-sm font-medium text-gray-900 dark:text-gray-100">{tier.name}</span>
-                              <span className="text-sm font-bold text-[#b45309] dark:text-[#d97706]">${tier.price}/mo</span>
-                            </div>
-                            {tier.description && (
-                              <p className="text-xs text-gray-600 dark:text-gray-400 mb-2">{tier.description}</p>
-                            )}
-                            <Button
-                              size="sm"
-                              className="w-full text-white text-xs"
-                              style={{ background: 'linear-gradient(to right, #b45309, #d97706)' }}
-                              onClick={() => handleAddToCart(siriZ31Product, Number(tier.price), tier)}
-                            >
-                              Subscribe to {tier.name}
-                            </Button>
+                    <div className="pt-4 space-y-2">
+                      {spotAsk && eurExchangeRate && (
+                        <>
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600 dark:text-gray-400 font-light">Unit Price (Live)</span>
+                            <span className="text-gray-900 dark:text-gray-100 font-medium">
+                              {priceLoading ? 'Loading...' : formatCurrency(calculateSiriZ31UnitPrice(spotAsk, eurExchangeRate), 'EUR')}
+                            </span>
                           </div>
-                        ))}
-                      </div>
-                    )}
-
-                    <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
-                      <div className="flex items-center justify-between text-sm mb-2">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-gray-600 dark:text-gray-400 font-light">Min. Investment (1 unit)</span>
+                            <span className="text-gray-900 dark:text-gray-100 font-medium">
+                              {priceLoading ? 'Loading...' : formatCurrency(calculateSiriZ31UnitPrice(spotAsk, eurExchangeRate), 'EUR')}
+                            </span>
+                          </div>
+                          <div className="text-xs text-gray-500 dark:text-gray-400 italic text-center pt-2">
+                            2.25B Units in Offering • Hedged by gold futures
+                          </div>
+                        </>
+                      )}
+                      <div className="flex items-center justify-between text-sm pt-2">
                         <span className="text-gray-600 dark:text-gray-400 font-light">Status</span>
                         <span className="text-xs px-3 py-1 rounded-full font-medium" style={{ background: siriZ31Product.is_active ? 'rgb(220, 252, 231)' : 'rgb(254, 202, 202)', color: siriZ31Product.is_active ? 'rgb(21, 128, 61)' : 'rgb(153, 27, 27)' }}>
                           {siriZ31Product.is_active ? 'Active' : 'Inactive'}
                         </span>
                       </div>
+                    </div>
+
+                    <div className="pt-4 space-y-2">
                       <Link to="/siriz31">
                         <Button variant="outline" className="w-full border-[#b45309] dark:border-[#d97706] text-[#b45309] dark:text-[#d97706] hover:bg-[#b45309]/10 dark:hover:bg-[#d97706]/10">
                           Learn More <ArrowRight className="ml-2 w-4 h-4" />
                         </Button>
                       </Link>
+                      <Button
+                        className="w-full text-white"
+                        style={{ background: 'linear-gradient(to right, #b45309, #d97706)' }}
+                        onClick={() => {
+                          // TODO: Link to offering documents portal
+                          alert('Please contact investor.relations@mycow.io to receive the official Offering Documents.')
+                        }}
+                      >
+                        <FileText className="mr-2 w-4 h-4" />
+                        View Offering Documents
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -1124,7 +1131,7 @@ export default function GoldPage() {
               letterSpacing: '0.01em'
             }}
           >
-            Professional tools for systematic gold investment management
+            Structured investment products delivering systematic gold exposure through retailing margins and futures positioning
           </p>
         </div>
       </section>
@@ -1159,5 +1166,13 @@ export default function GoldPage() {
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function GoldPage() {
+  return (
+    <GoldPriceProvider>
+      <GoldPageInner />
+    </GoldPriceProvider>
   );
 }

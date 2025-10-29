@@ -31,12 +31,15 @@ import { HeroBackground } from '@/components/hero-background'
 import { ProductMenu } from '@/components/product-menu'
 import { CartDropdown } from '@/components/cart-dropdown'
 import { supabase, type Product, type ProductTier } from "@cow/supabase-client"
+import { GoldPriceProvider, useGoldPriceContext } from '@/contexts/gold-price-context'
+import { calculateGoldSwimUnitPrice, calculateSiriZ31UnitPrice, formatCurrency } from '@/lib/gold-price-calculations'
 
-export default function DashboardPage() {
+function DashboardPageInner() {
   const { auth, signOut } = useAuthContext()
   const { isConnected, address, connectWallet, disconnectWallet } = useWeb3()
   const { addToCart } = useCart()
   const navigate = useNavigate()
+  const { spotAsk, eurExchangeRate, loading: priceLoading } = useGoldPriceContext()
   const [isClient, setIsClient] = useState(false)
 
   // Products state
@@ -499,97 +502,140 @@ export default function DashboardPage() {
                   <p className="text-sm text-gray-600">Exclusive access to new and limited offerings</p>
                 </CardHeader>
                 <CardContent>
-                  <div className="grid gap-6">
-                    {[
-                      {
-                        name: 'AuREAL - Real Estate Token',
-                        description: 'Commercial real estate backed by premium properties',
-                        minInvestment: '$25,000',
-                        expectedAPY: '15-20%',
-                        status: 'Pre-Launch',
-                        timeLeft: '14 days',
-                        riskLevel: 'Medium',
-                        allocation: 'Limited to 500 investors'
-                      },
-                      {
-                        name: 'AuENERGY - Renewable Energy',
-                        description: 'Solar and wind farm revenue sharing tokens',
-                        minInvestment: '$50,000',
-                        expectedAPY: '18-25%',
-                        status: 'Private Sale',
-                        timeLeft: '7 days',
-                        riskLevel: 'Medium-High',
-                        allocation: 'Limited to 200 investors'
-                      },
-                      {
-                        name: 'AuTECH - Technology Assets',
-                        description: 'AI and quantum computing infrastructure tokens',
-                        minInvestment: '$100,000',
-                        expectedAPY: '25-35%',
-                        status: 'Coming Soon',
-                        timeLeft: '30 days',
-                        riskLevel: 'High',
-                        allocation: 'Institutional + Accredited only'
-                      }
-                    ].map((opportunity) => (
-                      <Card key={opportunity.name} className="border-2 border-gray-200 hover:border-amber-300 transition-all duration-300">
-                        <CardContent className="p-6">
-                          <div className="flex items-start justify-between mb-4">
-                            <div>
-                              <h3 className="font-semibold text-lg text-gray-900 mb-1">{opportunity.name}</h3>
-                              <p className="text-gray-600 text-sm">{opportunity.description}</p>
-                            </div>
-                            <Badge className={`${
-                              opportunity.status === 'Pre-Launch' ? 'bg-amber-100 text-amber-800' :
-                              opportunity.status === 'Private Sale' ? 'bg-blue-100 text-blue-800' :
-                              'bg-gray-100 text-gray-800'
-                            }`}>
-                              {opportunity.status}
-                            </Badge>
-                          </div>
-
-                          <div className="grid md:grid-cols-2 gap-4 mb-4">
-                            <div className="space-y-2">
-                              <div className="flex justify-between">
-                                <span className="text-sm text-gray-600">Min Investment:</span>
-                                <span className="text-sm font-medium">{opportunity.minInvestment}</span>
+                  {loadingProducts ? (
+                    <div className="text-center py-12">
+                      <div className="inline-block w-8 h-8 border-4 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
+                      <p className="mt-4 text-gray-600">Loading investment opportunities...</p>
+                    </div>
+                  ) : (
+                    <div className="grid gap-6">
+                      {/* GOLD SWIM Product */}
+                      {goldSwimProduct && spotAsk && eurExchangeRate && (
+                        <Card className="border-2 border-[#b45309]/30 hover:border-[#b45309] transition-all duration-300">
+                          <CardContent className="p-6">
+                            <div className="flex items-start justify-between mb-4">
+                              <div>
+                                <h3 className="font-semibold text-lg text-gray-900 mb-1">{goldSwimProduct.name}</h3>
+                                <p className="text-gray-600 text-sm">{goldSwimProduct.description}</p>
+                                <p className="text-xs text-gray-500 mt-1">{goldSwimProduct.ticker_symbol} • Security Token</p>
                               </div>
-                              <div className="flex justify-between">
-                                <span className="text-sm text-gray-600">Expected APY:</span>
-                                <span className="text-sm font-medium text-green-600">{opportunity.expectedAPY}</span>
+                              <Badge className="bg-green-100 text-green-800">
+                                Available Now
+                              </Badge>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-4 mb-4">
+                              <div className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Unit Price (Live):</span>
+                                  <span className="text-sm font-medium">{priceLoading ? 'Loading...' : formatCurrency(calculateGoldSwimUnitPrice(spotAsk, eurExchangeRate), 'EUR')}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Min Investment:</span>
+                                  <span className="text-sm font-medium">{priceLoading ? 'Loading...' : formatCurrency(goldSwimProduct.min_investment || calculateGoldSwimUnitPrice(spotAsk, eurExchangeRate), 'EUR')}</span>
+                                </div>
+                              </div>
+                              <div className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Expected APY:</span>
+                                  <span className="text-sm font-medium text-green-600">{goldSwimProduct.projected_annual_return || 0}%</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Asset Class:</span>
+                                  <span className="text-sm font-medium">Gold (Physical)</span>
+                                </div>
                               </div>
                             </div>
-                            <div className="space-y-2">
-                              <div className="flex justify-between">
-                                <span className="text-sm text-gray-600">Risk Level:</span>
-                                <span className="text-sm font-medium">{opportunity.riskLevel}</span>
+
+                            <div className="bg-amber-50 p-3 rounded-lg mb-4">
+                              <p className="text-xs text-amber-800">
+                                <Shield className="w-3 h-3 inline mr-1" />
+                                Quarterly retailing margins • €1.00/gram premium strategy
+                              </p>
+                            </div>
+
+                            <div className="flex gap-3">
+                              <Button
+                                className="flex-1 bg-[#b45309] hover:bg-[#92400e]"
+                                onClick={() => handleAddToCart(goldSwimProduct, calculateGoldSwimUnitPrice(spotAsk, eurExchangeRate))}
+                              >
+                                <Plus className="w-4 h-4 mr-2" />
+                                Add to Cart
+                              </Button>
+                              <Link to="/gold-swim" className="flex-1">
+                                <Button variant="outline" className="w-full">
+                                  Learn More
+                                </Button>
+                              </Link>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      )}
+
+                      {/* SIRI Z31 Product */}
+                      {siriZ31Product && spotAsk && eurExchangeRate && (
+                        <Card className="border-2 border-[#b45309]/30 hover:border-[#b45309] transition-all duration-300">
+                          <CardContent className="p-6">
+                            <div className="flex items-start justify-between mb-4">
+                              <div>
+                                <h3 className="font-semibold text-lg text-gray-900 mb-1">{siriZ31Product.name}</h3>
+                                <p className="text-gray-600 text-sm">{siriZ31Product.description}</p>
+                                <p className="text-xs text-gray-500 mt-1">{siriZ31Product.ticker_symbol} • Trading Platform</p>
                               </div>
-                              <div className="flex justify-between">
-                                <span className="text-sm text-gray-600">Time Left:</span>
-                                <span className="text-sm font-medium text-amber-600">{opportunity.timeLeft}</span>
+                              <Badge className="bg-green-100 text-green-800">
+                                Available Now
+                              </Badge>
+                            </div>
+
+                            <div className="grid md:grid-cols-2 gap-4 mb-4">
+                              <div className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Unit Price (Live):</span>
+                                  <span className="text-sm font-medium">{priceLoading ? 'Loading...' : formatCurrency(calculateSiriZ31UnitPrice(spotAsk, eurExchangeRate), 'EUR')}</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Min Investment (1 unit):</span>
+                                  <span className="text-sm font-medium">{priceLoading ? 'Loading...' : formatCurrency(calculateSiriZ31UnitPrice(spotAsk, eurExchangeRate), 'EUR')}</span>
+                                </div>
+                              </div>
+                              <div className="space-y-2">
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Units in Offering:</span>
+                                  <span className="text-sm font-medium">2.25B Units</span>
+                                </div>
+                                <div className="flex justify-between">
+                                  <span className="text-sm text-gray-600">Hedging:</span>
+                                  <span className="text-sm font-medium">Gold Futures</span>
+                                </div>
                               </div>
                             </div>
-                          </div>
 
-                          <div className="bg-amber-50 p-3 rounded-lg mb-4">
-                            <p className="text-xs text-amber-800">
-                              <Shield className="w-3 h-3 inline mr-1" />
-                              {opportunity.allocation}
-                            </p>
-                          </div>
+                            <div className="bg-amber-50 p-3 rounded-lg mb-4">
+                              <p className="text-xs text-amber-800">
+                                <Shield className="w-3 h-3 inline mr-1" />
+                                Futures-hedged gold exposure • Systematic positioning strategy
+                              </p>
+                            </div>
 
-                          <div className="flex gap-3">
-                            <Button className="flex-1 bg-amber-600 hover:bg-amber-700">
-                              Reserve Allocation
-                            </Button>
-                            <Button variant="outline" className="flex-1">
-                              Learn More
-                            </Button>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
+                            <div className="flex gap-3">
+                              <Button
+                                className="flex-1 bg-[#b45309] hover:bg-[#92400e]"
+                                onClick={() => handleAddToCart(siriZ31Product, calculateSiriZ31UnitPrice(spotAsk, eurExchangeRate))}
+                              >
+                                <Plus className="w-4 h-4 mr-2" />
+                                Add to Cart
+                              </Button>
+                              <Link to="/siriz31" className="flex-1">
+                                <Button variant="outline" className="w-full">
+                                  Learn More
+                                </Button>
+                              </Link>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      )}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -825,5 +871,13 @@ export default function DashboardPage() {
         </Tabs>
       </main>
     </div>
+  )
+}
+
+export default function DashboardPage() {
+  return (
+    <GoldPriceProvider>
+      <DashboardPageInner />
+    </GoldPriceProvider>
   )
 }

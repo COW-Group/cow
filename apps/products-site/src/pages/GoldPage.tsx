@@ -13,7 +13,7 @@ import { CopilotSearchBar } from "../components/copilot-search-bar";
 import { PWAInstallInstructions } from "../components/pwa-install-instructions";
 import { Milestones } from "../components/milestones";
 import { OfferingDisclaimer } from "../components/offering-disclaimer";
-import { ArrowRight, TrendingUp, Shield, Zap, ChevronDown, Coins, RefreshCcw, Download, DollarSign, Sparkles, FileText } from "lucide-react";
+import { ArrowRight, TrendingUp, Shield, Zap, ChevronDown, Coins, RefreshCcw, Download, DollarSign, Sparkles } from "lucide-react";
 import cowLogo from "../assets/cow-logo.png";
 import { supabase, type Product } from "@cow/supabase-client";
 import { calculateGoldSwimUnitPrice, calculateSiriZ31UnitPrice, formatCurrency } from "../lib/gold-price-calculations";
@@ -968,17 +968,14 @@ function GoldPageInner() {
                           Learn More <ArrowRight className="ml-2 w-4 h-4" />
                         </Button>
                       </Link>
-                      <Button
-                        className="w-full text-white"
-                        style={{ background: 'linear-gradient(to right, #b45309, #d97706)' }}
-                        onClick={() => {
-                          // TODO: Link to offering documents portal
-                          alert('Please contact investor.relations@mycow.io to receive the official Offering Documents.')
-                        }}
-                      >
-                        <FileText className="mr-2 w-4 h-4" />
-                        View Offering Documents
-                      </Button>
+                      <Link to="/gold" className="w-full">
+                        <Button
+                          className="w-full text-white"
+                          style={{ background: 'linear-gradient(to right, #b45309, #d97706)' }}
+                        >
+                          Access Vertical <ArrowRight className="ml-2 w-4 h-4" />
+                        </Button>
+                      </Link>
                     </div>
                   </CardContent>
                 </Card>
@@ -1039,17 +1036,14 @@ function GoldPageInner() {
                           Learn More <ArrowRight className="ml-2 w-4 h-4" />
                         </Button>
                       </Link>
-                      <Button
-                        className="w-full text-white"
-                        style={{ background: 'linear-gradient(to right, #b45309, #d97706)' }}
-                        onClick={() => {
-                          // TODO: Link to offering documents portal
-                          alert('Please contact investor.relations@mycow.io to receive the official Offering Documents.')
-                        }}
-                      >
-                        <FileText className="mr-2 w-4 h-4" />
-                        View Offering Documents
-                      </Button>
+                      <Link to="/gold" className="w-full">
+                        <Button
+                          className="w-full text-white"
+                          style={{ background: 'linear-gradient(to right, #b45309, #d97706)' }}
+                        >
+                          Access Vertical <ArrowRight className="ml-2 w-4 h-4" />
+                        </Button>
+                      </Link>
                     </div>
                   </CardContent>
                 </Card>
@@ -1057,6 +1051,11 @@ function GoldPageInner() {
             )}
           </div>
           )}
+
+          {/* Legal Disclaimer */}
+          <div className="mt-16 max-w-4xl mx-auto">
+            <OfferingDisclaimer />
+          </div>
         </div>
       </section>
 
@@ -1128,11 +1127,6 @@ function GoldPageInner() {
           >
             Structured investment products delivering systematic gold exposure through retailing margins and futures positioning
           </p>
-
-          {/* Legal Disclaimer */}
-          <div className="mt-16 max-w-4xl mx-auto">
-            <OfferingDisclaimer />
-          </div>
         </div>
       </section>
 

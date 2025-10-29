@@ -31,7 +31,7 @@ export function OfferingDisclaimer() {
                 Prospective investors should carefully consider investment objectives, risks, charges, expenses, and suitability before making any investment decision. You should consult with qualified tax, legal, and financial advisers before making any investment decision.
               </p>
               <p className="font-medium">
-                Securities offered by <strong>My Gold Grams Inc</strong>, a wholly-owned subsidiary of <strong>COW Group of Companies</strong>.
+                Securities offered by <strong>My Gold Grams Inc</strong>. Technology services provided by <strong>COW Technologies</strong>.
               </p>
               <p className="text-[10px] text-amber-700 dark:text-amber-300 mt-3">
                 For additional information and complete disclosures, please visit our investor relations page or contact investor.relations@mycow.io

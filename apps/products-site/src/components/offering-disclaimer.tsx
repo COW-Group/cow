@@ -34,7 +34,7 @@ export function OfferingDisclaimer() {
                 <strong>My Gold Grams Inc.</strong> is an independent company and is not a subsidiary, affiliate, or related entity of <strong>COW Technologies, Inc.</strong> COW Technologies provides technology services to My Gold Grams Inc. pursuant to a software licensing and services agreement. My Gold Grams Inc., as the issuer, is solely responsible for the securities offerings and all related regulatory compliance.
               </p>
               <p className="text-[10px] text-amber-700 dark:text-amber-300 mt-3">
-                For additional information and complete disclosures, please visit our investor relations page or contact investor.relations@mycow.io
+                For additional information and complete disclosures, please visit our investor relations page or contact ir@mygoldgrams.com.
               </p>
             </div>
           </div>

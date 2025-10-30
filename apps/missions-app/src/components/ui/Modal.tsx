@@ -46,7 +46,7 @@ export function Modal({
               onClick={onClose}
             />
 
-            {/* Modal */}
+            {/* Modal - Sumi-e Sky + Earth Aesthetic */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -54,22 +54,37 @@ export function Modal({
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
               className={`
                 relative w-full ${sizeClasses[size]} mx-auto
-                bg-gray-900/50 backdrop-blur-md rounded-2xl shadow-2xl
-                border border-gray-800 text-white
+                rounded-2xl shadow-2xl
                 overflow-hidden
               `}
+              style={{
+                background: 'var(--bg-elevated)',
+                backdropFilter: 'blur(20px) saturate(180%)',
+                border: '1px solid var(--border-color)',
+                boxShadow: '0 20px 60px rgba(0, 0, 0, 0.3), 0 0 1px rgba(14, 165, 233, 0.2)'
+              }}
             >
+              {/* Subtle Cyan Accent Line - Sumi-e Sky */}
+              <div style={{
+                height: '1px',
+                background: 'linear-gradient(to right, transparent 0%, var(--cyan-bright) 50%, transparent 100%)',
+                opacity: 0.3
+              }} />
+
               {/* Header */}
               {showHeader && (title || showCloseButton) && (
                 <div className="flex items-center justify-between p-6 pb-0">
                   <div>
                     {title && (
-                      <h2 className="text-xl font-semibold text-white">
+                      <h2
+                        className="text-2xl font-light tracking-tight"
+                        style={{ color: 'var(--text-primary)' }}
+                      >
                         {title}
                       </h2>
                     )}
                     {description && (
-                      <p className="mt-1 text-sm text-gray-400">
+                      <p className="mt-2 text-sm font-light" style={{ color: 'var(--text-secondary)' }}>
                         {description}
                       </p>
                     )}
@@ -80,7 +95,8 @@ export function Modal({
                       variant="ghost"
                       size="sm"
                       onClick={onClose}
-                      className="text-gray-400 hover:text-white"
+                      className="transition-colors"
+                      style={{ color: 'var(--text-muted)' }}
                     >
                       <X className="h-5 w-5" />
                     </Button>

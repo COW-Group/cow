@@ -820,86 +820,171 @@ export function LandingPage() {
           onClose={() => setShowLoginModal(false)}
           title="Welcome back"
         >
-          <div className="p-6">
-            {error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                {error}
-              </div>
-            )}
-            <form onSubmit={handleLogin} className="space-y-4">
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  value={loginData.email}
-                  onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  placeholder="your@email.com"
-                  required
-                />
-              </div>
+          {error && (
+            <div
+              className="mx-6 mt-4 p-3 rounded-lg text-sm font-light"
+              style={{
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid rgba(239, 68, 68, 0.2)',
+                color: '#ef4444'
+              }}
+            >
+              {error}
+            </div>
+          )}
 
-              <div>
-                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="password"
-                  value={loginData.password}
-                  onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
-
-              <div className="flex items-center justify-between pt-4">
-                <a href="#" className="text-sm text-blue-600 hover:text-blue-500">
-                  Forgot password?
-                </a>
-                <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => {
-                      setShowLoginModal(false);
-                      setError(null);
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button type="submit" disabled={isLoading}>
-                    {isLoading ? 'Signing in...' : 'Sign In'}
-                  </Button>
-                </div>
-              </div>
-            </form>
-
-            <div className="mt-6 pt-6 border-t border-gray-200 text-center">
-              <Button
-                onClick={handleDemoLogin}
-                variant="outline"
-                className="w-full bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100"
+          <form onSubmit={handleLogin} className="space-y-5">
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-light mb-2"
+                style={{ color: 'var(--text-secondary)' }}
               >
-                Continue as Demo User
-              </Button>
-              <p className="mt-3 text-sm text-gray-600">
-                Don't have an account?{' '}
-                <button
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={loginData.email}
+                onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg font-light transition-all duration-200"
+                style={{
+                  backgroundColor: 'var(--bg-base)',
+                  border: '1px solid var(--border-color)',
+                  color: 'var(--text-primary)',
+                  outline: 'none'
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--cyan-bright)';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14, 165, 233, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-color)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+                placeholder="your@email.com"
+                required
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-light mb-2"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                value={loginData.password}
+                onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg font-light transition-all duration-200"
+                style={{
+                  backgroundColor: 'var(--bg-base)',
+                  border: '1px solid var(--border-color)',
+                  color: 'var(--text-primary)',
+                  outline: 'none'
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--cyan-bright)';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14, 165, 233, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-color)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+                placeholder="••••••••"
+                required
+              />
+            </div>
+
+            <div className="flex items-center justify-between pt-2">
+              <a
+                href="#"
+                className="text-sm font-light transition-colors"
+                style={{ color: 'var(--cyan-bright)' }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+              >
+                Forgot password?
+              </a>
+              <div className="flex gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
                   onClick={() => {
                     setShowLoginModal(false);
-                    setShowSignUpModal(true);
+                    setError(null);
                   }}
-                  className="text-blue-600 hover:text-blue-500 font-medium"
                 >
-                  Sign up
+                  Cancel
+                </Button>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="px-6 py-2 rounded-lg font-medium transition-all duration-200"
+                  style={{
+                    background: 'var(--button-blue)',
+                    color: 'var(--white)',
+                    border: 'none',
+                    cursor: isLoading ? 'not-allowed' : 'pointer',
+                    opacity: isLoading ? 0.7 : 1
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isLoading) {
+                      e.currentTarget.style.background = 'var(--button-hover)';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'var(--button-blue)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  {isLoading ? 'Signing in...' : 'Sign In'}
                 </button>
-              </p>
+              </div>
             </div>
+          </form>
+
+          <div
+            className="mt-6 pt-6 text-center"
+            style={{ borderTop: '1px solid var(--border-color)' }}
+          >
+            <button
+              onClick={handleDemoLogin}
+              className="w-full px-6 py-3 rounded-lg font-light transition-all duration-200"
+              style={{
+                backgroundColor: 'rgba(14, 165, 233, 0.08)',
+                border: '1px solid rgba(14, 165, 233, 0.2)',
+                color: 'var(--cyan-bright)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(14, 165, 233, 0.12)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(14, 165, 233, 0.08)';
+              }}
+            >
+              Continue as Demo User
+            </button>
+            <p className="mt-4 text-sm font-light" style={{ color: 'var(--text-secondary)' }}>
+              New to Missions?{' '}
+              <button
+                onClick={() => {
+                  setShowLoginModal(false);
+                  setShowSignUpModal(true);
+                }}
+                className="font-medium transition-colors"
+                style={{ color: 'var(--cyan-bright)' }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+              >
+                Create an account
+              </button>
+            </p>
           </div>
         </Modal>
       )}
@@ -909,113 +994,241 @@ export function LandingPage() {
         <Modal
           isOpen={showSignUpModal}
           onClose={() => setShowSignUpModal(false)}
-          title="Create your account"
+          title="Begin your journey"
         >
-          <div className="p-6">
-            {error && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                {error}
-              </div>
-            )}
-            <form onSubmit={handleSignUp} className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  value={signUpData.name}
-                  onChange={(e) => setSignUpData({ ...signUpData, name: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  placeholder="John Doe"
-                  required
-                />
-              </div>
+          {error && (
+            <div
+              className="mx-6 mt-4 p-3 rounded-lg text-sm font-light"
+              style={{
+                backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                border: '1px solid rgba(239, 68, 68, 0.2)',
+                color: '#ef4444'
+              }}
+            >
+              {error}
+            </div>
+          )}
 
-              <div>
-                <label htmlFor="signup-email" className="block text-sm font-medium text-gray-700 mb-1">
-                  Work Email
-                </label>
-                <input
-                  type="email"
-                  id="signup-email"
-                  value={signUpData.email}
-                  onChange={(e) => setSignUpData({ ...signUpData, email: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  placeholder="john@company.com"
-                  required
-                />
-              </div>
+          <form onSubmit={handleSignUp} className="space-y-4">
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-sm font-light mb-2"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                Full Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                value={signUpData.name}
+                onChange={(e) => setSignUpData({ ...signUpData, name: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg font-light transition-all duration-200"
+                style={{
+                  backgroundColor: 'var(--bg-base)',
+                  border: '1px solid var(--border-color)',
+                  color: 'var(--text-primary)',
+                  outline: 'none'
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--cyan-bright)';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14, 165, 233, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-color)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+                placeholder="Your name"
+                required
+              />
+            </div>
 
-              <div>
-                <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-1">
-                  Company
-                </label>
-                <input
-                  type="text"
-                  id="company"
-                  value={signUpData.company}
-                  onChange={(e) => setSignUpData({ ...signUpData, company: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  placeholder="Your Company"
-                />
-              </div>
+            <div>
+              <label
+                htmlFor="signup-email"
+                className="block text-sm font-light mb-2"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                Work Email
+              </label>
+              <input
+                type="email"
+                id="signup-email"
+                value={signUpData.email}
+                onChange={(e) => setSignUpData({ ...signUpData, email: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg font-light transition-all duration-200"
+                style={{
+                  backgroundColor: 'var(--bg-base)',
+                  border: '1px solid var(--border-color)',
+                  color: 'var(--text-primary)',
+                  outline: 'none'
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--cyan-bright)';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14, 165, 233, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-color)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+                placeholder="your@company.com"
+                required
+              />
+            </div>
 
-              <div>
-                <label htmlFor="signup-password" className="block text-sm font-medium text-gray-700 mb-1">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  id="signup-password"
-                  value={signUpData.password}
-                  onChange={(e) => setSignUpData({ ...signUpData, password: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 text-gray-900"
-                  placeholder="••••••••"
-                  required
-                />
-              </div>
+            <div>
+              <label
+                htmlFor="company"
+                className="block text-sm font-light mb-2"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                Company <span style={{ color: 'var(--text-muted)', fontWeight: '300' }}>(optional)</span>
+              </label>
+              <input
+                type="text"
+                id="company"
+                value={signUpData.company}
+                onChange={(e) => setSignUpData({ ...signUpData, company: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg font-light transition-all duration-200"
+                style={{
+                  backgroundColor: 'var(--bg-base)',
+                  border: '1px solid var(--border-color)',
+                  color: 'var(--text-primary)',
+                  outline: 'none'
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--cyan-bright)';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14, 165, 233, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-color)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+                placeholder="Your company"
+              />
+            </div>
 
-              <div className="flex items-start">
-                <input type="checkbox" className="mt-1 mr-2" required />
-                <p className="text-sm text-gray-600">
-                  I agree to the <a href="#" className="text-blue-600 hover:text-blue-500">Terms of Service</a> and{' '}
-                  <a href="#" className="text-blue-600 hover:text-blue-500">Privacy Policy</a>
-                </p>
-              </div>
+            <div>
+              <label
+                htmlFor="signup-password"
+                className="block text-sm font-light mb-2"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                id="signup-password"
+                value={signUpData.password}
+                onChange={(e) => setSignUpData({ ...signUpData, password: e.target.value })}
+                className="w-full px-4 py-3 rounded-lg font-light transition-all duration-200"
+                style={{
+                  backgroundColor: 'var(--bg-base)',
+                  border: '1px solid var(--border-color)',
+                  color: 'var(--text-primary)',
+                  outline: 'none'
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--cyan-bright)';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(14, 165, 233, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-color)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+                placeholder="••••••••"
+                required
+              />
+            </div>
 
-              <div className="flex justify-end gap-2 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => {
-                    setShowSignUpModal(false);
-                    setError(null);
-                  }}
+            <div className="flex items-start gap-3 pt-2">
+              <input
+                type="checkbox"
+                className="mt-1"
+                style={{ accentColor: 'var(--cyan-bright)' }}
+                required
+              />
+              <p className="text-sm font-light" style={{ color: 'var(--text-secondary)' }}>
+                I agree to the{' '}
+                <a
+                  href="#"
+                  className="transition-colors"
+                  style={{ color: 'var(--cyan-bright)' }}
+                  onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                  onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                 >
-                  Cancel
-                </Button>
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? 'Creating account...' : 'Create Account'}
-                </Button>
-              </div>
-            </form>
-
-            <div className="mt-6 pt-6 border-t border-gray-200 text-center">
-              <p className="text-sm text-gray-600">
-                Already have an account?{' '}
-                <button
-                  onClick={() => {
-                    setShowSignUpModal(false);
-                    setShowLoginModal(true);
-                  }}
-                  className="text-blue-600 hover:text-blue-500 font-medium"
+                  Terms of Service
+                </a>
+                {' '}and{' '}
+                <a
+                  href="#"
+                  className="transition-colors"
+                  style={{ color: 'var(--cyan-bright)' }}
+                  onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                  onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                 >
-                  Sign in
-                </button>
+                  Privacy Policy
+                </a>
               </p>
             </div>
+
+            <div className="flex justify-end gap-3 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setShowSignUpModal(false);
+                  setError(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="px-6 py-2 rounded-lg font-medium transition-all duration-200"
+                style={{
+                  background: 'var(--button-blue)',
+                  color: 'var(--white)',
+                  border: 'none',
+                  cursor: isLoading ? 'not-allowed' : 'pointer',
+                  opacity: isLoading ? 0.7 : 1
+                }}
+                onMouseEnter={(e) => {
+                  if (!isLoading) {
+                    e.currentTarget.style.background = 'var(--button-hover)';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'var(--button-blue)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                {isLoading ? 'Creating account...' : 'Create Account'}
+              </button>
+            </div>
+          </form>
+
+          <div
+            className="mt-6 pt-6 text-center"
+            style={{ borderTop: '1px solid var(--border-color)' }}
+          >
+            <p className="text-sm font-light" style={{ color: 'var(--text-secondary)' }}>
+              Already have an account?{' '}
+              <button
+                onClick={() => {
+                  setShowSignUpModal(false);
+                  setShowLoginModal(true);
+                }}
+                className="font-medium transition-colors"
+                style={{ color: 'var(--cyan-bright)' }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+              >
+                Sign in
+              </button>
+            </p>
           </div>
         </Modal>
       )}

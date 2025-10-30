@@ -18,14 +18,34 @@ export function Button({
   children,
   ...props
 }: ButtonProps) {
-  const baseClasses = 'inline-flex items-center justify-center rounded-full font-medium transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed backdrop-blur-md';
+  const baseClasses = 'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed';
 
-  const variants = {
-    primary: 'bg-yellow-400 text-black hover:bg-yellow-300 hover:shadow-lg focus:ring-yellow-500 ring-offset-black',
-    secondary: 'bg-gray-900/50 text-white hover:bg-gray-800 hover:shadow-lg focus:ring-gray-500 backdrop-blur-md border border-gray-800 ring-offset-black',
-    ghost: 'text-gray-400 hover:bg-gray-900/50 hover:text-white hover:backdrop-blur-md hover:shadow-md focus:ring-gray-500 ring-offset-black',
-    outline: 'border border-gray-600 text-white hover:bg-gray-800 hover:shadow-lg focus:ring-gray-500 backdrop-blur-md bg-transparent ring-offset-black',
-    danger: 'bg-red-600 text-white hover:bg-red-700 hover:shadow-lg focus:ring-red-500 backdrop-blur-md ring-offset-black',
+  const variantStyles = {
+    primary: {
+      backgroundColor: 'var(--button-blue)',
+      color: 'var(--white)',
+      border: 'none'
+    },
+    secondary: {
+      backgroundColor: 'var(--bg-elevated)',
+      color: 'var(--text-primary)',
+      border: '1px solid var(--border-color)'
+    },
+    ghost: {
+      backgroundColor: 'transparent',
+      color: 'var(--text-secondary)',
+      border: 'none'
+    },
+    outline: {
+      backgroundColor: 'transparent',
+      color: 'var(--text-primary)',
+      border: '1px solid var(--border-color)'
+    },
+    danger: {
+      backgroundColor: '#ef4444',
+      color: 'var(--white)',
+      border: 'none'
+    }
   };
 
   const sizes = {
@@ -40,12 +60,13 @@ export function Button({
   return (
     <motion.button
       whileTap={{ scale: isDisabled ? 1 : 0.98 }}
+      whileHover={{ scale: isDisabled ? 1 : 1.02 }}
       className={cn(
         baseClasses,
-        variants[variant],
         sizes[size],
         className
       )}
+      style={variantStyles[variant]}
       disabled={isDisabled}
       {...props}
     >

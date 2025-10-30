@@ -419,29 +419,30 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Mission Execution Architecture - Apple Minimalism */}
-      <section className="py-40 px-8 bg-white">
+      {/* Mission Execution Architecture */}
+      <section className="py-40 px-8" style={{ backgroundColor: 'var(--bg-elevated)' }}>
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-32">
             <h2
-              className="text-gray-900 mb-12"
               style={{
                 fontSize: 'clamp(3rem, 6vw, 4.5rem)',
                 fontWeight: '100',
                 letterSpacing: '-0.025em',
-                lineHeight: '1.0'
+                lineHeight: '1.0',
+                color: 'var(--text-primary)'
               }}
             >
               Enterprise Mission Architecture
             </h2>
             <p
-              className="text-gray-500 max-w-3xl mx-auto"
+              className="max-w-3xl mx-auto"
               style={{
                 fontSize: 'clamp(1.125rem, 2.5vw, 1.375rem)',
                 fontWeight: '200',
                 letterSpacing: '0.005em',
-                lineHeight: '1.4'
+                lineHeight: '1.4',
+                color: 'var(--text-secondary)'
               }}
             >
               Institutional-grade mission management designed specifically for Cycles of Wealth
@@ -449,7 +450,7 @@ export function LandingPage() {
             </p>
           </div>
 
-          {/* Ultra Clean Grid */}
+          {/* Capabilities Grid */}
           <div className="grid md:grid-cols-3 gap-16 mb-32 max-w-6xl mx-auto">
             {capabilities.map((capability, index) => (
               <div key={index} className="text-center group">
@@ -457,32 +458,34 @@ export function LandingPage() {
                   <div
                     className="p-4 rounded-full transition-all duration-300 group-hover:scale-110"
                     style={{
-                      background: 'rgba(59, 130, 246, 0.08)',
-                      border: '1px solid rgba(59, 130, 246, 0.12)'
+                      background: 'rgba(14, 165, 233, 0.08)',
+                      border: '1px solid rgba(14, 165, 233, 0.15)'
                     }}
                   >
-                    <div className="text-blue-600">
+                    <div style={{ color: 'var(--cyan-bright)' }}>
                       {capability.icon}
                     </div>
                   </div>
                 </div>
                 <h3
-                  className="text-gray-900 mb-4"
+                  className="mb-4"
                   style={{
                     fontSize: '1.25rem',
                     fontWeight: '400',
-                    letterSpacing: '0.01em'
+                    letterSpacing: '0.01em',
+                    color: 'var(--text-primary)'
                   }}
                 >
                   {capability.title}
                 </h3>
                 <p
-                  className="text-gray-500 leading-relaxed"
+                  className="leading-relaxed"
                   style={{
                     fontSize: '0.95rem',
                     fontWeight: '300',
                     letterSpacing: '0.005em',
-                    lineHeight: '1.6'
+                    lineHeight: '1.6',
+                    color: 'var(--text-secondary)'
                   }}
                 >
                   {capability.description}
@@ -493,17 +496,17 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* COW Ecosystem Impact - Statistical Excellence */}
-      <section className="py-40 px-8 bg-gray-50">
+      {/* COW Ecosystem Impact */}
+      <section className="py-40 px-8" style={{ backgroundColor: 'var(--bg-base)' }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <h2
-              className="text-gray-900 mb-12"
               style={{
                 fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
                 fontWeight: '100',
                 letterSpacing: '-0.04em',
-                lineHeight: '0.9'
+                lineHeight: '0.9',
+                color: 'var(--text-primary)'
               }}
             >
               Transforming mission execution
@@ -511,7 +514,7 @@ export function LandingPage() {
               <span
                 style={{
                   fontWeight: '200',
-                  color: '#374151'
+                  color: 'var(--text-secondary)'
                 }}
               >
                 across the Cycles of Wealth
@@ -530,23 +533,23 @@ export function LandingPage() {
             ].map((stat, index) => (
               <div key={index} className="text-center">
                 <div
-                  className="text-gray-900 mb-3"
                   style={{
                     fontSize: '3rem',
                     fontWeight: '100',
                     letterSpacing: '-0.02em',
-                    lineHeight: '1'
+                    lineHeight: '1',
+                    color: 'var(--text-primary)'
                   }}
                 >
                   {stat.number}
                 </div>
                 <div
-                  className="text-gray-500"
                   style={{
                     fontSize: '1rem',
                     fontWeight: '400',
                     letterSpacing: '0.01em',
-                    whiteSpace: 'pre-line'
+                    whiteSpace: 'pre-line',
+                    color: 'var(--text-secondary)'
                   }}
                 >
                   {stat.label}
@@ -558,27 +561,29 @@ export function LandingPage() {
       </section>
 
       {/* Client Success Stories - Ultra Minimal */}
-      <section className="py-40 px-8 bg-white">
+      <section className="py-40 px-8" style={{ backgroundColor: 'var(--bg-elevated)' }}>
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-20">
             <h2
-              className="text-gray-900 mb-12"
+              className="mb-12"
               style={{
                 fontSize: 'clamp(3rem, 6vw, 4.5rem)',
                 fontWeight: '100',
                 letterSpacing: '-0.025em',
-                lineHeight: '1.0'
+                lineHeight: '1.0',
+                color: 'var(--text-primary)'
               }}
             >
               Trusted by Leading Organizations
             </h2>
             <p
-              className="text-gray-500 max-w-2xl mx-auto"
+              className="max-w-2xl mx-auto"
               style={{
                 fontSize: 'clamp(1.125rem, 2.5vw, 1.375rem)',
                 fontWeight: '200',
                 letterSpacing: '0.005em',
-                lineHeight: '1.4'
+                lineHeight: '1.4',
+                color: 'var(--text-secondary)'
               }}
             >
               Cycles of Wealth ecosystem leaders share their mission execution results.
@@ -599,34 +604,36 @@ export function LandingPage() {
                   </div>
                 </div>
                 <blockquote
-                  className="text-gray-700 mb-8"
+                  className="mb-8"
                   style={{
                     fontSize: '1.125rem',
                     fontWeight: '300',
                     letterSpacing: '0.005em',
                     lineHeight: '1.6',
-                    fontStyle: 'italic'
+                    fontStyle: 'italic',
+                    color: 'var(--text-primary)'
                   }}
                 >
                   "{testimonial.content}"
                 </blockquote>
                 <div>
                   <div
-                    className="text-gray-900 mb-1"
+                    className="mb-1"
                     style={{
                       fontSize: '1rem',
                       fontWeight: '500',
-                      letterSpacing: '0.01em'
+                      letterSpacing: '0.01em',
+                      color: 'var(--text-primary)'
                     }}
                   >
                     {testimonial.name}
                   </div>
                   <div
-                    className="text-gray-500"
                     style={{
                       fontSize: '0.875rem',
                       fontWeight: '300',
-                      letterSpacing: '0.005em'
+                      letterSpacing: '0.005em',
+                      color: 'var(--text-secondary)'
                     }}
                   >
                     {testimonial.role}
@@ -639,7 +646,7 @@ export function LandingPage() {
       </section>
 
       {/* Enterprise CTA - Institutional Grade */}
-      <section className="relative py-40 px-8 overflow-hidden" style={{ background: 'linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)' }}>
+      <section className="relative py-40 px-8 overflow-hidden" style={{ background: 'linear-gradient(135deg, var(--cyan-deep) 0%, var(--button-blue) 100%)' }}>
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <h2
             className="text-white mb-8"
@@ -651,7 +658,7 @@ export function LandingPage() {
               textShadow: '0 2px 20px rgba(0, 0, 0, 0.3)'
             }}
           >
-            Ready to Transform Your Mission Execution?
+            Begin Your Journey
           </h2>
           <p
             className="text-white/90 mb-12 max-w-2xl mx-auto"
@@ -732,41 +739,73 @@ export function LandingPage() {
       </section>
 
       {/* Footer - Minimalist */}
-      <footer className="bg-white py-20">
+      <footer className="py-20" style={{ backgroundColor: 'var(--bg-section)' }}>
         <div className="max-w-7xl mx-auto px-8">
           <div className="text-center">
             <div className="flex items-center justify-center gap-2 mb-8">
-              <Rocket className="h-6 w-6 text-gray-400" />
+              <img
+                src={cowLogo}
+                alt="COW Communications"
+                className="h-6 w-auto"
+              />
               <div
-                className="text-gray-400"
                 style={{
                   fontSize: '1.25rem',
                   fontWeight: '300',
-                  letterSpacing: '0.02em'
+                  letterSpacing: '0.02em',
+                  color: 'var(--text-secondary)'
                 }}
               >
                 Missions
               </div>
             </div>
             <p
-              className="text-gray-500 mb-8 max-w-md mx-auto"
+              className="mb-8 max-w-md mx-auto"
               style={{
                 fontSize: '0.95rem',
                 fontWeight: '300',
                 letterSpacing: '0.005em',
-                lineHeight: '1.6'
+                lineHeight: '1.6',
+                color: 'var(--text-secondary)'
               }}
             >
               Enterprise mission management platform for the Cycles of Wealth ecosystem.
             </p>
-            <div className="flex justify-center gap-8 text-sm text-gray-400">
-              <a href="#" className="hover:text-gray-600 transition-colors" style={{ letterSpacing: '0.005em' }}>
+            <div className="flex justify-center gap-8 text-sm">
+              <a
+                href="#"
+                className="transition-colors"
+                style={{
+                  letterSpacing: '0.005em',
+                  color: 'var(--text-muted)'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
+              >
                 Privacy Policy
               </a>
-              <a href="#" className="hover:text-gray-600 transition-colors" style={{ letterSpacing: '0.005em' }}>
+              <a
+                href="#"
+                className="transition-colors"
+                style={{
+                  letterSpacing: '0.005em',
+                  color: 'var(--text-muted)'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
+              >
                 Terms of Service
               </a>
-              <a href="#" className="hover:text-gray-600 transition-colors" style={{ letterSpacing: '0.005em' }}>
+              <a
+                href="#"
+                className="transition-colors"
+                style={{
+                  letterSpacing: '0.005em',
+                  color: 'var(--text-muted)'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
+              >
                 Enterprise Support
               </a>
             </div>

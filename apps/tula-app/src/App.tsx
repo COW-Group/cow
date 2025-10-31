@@ -166,37 +166,28 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
               }}
             >
               Legal AI Platform for the<br />
-              <span style={{
-                background: 'linear-gradient(to right, #b45309 0%, #00A5CF 50%, #059669 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                fontWeight: '300'
-              }}>
-                Digital Economy
-              </span>
+              <span style={{ color: isDark ? '#9ca3af' : '#6b7280', fontWeight: '200' }}>Digital Economy</span>
             </h1>
             <p
-              className="text-xl sm:text-2xl font-light max-w-4xl mx-auto mb-8"
+              className="text-xl sm:text-2xl font-light max-w-4xl mx-auto mb-4"
               style={{
-                lineHeight: '1.6',
+                lineHeight: '1.5',
                 fontWeight: '300',
                 letterSpacing: '-0.01em',
                 color: isDark ? '#9ca3af' : '#6b7280'
               }}
             >
-              Born from multi-generational banking heritage and pioneering tokenization practice.{' '}
-              <span style={{ color: isDark ? '#cbd5e1' : '#4b5563' }}>Built by practitioners navigating the intersection of traditional law and emerging technologies.</span>
+              Draft contracts in minutes. Navigate compliance across jurisdictions. Structure entities with AI guidance.
             </p>
             <p
-              className="text-base sm:text-lg font-light max-w-3xl mx-auto"
+              className="text-base sm:text-lg font-light max-w-3xl mx-auto mb-12"
               style={{
                 lineHeight: '1.7',
                 fontWeight: '300',
                 color: isDark ? '#6b7280' : '#9ca3af'
               }}
             >
-              Where precedent meets innovation. From bar exam preparation to blockchain deployment.
+              Built by practitioners who've actually done this work—from high street contracts to multi-billion tokenizations across three continents.
             </p>
           </div>
 
@@ -212,7 +203,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 border: '1px solid rgba(255, 255, 255, 0.1)'
               }}
             >
-              Start Free Trial
+              Try Free for 14 Days
             </button>
             <button
               className="px-8 py-4 transition-all duration-200 rounded-lg"
@@ -225,7 +216,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 background: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)'
               }}
             >
-              Book Demo
+              Book a 20-Minute Demo
             </button>
             <button
               className="px-8 py-4 transition-all duration-200 rounded-lg"
@@ -238,8 +229,53 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)'
               }}
             >
-              Student Access
+              Student Access (£247/mo)
             </button>
+          </div>
+          <p
+            className="text-xs font-light mt-4"
+            style={{
+              color: isDark ? '#6b7280' : '#9ca3af',
+              textAlign: 'center'
+            }}
+          >
+            No credit card required for trial
+          </p>
+        </div>
+      </section>
+
+      {/* Problem Statement Section */}
+      <section className="py-20 px-8" style={{
+        backgroundColor: isDark ? '#1e293b' : '#f8fafc'
+      }}>
+        <div className="max-w-4xl mx-auto">
+          <h2
+            className="text-3xl sm:text-4xl font-light text-center mb-12"
+            style={{
+              lineHeight: '1.3',
+              letterSpacing: '-0.01em',
+              color: isDark ? '#f8fafc' : '#1f2937',
+              fontWeight: '300'
+            }}
+          >
+            Most Legal AI Doesn't Work for Real Practice
+          </h2>
+          <div
+            className="space-y-6 text-lg font-light"
+            style={{
+              color: isDark ? '#9ca3af' : '#6b7280',
+              lineHeight: '1.8'
+            }}
+          >
+            <p>
+              You've seen the demos: Tools that can't handle your firm's templates. "AI" that's just GPT wrapper with no legal knowledge. Platforms built by engineers who've never billed an hour.
+            </p>
+            <p>
+              Features that sound good but break on actual client work. Security that means "we'll train on your client data."
+            </p>
+            <p style={{ color: isDark ? '#cbd5e1' : '#4b5563', fontWeight: '400' }}>
+              We built TULA because we got tired of tools that don't understand how legal work actually happens.
+            </p>
           </div>
         </div>
       </section>
@@ -260,7 +296,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 textTransform: 'uppercase'
               }}
             >
-              One Platform, Every Legal Need
+              How It Works
             </div>
           </div>
 
@@ -274,7 +310,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
               fontWeight: '300'
             }}
           >
-            From bar exam to billion-dollar structuring
+            Legal work that actually works
           </h2>
 
           <p
@@ -284,51 +320,107 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
               lineHeight: '1.8'
             }}
           >
-            TULA grows with your career. Start as a student, scale to specialist.
+            Built for how lawyers actually work. Not how engineers think they work.
           </p>
 
-          {/* Feature Grid by Audience */}
+          {/* Feature Grid - Workflow Based */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <FeatureCard
-              icon={<BookOpen className="h-6 w-6" />}
-              audience="For Students"
-              title="Bar Exam Prep with AI"
-              description="Practice essays with instant AI feedback. Case law summaries. Legal writing improvement. Mock oral examinations."
-              isDark={isDark}
-            />
-            <FeatureCard
               icon={<FileText className="h-6 w-6" />}
-              audience="For Practitioners"
-              title="AI Contract Drafting"
-              description="Generate contracts from templates. Clause suggestions. Style matching. Version control and redlining."
+              audience=""
+              title="Draft Contracts That Actually Work"
+              description="Upload your firm's templates. TULA learns your style, precedents, and clauses. Generate first drafts in minutes with your formatting, your language, your precedents. Version control and redlining built in."
               isDark={isDark}
             />
             <FeatureCard
               icon={<Search className="h-6 w-6" />}
-              audience="For All Lawyers"
-              title="Legal Research"
-              description="Case law search across UK, EU, US. Statute lookup. Precedent finding. Citation checking."
+              audience=""
+              title="Research That Understands Your Matter"
+              description="Search across UK, EU, and US case law with context. Find precedents that matter for your specific issue. AI-generated summaries with full citations. Integrated with your matter files."
+              isDark={isDark}
+            />
+            <FeatureCard
+              icon={<Briefcase className="h-6 w-6" />}
+              audience=""
+              title="Manage Matters, Not Chaos"
+              description="Track deadlines, communications, and documents in one place. Client portals that actually get used. Time tracking that doesn't feel like punishment. Matter templates that evolve with your practice."
+              isDark={isDark}
+            />
+            <FeatureCard
+              icon={<Globe className="h-6 w-6" />}
+              audience=""
+              title="Navigate Multi-Jurisdiction Complexity"
+              description="Compare regulatory requirements across UK, EU, US, and offshore jurisdictions. Generate compliance calendars automatically. Track filing deadlines. Get alerts for regulatory changes that affect your clients."
               isDark={isDark}
             />
             <FeatureCard
               icon={<Building className="h-6 w-6" />}
-              audience="For Business Lawyers"
-              title="Entity Structuring"
-              description="Multi-jurisdiction entity formation. Corporate governance automation. Board pack generation."
-              isDark={isDark}
-            />
-            <FeatureCard
-              icon={<Shield className="h-6 w-6" />}
-              audience="For In-House Counsel"
-              title="Compliance Tracking"
-              description="Regulatory monitoring. Compliance calendars. Filing automation. Policy generation."
+              audience=""
+              title="Structure Entities with AI Guidance"
+              description="Answer questions about the business. TULA recommends entity structures across jurisdictions. Generate formation documents. Automate governance templates. Board packs that don't take weekends."
               isDark={isDark}
             />
             <FeatureCard
               icon={<Network className="h-6 w-6" />}
-              audience="For Crypto Specialists"
-              title="Smart Legal Contracts"
-              description="Blockchain-native contracts. Token sale documentation. DAO governance. MiCA compliance."
+              audience="ADVANCED"
+              title="Deploy Smart Legal Contracts"
+              description="Convert legal agreements to blockchain-executable contracts. Generate token sale documentation with built-in compliance. DAO governance frameworks. MiCA-compliant stablecoin structures."
+              isDark={isDark}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Social Proof Section */}
+      <section className="py-32 px-8" style={{
+        backgroundColor: isDark ? '#1e293b' : '#f8fafc'
+      }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <div
+              style={{
+                color: '#b45309',
+                letterSpacing: '0.15em',
+                fontSize: '11px',
+                fontWeight: '500',
+                textTransform: 'uppercase'
+              }}
+            >
+              From Real Practitioners
+            </div>
+          </div>
+
+          <h2
+            className="text-3xl sm:text-4xl font-light text-center mb-20 max-w-3xl mx-auto"
+            style={{
+              lineHeight: '1.3',
+              letterSpacing: '-0.01em',
+              color: isDark ? '#f8fafc' : '#1f2937',
+              fontWeight: '300'
+            }}
+          >
+            Built by lawyers who understand the work
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            <TestimonialCard
+              quote="Finally, a legal AI that understands our templates and doesn't break on edge cases. We've cut contract drafting time by 60%."
+              role="Associate, Commercial Property Firm"
+              isDark={isDark}
+            />
+            <TestimonialCard
+              quote="The multi-jurisdiction compliance tracking is a game-changer. It's like having a regulatory team in 15 countries without the headcount."
+              role="General Counsel, International Scale-up"
+              isDark={isDark}
+            />
+            <TestimonialCard
+              quote="As an NQ, TULA's been like having a senior associate checking my work. The research tool actually understands context, not just keywords."
+              role="Newly Qualified Solicitor"
+              isDark={isDark}
+            />
+            <TestimonialCard
+              quote="We've deployed tokenization structures across UK, Switzerland, and Singapore. TULA's smart contract templates understand both the legal and technical requirements."
+              role="Partner, Blockchain Legal Specialist"
               isDark={isDark}
             />
           </div>
@@ -337,7 +429,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
 
       {/* About / Origin Section */}
       <section id="about" className="py-40 px-8" style={{
-        backgroundColor: isDark ? '#1e293b' : '#f8fafc'
+        backgroundColor: isDark ? '#0f172a' : '#ffffff'
       }}>
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
@@ -416,43 +508,34 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
               fontWeight: '300'
             }}
           >
-            Transparent pricing for every stage
+            Simple, transparent pricing
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <PricingCard
-              tier="Student"
-              price="£47"
+              tier="Essentials"
+              price="£247"
               period="/month"
-              subtitle="Built by practitioners who've taught thousands"
-              features={['Bar exam prep mode', 'Unlimited practice essays', 'Case law study guides', 'Legal research training']}
+              subtitle="For students and early-career practitioners"
+              features={['Bar exam prep & legal writing', 'AI contract drafting', 'Legal research (UK/EU/US)', 'Matter templates', 'Up to 50 matters/month']}
               popular={false}
               isDark={isDark}
             />
             <PricingCard
-              tier="Solo Practice"
-              price="£297"
+              tier="Professional"
+              price="£697"
               period="/month"
-              subtitle="Built by lawyers managing complex matters"
-              features={['Everything in Student', 'AI contract drafting', 'Matter management', 'Client portals']}
+              subtitle="For established practices and in-house teams"
+              features={['Everything in Essentials', 'Unlimited matters', 'Multi-jurisdiction compliance', 'Entity structuring tools', 'Client portals', 'Priority support']}
               popular={true}
               isDark={isDark}
             />
             <PricingCard
-              tier="Business Team"
-              price="£997"
+              tier="Specialist"
+              price="£1,997"
               period="/month"
-              subtitle="Built by in-house counsel and business lawyers"
-              features={['Everything in Solo', 'Entity structuring', 'Compliance tracking', 'Priority support']}
-              popular={false}
-              isDark={isDark}
-            />
-            <PricingCard
-              tier="Wealth & Crypto"
-              price="£2,997"
-              period="/month"
-              subtitle="Built by a practice spanning traditional banking and digital assets"
-              features={['Everything in Business', 'Smart legal contracts', 'Blockchain deployment', 'Tokenization templates']}
+              subtitle="For complex cross-border and digital asset work"
+              features={['Everything in Professional', 'Smart legal contracts', 'Blockchain deployment', 'Token sale documentation', 'DAO governance frameworks', 'Dedicated account team']}
               popular={false}
               isDark={isDark}
             />
@@ -673,6 +756,41 @@ function PricingCard({ tier, price, period, subtitle, features, popular, isDark 
       >
         {popular ? 'Start Free Trial' : 'Learn More'}
       </button>
+    </div>
+  )
+}
+
+function TestimonialCard({ quote, role, isDark }: {
+  quote: string;
+  role: string;
+  isDark: boolean;
+}) {
+  return (
+    <div
+      className="p-8 rounded-lg transition-all duration-300"
+      style={{
+        background: isDark ? 'rgba(30, 41, 59, 0.5)' : '#ffffff',
+        border: isDark ? '1px solid rgba(148, 163, 184, 0.1)' : '1px solid rgba(155, 139, 126, 0.2)',
+        boxShadow: isDark ? 'none' : '0 1px 3px rgba(0, 0, 0, 0.05)'
+      }}
+    >
+      <p
+        className="text-base font-light mb-6 italic"
+        style={{
+          color: isDark ? '#cbd5e1' : '#4b5563',
+          lineHeight: '1.8'
+        }}
+      >
+        "{quote}"
+      </p>
+      <div
+        className="text-sm font-light"
+        style={{
+          color: isDark ? '#6b7280' : '#9ca3af'
+        }}
+      >
+        {role}
+      </div>
     </div>
   )
 }

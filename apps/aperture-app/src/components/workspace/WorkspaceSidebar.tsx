@@ -139,40 +139,54 @@ export function WorkspaceSidebar({
     { id: 'recent-3', name: 'Q4 Goals', icon: Target, path: '/insights/goals', color: '#8B5CF6' },
   ];
 
+  const loadWorkspaceData = async () => {
+    // Load workspaces from Supabase first, filtered by organization
+    const orgId = userProfile?.organization_id;
+    await workspaceService.loadWorkspacesFromSupabase(orgId);
+
+    // Then sync with COW boards
+    await workspaceService.syncWithCOWBoards();
+
+    // Load workspaces
+    const allWorkspaces = workspaceService.getAllWorkspaces();
+    setWorkspaces(allWorkspaces);
+
+    // Set current workspace - prefer emoji workspace or use first available
+    const current = currentWorkspaceId
+      ? allWorkspaces.find(w => w.id === currentWorkspaceId) || allWorkspaces[0]
+      : allWorkspaces.find(w => w.name.includes('🐮')) || allWorkspaces[0];
+
+    setCurrentWorkspace(current);
+
+    // Update current workspace ID in parent component
+    if (current && onWorkspaceChange) {
+      onWorkspaceChange(current.id);
+    }
+
+    // Load starred boards
+    setStarredBoards(workspaceService.getStarredBoards());
+  };
+
   useEffect(() => {
-    const loadWorkspaceData = async () => {
-      // Load workspaces from Supabase first, filtered by organization
-      const orgId = userProfile?.organization_id;
-      await workspaceService.loadWorkspacesFromSupabase(orgId);
-
-      // Then sync with COW boards
-      await workspaceService.syncWithCOWBoards();
-
-      // Load workspaces
-      const allWorkspaces = workspaceService.getAllWorkspaces();
-      setWorkspaces(allWorkspaces);
-
-      // Set current workspace - prefer emoji workspace or use first available
-      const current = currentWorkspaceId
-        ? allWorkspaces.find(w => w.id === currentWorkspaceId) || allWorkspaces[0]
-        : allWorkspaces.find(w => w.name.includes('🐮')) || allWorkspaces[0];
-
-      setCurrentWorkspace(current);
-
-      // Update current workspace ID in parent component
-      if (current && onWorkspaceChange) {
-        onWorkspaceChange(current.id);
-      }
-
-      // Load starred boards
-      setStarredBoards(workspaceService.getStarredBoards());
-    };
-
     loadWorkspaceData();
 
     // Initialize apps on first load
     initializeApps();
   }, [currentWorkspaceId, initializeApps, userProfile?.organization_id]);
+
+  // Listen for workspaces-changed event to reload from Supabase
+  useEffect(() => {
+    const handleWorkspacesChanged = () => {
+      console.log('📢 Workspaces changed event received, reloading from Supabase...');
+      loadWorkspaceData();
+    };
+
+    window.addEventListener('workspaces-changed', handleWorkspacesChanged);
+
+    return () => {
+      window.removeEventListener('workspaces-changed', handleWorkspacesChanged);
+    };
+  }, [userProfile?.organization_id]);
 
 
   const handleFolderToggle = (folderId: string) => {

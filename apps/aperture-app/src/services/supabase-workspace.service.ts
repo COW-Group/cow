@@ -195,7 +195,7 @@ export class SupabaseWorkspaceService {
 
       const { data, error } = await supabase
         .from('workspaces')
-        .select('count')
+        .select('id')
         .limit(1);
 
       if (error) {

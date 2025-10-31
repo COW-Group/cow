@@ -95,7 +95,16 @@ export function WorkspaceSettings() {
       setWorkspaces([data, ...workspaces]);
       setShowCreateModal(false);
       setFormData({ name: '', description: '' });
+
+      // Dispatch event to notify other components that workspaces have changed
+      window.dispatchEvent(new CustomEvent('workspaces-changed'));
+
       alert('Workspace created successfully!');
+
+      // Navigate back to refresh the workspace list in sidebar
+      setTimeout(() => {
+        navigate('/app/my-office');
+      }, 1000);
     } catch (error: any) {
       console.error('Error creating workspace:', error);
       alert(`Failed to create workspace: ${error.message}`);

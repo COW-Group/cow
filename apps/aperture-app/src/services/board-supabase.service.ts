@@ -39,14 +39,13 @@ async function getDefaultWorkspaceId(): Promise<string> {
   const { data: workspaces, error } = await supabase
     .from('workspaces')
     .select('id')
-    .limit(1)
-    .single();
+    .limit(1);
 
-  if (error || !workspaces) {
+  if (error || !workspaces || workspaces.length === 0) {
     throw new Error('No workspace found. Please create a workspace first.');
   }
 
-  return workspaces.id;
+  return workspaces[0].id;
 }
 
 class BoardSupabaseService {

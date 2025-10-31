@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { Workspace } from '../../types/workspace.types';
 import { workspaceService } from '../../services/workspace.service';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface WorkspaceSwitcherProps {
   currentWorkspace: Workspace | null;
@@ -27,19 +28,44 @@ export function WorkspaceSwitcher({
   onCreateWorkspace
 }: WorkspaceSwitcherProps) {
   const navigate = useNavigate();
+  const { userProfile } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [allWorkspaces, setAllWorkspaces] = useState<Workspace[]>([]);
   const [recentWorkspaces, setRecentWorkspaces] = useState<Workspace[]>([]);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  const loadWorkspaces = async () => {
+    console.log('📂 WorkspaceSwitcher: Loading workspaces from Supabase...');
+    // Load from Supabase first with organization filter
+    const orgId = userProfile?.organization_id;
+    await workspaceService.loadWorkspacesFromSupabase(orgId);
+
+    // Get all workspaces from service
     const workspaces = workspaceService.getAllWorkspaces();
     setAllWorkspaces(workspaces);
-    
+
     // Mock recent workspaces (in real app, this would come from user activity)
     setRecentWorkspaces(workspaces.slice(0, 3));
-  }, []);
+  };
+
+  useEffect(() => {
+    loadWorkspaces();
+  }, [userProfile?.organization_id]);
+
+  // Listen for workspaces-changed event
+  useEffect(() => {
+    const handleWorkspacesChanged = () => {
+      console.log('📢 Workspace Switcher: Reloading workspaces from Supabase...');
+      loadWorkspaces();
+    };
+
+    window.addEventListener('workspaces-changed', handleWorkspacesChanged);
+
+    return () => {
+      window.removeEventListener('workspaces-changed', handleWorkspacesChanged);
+    };
+  }, [userProfile?.organization_id]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

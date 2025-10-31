@@ -281,7 +281,7 @@ export function LandingPage() {
                 letterSpacing: '-0.01em'
               }}
             >
-              <span style={{ color: '#0066FF', fontWeight: '400' }}>Intelligent workspace</span> that adjusts to your context. <span className="text-emerald-600 font-normal">Same work. Different views.</span>
+              Intelligent workspace that adjusts to your context. <span style={{ color: '#0066FF', fontWeight: '400' }}>Same object</span>. <span className="text-emerald-600 font-normal">Different views</span>.
             </p>
           </motion.div>
 
@@ -312,26 +312,6 @@ export function LandingPage() {
             >
               Get started
             </button>
-
-            <button
-              className="px-6 py-3 transition-all duration-200"
-              style={{
-                background: 'transparent',
-                border: '1px solid var(--text-tertiary)',
-                borderRadius: '8px',
-                fontSize: '0.95rem',
-                fontWeight: '400',
-                letterSpacing: '0.01em',
-                color: 'var(--text-primary)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'var(--text-primary)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'var(--text-tertiary)';
-              }}
-              onClick={handleDemoLogin}
-            >
 
             <a
               href="#research"

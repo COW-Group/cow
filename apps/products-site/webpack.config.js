@@ -4,6 +4,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env.local') });
 
+// Debug: Log environment variables
+console.log('🔧 Webpack Config - Environment Variables:');
+console.log('  SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL ? '✅ Loaded' : '❌ Missing');
+console.log('  SUPABASE_KEY:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? '✅ Loaded' : '❌ Missing');
+
 module.exports = {
   entry: './src/main.tsx',
   output: {

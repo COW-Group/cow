@@ -41,8 +41,15 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event - serve from cache, fallback to network
 self.addEventListener('fetch', (event) => {
-  // Skip cross-origin requests
-  if (!event.request.url.startsWith(self.location.origin)) {
+  // Skip cross-origin requests (but allow Supabase API calls)
+  if (!event.request.url.startsWith(self.location.origin) &&
+      !event.request.url.includes('supabase.co')) {
+    return;
+  }
+
+  // Don't cache Supabase API requests
+  if (event.request.url.includes('supabase.co')) {
+    event.respondWith(fetch(event.request));
     return;
   }
 

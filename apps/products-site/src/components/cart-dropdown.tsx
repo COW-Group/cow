@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -13,6 +14,7 @@ import { useBackgroundDetection } from "@/hooks/useBackgroundDetection"
 
 export function CartDropdown() {
   const { cart, removeFromCart, clearCart, getTotalItems, getTotalPrice } = useCart()
+  const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
   const backgroundDetection = useBackgroundDetection()
 
@@ -205,6 +207,7 @@ export function CartDropdown() {
                   }}
                   onClick={() => {
                     setIsOpen(false)
+                    navigate('/checkout')
                   }}
                 >
                   Checkout

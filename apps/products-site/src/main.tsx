@@ -7,7 +7,7 @@ import { CartProvider } from './contexts/cart-context';
 import { AuthProvider } from './lib/auth-context';
 import App from './App';
 import './styles/globals.css';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+// import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -34,13 +34,14 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   </React.StrictMode>
 );
 
+// SERVICE WORKER DISABLED - It was blocking Supabase API requests
 // Register service worker for PWA functionality
-serviceWorkerRegistration.register({
-  onSuccess: () => {
-    console.log('MyCOW is ready for offline use!');
-  },
-  onUpdate: (registration) => {
-    console.log('New version available! Please refresh.');
-    // You can add UI notification here for updates
-  },
-});
+// serviceWorkerRegistration.register({
+//   onSuccess: () => {
+//     console.log('MyCOW is ready for offline use!');
+//   },
+//   onUpdate: (registration) => {
+//     console.log('New version available! Please refresh.');
+//     // You can add UI notification here for updates
+//   },
+// });

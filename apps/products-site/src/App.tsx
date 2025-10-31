@@ -25,9 +25,12 @@ import AuRailPage from './pages/AuRailPage';
 import SuraPage from './pages/SuraPage';
 import GoldSwimPage from './pages/GoldSwimPage';
 import SiriZ31Page from './pages/SiriZ31Page';
+import InvestGoldSwimPage from './pages/InvestGoldSwimPage';
+import InvestSiriZ31Page from './pages/InvestSiriZ31Page';
 import ResearchCentrePage from './pages/ResearchCentrePage';
 import ResearchArticlePage from './pages/ResearchArticlePage';
 import MooPage from './pages/MooPage';
+import CheckoutPage from './pages/CheckoutPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
@@ -59,9 +62,12 @@ function App() {
         <Route path="/sura" element={<SuraPage />} />
         <Route path="/gold-swim" element={<GoldSwimPage />} />
         <Route path="/siriz31" element={<SiriZ31Page />} />
+        <Route path="/invest/gold-swim" element={<InvestGoldSwimPage />} />
+        <Route path="/invest/siriz31" element={<InvestSiriZ31Page />} />
         <Route path="/research" element={<ResearchCentrePage />} />
         <Route path="/research/:slug" element={<ResearchArticlePage />} />
         <Route path="/moo" element={<MooPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Toaster

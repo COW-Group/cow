@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react"
-import { supabase, type Profile } from "@cow/supabase-client"
+import { supabase, type Profile } from "@/lib/supabase"
 import type { User } from "@supabase/supabase-js"
 
 interface AuthUser {
@@ -13,7 +13,7 @@ interface AuthUser {
 // Use the Profile type from Supabase, extending it with legacy fields for compatibility
 interface UserProfile extends Partial<Profile> {
   id: string
-  name: string | null
+  full_name: string | null
   email: string
   avatar_url?: string
   created_at: string
@@ -65,7 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     profile: UserProfile | null
     isAuthenticated: boolean
   }>({ user: null, profile: null, isAuthenticated: false })
-  const [loading, setLoading] = useState(true) // Start with loading true
+  const [loading, setLoading] = useState(false) // Start with loading false
   const [error, setError] = useState<string | null>(null)
 
   // Helper function to save auth state to localStorage
@@ -86,43 +86,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Check for existing authentication on app load
   useEffect(() => {
     const checkAuthState = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession()
-
-        if (session?.user) {
-          // Fetch user profile from database
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single()
-
-          const authUser: AuthUser = {
-            id: session.user.id,
-            email: session.user.email || '',
-            user_metadata: session.user.user_metadata
-          }
-
-          const userProfile: UserProfile = profile ? {
-            ...profile,
-            name: profile.name || session.user.user_metadata.full_name || null,
-            email: session.user.email || '',
-            avatar_url: profile.avatar_url || session.user.user_metadata.avatar_url,
-            created_at: profile.created_at || new Date().toISOString()
-          } : {
-            id: session.user.id,
-            name: session.user.user_metadata.full_name || null,
-            email: session.user.email || '',
-            created_at: new Date().toISOString()
-          }
-
-          updateAuth({ user: authUser, profile: userProfile, isAuthenticated: true })
-        }
-      } catch (error) {
-        console.warn('Failed to load auth state:', error)
-      } finally {
-        setLoading(false)
-      }
+      console.log('🔍 Checking auth state on mount...')
+      // SKIP: Supabase getSession() hangs in Chrome
+      // Auth state will be populated when user signs in
+      console.log('ℹ️ Skipping session check (Chrome compatibility)')
     }
 
     checkAuthState()
@@ -144,15 +111,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         const userProfile: UserProfile = profile ? {
           ...profile,
-          name: profile.name || session.user.user_metadata.full_name || null,
+          full_name: profile.full_name || session.user.user_metadata.full_name || null,
           email: session.user.email || '',
           avatar_url: profile.avatar_url || session.user.user_metadata.avatar_url,
           created_at: profile.created_at || new Date().toISOString()
         } : {
           id: session.user.id,
-          name: session.user.user_metadata.full_name || null,
+          full_name: session.user.user_metadata.full_name || session.user.email?.split('@')[0] || null,
           email: session.user.email || '',
-          created_at: new Date().toISOString()
+          created_at: session.user.created_at || new Date().toISOString()
         }
 
         updateAuth({ user: authUser, profile: userProfile, isAuthenticated: true })
@@ -167,55 +134,84 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const signInWithPassword = async (email: string, password: string) => {
+    console.log('🟢 signInWithPassword START', { email, hasSupabase: !!supabase })
     setLoading(true)
     setError(null)
+
+    // NUCLEAR WORKAROUND: Chrome blocks ALL Supabase Promise methods
+    // Make raw HTTP request and manually parse the response
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
+      console.log('🟢 Making raw HTTP auth request...')
+
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
+        },
+        body: JSON.stringify({ email, password })
       })
 
-      if (error) throw error
+      if (!response.ok) {
+        throw new Error('Authentication failed')
+      }
 
-      if (data.user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', data.user.id)
-          .single()
+      const authData = await response.json()
+      console.log('✅ Auth response received', { hasUser: !!authData.user })
+
+      if (authData.user) {
+        // Fetch profile directly with raw HTTP
+        console.log('🟢 Fetching profile...')
+        const profileResponse = await fetch(
+          `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/profiles?id=eq.${authData.user.id}&select=*`,
+          {
+            headers: {
+              'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
+              'Authorization': `Bearer ${authData.access_token}`
+            }
+          }
+        )
+
+        const profiles = await profileResponse.json()
+        const profile = profiles?.[0]
 
         const authUser: AuthUser = {
-          id: data.user.id,
-          email: data.user.email || '',
-          user_metadata: data.user.user_metadata
+          id: authData.user.id,
+          email: authData.user.email || '',
+          user_metadata: authData.user.user_metadata
         }
 
         const userProfile: UserProfile = profile ? {
           ...profile,
-          name: profile.name || data.user.user_metadata.full_name || null,
-          email: data.user.email || '',
-          avatar_url: profile.avatar_url || data.user.user_metadata.avatar_url,
+          full_name: profile.full_name || authData.user.user_metadata.full_name || null,
+          email: authData.user.email || '',
+          avatar_url: profile.avatar_url || authData.user.user_metadata.avatar_url,
           created_at: profile.created_at || new Date().toISOString()
         } : {
-          id: data.user.id,
-          name: data.user.user_metadata.full_name || null,
-          email: data.user.email || '',
-          created_at: new Date().toISOString()
+          id: authData.user.id,
+          full_name: authData.user.user_metadata.full_name || authData.user.email?.split('@')[0] || null,
+          email: authData.user.email || '',
+          created_at: authData.user.created_at || new Date().toISOString()
         }
 
         updateAuth({ user: authUser, profile: userProfile, isAuthenticated: true })
 
-        // Check if user needs onboarding (no profile data)
-        const needsOnboarding = !profile
-        return { needsOnboarding }
+        // Store session in localStorage for Supabase client
+        const storageKey = `sb-${process.env.NEXT_PUBLIC_SUPABASE_URL?.split('//')[1]?.split('.')[0]}-auth-token`
+        localStorage.setItem(storageKey, JSON.stringify(authData))
+
+        console.log('✅ Authentication successful!')
+        setLoading(false)
+        return { needsOnboarding: !profile }
       }
 
-      return { needsOnboarding: false }
+      throw new Error('Authentication failed - no user returned')
+
     } catch (err: any) {
+      console.error('❌ Sign-in error:', err)
       setError(err.message || "Sign-in failed")
-      throw err
-    } finally {
       setLoading(false)
+      throw err
     }
   }
 
@@ -242,8 +238,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           .insert({
             id: data.user.id,
             email: data.user.email || '',
-            name: email.split('@')[0],
-            role: 'investor' // Default role
+            full_name: email.split('@')[0],
+            investor_type: 'individual',
+            accreditation_verified: false,
+            kyc_status: 'not_started',
+            metadata: {}
           })
 
         if (profileError) {
@@ -258,7 +257,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         const userProfile: UserProfile = {
           id: data.user.id,
-          name: email.split('@')[0],
+          full_name: email.split('@')[0],
           email: data.user.email || '',
           created_at: new Date().toISOString()
         }

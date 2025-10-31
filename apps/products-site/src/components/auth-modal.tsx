@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
@@ -30,29 +30,50 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
   const { signInWithPassword, signUp, resetPassword, resendConfirmationEmail, loading, error, getDashboardRoute } = useAuthContext()
   const navigate = useNavigate()
 
+  console.log('🟢 AuthModal rendered', { isOpen, isLogin, email, loading, error })
+
+  // Reset error when modal opens
+  useEffect(() => {
+    console.log('🟣 Modal state changed', { isOpen, loading })
+    if (isOpen) {
+      console.log('🟣 Modal opened - loading state:', loading)
+    }
+  }, [isOpen, loading])
+
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    console.log('🔵 handleAuthSubmit called', { isLogin, email, password: '***', loading })
+
     try {
       let result
       if (isLogin) {
+        console.log('🔵 Calling signInWithPassword...')
         result = await signInWithPassword(email, password)
+        console.log('✅ signInWithPassword success', result)
       } else {
+        console.log('🔵 Calling signUp...')
         result = await signUp(email, password)
+        console.log('✅ signUp success', result)
       }
-      
-      if (!error) {
-        setEmail("")
-        setPassword("")
-        setIsResetPassword(false)
-        setIsResendConfirmation(false)
-        setSuccessMessage("")
-        onClose()
 
-        // Always navigate to dashboard - onboarding is now accessed from dashboard nav
-        navigate(getDashboardRoute())
-      }
-    } catch (err) {
-      console.error(isLogin ? "Sign-in error:" : "Sign-up error:", err)
+      // If we got here without throwing, sign-in succeeded
+      console.log('🔵 Cleaning up form and closing modal...')
+      setEmail("")
+      setPassword("")
+      setIsResetPassword(false)
+      setIsResendConfirmation(false)
+      setSuccessMessage("")
+      onClose()
+
+      // Always navigate to dashboard - onboarding is now accessed from dashboard nav
+      const dashboardRoute = getDashboardRoute()
+      console.log('🔵 Navigating to:', dashboardRoute)
+      navigate(dashboardRoute)
+    } catch (err: any) {
+      console.error('❌ Auth error:', err)
+      console.error('❌ Error message:', err?.message)
+      console.error('❌ Error details:', JSON.stringify(err, null, 2))
+      // Error is already set in the auth context, so we don't need to do anything else
     }
   }
 
@@ -319,14 +340,24 @@ export function AuthModal({ isOpen, onClose, userType }: AuthModalProps) {
             )}
             <Button
               type="submit"
+              onClick={(e) => {
+                console.log('🟡 Button clicked!', { isLogin, email, loading })
+                if (!email || !password) {
+                  console.log('❌ Missing email or password')
+                  e.preventDefault()
+                  return
+                }
+                // Let form submission happen naturally
+              }}
               className="w-full h-14 sm:h-16 rounded-xl border-0 text-lg sm:text-xl font-medium tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl focus:shadow-2xl transform hover:scale-[1.02] focus:scale-[1.02] text-white"
               style={{
                 background: 'linear-gradient(to right, #0066FF, #0080FF)',
-                boxShadow: '0 8px 24px rgba(0, 102, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                boxShadow: '0 8px 24px rgba(0, 102, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                opacity: loading ? 0.7 : 1,
+                cursor: loading ? 'wait' : 'pointer'
               }}
               onMouseEnter={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #0052CC, #0066FF)'}
               onMouseLeave={(e) => e.currentTarget.style.background = 'linear-gradient(to right, #0066FF, #0080FF)'}
-              disabled={loading}
             >
               {loading ? <Loader2 className="mr-2 h-4 w-4 sm:h-5 sm:w-5 animate-spin" /> : null}
               {isLogin ? "Sign In" : "Register"}

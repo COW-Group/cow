@@ -30,9 +30,22 @@ import { useCart } from '@/contexts/cart-context'
 import { HeroBackground } from '@/components/hero-background'
 import { ProductMenu } from '@/components/product-menu'
 import { CartDropdown } from '@/components/cart-dropdown'
-import { supabase, type Product, type ProductTier } from "@cow/supabase-client"
+import { ThemeToggle } from '@/components/theme-toggle'
+import { supabase, type Product, type ProductTier } from "@/lib/supabase"
 import { GoldPriceProvider, useGoldPriceContext } from '@/contexts/gold-price-context'
 import { calculateGoldSwimUnitPrice, calculateSiriZ31UnitPrice, formatCurrency } from '@/lib/gold-price-calculations'
+
+// Product allocation interface
+interface ProductAllocation {
+  id: string
+  product_id: string
+  component_name: string
+  allocation_percent: number
+  description: string | null
+  calculator_path: string | null
+  is_active: boolean
+  display_order: number
+}
 
 function DashboardPageInner() {
   const { auth, signOut } = useAuthContext()
@@ -43,9 +56,8 @@ function DashboardPageInner() {
   const [isClient, setIsClient] = useState(false)
 
   // Products state
-  const [goldSwimProduct, setGoldSwimProduct] = useState<Product | null>(null)
-  const [siriZ31Product, setSiriZ31Product] = useState<Product | null>(null)
-  const [siriZ31Tiers, setSiriZ31Tiers] = useState<ProductTier[]>([])
+  const [myGoldProduct, setMyGoldProduct] = useState<Product | null>(null)
+  const [myGoldAllocations, setMyGoldAllocations] = useState<ProductAllocation[]>([])
   const [loadingProducts, setLoadingProducts] = useState(true)
 
   useEffect(() => {
@@ -60,39 +72,42 @@ function DashboardPageInner() {
 
   const fetchProducts = async () => {
     try {
-      // Fetch GOLD SWIM product
-      const { data: goldSwim, error: goldSwimError } = await supabase
-        .from('products')
-        .select('*')
-        .eq('slug', 'gold-swim')
-        .eq('is_active', true)
-        .single()
+      // WORKAROUND: Use raw fetch() instead of Supabase client (Chrome Promise issue)
 
-      if (!goldSwimError && goldSwim) {
-        setGoldSwimProduct(goldSwim)
-      }
+      // Fetch MyGOLD product
+      const myGoldResponse = await fetch(
+        `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/products?slug=eq.mygold&is_active=eq.true&select=*`,
+        {
+          headers: {
+            'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
+            'Content-Type': 'application/json'
+          }
+        }
+      )
 
-      // Fetch SIRI Z31 product
-      const { data: siriZ31, error: siriZ31Error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('slug', 'siri-z31')
-        .eq('is_active', true)
-        .single()
+      if (myGoldResponse.ok) {
+        const myGoldData = await myGoldResponse.json()
+        if (myGoldData && myGoldData.length > 0) {
+          const myGold = myGoldData[0]
+          setMyGoldProduct(myGold)
 
-      if (!siriZ31Error && siriZ31) {
-        setSiriZ31Product(siriZ31)
+          // Fetch MyGOLD allocations
+          const allocationsResponse = await fetch(
+            `${process.env.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/product_allocations?product_id=eq.${myGold.id}&is_active=eq.true&select=*&order=display_order.asc`,
+            {
+              headers: {
+                'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
+                'Content-Type': 'application/json'
+              }
+            }
+          )
 
-        // Fetch SIRI Z31 tiers
-        const { data: tiers, error: tiersError } = await supabase
-          .from('product_tiers')
-          .select('*')
-          .eq('product_id', siriZ31.id)
-          .eq('is_active', true)
-          .order('price', { ascending: true })
-
-        if (!tiersError && tiers) {
-          setSiriZ31Tiers(tiers)
+          if (allocationsResponse.ok) {
+            const allocationsData = await allocationsResponse.json()
+            if (allocationsData) {
+              setMyGoldAllocations(allocationsData)
+            }
+          }
         }
       }
     } catch (error) {
@@ -150,34 +165,19 @@ function DashboardPageInner() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Hero Background */}
       <div className="fixed inset-0 z-0">
         <HeroBackground />
-        <div className="absolute inset-0 bg-black/10"></div>
+        <div className="absolute inset-0 bg-black/10 dark:bg-black/30"></div>
       </div>
 
       {/* Floating Navigation with Complete Profile */}
       <nav className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50">
         <div
-          className="px-8 py-4 flex items-center gap-8 transition-all duration-300"
-          style={{
-            background: 'rgba(255, 255, 255, 0.9)',
-            backdropFilter: 'blur(25px) saturate(180%)',
-            borderRadius: '20px',
-            border: '1px solid rgba(255, 255, 255, 0.4)',
-            boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)'
-          }}
+          className="px-8 py-4 flex items-center gap-8 transition-all duration-300 bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl rounded-3xl border border-white/40 dark:border-gray-700/40 shadow-lg"
         >
-          <Link to="/"
-            className="text-xl font-light tracking-tight"
-            style={{
-              color: '#1f2937',
-              letterSpacing: '0.02em',
-              fontWeight: '300',
-              fontFamily: 'Inter, sans-serif'
-            }}
-          >
+          <Link to="/" className="text-xl font-light tracking-tight text-gray-900 dark:text-gray-100">
             COW
           </Link>
           <ProductMenu />
@@ -188,31 +188,18 @@ function DashboardPageInner() {
               <Button
                 variant="outline"
                 size="sm"
-                className="rounded-full transition-all duration-300"
-                style={{
-                  background: 'rgba(139, 149, 109, 0.1)',
-                  border: '1px solid rgba(139, 149, 109, 0.3)',
-                  fontSize: '13px',
-                  fontWeight: '500',
-                  letterSpacing: '0.01em',
-                  padding: '8px 16px',
-                  color: '#8B956D',
-                  fontFamily: 'Inter, sans-serif'
-                }}
+                className="rounded-full transition-all duration-300 text-sm font-medium border-green-700/30 dark:border-green-600/30 bg-green-700/10 dark:bg-green-600/10 text-green-800 dark:text-green-400 hover:bg-green-700/20 dark:hover:bg-green-600/20"
               >
                 <User className="w-4 h-4 mr-2" />
                 Complete Profile
               </Button>
             </Link>
 
+            <ThemeToggle />
+
             <button
               onClick={signOut}
-              className="text-sm transition-colors duration-200"
-              style={{
-                color: '#6b7280',
-                fontFamily: 'Inter, sans-serif',
-                fontWeight: '300'
-              }}
+              className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors duration-200 font-light"
             >
               Sign Out
             </button>
@@ -274,19 +261,19 @@ function DashboardPageInner() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h1 className="text-4xl font-light text-gray-900">Investment Portfolio</h1>
+            <h1 className="text-4xl font-light text-gray-900 dark:text-gray-100">Investment Portfolio</h1>
             <div className="flex items-center space-x-4">
-              <Badge className="bg-green-100 text-green-800 hover:bg-green-100">
+              <Badge className="bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/30">
                 <CheckCircle className="w-3 h-3 mr-1" />
                 Active
               </Badge>
-              <Badge className="bg-amber-100 text-amber-800 hover:bg-amber-100">
+              <Badge className="bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-amber-900/30">
                 <Award className="w-3 h-3 mr-1" />
                 Verified
               </Badge>
             </div>
           </div>
-          <p className="text-xl text-gray-600 font-light">
+          <p className="text-xl text-gray-600 dark:text-gray-400 font-light">
             Professional investment tools and asset management for your portfolio
           </p>
         </div>
@@ -351,10 +338,10 @@ function DashboardPageInner() {
         </div>
 
         {/* Dashboard Tabs */}
-        <Tabs defaultValue="portfolio" className="space-y-6">
-          <TabsList className="bg-white/90 backdrop-blur-xl border border-gray-200/50 p-1 shadow-sm">
-            <TabsTrigger value="portfolio" className="font-medium">Portfolio</TabsTrigger>
+        <Tabs defaultValue="opportunities" className="space-y-6">
+          <TabsList className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 p-1 shadow-sm">
             <TabsTrigger value="opportunities" className="font-medium">Opportunities</TabsTrigger>
+            <TabsTrigger value="portfolio" className="font-medium">Portfolio</TabsTrigger>
             <TabsTrigger value="analytics" className="font-medium">Analytics</TabsTrigger>
             <TabsTrigger value="strategies" className="font-medium">Strategies</TabsTrigger>
           </TabsList>
@@ -490,146 +477,182 @@ function DashboardPageInner() {
             </div>
           </TabsContent>
 
-          {/* Opportunities Tab */}
+          {/* Opportunities Tab - COW Brand Aligned */}
           <TabsContent value="opportunities">
             <div className="space-y-6">
-              <Card className="bg-white/90 backdrop-blur-xl border-gray-200/50 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Star className="w-5 h-5 text-amber-500" />
+              <Card
+                className="backdrop-blur-xl shadow-lg border-b-4"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  borderColor: 'rgba(155, 139, 126, 0.2)',
+                  borderBottomColor: '#9B8B7E'
+                }}
+              >
+                <CardHeader style={{ borderBottom: '1px solid rgba(155, 139, 126, 0.15)' }}>
+                  <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100 tracking-tight font-light text-2xl">
+                    <Star
+                      className="w-5 h-5"
+                      style={{ color: '#00A5CF' }}
+                    />
                     Investment Opportunities
                   </CardTitle>
-                  <p className="text-sm text-gray-600">Exclusive access to new and limited offerings</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 font-light">Performance real-world assets designed for optimal returns</p>
                 </CardHeader>
                 <CardContent>
                   {loadingProducts ? (
                     <div className="text-center py-12">
-                      <div className="inline-block w-8 h-8 border-4 border-amber-600 border-t-transparent rounded-full animate-spin"></div>
-                      <p className="mt-4 text-gray-600">Loading investment opportunities...</p>
+                      <div
+                        className="inline-block w-8 h-8 border-4 border-t-transparent rounded-full animate-spin"
+                        style={{ borderColor: '#0ea5e9', borderTopColor: 'transparent' }}
+                      ></div>
+                      <p className="mt-4 text-gray-600 dark:text-gray-400">Loading opportunities...</p>
                     </div>
                   ) : (
                     <div className="grid gap-6">
-                      {/* GOLD SWIM Product */}
-                      {goldSwimProduct && spotAsk && eurExchangeRate && (
-                        <Card className="border-2 border-[#b45309]/30 hover:border-[#b45309] transition-all duration-300">
+                      {/* MyGOLD Product */}
+                      {myGoldProduct && (
+                        <Card
+                          className="border-2 transition-all duration-300 bg-white dark:bg-gray-900 shadow-lg relative overflow-hidden"
+                          style={{
+                            borderColor: 'rgba(0, 165, 207, 0.3)',
+                            borderBottom: '4px solid #9B8B7E'
+                          }}
+                        >
                           <CardContent className="p-6">
                             <div className="flex items-start justify-between mb-4">
                               <div>
-                                <h3 className="font-semibold text-lg text-gray-900 mb-1">{goldSwimProduct.name}</h3>
-                                <p className="text-gray-600 text-sm">{goldSwimProduct.description}</p>
-                                <p className="text-xs text-gray-500 mt-1">{goldSwimProduct.ticker_symbol} • Security Token</p>
+                                <h3 className="font-semibold text-2xl text-gray-900 dark:text-gray-100 mb-2 tracking-tight">{myGoldProduct.name}</h3>
+                                <p className="text-gray-600 dark:text-gray-400 text-sm mb-2 leading-relaxed font-light">{myGoldProduct.description}</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-500 mt-1 font-mono">{myGoldProduct.ticker_symbol} • Security Token</p>
                               </div>
-                              <Badge className="bg-green-100 text-green-800">
+                              <Badge
+                                className="font-semibold"
+                                style={{
+                                  background: 'rgba(5, 150, 105, 0.1)',
+                                  color: '#059669',
+                                  border: '1px solid rgba(5, 150, 105, 0.2)'
+                                }}
+                              >
                                 Available Now
                               </Badge>
+                            </div>
+
+                            {/* Asset Allocation Breakdown */}
+                            <div className="mb-6">
+                              <h4 className="font-semibold text-sm text-gray-900 dark:text-gray-100 mb-3 tracking-tight">Strategic Asset Allocation</h4>
+                              <div className="space-y-3">
+                                {myGoldAllocations.map((allocation, index) => (
+                                  <div
+                                    key={allocation.id}
+                                    className="rounded-lg p-3 border-l-4"
+                                    style={{
+                                      background: 'rgba(255, 255, 255, 0.6)',
+                                      borderLeftColor: '#00A5CF',
+                                      border: '1px solid rgba(0, 165, 207, 0.2)',
+                                      borderLeft: '4px solid #00A5CF'
+                                    }}
+                                  >
+                                    <div className="flex items-center justify-between mb-2">
+                                      <div className="flex items-center gap-2">
+                                        <span className="font-medium text-sm text-gray-900 dark:text-gray-100">
+                                          {allocation.component_name}
+                                        </span>
+                                        {allocation.calculator_path && (
+                                          <Link to={allocation.calculator_path}>
+                                            <Badge
+                                              variant="outline"
+                                              className="text-xs cursor-pointer"
+                                              style={{
+                                                borderColor: 'rgba(14, 165, 233, 0.3)',
+                                                color: '#0ea5e9'
+                                              }}
+                                            >
+                                              Calculator
+                                            </Badge>
+                                          </Link>
+                                        )}
+                                      </div>
+                                      <span
+                                        className="font-bold"
+                                        style={{ color: '#b45309' }}
+                                      >
+                                        {allocation.allocation_percent.toFixed(2)}%
+                                      </span>
+                                    </div>
+                                    {allocation.description && (
+                                      <p className="text-xs text-gray-600 dark:text-gray-400 font-light leading-relaxed">{allocation.description}</p>
+                                    )}
+                                    {/* Progress bar */}
+                                    <div className="mt-2 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-1.5">
+                                      <div
+                                        className="h-1.5 rounded-full"
+                                        style={{
+                                          background: 'linear-gradient(to right, #d97706, #b45309)',
+                                          width: `${allocation.allocation_percent}%`
+                                        }}
+                                      ></div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
                             </div>
 
                             <div className="grid md:grid-cols-2 gap-4 mb-4">
                               <div className="space-y-2">
                                 <div className="flex justify-between">
-                                  <span className="text-sm text-gray-600">Unit Price (Live):</span>
-                                  <span className="text-sm font-medium">{priceLoading ? 'Loading...' : formatCurrency(calculateGoldSwimUnitPrice(spotAsk, eurExchangeRate), 'EUR')}</span>
+                                  <span className="text-sm text-gray-600 dark:text-gray-400 font-light">Min Investment:</span>
+                                  <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">{formatCurrency(myGoldProduct.min_investment || 1000, 'EUR')}</span>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-sm text-gray-600">Min Investment:</span>
-                                  <span className="text-sm font-medium">{priceLoading ? 'Loading...' : formatCurrency(goldSwimProduct.min_investment || calculateGoldSwimUnitPrice(spotAsk, eurExchangeRate), 'EUR')}</span>
+                                  <span className="text-sm text-gray-600 dark:text-gray-400 font-light">Ticker Symbol:</span>
+                                  <span className="text-sm font-mono font-semibold text-gray-900 dark:text-gray-100">{myGoldProduct.ticker_symbol}</span>
                                 </div>
                               </div>
                               <div className="space-y-2">
                                 <div className="flex justify-between">
-                                  <span className="text-sm text-gray-600">Expected APY:</span>
-                                  <span className="text-sm font-medium text-green-600">{goldSwimProduct.projected_annual_return || 0}%</span>
+                                  <span className="text-sm text-gray-600 dark:text-gray-400 font-light">Target APY:</span>
+                                  <span className="text-sm font-semibold" style={{ color: '#10b981' }}>{myGoldProduct.projected_annual_return || 0}%</span>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-sm text-gray-600">Asset Class:</span>
-                                  <span className="text-sm font-medium">Gold (Physical)</span>
+                                  <span className="text-sm text-gray-600 dark:text-gray-400 font-light">Asset Class:</span>
+                                  <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">Diversified Gold</span>
                                 </div>
                               </div>
                             </div>
 
-                            <div className="bg-amber-50 p-3 rounded-lg mb-4">
-                              <p className="text-xs text-amber-800">
-                                <Shield className="w-3 h-3 inline mr-1" />
-                                Quarterly retailing margins • €1.00/gram premium strategy
-                              </p>
+                            <div
+                              className="p-4 rounded-lg mb-4 border"
+                              style={{
+                                background: 'rgba(249, 243, 221, 0.5)',
+                                borderColor: 'rgba(180, 83, 9, 0.2)',
+                                borderLeft: '4px solid #9B8B7E'
+                              }}
+                            >
+                              <div className="flex items-start gap-2">
+                                <Shield
+                                  className="w-4 h-4 flex-shrink-0 mt-0.5"
+                                  style={{ color: '#00A5CF' }}
+                                />
+                                <div>
+                                  <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-1 tracking-tight">Full Asset Backing</p>
+                                  <p className="text-xs text-gray-700 dark:text-gray-300 font-light leading-relaxed">
+                                    Diversified allocation across physical gold operations, futures positioning, cash reserves, and real-world assets for optimal risk-adjusted returns.
+                                  </p>
+                                </div>
+                              </div>
                             </div>
 
                             <div className="flex gap-3">
                               <Button
-                                className="flex-1 bg-[#b45309] hover:bg-[#92400e]"
-                                onClick={() => handleAddToCart(goldSwimProduct, calculateGoldSwimUnitPrice(spotAsk, eurExchangeRate))}
+                                className="flex-1 text-white font-semibold shadow-lg transition-all duration-300"
+                                style={{
+                                  background: 'linear-gradient(to right, #0ea5e9, #00A5CF)'
+                                }}
+                                onClick={() => handleAddToCart(myGoldProduct, myGoldProduct.min_investment || 1000)}
                               >
                                 <Plus className="w-4 h-4 mr-2" />
                                 Add to Cart
                               </Button>
-                              <Link to="/gold-swim" className="flex-1">
-                                <Button variant="outline" className="w-full">
-                                  Learn More
-                                </Button>
-                              </Link>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      )}
-
-                      {/* SIRI Z31 Product */}
-                      {siriZ31Product && spotAsk && eurExchangeRate && (
-                        <Card className="border-2 border-[#b45309]/30 hover:border-[#b45309] transition-all duration-300">
-                          <CardContent className="p-6">
-                            <div className="flex items-start justify-between mb-4">
-                              <div>
-                                <h3 className="font-semibold text-lg text-gray-900 mb-1">{siriZ31Product.name}</h3>
-                                <p className="text-gray-600 text-sm">{siriZ31Product.description}</p>
-                                <p className="text-xs text-gray-500 mt-1">{siriZ31Product.ticker_symbol} • Trading Platform</p>
-                              </div>
-                              <Badge className="bg-green-100 text-green-800">
-                                Available Now
-                              </Badge>
-                            </div>
-
-                            <div className="grid md:grid-cols-2 gap-4 mb-4">
-                              <div className="space-y-2">
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-600">Unit Price (Live):</span>
-                                  <span className="text-sm font-medium">{priceLoading ? 'Loading...' : formatCurrency(calculateSiriZ31UnitPrice(spotAsk, eurExchangeRate), 'EUR')}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-600">Min Investment (1 unit):</span>
-                                  <span className="text-sm font-medium">{priceLoading ? 'Loading...' : formatCurrency(calculateSiriZ31UnitPrice(spotAsk, eurExchangeRate), 'EUR')}</span>
-                                </div>
-                              </div>
-                              <div className="space-y-2">
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-600">Units in Offering:</span>
-                                  <span className="text-sm font-medium">2.25B Units</span>
-                                </div>
-                                <div className="flex justify-between">
-                                  <span className="text-sm text-gray-600">Hedging:</span>
-                                  <span className="text-sm font-medium">Gold Futures</span>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="bg-amber-50 p-3 rounded-lg mb-4">
-                              <p className="text-xs text-amber-800">
-                                <Shield className="w-3 h-3 inline mr-1" />
-                                Futures-hedged gold exposure • Systematic positioning strategy
-                              </p>
-                            </div>
-
-                            <div className="flex gap-3">
-                              <Button
-                                className="flex-1 bg-[#b45309] hover:bg-[#92400e]"
-                                onClick={() => handleAddToCart(siriZ31Product, calculateSiriZ31UnitPrice(spotAsk, eurExchangeRate))}
-                              >
-                                <Plus className="w-4 h-4 mr-2" />
-                                Add to Cart
-                              </Button>
-                              <Link to="/siriz31" className="flex-1">
-                                <Button variant="outline" className="w-full">
-                                  Learn More
-                                </Button>
-                              </Link>
                             </div>
                           </CardContent>
                         </Card>

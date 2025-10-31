@@ -91,66 +91,66 @@ export const navigationSections: NavSection[] = [
   // PLATFORM ADMINISTRATION (App-Specific - Platform Admins & Ecosystem Admins)
   // ============================================================================
   {
-    id: 'missions-app-admin',
+    id: 'aperture-app-admin',
     label: 'Missions App Administration',
     requiredRole: ['ecosystem_admin', 'platform_admin'],
-    requiredApp: 'missions-app',
+    requiredApp: 'aperture-app',
     collapsible: true,
     defaultOpen: true,
     items: [
       {
         id: 'missions-dashboard',
         name: 'Missions App Dashboard',
-        href: '/platform/missions-app',
+        href: '/platform/aperture-app',
         icon: HomeIcon,
         description: 'App usage, key metrics',
       },
       {
         id: 'missions-accounts',
         name: 'Accounts Management',
-        href: '/platform/missions-app/accounts',
+        href: '/platform/aperture-app/accounts',
         icon: BuildingOfficeIcon,
-        description: 'All organizations using missions-app',
+        description: 'All organizations using aperture-app',
       },
       {
         id: 'missions-users',
         name: 'App Users',
-        href: '/platform/missions-app/users',
+        href: '/platform/aperture-app/users',
         icon: UsersIcon,
-        description: 'Users within missions-app',
+        description: 'Users within aperture-app',
       },
       {
         id: 'missions-templates',
         name: 'Templates & Workflows',
-        href: '/platform/missions-app/templates',
+        href: '/platform/aperture-app/templates',
         icon: DocumentTextIcon,
         description: 'Board templates, automations',
       },
       {
         id: 'missions-integrations',
         name: 'Integrations',
-        href: '/platform/missions-app/integrations',
+        href: '/platform/aperture-app/integrations',
         icon: CubeIcon,
         description: '3rd party integrations',
       },
       {
         id: 'missions-analytics',
         name: 'Analytics',
-        href: '/platform/missions-app/analytics',
+        href: '/platform/aperture-app/analytics',
         icon: ChartBarIcon,
         description: 'App performance, user behavior',
       },
       {
         id: 'missions-billing',
         name: 'App Billing',
-        href: '/platform/missions-app/billing',
+        href: '/platform/aperture-app/billing',
         icon: CreditCardIcon,
-        description: 'Subscriptions for missions-app',
+        description: 'Subscriptions for aperture-app',
       },
       {
         id: 'missions-settings',
         name: 'App Settings',
-        href: '/platform/missions-app/settings',
+        href: '/platform/aperture-app/settings',
         icon: CogIcon,
         description: 'Missions-app configuration',
       },
@@ -523,7 +523,7 @@ export const navigationSections: NavSection[] = [
  */
 export function getAppDisplayName(app: string): string {
   switch (app) {
-    case 'missions-app':
+    case 'aperture-app':
       return 'Missions App';
     case 'mauna-app':
       return 'Mauna App';

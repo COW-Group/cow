@@ -25,9 +25,9 @@ const roleOptions: RoleOption[] = [
   },
   {
     role: 'platform_admin',
-    app: 'missions-app',
+    app: 'aperture-app',
     label: 'Platform Admin (Missions App)',
-    description: 'Manage missions-app only',
+    description: 'Manage aperture-app only',
   },
   {
     role: 'platform_admin',

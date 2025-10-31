@@ -68,6 +68,14 @@ export function createSupabaseClient(config?: SupabaseConfig): SupabaseClient<Da
               process.env.REACT_APP_SUPABASE_ANON_KEY ||
               '';
 
+  // Debug logging
+  console.log('🔧 Supabase Client Init:', {
+    url: url ? `${url.substring(0, 30)}...` : '❌ MISSING',
+    key: key ? `${key.substring(0, 20)}...` : '❌ MISSING',
+    env_NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ? '✅' : '❌',
+    env_REACT_APP_SUPABASE_URL: process.env.REACT_APP_SUPABASE_URL ? '✅' : '❌',
+  });
+
   if (!url || !key) {
     throw new Error(
       'Supabase configuration missing: NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY ' +

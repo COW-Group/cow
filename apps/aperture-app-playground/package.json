@@ -1,0 +1,6 @@
+{
+  "name": "@cow/aperture-app-playground",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Playground for testing Aperture workspace implementation"
+}

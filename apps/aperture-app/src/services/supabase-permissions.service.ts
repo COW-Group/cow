@@ -564,8 +564,14 @@ export class SupabasePermissionsService {
       // Get organizations
       const organizations = await this.getUserOrganizations(userId);
 
-      // Get teams
-      const teams = await this.getUserTeams(userId);
+      // Get teams - with error handling
+      let teams: (Team & { memberRole: string })[] = [];
+      try {
+        teams = await this.getUserTeams(userId);
+      } catch (error) {
+        console.error('Error loading teams (will continue without them):', error);
+        teams = [];
+      }
 
       return {
         ...profile,
@@ -596,6 +602,56 @@ export class SupabasePermissionsService {
     } catch (error) {
       console.error('Failed to fetch current user profile:', error);
       return null;
+    }
+  }
+
+  /**
+   * Update user profile
+   */
+  async updateUserProfile(
+    userId: string,
+    updates: Partial<Profile>
+  ): Promise<{ success: boolean; error?: string }> {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('id', userId);
+
+      if (error) {
+        console.error('Error updating profile:', error);
+        return { success: false, error: error.message };
+      }
+
+      return { success: true };
+    } catch (error: any) {
+      console.error('Failed to update profile:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  /**
+   * Update organization
+   */
+  async updateOrganization(
+    organizationId: string,
+    updates: Partial<Organization>
+  ): Promise<{ success: boolean; error?: string }> {
+    try {
+      const { error } = await supabase
+        .from('organizations')
+        .update(updates)
+        .eq('id', organizationId);
+
+      if (error) {
+        console.error('Error updating organization:', error);
+        return { success: false, error: error.message };
+      }
+
+      return { success: true };
+    } catch (error: any) {
+      console.error('Failed to update organization:', error);
+      return { success: false, error: error.message };
     }
   }
 
@@ -633,8 +689,6 @@ export class SupabasePermissionsService {
     totalUsers: number;
     totalTeams: number;
     totalWorkspaces: number;
-    activeUsers7d: number;
-    activeUsers30d: number;
   }> {
     try {
       const [orgsResult, usersResult, teamsResult, workspacesResult] = await Promise.all([
@@ -644,17 +698,11 @@ export class SupabasePermissionsService {
         supabase.from('workspaces').select('id', { count: 'exact', head: true }),
       ]);
 
-      // TODO: Implement actual active users tracking based on last_active_at timestamps
-      const activeUsers7d = 0;
-      const activeUsers30d = 0;
-
       return {
         totalOrganizations: orgsResult.count || 0,
         totalUsers: usersResult.count || 0,
         totalTeams: teamsResult.count || 0,
         totalWorkspaces: workspacesResult.count || 0,
-        activeUsers7d,
-        activeUsers30d,
       };
     } catch (error) {
       console.error('Failed to fetch platform stats:', error);
@@ -663,8 +711,6 @@ export class SupabasePermissionsService {
         totalUsers: 0,
         totalTeams: 0,
         totalWorkspaces: 0,
-        activeUsers7d: 0,
-        activeUsers30d: 0,
       };
     }
   }

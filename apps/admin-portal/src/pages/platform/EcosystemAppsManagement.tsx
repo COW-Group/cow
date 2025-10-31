@@ -35,7 +35,7 @@ export default function EcosystemAppsManagement() {
       const mockApps: EcosystemApp[] = [
         {
           id: '1',
-          app_name: 'missions-app',
+          app_name: 'aperture-app',
           display_name: 'Missions',
           description: 'Project management and task tracking platform',
           icon_url: null,

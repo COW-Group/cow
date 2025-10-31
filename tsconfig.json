@@ -25,7 +25,7 @@
       "path": "./apps/mauna-app-e2e"
     },
     {
-      "path": "./apps/missions-app"
+      "path": "./apps/aperture-app"
     }
   ]
 }

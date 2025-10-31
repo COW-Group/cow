@@ -10,7 +10,7 @@
 /**
  * Admin role levels in descending order of access:
  * 1. Ecosystem Admin (God Mode) - All apps and organizations
- * 2. Platform Admin - Single app only (e.g., missions-app)
+ * 2. Platform Admin - Single app only (e.g., aperture-app)
  * 3. Organization Admin - Single organization within an app
  * 4. Specialized Admins - Cross-cutting roles (compliance, security, etc.)
  */
@@ -27,7 +27,7 @@ export type AdminRole =
  * Apps in the COW ecosystem
  */
 export type EcosystemApp =
-  | 'missions-app'
+  | 'aperture-app'
   | 'mauna-app'
   | 'mycow-app'
   | 'support-center'
@@ -235,7 +235,7 @@ export function getNavigationPermissions(user: AdminUser): NavigationPermissions
     // App-specific
     canManageMissionsApp:
       role === 'ecosystem_admin' ||
-      (role === 'platform_admin' && managedApp === 'missions-app'),
+      (role === 'platform_admin' && managedApp === 'aperture-app'),
 
     canManageMaunaApp:
       role === 'ecosystem_admin' ||
@@ -264,7 +264,7 @@ export function getContextLabel(user: AdminUser): string {
       return 'Ecosystem Administration | All Apps';
 
     case 'platform_admin':
-      if (user.managedApp === 'missions-app') return 'Missions App Administration';
+      if (user.managedApp === 'aperture-app') return 'Missions App Administration';
       if (user.managedApp === 'mauna-app') return 'Mauna App Administration';
       if (user.managedApp === 'mycow-app') return 'MyCow App Administration';
       if (user.managedApp === 'support-center') return 'Support Center Administration';

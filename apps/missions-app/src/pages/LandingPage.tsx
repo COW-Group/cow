@@ -1057,6 +1057,185 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* Core Capabilities Section */}
+      <section className="py-40 px-8" style={{ backgroundColor: 'var(--bg-base)' }}>
+        <div className="max-w-7xl mx-auto">
+          {/* Section Label */}
+          <div className="text-center mb-12">
+            <div
+              className="inline-block px-4 py-2 text-xs font-light tracking-widest uppercase"
+              style={{
+                color: 'var(--text-tertiary)',
+                letterSpacing: '0.15em'
+              }}
+            >
+              Core Capabilities
+            </div>
+          </div>
+
+          {/* Headline */}
+          <div className="text-center mb-20">
+            <h2
+              style={{
+                fontSize: 'clamp(3rem, 6vw, 4.5rem)',
+                fontWeight: '100',
+                letterSpacing: '-0.025em',
+                lineHeight: '1.0',
+                color: 'var(--text-primary)'
+              }}
+            >
+              What Makes Aperture Different
+            </h2>
+          </div>
+
+          {/* Four Capabilities Grid */}
+          <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
+            {/* Complete Customization */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="mb-4"
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Complete Customization
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.7',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Monday.com-level flexibility. Tables, boards, timelines, calendars, forms. Drag columns, create formulas, build automations, design relationships. Total control over structure and behavior.
+              </p>
+            </div>
+
+            {/* AI Pattern Recognition */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="mb-4"
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                AI Pattern Recognition
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.7',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Context learning without manual configuration. AI observes which views you use in which situations, what data matters together, how your work flows. Suggests adjustments. Never forces.
+              </p>
+            </div>
+
+            {/* Workspace Templates */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="mb-4"
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Workspace Templates <span style={{ fontSize: '0.875rem', fontWeight: '300', color: 'var(--text-tertiary)' }}>(Optional)</span>
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.7',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Research-based starting points for common patterns. CRM setup based on what actually works. Project boards refined through real use. Accept, customize, or build from scratch.
+              </p>
+            </div>
+
+            {/* Cross-Ecosystem Intelligence */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="mb-4"
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Cross-Ecosystem Intelligence
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.7',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Aperture connects your workflow across wealth, community, and tokenization. See portfolio performance alongside project delivery. Track investor relationships next to token metrics. One workspace, complete visibility.
+              </p>
+            </div>
+          </div>
+
+          {/* Earth Horizon Divider */}
+          <div
+            className="mt-32"
+            style={{
+              width: '100%',
+              height: '2px',
+              background: 'linear-gradient(to right, transparent 0%, #9B8B7E 50%, transparent 100%)',
+              margin: '80px auto 0 auto'
+            }}
+          />
+        </div>
+      </section>
+
       {/* Early Access CTA */}
       <section className="relative py-40 px-8 overflow-hidden" style={{ background: 'linear-gradient(135deg, var(--cyan-deep) 0%, var(--button-blue) 100%)' }}>
         <div className="max-w-5xl mx-auto text-center relative z-10">

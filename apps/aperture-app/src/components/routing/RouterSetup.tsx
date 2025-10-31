@@ -25,6 +25,7 @@ import MigrationDashboard from '../migration/MigrationDashboard';
 import { OrganizationSettings } from '../../pages/organization/OrganizationSettings';
 import { OrganizationMembers } from '../../pages/organization/OrganizationMembers';
 import { OrganizationTeams } from '../../pages/organization/OrganizationTeams';
+import { WorkspaceSettings } from '../../pages/workspace/WorkspaceSettings';
 
 
 export function RouterSetup() {
@@ -86,6 +87,9 @@ export function RouterSetup() {
         <Route path="organization/settings" element={<OrganizationSettings />} />
         <Route path="organization/members" element={<OrganizationMembers />} />
         <Route path="organization/teams" element={<OrganizationTeams />} />
+
+        {/* Workspace routes */}
+        <Route path="workspace/settings" element={<WorkspaceSettings />} />
       </Route>
 
       {/* Legacy routes - redirect to app */}

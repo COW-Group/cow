@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   ChevronDown,
   Check,
@@ -8,7 +9,8 @@ import {
   Lock,
   Unlock,
   Plus,
-  X
+  X,
+  Settings
 } from 'lucide-react';
 import { Workspace } from '../../types/workspace.types';
 import { workspaceService } from '../../services/workspace.service';
@@ -19,11 +21,12 @@ interface WorkspaceSwitcherProps {
   onCreateWorkspace: () => void;
 }
 
-export function WorkspaceSwitcher({ 
-  currentWorkspace, 
-  onWorkspaceChange, 
-  onCreateWorkspace 
+export function WorkspaceSwitcher({
+  currentWorkspace,
+  onWorkspaceChange,
+  onCreateWorkspace
 }: WorkspaceSwitcherProps) {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [allWorkspaces, setAllWorkspaces] = useState<Workspace[]>([]);
@@ -273,8 +276,20 @@ export function WorkspaceSwitcher({
               </div>
             )}
 
-            {/* Create New Workspace */}
-            <div className="border-t border-white/10 p-3">
+            {/* Workspace Management */}
+            <div className="border-t border-white/10 p-3 space-y-1">
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  navigate('/app/workspace/settings');
+                }}
+                className="w-full flex items-center p-2 hover:bg-white/05 rounded-md text-left text-adaptive-secondary hover:text-adaptive-primary"
+              >
+                <div className="w-6 h-6 rounded flex items-center justify-center mr-3">
+                  <Settings className="w-4 h-4 icon-adaptive-muted" />
+                </div>
+                <span className="text-sm font-medium">Manage workspaces</span>
+              </button>
               <button
                 onClick={onCreateWorkspace}
                 className="w-full flex items-center p-2 hover:bg-white/05 rounded-md text-left text-adaptive-secondary hover:text-adaptive-primary"

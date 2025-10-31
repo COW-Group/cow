@@ -1236,6 +1236,152 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* AI Intelligence Section */}
+      <section className="py-40 px-8" style={{ backgroundColor: 'var(--bg-elevated)' }}>
+        <div className="max-w-7xl mx-auto">
+          {/* Section Label */}
+          <div className="text-center mb-12">
+            <div
+              className="inline-block px-4 py-2 text-xs font-light tracking-widest uppercase"
+              style={{
+                color: 'var(--text-tertiary)',
+                letterSpacing: '0.15em'
+              }}
+            >
+              AI Intelligence
+            </div>
+          </div>
+
+          {/* Headline */}
+          <div className="text-center mb-20">
+            <h2
+              style={{
+                fontSize: 'clamp(3rem, 6vw, 4.5rem)',
+                fontWeight: '100',
+                letterSpacing: '-0.025em',
+                lineHeight: '1.0',
+                color: 'var(--text-primary)'
+              }}
+            >
+              Intelligence That Learns, Not Forces
+            </h2>
+          </div>
+
+          {/* Three Intelligence Features */}
+          <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+            {/* Context Awareness */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="mb-4"
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Context Awareness
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.7',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                AI recognizes patterns in your behavior. What views you use when managing investors versus coordinating product teams. What information matters in strategic reviews versus tactical execution. Which transitions happen frequently.
+              </p>
+            </div>
+
+            {/* Pattern Learning */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="mb-4"
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Pattern Learning
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.7',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                The system learns without configuration. No "set up your AI assistant" steps. No training the model. Just work. Aperture observes, adapts, improves suggestions over time.
+              </p>
+            </div>
+
+            {/* Smart Suggestions */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="mb-4"
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Smart Suggestions, Not Automation
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.7',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                AI suggests. You decide. "Switch to board view?" Accept or ignore. "Surface investor details?" Yes or no. You stay in control. Intelligence guides. It doesn't dictate.
+              </p>
+            </div>
+          </div>
+
+          {/* Earth Horizon Divider */}
+          <div
+            className="mt-32"
+            style={{
+              width: '100%',
+              height: '2px',
+              background: 'linear-gradient(to right, transparent 0%, #9B8B7E 50%, transparent 100%)',
+              margin: '80px auto 0 auto'
+            }}
+          />
+        </div>
+      </section>
+
       {/* Early Access CTA */}
       <section className="relative py-40 px-8 overflow-hidden" style={{ background: 'linear-gradient(135deg, var(--cyan-deep) 0%, var(--button-blue) 100%)' }}>
         <div className="max-w-5xl mx-auto text-center relative z-10">

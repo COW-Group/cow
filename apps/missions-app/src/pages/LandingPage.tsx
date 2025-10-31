@@ -294,8 +294,7 @@ export function LandingPage() {
                 letterSpacing: '-0.01em'
               }}
             >
-              Intelligent workspace that adjusts to your context.<br />
-              Same work. Different views.
+              Intelligent workspace that adjusts to your context. Same work. Different views.
             </p>
           </motion.div>
 
@@ -363,89 +362,6 @@ export function LandingPage() {
               Read the research →
             </a>
           </motion.div>
-
-          {/* Aperture Visual Concept */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="mt-24"
-          >
-            <div
-              className="rounded-lg p-12"
-              style={{
-                background: 'var(--glass-bg)',
-                border: '1px solid var(--glass-border)',
-                backdropFilter: 'blur(20px)'
-              }}
-            >
-              <div className="grid grid-cols-3 gap-8 text-center">
-                <div>
-                  <div
-                    style={{
-                      fontSize: '2rem',
-                      fontWeight: '100',
-                      color: 'var(--text-primary)',
-                      marginBottom: '8px'
-                    }}
-                  >
-                    f/1.4
-                  </div>
-                  <div
-                    style={{
-                      fontSize: '0.875rem',
-                      fontWeight: '300',
-                      color: 'var(--text-secondary)'
-                    }}
-                  >
-                    Strategic context
-                  </div>
-                </div>
-                <div>
-                  <div
-                    style={{
-                      fontSize: '2rem',
-                      fontWeight: '100',
-                      color: 'var(--text-primary)',
-                      marginBottom: '8px'
-                    }}
-                  >
-                    f/8
-                  </div>
-                  <div
-                    style={{
-                      fontSize: '0.875rem',
-                      fontWeight: '300',
-                      color: 'var(--text-secondary)'
-                    }}
-                  >
-                    Tactical coordination
-                  </div>
-                </div>
-                <div>
-                  <div
-                    style={{
-                      fontSize: '2rem',
-                      fontWeight: '100',
-                      color: 'var(--text-primary)',
-                      marginBottom: '8px'
-                    }}
-                  >
-                    f/16
-                  </div>
-                  <div
-                    style={{
-                      fontSize: '0.875rem',
-                      fontWeight: '300',
-                      color: 'var(--text-secondary)'
-                    }}
-                  >
-                    Detail execution
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
 
@@ -476,7 +392,7 @@ export function LandingPage() {
                 color: 'var(--text-primary)'
               }}
             >
-              One Workspace, Every View
+              One Workspace, Infinite Views
             </h2>
           </div>
 
@@ -502,7 +418,7 @@ export function LandingPage() {
                 color: 'var(--text-secondary)'
               }}
             >
-              Aperture adjusts focus automatically. When you're in investor relations, you see CRM. When you're coordinating delivery, you see project boards. When you're tracking governance, you see compliance frameworks. The intelligence recognizes your context and adjusts the aperture.
+              Aperture gives you complete control. Build the exact view your work needs—customize columns, layouts, automation, and workflows. The AI learns your patterns and suggests adjustments as your context shifts.
             </p>
             <p
               style={{
@@ -513,7 +429,7 @@ export function LandingPage() {
                 color: 'var(--text-secondary)'
               }}
             >
-              Think of it like a camera: wide aperture shows strategic context, narrow aperture shows tactical details. Both views are accurate. Both are necessary. Aperture lets you shift between them without losing sight of the whole picture.
+              Not preset modes. Not rigid templates. Your workspace, shaped by you, enhanced by intelligence.
             </p>
           </div>
 
@@ -529,7 +445,7 @@ export function LandingPage() {
                   color: 'var(--text-primary)'
                 }}
               >
-                Adaptive Views
+                Fully Customizable
               </h3>
               <p
                 style={{
@@ -540,7 +456,7 @@ export function LandingPage() {
                   color: 'var(--text-secondary)'
                 }}
               >
-                CRM, Projects, Compliance, Content, Sales
+                Build any workspace structure—tables, boards, timelines, calendars. Add fields, create automations, design workflows exactly how you work.
               </p>
             </div>
 
@@ -554,7 +470,7 @@ export function LandingPage() {
                   color: 'var(--text-primary)'
                 }}
               >
-                Context Recognition
+                Context-Aware AI
               </h3>
               <p
                 style={{
@@ -565,7 +481,7 @@ export function LandingPage() {
                   color: 'var(--text-secondary)'
                 }}
               >
-                AI understands what you're working on
+                Intelligence that learns from your patterns. Suggests relevant views, surfaces important information, adapts to how you actually use the workspace.
               </p>
             </div>
 
@@ -579,7 +495,7 @@ export function LandingPage() {
                   color: 'var(--text-primary)'
                 }}
               >
-                Seamless Switching
+                Seamless Transitions
               </h3>
               <p
                 style={{
@@ -590,7 +506,7 @@ export function LandingPage() {
                   color: 'var(--text-secondary)'
                 }}
               >
-                Move between views without losing context
+                Move between views without losing context. Same data, different perspectives. Switch from high-level strategy to granular execution instantly.
               </p>
             </div>
 
@@ -604,7 +520,7 @@ export function LandingPage() {
                   color: 'var(--text-primary)'
                 }}
               >
-                Unified Data
+                Complete Integration
               </h3>
               <p
                 style={{
@@ -615,7 +531,7 @@ export function LandingPage() {
                   color: 'var(--text-secondary)'
                 }}
               >
-                Same information, different lenses
+                Connects across your entire workflow—wealth tracking, community engagement, tokenization. One workspace, unified visibility.
               </p>
             </div>
           </div>

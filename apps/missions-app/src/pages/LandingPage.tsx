@@ -610,67 +610,233 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* COW Ecosystem Impact */}
+      {/* How Aperture Works Section */}
       <section className="py-40 px-8" style={{ backgroundColor: 'var(--bg-base)' }}>
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
+          {/* Section Label */}
+          <div className="text-center mb-12">
+            <div
+              className="inline-block px-4 py-2 text-xs font-light tracking-widest uppercase"
+              style={{
+                color: 'var(--text-tertiary)',
+                letterSpacing: '0.15em'
+              }}
+            >
+              How Aperture Works
+            </div>
+          </div>
+
+          {/* Headline */}
+          <div className="text-center mb-16">
             <h2
               style={{
-                fontSize: 'clamp(2.5rem, 5vw, 3.5rem)',
+                fontSize: 'clamp(3rem, 6vw, 4.5rem)',
                 fontWeight: '100',
-                letterSpacing: '-0.04em',
-                lineHeight: '0.9',
+                letterSpacing: '-0.025em',
+                lineHeight: '1.0',
                 color: 'var(--text-primary)'
               }}
             >
-              Transforming mission execution
-              <br />
-              <span
-                style={{
-                  fontWeight: '200',
-                  color: 'var(--text-secondary)'
-                }}
-              >
-                across the Cycles of Wealth
-                <br />
-                ecosystem architecture.
-              </span>
+              Three Settings, Infinite Context
             </h2>
           </div>
 
-          <div className="mt-16 grid md:grid-cols-4 gap-16">
-            {[
-              { number: '347%', label: 'Faster mission\ncompletion rates' },
-              { number: '12+', label: 'Portfolio companies\nintegrated seamlessly' },
-              { number: '$2.3B+', label: 'In coordinated\nasset management' },
-              { number: '99.9%', label: 'Enterprise-grade\nreliability metrics' }
-            ].map((stat, index) => (
-              <div key={index} className="text-center">
+          {/* Body Copy */}
+          <div className="max-w-4xl mx-auto mb-20 text-center">
+            <p
+              style={{
+                fontSize: 'clamp(1.125rem, 2.5vw, 1.25rem)',
+                fontWeight: '300',
+                letterSpacing: '0.005em',
+                lineHeight: '1.8',
+                color: 'var(--text-secondary)'
+              }}
+            >
+              Like a camera lens adjusting depth of field, Aperture shifts between three fundamental perspectives. Wide aperture reveals strategic context. Medium aperture shows tactical coordination. Narrow aperture exposes granular details. The intelligence determines which view serves your current work.
+            </p>
+          </div>
+
+          {/* Three Aperture Settings Grid */}
+          <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+            {/* Wide Aperture - f/1.4 */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <div className="mb-6">
                 <div
                   style={{
-                    fontSize: '3rem',
+                    fontSize: '2.5rem',
                     fontWeight: '100',
                     letterSpacing: '-0.02em',
-                    lineHeight: '1',
                     color: 'var(--text-primary)'
                   }}
                 >
-                  {stat.number}
+                  f/1.4
                 </div>
                 <div
                   style={{
-                    fontSize: '1rem',
+                    fontSize: '1.25rem',
                     fontWeight: '400',
                     letterSpacing: '0.01em',
-                    whiteSpace: 'pre-line',
-                    color: 'var(--text-secondary)'
+                    color: 'var(--text-primary)',
+                    marginTop: '8px'
                   }}
                 >
-                  {stat.label}
+                  Wide Aperture
+                </div>
+                <div
+                  style={{
+                    fontSize: '0.95rem',
+                    fontWeight: '300',
+                    letterSpacing: '0.01em',
+                    color: '#00A5CF',
+                    marginTop: '4px'
+                  }}
+                >
+                  Strategic Context
                 </div>
               </div>
-            ))}
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.7',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                See the entire landscape. Strategic relationships, portfolio health, organizational structure. Background blurs—what matters is the big picture, patterns across time, connections between entities.
+              </p>
+            </div>
+
+            {/* Medium Aperture - f/8 */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <div className="mb-6">
+                <div
+                  style={{
+                    fontSize: '2.5rem',
+                    fontWeight: '100',
+                    letterSpacing: '-0.02em',
+                    color: 'var(--text-primary)'
+                  }}
+                >
+                  f/8
+                </div>
+                <div
+                  style={{
+                    fontSize: '1.25rem',
+                    fontWeight: '400',
+                    letterSpacing: '0.01em',
+                    color: 'var(--text-primary)',
+                    marginTop: '8px'
+                  }}
+                >
+                  Medium Aperture
+                </div>
+                <div
+                  style={{
+                    fontSize: '0.95rem',
+                    fontWeight: '300',
+                    letterSpacing: '0.01em',
+                    color: '#00A5CF',
+                    marginTop: '4px'
+                  }}
+                >
+                  Tactical Coordination
+                </div>
+              </div>
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.7',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Balance context and detail. Project timelines, team coordination, workflow dependencies. Everything in reasonable focus—you see how pieces connect without drowning in minutiae.
+              </p>
+            </div>
+
+            {/* Narrow Aperture - f/16 */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <div className="mb-6">
+                <div
+                  style={{
+                    fontSize: '2.5rem',
+                    fontWeight: '100',
+                    letterSpacing: '-0.02em',
+                    color: 'var(--text-primary)'
+                  }}
+                >
+                  f/16
+                </div>
+                <div
+                  style={{
+                    fontSize: '1.25rem',
+                    fontWeight: '400',
+                    letterSpacing: '0.01em',
+                    color: 'var(--text-primary)',
+                    marginTop: '8px'
+                  }}
+                >
+                  Narrow Aperture
+                </div>
+                <div
+                  style={{
+                    fontSize: '0.95rem',
+                    fontWeight: '300',
+                    letterSpacing: '0.01em',
+                    color: '#00A5CF',
+                    marginTop: '4px'
+                  }}
+                >
+                  Detail Execution
+                </div>
+              </div>
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.7',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Maximum depth of field. Compliance requirements, contract terms, technical specifications. Everything sharp, everything visible. When precision matters more than context.
+              </p>
+            </div>
           </div>
+
+          {/* Earth Horizon Divider */}
+          <div
+            className="mt-32"
+            style={{
+              width: '100%',
+              height: '2px',
+              background: 'linear-gradient(to right, transparent 0%, #9B8B7E 50%, transparent 100%)',
+              margin: '80px auto 0 auto'
+            }}
+          />
         </div>
       </section>
 

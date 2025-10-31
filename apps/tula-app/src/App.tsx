@@ -185,8 +185,8 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 color: isDark ? '#9ca3af' : '#6b7280'
               }}
             >
-              Founded by a multi-generational banking family turned tokenization pioneer.{' '}
-              <span style={{ color: isDark ? '#cbd5e1' : '#4b5563' }}>Built for all legal work, with superpowers in digital assets and cross-border structuring.</span>
+              Born from multi-generational banking heritage and pioneering tokenization practice.{' '}
+              <span style={{ color: isDark ? '#cbd5e1' : '#4b5563' }}>Built by practitioners navigating the intersection of traditional law and emerging technologies.</span>
             </p>
             <p
               className="text-base sm:text-lg font-light max-w-3xl mx-auto"
@@ -196,7 +196,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 color: isDark ? '#6b7280' : '#9ca3af'
               }}
             >
-              Whether you're studying for the bar, managing litigation, structuring entities, or tokenizing assets - TULA adapts to your practice.
+              Where precedent meets innovation. From bar exam preparation to blockchain deployment.
             </p>
           </div>
 
@@ -335,7 +335,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
         </div>
       </section>
 
-      {/* About / Founder Section */}
+      {/* About / Origin Section */}
       <section id="about" className="py-40 px-8" style={{
         backgroundColor: isDark ? '#1e293b' : '#f8fafc'
       }}>
@@ -350,13 +350,13 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 textTransform: 'uppercase'
               }}
             >
-              Founder Story
+              Built by Practitioners, For Practitioners
             </div>
           </div>
 
           <div className="max-w-3xl mx-auto">
             <h2
-              className="text-3xl sm:text-4xl font-light text-center mb-8"
+              className="text-3xl sm:text-4xl font-light text-center mb-12"
               style={{
                 lineHeight: '1.3',
                 letterSpacing: '-0.01em',
@@ -364,33 +364,24 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 fontWeight: '300'
               }}
             >
-              Likhitha
+              Born from Necessity
             </h2>
-            <p
-              className="text-center text-sm font-light mb-12"
-              style={{
-                color: isDark ? '#9ca3af' : '#6b7280',
-                letterSpacing: '0.05em'
-              }}
-            >
-              Founder & CEO
-            </p>
 
             <div className="space-y-6 text-lg font-light" style={{
               color: isDark ? '#9ca3af' : '#6b7280',
               lineHeight: '1.8'
             }}>
               <p>
-                Multi-generational banking heritage. State Bank of India roots. University of St Andrews, International Relations & Economics.
+                TULA emerged from a practice spanning three generations of banking, international law, and digital asset innovation. We saw the gap: traditional legal education and tools weren't preparing lawyers for clients operating in digital economies.
               </p>
               <p>
-                Became CEO at 21. Built COW Group to tokenize real-world assets. Predicted in 2018 that legal tech would need to bridge traditional law and blockchain execution.
+                Students needed better exam preparation. Practitioners needed efficient matter management. Specialists needed frameworks for tokenization and cross-border structuring.
               </p>
               <p>
-                Built TULA because my sister needed better bar exam prep, my clients needed tokenization frameworks, and the market needed both in one platform.
+                Rather than wait for legal tech to catch up to our practice, we built the infrastructure ourselves.
               </p>
               <p style={{ color: isDark ? '#cbd5e1' : '#4b5563', fontWeight: '400' }}>
-                Not a tech company playing in legal. A legal-tech-crypto pioneer building the platform I needed.
+                Not a tech company building legal tools. A legal practice building its own infrastructure—and sharing it.
               </p>
             </div>
           </div>
@@ -433,6 +424,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
               tier="Student"
               price="£47"
               period="/month"
+              subtitle="Built by practitioners who've taught thousands"
               features={['Bar exam prep mode', 'Unlimited practice essays', 'Case law study guides', 'Legal research training']}
               popular={false}
               isDark={isDark}
@@ -441,6 +433,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
               tier="Solo Practice"
               price="£297"
               period="/month"
+              subtitle="Built by lawyers managing complex matters"
               features={['Everything in Student', 'AI contract drafting', 'Matter management', 'Client portals']}
               popular={true}
               isDark={isDark}
@@ -449,6 +442,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
               tier="Business Team"
               price="£997"
               period="/month"
+              subtitle="Built by in-house counsel and business lawyers"
               features={['Everything in Solo', 'Entity structuring', 'Compliance tracking', 'Priority support']}
               popular={false}
               isDark={isDark}
@@ -457,6 +451,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
               tier="Wealth & Crypto"
               price="£2,997"
               period="/month"
+              subtitle="Built by a practice spanning traditional banking and digital assets"
               features={['Everything in Business', 'Smart legal contracts', 'Blockchain deployment', 'Tokenization templates']}
               popular={false}
               isDark={isDark}
@@ -491,7 +486,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 color: isDark ? '#9ca3af' : '#d1d5db'
               }}
             >
-              From bar exam prep to billion-dollar tokenization. Blending multi-generational banking heritage with legal AI innovation. Built by a CEO who understands both traditional law and digital assets.
+              From bar exam prep to billion-dollar tokenization. Three generations of banking heritage meets legal AI innovation. Built by practitioners who bridge traditional law and digital assets.
             </p>
           </div>
 
@@ -590,10 +585,11 @@ function FeatureCard({ icon, audience, title, description, isDark }: {
   )
 }
 
-function PricingCard({ tier, price, period, features, popular, isDark }: {
+function PricingCard({ tier, price, period, subtitle, features, popular, isDark }: {
   tier: string;
   price: string;
   period: string;
+  subtitle?: string;
   features: string[];
   popular: boolean;
   isDark: boolean;
@@ -631,6 +627,14 @@ function PricingCard({ tier, price, period, features, popular, isDark }: {
       >
         {tier}
       </h3>
+      {subtitle && (
+        <p
+          className="text-xs font-light mb-4"
+          style={{ color: isDark ? '#6b7280' : '#9ca3af', lineHeight: '1.5' }}
+        >
+          {subtitle}
+        </p>
+      )}
       <div className="mb-6">
         <span
           className="text-4xl font-light"

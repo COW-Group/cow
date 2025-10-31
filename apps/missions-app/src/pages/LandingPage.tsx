@@ -262,168 +262,191 @@ export function LandingPage() {
         </div>
       </nav>
 
-      {/* Hero Section - COW Sumi-e Sky + Earth */}
+      {/* Hero Section - Refined & Sophisticated */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <COWHeroBackground />
 
         {/* Content with Motion */}
-        <div className="relative z-10 text-center max-w-7xl mx-auto px-8" style={{ paddingTop: '120px', paddingBottom: '120px' }}>
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="inline-block mb-8"
-          >
-            <div
-              className="px-6 py-2 rounded-full text-sm font-light tracking-wide"
-              style={{
-                background: 'var(--glass-bg)',
-                border: '1px solid var(--glass-border)',
-                color: 'var(--text-secondary)'
-              }}
-            >
-              INTELLIGENT WORKSPACE
-            </div>
-          </motion.div>
-
+        <div className="relative z-10 max-w-6xl mx-auto px-8" style={{ paddingTop: '160px', paddingBottom: '100px' }}>
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
-            className="mb-8"
+            transition={{ duration: 1, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="mb-16"
           >
-            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight tracking-tight" style={{ color: 'var(--text-primary)', lineHeight: '1.2' }}>
-              Adjust Your View<br />
-              See What Matters
+            <h1
+              className="text-6xl sm:text-7xl lg:text-8xl font-light mb-8 tracking-tight"
+              style={{
+                color: 'var(--text-primary)',
+                lineHeight: '1.1',
+                fontWeight: '200',
+                letterSpacing: '-0.02em'
+              }}
+            >
+              Aperture
             </h1>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="max-w-3xl mx-auto mb-16"
-            style={{ maxWidth: '800px' }}
-          >
-            <p className="text-lg sm:text-xl font-light leading-relaxed" style={{ color: 'var(--text-secondary)', lineHeight: '1.8' }}>
-              Different work needs different views. Aperture adjusts your workspace to match your context—CRM when managing relationships, compliance when tracking governance, project boards when coordinating delivery. Same work. Different apertures. All revealing what you need to see now.
+            <p
+              className="text-2xl sm:text-3xl lg:text-4xl font-light max-w-4xl"
+              style={{
+                color: 'var(--text-secondary)',
+                lineHeight: '1.4',
+                fontWeight: '300',
+                letterSpacing: '-0.01em'
+              }}
+            >
+              Intelligent workspace that adjusts to your context.<br />
+              Same work. Different views.
             </p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="flex flex-wrap gap-4 items-center"
           >
-            {/* Explore Aperture - Primary CTA */}
             <button
-              className="group relative px-8 py-4 font-medium transition-all duration-300"
+              className="px-6 py-3 transition-all duration-200"
               style={{
                 background: '#2563eb',
-                border: '1px solid #0ea5e9',
-                borderRadius: '12px',
-                fontSize: '1rem',
-                fontWeight: '500',
+                borderRadius: '8px',
+                fontSize: '0.95rem',
+                fontWeight: '400',
                 letterSpacing: '0.01em',
                 color: '#ffffff',
-                boxShadow: '0 4px 16px rgba(37, 99, 235, 0.3), 0 1px 4px rgba(37, 99, 235, 0.2)'
+                border: 'none'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.background = '#1d4ed8';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 8px 24px rgba(37, 99, 235, 0.4), 0 2px 8px rgba(37, 99, 235, 0.3)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.background = '#2563eb';
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 16px rgba(37, 99, 235, 0.3), 0 1px 4px rgba(37, 99, 235, 0.2)';
               }}
               onClick={() => setShowSignUpModal(true)}
             >
-              <span className="relative flex items-center gap-2">
-                Explore Aperture
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-              </span>
+              Get started
             </button>
 
-            {/* See How It Works - Secondary CTA */}
             <button
-              className="group relative px-8 py-4 font-medium transition-all duration-300"
+              className="px-6 py-3 transition-all duration-200"
               style={{
                 background: 'transparent',
-                border: '1px solid #00A5CF',
-                borderRadius: '12px',
-                fontSize: '1rem',
+                border: '1px solid var(--text-tertiary)',
+                borderRadius: '8px',
+                fontSize: '0.95rem',
                 fontWeight: '400',
                 letterSpacing: '0.01em',
-                color: 'var(--text-primary)',
-                backdropFilter: 'blur(10px)'
+                color: 'var(--text-primary)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = '#00A5CF';
-                e.currentTarget.style.color = '#ffffff';
-                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.borderColor = 'var(--text-primary)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color = 'var(--text-primary)';
-                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.borderColor = 'var(--text-tertiary)';
               }}
               onClick={handleDemoLogin}
             >
-              <span className="relative flex items-center gap-2">
-                See How It Works
-                <ChevronDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
-              </span>
+              View demo
             </button>
 
-            {/* Research Paper - Text Link */}
             <a
               href="#research"
-              className="text-sm font-light transition-all duration-200"
+              className="px-4 py-3 text-sm font-light transition-opacity duration-200"
               style={{
-                color: '#00A5CF',
+                color: 'var(--text-secondary)',
                 letterSpacing: '0.01em',
                 textDecoration: 'none'
               }}
-              onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = '0.7'}
               onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
             >
-              Research Paper
+              Read the research →
             </a>
           </motion.div>
 
-          {/* Earth Horizon Divider */}
-          <div
-            className="mt-20"
-            style={{
-              width: '100%',
-              height: '2px',
-              background: 'linear-gradient(to right, transparent 0%, #9B8B7E 50%, transparent 100%)',
-              margin: '80px auto 0 auto'
-            }}
-          />
-        </div>
-
-        {/* Scroll Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 0.8 }}
-          className="absolute bottom-12 left-1/2 transform -translate-x-1/2 z-20"
-        >
+          {/* Aperture Visual Concept */}
           <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="flex flex-col items-center"
-            style={{ color: 'var(--text-tertiary)' }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="mt-24"
           >
-            <span className="text-sm font-light mb-2">Explore</span>
-            <ChevronDown className="w-5 h-5" />
+            <div
+              className="rounded-lg p-12"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(20px)'
+              }}
+            >
+              <div className="grid grid-cols-3 gap-8 text-center">
+                <div>
+                  <div
+                    style={{
+                      fontSize: '2rem',
+                      fontWeight: '100',
+                      color: 'var(--text-primary)',
+                      marginBottom: '8px'
+                    }}
+                  >
+                    f/1.4
+                  </div>
+                  <div
+                    style={{
+                      fontSize: '0.875rem',
+                      fontWeight: '300',
+                      color: 'var(--text-secondary)'
+                    }}
+                  >
+                    Strategic context
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style={{
+                      fontSize: '2rem',
+                      fontWeight: '100',
+                      color: 'var(--text-primary)',
+                      marginBottom: '8px'
+                    }}
+                  >
+                    f/8
+                  </div>
+                  <div
+                    style={{
+                      fontSize: '0.875rem',
+                      fontWeight: '300',
+                      color: 'var(--text-secondary)'
+                    }}
+                  >
+                    Tactical coordination
+                  </div>
+                </div>
+                <div>
+                  <div
+                    style={{
+                      fontSize: '2rem',
+                      fontWeight: '100',
+                      color: 'var(--text-primary)',
+                      marginBottom: '8px'
+                    }}
+                  >
+                    f/16
+                  </div>
+                  <div
+                    style={{
+                      fontSize: '0.875rem',
+                      fontWeight: '300',
+                      color: 'var(--text-secondary)'
+                    }}
+                  >
+                    Detail execution
+                  </div>
+                </div>
+              </div>
+            </div>
           </motion.div>
-        </motion.div>
+        </div>
       </section>
 
       {/* What is Aperture Section */}
@@ -1166,9 +1189,22 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Enterprise CTA - Institutional Grade */}
+      {/* Early Access CTA */}
       <section className="relative py-40 px-8 overflow-hidden" style={{ background: 'linear-gradient(135deg, var(--cyan-deep) 0%, var(--button-blue) 100%)' }}>
-        <div className="max-w-4xl mx-auto text-center relative z-10">
+        <div className="max-w-5xl mx-auto text-center relative z-10">
+          {/* Section Label */}
+          <div className="mb-12">
+            <div
+              className="inline-block px-4 py-2 text-xs font-light tracking-widest uppercase"
+              style={{
+                color: 'rgba(255, 255, 255, 0.7)',
+                letterSpacing: '0.15em'
+              }}
+            >
+              Early Access
+            </div>
+          </div>
+
           <h2
             className="text-white mb-8"
             style={{
@@ -1179,83 +1215,197 @@ export function LandingPage() {
               textShadow: '0 2px 20px rgba(0, 0, 0, 0.3)'
             }}
           >
-            Begin Your Journey
+            Request Access
           </h2>
           <p
-            className="text-white/90 mb-12 max-w-2xl mx-auto"
+            className="text-white/90 mb-16 max-w-2xl mx-auto"
             style={{
               fontSize: 'clamp(1.125rem, 2vw, 1.25rem)',
               fontWeight: '300',
               letterSpacing: '0.005em',
-              lineHeight: '1.5',
+              lineHeight: '1.6',
               textShadow: '0 1px 8px rgba(0, 0, 0, 0.2)'
             }}
           >
-            Join the Cycles of Wealth ecosystem in revolutionizing enterprise mission management
-            and tokenized program coordination.
+            Aperture is in active development. Choose your access level based on your current needs and organizational readiness.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            {/* Primary Enterprise CTA */}
-            <button
-              className="group relative px-10 py-4 font-medium transition-all duration-300"
-              style={{
-                background: 'rgba(255, 255, 255, 0.95)',
-                border: '1px solid rgba(0, 0, 0, 0.1)',
-                borderRadius: '12px',
-                fontSize: '1.125rem',
-                fontWeight: '500',
-                letterSpacing: '0.01em',
-                color: '#1f2937',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.05)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 1)';
-                e.currentTarget.style.transform = 'translateY(-3px)';
-                e.currentTarget.style.boxShadow = '0 12px 32px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.08)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.95)';
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(0, 0, 0, 0.05)';
-              }}
-              onClick={() => setShowSignUpModal(true)}
-            >
-              <span className="relative flex items-center gap-3">
-                Begin Enterprise Mission Management
-                <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-              </span>
-            </button>
-
-            {/* Secondary CTA */}
-            <button
-              className="group relative px-10 py-4 font-medium transition-all duration-300"
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            {/* Research Access */}
+            <div
+              className="p-8 rounded-lg"
               style={{
                 background: 'rgba(255, 255, 255, 0.1)',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                borderRadius: '12px',
-                fontSize: '1.125rem',
-                fontWeight: '400',
-                letterSpacing: '0.01em',
-                color: 'white',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
                 backdropFilter: 'blur(10px)'
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
-                e.currentTarget.style.transform = 'translateY(-3px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-              onClick={() => setShowLoginModal(true)}
             >
-              <span className="relative flex items-center gap-3">
-                Schedule Strategic Consultation
-                <TrendingUp className="w-5 h-5 transition-transform group-hover:scale-110" />
-              </span>
-            </button>
+              <h3
+                className="text-white mb-4"
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                Research Access
+              </h3>
+              <p
+                className="text-white/80 mb-6"
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  lineHeight: '1.6'
+                }}
+              >
+                Review technical documentation, architecture decisions, and research findings. For teams evaluating workspace intelligence systems.
+              </p>
+              <button
+                className="w-full px-6 py-3 rounded-lg transition-all duration-300"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  color: 'white',
+                  fontSize: '0.95rem',
+                  fontWeight: '400'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
+                }}
+                onClick={() => setShowSignUpModal(true)}
+              >
+                Request Research Access
+              </button>
+            </div>
+
+            {/* Beta Access */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'rgba(255, 255, 255, 0.15)',
+                border: '2px solid rgba(255, 255, 255, 0.4)',
+                backdropFilter: 'blur(10px)',
+                transform: 'scale(1.05)'
+              }}
+            >
+              <div
+                className="mb-4"
+                style={{
+                  fontSize: '0.75rem',
+                  fontWeight: '500',
+                  letterSpacing: '0.1em',
+                  color: '#00A5CF',
+                  textTransform: 'uppercase'
+                }}
+              >
+                Recommended
+              </div>
+              <h3
+                className="text-white mb-4"
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                Beta Access
+              </h3>
+              <p
+                className="text-white/80 mb-6"
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  lineHeight: '1.6'
+                }}
+              >
+                Use Aperture for real work with your team. Shape development through feedback. Limited availability for organizations ready to test adaptive workspace intelligence.
+              </p>
+              <button
+                className="w-full px-6 py-3 rounded-lg transition-all duration-300"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.95)',
+                  border: '1px solid rgba(255, 255, 255, 1)',
+                  color: '#1f2937',
+                  fontSize: '0.95rem',
+                  fontWeight: '500'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 1)';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.95)';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+                onClick={() => setShowSignUpModal(true)}
+              >
+                Request Beta Access
+              </button>
+            </div>
+
+            {/* Implementation Partnership */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'rgba(255, 255, 255, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="text-white mb-4"
+                style={{
+                  fontSize: '1.5rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em'
+                }}
+              >
+                Implementation Partnership
+              </h3>
+              <p
+                className="text-white/80 mb-6"
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  lineHeight: '1.6'
+                }}
+              >
+                Custom deployment, dedicated support, and collaborative feature development. For organizations with specific workspace intelligence requirements.
+              </p>
+              <button
+                className="w-full px-6 py-3 rounded-lg transition-all duration-300"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  color: 'white',
+                  fontSize: '0.95rem',
+                  fontWeight: '400'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
+                }}
+                onClick={() => setShowLoginModal(true)}
+              >
+                Discuss Partnership
+              </button>
+            </div>
           </div>
+
+          <p
+            className="text-white/70"
+            style={{
+              fontSize: '0.875rem',
+              fontWeight: '300'
+            }}
+          >
+            All access requests reviewed within 48 hours
+          </p>
         </div>
       </section>
 

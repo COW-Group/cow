@@ -566,7 +566,7 @@ export function LandingPage() {
           </div>
 
           {/* Headline */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-20">
             <h2
               style={{
                 fontSize: 'clamp(3rem, 6vw, 4.5rem)',
@@ -576,28 +576,13 @@ export function LandingPage() {
                 color: 'var(--text-primary)'
               }}
             >
-              Three Settings, Infinite Context
+              Build Your View. Add Intelligence.
             </h2>
           </div>
 
-          {/* Body Copy */}
-          <div className="max-w-4xl mx-auto mb-20 text-center">
-            <p
-              style={{
-                fontSize: 'clamp(1.125rem, 2.5vw, 1.25rem)',
-                fontWeight: '300',
-                letterSpacing: '0.005em',
-                lineHeight: '1.8',
-                color: 'var(--text-secondary)'
-              }}
-            >
-              Like a camera lens adjusting depth of field, Aperture shifts between three fundamental perspectives. Wide aperture reveals strategic context. Medium aperture shows tactical coordination. Narrow aperture exposes granular details. The intelligence determines which view serves your current work.
-            </p>
-          </div>
-
-          {/* Three Aperture Settings Grid */}
+          {/* Three Steps Grid */}
           <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
-            {/* Wide Aperture - f/1.4 */}
+            {/* Step 1: Design Your Workspace */}
             <div
               className="p-8 rounded-lg"
               style={{
@@ -612,10 +597,10 @@ export function LandingPage() {
                     fontSize: '2.5rem',
                     fontWeight: '100',
                     letterSpacing: '-0.02em',
-                    color: 'var(--text-primary)'
+                    color: '#00A5CF'
                   }}
                 >
-                  f/1.4
+                  01
                 </div>
                 <div
                   style={{
@@ -626,18 +611,7 @@ export function LandingPage() {
                     marginTop: '8px'
                   }}
                 >
-                  Wide Aperture
-                </div>
-                <div
-                  style={{
-                    fontSize: '0.95rem',
-                    fontWeight: '300',
-                    letterSpacing: '0.01em',
-                    color: '#00A5CF',
-                    marginTop: '4px'
-                  }}
-                >
-                  Strategic Context
+                  Design Your Workspace
                 </div>
               </div>
               <p
@@ -649,11 +623,11 @@ export function LandingPage() {
                   color: 'var(--text-secondary)'
                 }}
               >
-                See the entire landscape. Strategic relationships, portfolio health, organizational structure. Background blurs—what matters is the big picture, patterns across time, connections between entities.
+                Start with any structure—table, board, timeline, calendar. Add columns, fields, properties, formulas, relationships. Build exactly how your work requires.
               </p>
             </div>
 
-            {/* Medium Aperture - f/8 */}
+            {/* Step 2: Intelligence Learns Your Context */}
             <div
               className="p-8 rounded-lg"
               style={{
@@ -668,10 +642,10 @@ export function LandingPage() {
                     fontSize: '2.5rem',
                     fontWeight: '100',
                     letterSpacing: '-0.02em',
-                    color: 'var(--text-primary)'
+                    color: '#00A5CF'
                   }}
                 >
-                  f/8
+                  02
                 </div>
                 <div
                   style={{
@@ -682,18 +656,7 @@ export function LandingPage() {
                     marginTop: '8px'
                   }}
                 >
-                  Medium Aperture
-                </div>
-                <div
-                  style={{
-                    fontSize: '0.95rem',
-                    fontWeight: '300',
-                    letterSpacing: '0.01em',
-                    color: '#00A5CF',
-                    marginTop: '4px'
-                  }}
-                >
-                  Tactical Coordination
+                  Intelligence Learns Your Context
                 </div>
               </div>
               <p
@@ -705,11 +668,11 @@ export function LandingPage() {
                   color: 'var(--text-secondary)'
                 }}
               >
-                Balance context and detail. Project timelines, team coordination, workflow dependencies. Everything in reasonable focus—you see how pieces connect without drowning in minutiae.
+                AI recognizes patterns: what views in which contexts, what information matters together, which transitions frequent.
               </p>
             </div>
 
-            {/* Narrow Aperture - f/16 */}
+            {/* Step 3: Guided Adaptation */}
             <div
               className="p-8 rounded-lg"
               style={{
@@ -724,10 +687,10 @@ export function LandingPage() {
                     fontSize: '2.5rem',
                     fontWeight: '100',
                     letterSpacing: '-0.02em',
-                    color: 'var(--text-primary)'
+                    color: '#00A5CF'
                   }}
                 >
-                  f/16
+                  03
                 </div>
                 <div
                   style={{
@@ -738,18 +701,7 @@ export function LandingPage() {
                     marginTop: '8px'
                   }}
                 >
-                  Narrow Aperture
-                </div>
-                <div
-                  style={{
-                    fontSize: '0.95rem',
-                    fontWeight: '300',
-                    letterSpacing: '0.01em',
-                    color: '#00A5CF',
-                    marginTop: '4px'
-                  }}
-                >
-                  Detail Execution
+                  Guided Adaptation
                 </div>
               </div>
               <p
@@ -761,7 +713,7 @@ export function LandingPage() {
                   color: 'var(--text-secondary)'
                 }}
               >
-                Maximum depth of field. Compliance requirements, contract terms, technical specifications. Everything sharp, everything visible. When precision matters more than context.
+                AI suggests view adjustments. Accept, modify, or ignore. You maintain complete control.
               </p>
             </div>
           </div>

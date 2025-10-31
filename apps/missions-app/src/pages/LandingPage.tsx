@@ -1922,7 +1922,7 @@ export function LandingPage() {
                   color: 'var(--text-secondary)'
                 }}
               >
-                Missions
+                Aperture
               </div>
             </div>
             <p
@@ -1935,7 +1935,7 @@ export function LandingPage() {
                 color: 'var(--text-secondary)'
               }}
             >
-              Enterprise mission management platform for the Cycles of Wealth ecosystem.
+              Intelligent workspace platform that adapts to your context.
             </p>
             <div className="flex justify-center gap-8 text-sm">
               <a

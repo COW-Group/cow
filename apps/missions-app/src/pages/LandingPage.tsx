@@ -611,7 +611,7 @@ export function LandingPage() {
                     marginTop: '8px'
                   }}
                 >
-                  Design Your Workspace
+                  Design Your View
                 </div>
               </div>
               <p

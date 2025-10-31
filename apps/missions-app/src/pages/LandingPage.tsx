@@ -207,12 +207,12 @@ export function LandingPage() {
             <span
               className="text-xl font-light tracking-tight"
               style={{
-                color: '#1f2937',
+                color: '#00A5CF',
                 letterSpacing: '0.02em',
                 fontWeight: '300'
               }}
             >
-              Missions
+              Aperture
             </span>
           </div>
 
@@ -267,112 +267,93 @@ export function LandingPage() {
         <COWHeroBackground />
 
         {/* Content with Motion */}
-        <div className="relative z-10 text-center max-w-7xl mx-auto px-8">
+        <div className="relative z-10 text-center max-w-7xl mx-auto px-8" style={{ paddingTop: '120px', paddingBottom: '120px' }}>
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="inline-block mb-8"
+          >
+            <div
+              className="px-6 py-2 rounded-full text-sm font-light tracking-wide"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                color: 'var(--text-secondary)'
+              }}
+            >
+              INTELLIGENT WORKSPACE
+            </div>
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
             className="mb-8"
           >
-            {/* Exciting Gradient Headline */}
-            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-thin mb-6 leading-[0.9] tracking-tight" style={{ color: 'var(--text-primary)' }}>
-              Orchestrate the Future of{' '}
-              <span style={{
-                background: 'linear-gradient(to right, var(--cyan-deep) 0%, var(--cyan-bright) 50%, var(--emerald-bright) 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-                fontWeight: '300'
-              }}>
-                Mission Execution
-              </span>
+            <h1 className="text-5xl sm:text-7xl lg:text-8xl font-extrabold mb-6 leading-tight tracking-tight" style={{ color: 'var(--text-primary)', lineHeight: '1.2' }}>
+              Adjust Your View<br />
+              See What Matters
             </h1>
-
-            {/* COW Deep Cyan Divider */}
-            <div style={{
-              width: '120px',
-              height: '2px',
-              background: 'linear-gradient(to right, transparent 0%, var(--cyan-deep) 50%, transparent 100%)',
-              margin: '0 auto 2rem auto'
-            }} />
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="max-w-4xl mx-auto mb-16"
+            className="max-w-3xl mx-auto mb-16"
+            style={{ maxWidth: '800px' }}
           >
-            <p className="text-xl sm:text-2xl font-light mb-12 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-              Systematic coordination across{' '}
-              <span style={{ color: 'var(--cyan-deep)', fontWeight: '400' }}>tokenized verticals</span>
-              {' '}and portfolio companies—transforming complex{' '}
-              <span style={{ color: 'var(--emerald-primary)', fontWeight: '400' }}>multi-entity initiatives</span> into executable reality.
+            <p className="text-lg sm:text-xl font-light leading-relaxed" style={{ color: 'var(--text-secondary)', lineHeight: '1.8' }}>
+              Different work needs different views. Aperture adjusts your workspace to match your context—CRM when managing relationships, compliance when tracking governance, project boards when coordinating delivery. Same work. Different apertures. All revealing what you need to see now.
             </p>
-
-            {/* Success Metrics */}
-            <div className="mt-12 flex flex-wrap items-center justify-center gap-8" style={{ color: 'var(--text-secondary)' }}>
-              {successMetrics.map((metric, index) => (
-                <React.Fragment key={metric.label}>
-                  <div className="text-center">
-                    <div className="text-2xl font-light" style={{ letterSpacing: '0.02em' }}>
-                      {metric.number}
-                    </div>
-                    <div className="text-sm" style={{ letterSpacing: '0.01em', color: 'var(--text-tertiary)' }}>
-                      {metric.label}
-                    </div>
-                  </div>
-                  {index < successMetrics.length - 1 && (
-                    <div className="w-px h-8 opacity-20" style={{ backgroundColor: 'var(--text-tertiary)' }}></div>
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-6 justify-center items-center mt-16 max-w-4xl mx-auto"
+            className="flex flex-col sm:flex-row gap-6 justify-center items-center"
           >
-            {/* Access Mission Platform - COW Button Blue */}
+            {/* Explore Aperture - Primary CTA */}
             <button
               className="group relative px-8 py-4 font-medium transition-all duration-300"
               style={{
-                background: 'var(--button-blue)',
-                border: '1px solid var(--cyan-bright)',
+                background: '#2563eb',
+                border: '1px solid #0ea5e9',
                 borderRadius: '12px',
                 fontSize: '1rem',
                 fontWeight: '500',
                 letterSpacing: '0.01em',
-                color: 'var(--white)',
+                color: '#ffffff',
                 boxShadow: '0 4px 16px rgba(37, 99, 235, 0.3), 0 1px 4px rgba(37, 99, 235, 0.2)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'var(--button-hover)';
+                e.currentTarget.style.background = '#1d4ed8';
                 e.currentTarget.style.transform = 'translateY(-2px)';
                 e.currentTarget.style.boxShadow = '0 8px 24px rgba(37, 99, 235, 0.4), 0 2px 8px rgba(37, 99, 235, 0.3)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'var(--button-blue)';
+                e.currentTarget.style.background = '#2563eb';
                 e.currentTarget.style.transform = 'translateY(0)';
                 e.currentTarget.style.boxShadow = '0 4px 16px rgba(37, 99, 235, 0.3), 0 1px 4px rgba(37, 99, 235, 0.2)';
               }}
               onClick={() => setShowSignUpModal(true)}
             >
               <span className="relative flex items-center gap-2">
-                Access Mission Platform
+                Explore Aperture
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </span>
             </button>
 
-            {/* Schedule Enterprise Demo - COW Cyan Accent */}
+            {/* See How It Works - Secondary CTA */}
             <button
               className="group relative px-8 py-4 font-medium transition-all duration-300"
               style={{
                 background: 'transparent',
-                border: '1px solid var(--cyan-bright)',
+                border: '1px solid #00A5CF',
                 borderRadius: '12px',
                 fontSize: '1rem',
                 fontWeight: '400',
@@ -381,8 +362,8 @@ export function LandingPage() {
                 backdropFilter: 'blur(10px)'
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'var(--cyan-bright)';
-                e.currentTarget.style.color = 'var(--white)';
+                e.currentTarget.style.background = '#00A5CF';
+                e.currentTarget.style.color = '#ffffff';
                 e.currentTarget.style.transform = 'translateY(-2px)';
               }}
               onMouseLeave={(e) => {
@@ -393,11 +374,37 @@ export function LandingPage() {
               onClick={handleDemoLogin}
             >
               <span className="relative flex items-center gap-2">
-                Schedule Enterprise Demo
-                <Globe className="w-4 h-4 transition-transform group-hover:rotate-12" />
+                See How It Works
+                <ChevronDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
               </span>
             </button>
+
+            {/* Research Paper - Text Link */}
+            <a
+              href="#research"
+              className="text-sm font-light transition-all duration-200"
+              style={{
+                color: '#00A5CF',
+                letterSpacing: '0.01em',
+                textDecoration: 'none'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
+            >
+              Research Paper
+            </a>
           </motion.div>
+
+          {/* Earth Horizon Divider */}
+          <div
+            className="mt-20"
+            style={{
+              width: '100%',
+              height: '2px',
+              background: 'linear-gradient(to right, transparent 0%, #9B8B7E 50%, transparent 100%)',
+              margin: '80px auto 0 auto'
+            }}
+          />
         </div>
 
         {/* Scroll Indicator */}

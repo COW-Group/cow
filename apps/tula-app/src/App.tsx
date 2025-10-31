@@ -84,34 +84,27 @@ function FloatingNav({ toggleTheme, isDark }: { toggleTheme: () => void; isDark:
         </Link>
 
         <div className="flex items-center gap-6">
-          <Link
-            to="/contracts"
+          <a
+            href="#features"
             className="text-sm font-light transition-opacity duration-200 hover:opacity-70"
             style={{ color: isDark ? '#9ca3af' : '#6b7280', letterSpacing: '0.02em', fontWeight: '300' }}
           >
-            Contracts
-          </Link>
-          <Link
-            to="/compliance"
+            Features
+          </a>
+          <a
+            href="#pricing"
             className="text-sm font-light transition-opacity duration-200 hover:opacity-70"
             style={{ color: isDark ? '#9ca3af' : '#6b7280', letterSpacing: '0.02em', fontWeight: '300' }}
           >
-            Compliance
-          </Link>
-          <Link
-            to="/documents"
+            Pricing
+          </a>
+          <a
+            href="#about"
             className="text-sm font-light transition-opacity duration-200 hover:opacity-70"
             style={{ color: isDark ? '#9ca3af' : '#6b7280', letterSpacing: '0.02em', fontWeight: '300' }}
           >
-            Documents
-          </Link>
-          <Link
-            to="/structuring"
-            className="text-sm font-light transition-opacity duration-200 hover:opacity-70"
-            style={{ color: isDark ? '#9ca3af' : '#6b7280', letterSpacing: '0.02em', fontWeight: '300' }}
-          >
-            Structuring
-          </Link>
+            About
+          </a>
 
           <div className="w-px h-6" style={{ background: isDark ? '#374151' : '#d1d5db' }} />
 
@@ -125,7 +118,7 @@ function FloatingNav({ toggleTheme, isDark }: { toggleTheme: () => void; isDark:
               fontWeight: '300'
             }}
           >
-            Account
+            Sign In
           </button>
 
           <button
@@ -161,7 +154,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
         }} />
 
         {/* Content */}
-        <div className="relative z-10 max-w-6xl mx-auto px-8" style={{ paddingTop: '160px', paddingBottom: '100px' }}>
+        <div className="relative z-10 max-w-6xl mx-auto px-8 text-center" style={{ paddingTop: '160px', paddingBottom: '100px' }}>
           <div className="mb-12">
             <h1
               className="text-5xl sm:text-6xl lg:text-7xl mb-8"
@@ -172,7 +165,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 color: isDark ? '#f8fafc' : '#1f2937'
               }}
             >
-              Legal Infrastructure for<br />
+              Legal AI Platform for the<br />
               <span style={{
                 background: 'linear-gradient(to right, #b45309 0%, #00A5CF 50%, #059669 100%)',
                 WebkitBackgroundClip: 'text',
@@ -180,65 +173,79 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 backgroundClip: 'text',
                 fontWeight: '300'
               }}>
-                Performance-Based Assets
+                Digital Economy
               </span>
             </h1>
             <p
-              className="text-xl sm:text-2xl lg:text-3xl font-light max-w-4xl mb-8"
+              className="text-xl sm:text-2xl font-light max-w-4xl mx-auto mb-8"
               style={{
-                lineHeight: '1.5',
+                lineHeight: '1.6',
                 fontWeight: '300',
                 letterSpacing: '-0.01em',
                 color: isDark ? '#9ca3af' : '#6b7280'
               }}
             >
-              AI-powered contracts and compliance for tokenized wealth in the COW ecosystem.{' '}
-              <span style={{ color: isDark ? '#cbd5e1' : '#4b5563' }}>Natural language meets blockchain execution.</span>
+              Founded by a multi-generational banking family turned tokenization pioneer.{' '}
+              <span style={{ color: isDark ? '#cbd5e1' : '#4b5563' }}>Built for all legal work, with superpowers in digital assets and cross-border structuring.</span>
             </p>
             <p
-              className="text-base sm:text-lg font-light max-w-3xl"
+              className="text-base sm:text-lg font-light max-w-3xl mx-auto"
               style={{
                 lineHeight: '1.7',
                 fontWeight: '300',
                 color: isDark ? '#6b7280' : '#9ca3af'
               }}
             >
-              TULA bridges traditional legal frameworks with distributed ledger technology, creating smart legal contracts that preserve human comprehension while enabling automated execution. Built for multi-generational wealth structuring across jurisdictions.
+              Whether you're studying for the bar, managing litigation, structuring entities, or tokenizing assets - TULA adapts to your practice.
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-4 items-center">
+          <div className="flex flex-wrap gap-4 items-center justify-center">
             <button
-              className="px-6 py-3 transition-all duration-200 rounded-lg"
+              className="px-8 py-4 transition-all duration-200 rounded-lg"
               style={{
                 background: '#2563eb',
-                fontSize: '0.95rem',
+                fontSize: '1rem',
                 fontWeight: '400',
                 letterSpacing: '0.01em',
                 color: '#ffffff',
                 border: '1px solid rgba(255, 255, 255, 0.1)'
               }}
             >
-              Request Access
+              Start Free Trial
             </button>
-            <a
-              href="#capabilities"
-              className="px-6 py-3 text-sm font-light transition-all duration-200 rounded-lg"
+            <button
+              className="px-8 py-4 transition-all duration-200 rounded-lg"
               style={{
                 color: isDark ? '#9ca3af' : '#6b7280',
+                fontSize: '1rem',
+                fontWeight: '300',
                 letterSpacing: '0.01em',
                 border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
                 background: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)'
               }}
             >
-              View Documentation
-            </a>
+              Book Demo
+            </button>
+            <button
+              className="px-8 py-4 transition-all duration-200 rounded-lg"
+              style={{
+                color: isDark ? '#cbd5e1' : '#1f2937',
+                fontSize: '1rem',
+                fontWeight: '300',
+                letterSpacing: '0.01em',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.15)',
+                background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)'
+              }}
+            >
+              Student Access
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Capabilities Section */}
-      <section id="capabilities" className="py-40 px-8" style={{
+      {/* Features Section */}
+      <section id="features" className="py-40 px-8" style={{
         backgroundColor: isDark ? '#0f172a' : '#ffffff'
       }}>
         <div className="max-w-7xl mx-auto">
@@ -253,13 +260,13 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 textTransform: 'uppercase'
               }}
             >
-              Capabilities
+              One Platform, Every Legal Need
             </div>
           </div>
 
           {/* Headline */}
           <h2
-            className="text-3xl sm:text-4xl lg:text-5xl font-light text-center mb-24 max-w-3xl mx-auto"
+            className="text-3xl sm:text-4xl lg:text-5xl font-light text-center mb-16 max-w-4xl mx-auto"
             style={{
               lineHeight: '1.3',
               letterSpacing: '-0.01em',
@@ -267,92 +274,72 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
               fontWeight: '300'
             }}
           >
-            Legal automation that respects complexity
+            From bar exam to billion-dollar structuring
           </h2>
 
-          {/* Capabilities Grid */}
+          <p
+            className="text-lg font-light text-center max-w-3xl mx-auto mb-24"
+            style={{
+              color: isDark ? '#9ca3af' : '#6b7280',
+              lineHeight: '1.8'
+            }}
+          >
+            TULA grows with your career. Start as a student, scale to specialist.
+          </p>
+
+          {/* Feature Grid by Audience */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <CapabilityCard
-              icon={<Scale className="h-6 w-6" />}
-              title="Smart Legal Contracts"
-              description="Natural language contracts that live on blockchain. Negotiate, execute, and verify directly on-chain while maintaining full legal intelligibility. Built on third-generation public blockchain with logical platform oversight."
-              bullets={[
-                'Contract-on-chain architecture',
-                'Human-readable + machine-executable',
-                'Automatic compliance verification',
-                'Multi-party coordination'
-              ]}
+            <FeatureCard
+              icon={<BookOpen className="h-6 w-6" />}
+              audience="For Students"
+              title="Bar Exam Prep with AI"
+              description="Practice essays with instant AI feedback. Case law summaries. Legal writing improvement. Mock oral examinations."
               isDark={isDark}
             />
-            <CapabilityCard
-              icon={<Globe className="h-6 w-6" />}
-              title="Cross-Border Structuring"
-              description="Design holding structures for performance real-world asset tokens across Estonia, Lithuania, Luxembourg, and target NYSE/NASDAQ listings. Optimize for regulatory compliance and tax efficiency simultaneously."
-              bullets={[
-                'Entity formation automation',
-                'Multi-jurisdictional compliance mapping',
-                'Tax treaty optimization',
-                'Succession planning integration'
-              ]}
-              isDark={isDark}
-            />
-            <CapabilityCard
+            <FeatureCard
               icon={<FileText className="h-6 w-6" />}
-              title="Private Placement Infrastructure"
-              description="Generate comprehensive PPMs, investor agreements, and offering documents for tokenized commodities and services. From agricultural technology (Womenova) to aviation tokenization and beyond."
-              bullets={[
-                'PPM generation for 35+ commodity types',
-                'Investor suitability assessment',
-                'MiFID II / accredited investor compliance',
-                'Performance-based return documentation'
-              ]}
+              audience="For Practitioners"
+              title="AI Contract Drafting"
+              description="Generate contracts from templates. Clause suggestions. Style matching. Version control and redlining."
               isDark={isDark}
             />
-            <CapabilityCard
-              icon={<Target className="h-6 w-6" />}
-              title="Dispute Resolution & Oracles"
-              description="Built-in arbitration mechanisms and oracle services for performance measurement verification. Resolve disputes on-chain or escalate to traditional arbitration as needed."
-              bullets={[
-                'On-chain dispute resolution',
-                'Sales cycle verification oracles',
-                'Multi-tiered arbitration',
-                'Audit trail preservation'
-              ]}
+            <FeatureCard
+              icon={<Search className="h-6 w-6" />}
+              audience="For All Lawyers"
+              title="Legal Research"
+              description="Case law search across UK, EU, US. Statute lookup. Precedent finding. Citation checking."
               isDark={isDark}
             />
-            <CapabilityCard
+            <FeatureCard
+              icon={<Building className="h-6 w-6" />}
+              audience="For Business Lawyers"
+              title="Entity Structuring"
+              description="Multi-jurisdiction entity formation. Corporate governance automation. Board pack generation."
+              isDark={isDark}
+            />
+            <FeatureCard
               icon={<Shield className="h-6 w-6" />}
-              title="Regulatory Intelligence"
-              description="Monitor and adapt to evolving frameworks: MiCA, DLT Pilot Regime, Data Act, and securities regulations across jurisdictions. Participatory regulation approach with automated compliance updates."
-              bullets={[
-                'Real-time regulatory monitoring',
-                'KYC/AML automation within logical platforms',
-                'Reporting automation for EU authorities',
-                'Overriding mandatory rules detection'
-              ]}
+              audience="For In-House Counsel"
+              title="Compliance Tracking"
+              description="Regulatory monitoring. Compliance calendars. Filing automation. Policy generation."
               isDark={isDark}
             />
-            <CapabilityCard
-              icon={<Briefcase className="h-6 w-6" />}
-              title="COW Ecosystem Integration"
-              description="Purpose-built for COW Group's tokenization platform, MyCOW wealth management, and mass customization marketplace. Unified legal infrastructure across all applications."
-              bullets={[
-                'MyCOW portfolio compliance',
-                'Tokenization legal wrappers',
-                'Mauna wellness service agreements',
-                'Marketplace commercial terms'
-              ]}
+            <FeatureCard
+              icon={<Network className="h-6 w-6" />}
+              audience="For Crypto Specialists"
+              title="Smart Legal Contracts"
+              description="Blockchain-native contracts. Token sale documentation. DAO governance. MiCA compliance."
               isDark={isDark}
             />
           </div>
         </div>
       </section>
 
-      {/* Technical Foundation Section */}
-      <section className="py-40 px-8" style={{
+      {/* About / Founder Section */}
+      <section id="about" className="py-40 px-8" style={{
         backgroundColor: isDark ? '#1e293b' : '#f8fafc'
       }}>
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
             <div
               style={{
@@ -363,59 +350,55 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 textTransform: 'uppercase'
               }}
             >
-              Technical Foundation
+              Founder Story
             </div>
           </div>
 
-          <h2
-            className="text-3xl sm:text-4xl lg:text-5xl font-light text-center mb-16 max-w-3xl mx-auto"
-            style={{
-              lineHeight: '1.3',
-              letterSpacing: '-0.01em',
-              color: isDark ? '#f8fafc' : '#1f2937',
-              fontWeight: '300'
-            }}
-          >
-            Built on Contracts-on-Chain Architecture
-          </h2>
+          <div className="max-w-3xl mx-auto">
+            <h2
+              className="text-3xl sm:text-4xl font-light text-center mb-8"
+              style={{
+                lineHeight: '1.3',
+                letterSpacing: '-0.01em',
+                color: isDark ? '#f8fafc' : '#1f2937',
+                fontWeight: '300'
+              }}
+            >
+              Likhitha
+            </h2>
+            <p
+              className="text-center text-sm font-light mb-12"
+              style={{
+                color: isDark ? '#9ca3af' : '#6b7280',
+                letterSpacing: '0.05em'
+              }}
+            >
+              Founder & CEO
+            </p>
 
-          <p
-            className="text-lg font-light text-center max-w-4xl mx-auto mb-16"
-            style={{
+            <div className="space-y-6 text-lg font-light" style={{
               color: isDark ? '#9ca3af' : '#6b7280',
               lineHeight: '1.8'
-            }}
-          >
-            TULA implements the latest research in blockchain-based legal contracts, using third-generation public blockchains with logical platform superstructures.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-            <TechCard
-              title="Modular Blockchain Usage"
-              description="Choose your compliance level - from minimal timestamping to full negotiation, execution, and dispute resolution on-chain."
-              isDark={isDark}
-            />
-            <TechCard
-              title="Translation Verification"
-              description="Every smart contract clause maps 1:1 to natural language text, verifiable by parties, arbitrators, or judges through blockchain explorers."
-              isDark={isDark}
-            />
-            <TechCard
-              title="Distributed Finance Model"
-              description="Operates across interconnected logical platforms rather than fully decentralized, maintaining regulatory oversight while maximizing blockchain security and efficiency."
-              isDark={isDark}
-            />
-            <TechCard
-              title="Third-Generation Infrastructure"
-              description="Built on Algorand-class blockchains: minimal transaction costs, immediate finality, no fork possibility, quantum-resistant security."
-              isDark={isDark}
-            />
+            }}>
+              <p>
+                Multi-generational banking heritage. State Bank of India roots. University of St Andrews, International Relations & Economics.
+              </p>
+              <p>
+                Became CEO at 21. Built COW Group to tokenize real-world assets. Predicted in 2018 that legal tech would need to bridge traditional law and blockchain execution.
+              </p>
+              <p>
+                Built TULA because my sister needed better bar exam prep, my clients needed tokenization frameworks, and the market needed both in one platform.
+              </p>
+              <p style={{ color: isDark ? '#cbd5e1' : '#4b5563', fontWeight: '400' }}>
+                Not a tech company playing in legal. A legal-tech-crypto pioneer building the platform I needed.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Use Case Highlights */}
-      <section className="py-40 px-8" style={{
+      {/* Pricing Preview */}
+      <section id="pricing" className="py-40 px-8" style={{
         backgroundColor: isDark ? '#0f172a' : '#ffffff'
       }}>
         <div className="max-w-7xl mx-auto">
@@ -429,12 +412,12 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 textTransform: 'uppercase'
               }}
             >
-              Applications
+              Pricing
             </div>
           </div>
 
           <h2
-            className="text-3xl sm:text-4xl lg:text-5xl font-light text-center mb-20 max-w-3xl mx-auto"
+            className="text-3xl sm:text-4xl lg:text-5xl font-light text-center mb-16 max-w-3xl mx-auto"
             style={{
               lineHeight: '1.3',
               letterSpacing: '-0.01em',
@@ -442,23 +425,40 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
               fontWeight: '300'
             }}
           >
-            From family offices to institutional tokenization
+            Transparent pricing for every stage
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <UseCaseCard
-              title="Performance RWA Tokens"
-              description="Legal frameworks for sales-cycle-based returns on tokenized commodities. Automate performance measurement and distribution triggers while maintaining investor protections."
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            <PricingCard
+              tier="Student"
+              price="£47"
+              period="/month"
+              features={['Bar exam prep mode', 'Unlimited practice essays', 'Case law study guides', 'Legal research training']}
+              popular={false}
               isDark={isDark}
             />
-            <UseCaseCard
-              title="Multi-Generational Wealth"
-              description="Structure trusts, foundations, and corporate entities that hold tokenized assets across generations. Navigate succession planning in the Web3 era."
+            <PricingCard
+              tier="Solo Practice"
+              price="£297"
+              period="/month"
+              features={['Everything in Student', 'AI contract drafting', 'Matter management', 'Client portals']}
+              popular={true}
               isDark={isDark}
             />
-            <UseCaseCard
-              title="Institutional Compliance"
-              description="Private placement administration for professional investors under Cyprus AIF structures and EU passporting. Full audit trails for regulatory examination."
+            <PricingCard
+              tier="Business Team"
+              price="£997"
+              period="/month"
+              features={['Everything in Solo', 'Entity structuring', 'Compliance tracking', 'Priority support']}
+              popular={false}
+              isDark={isDark}
+            />
+            <PricingCard
+              tier="Wealth & Crypto"
+              price="£2,997"
+              period="/month"
+              features={['Everything in Business', 'Smart legal contracts', 'Blockchain deployment', 'Tokenization templates']}
+              popular={false}
               isDark={isDark}
             />
           </div>
@@ -491,7 +491,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 color: isDark ? '#9ca3af' : '#d1d5db'
               }}
             >
-              Blending multi-generational banking heritage with 2018 tokenization vision. Legal infrastructure that bridges Web2 contracts and Web3 execution.
+              From bar exam prep to billion-dollar tokenization. Blending multi-generational banking heritage with legal AI innovation. Built by a CEO who understands both traditional law and digital assets.
             </p>
           </div>
 
@@ -547,11 +547,11 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
   )
 }
 
-function CapabilityCard({ icon, title, description, bullets, isDark }: {
+function FeatureCard({ icon, audience, title, description, isDark }: {
   icon: React.ReactNode;
+  audience: string;
   title: string;
   description: string;
-  bullets: string[];
   isDark: boolean;
 }) {
   return (
@@ -564,6 +564,16 @@ function CapabilityCard({ icon, title, description, bullets, isDark }: {
       }}
     >
       <div className="mb-4" style={{ color: '#b45309' }}>{icon}</div>
+      <div
+        className="text-xs font-medium mb-2"
+        style={{
+          color: '#b45309',
+          letterSpacing: '0.1em',
+          textTransform: 'uppercase'
+        }}
+      >
+        {audience}
+      </div>
       <h3
         className="text-xl mb-3"
         style={{ color: isDark ? '#f8fafc' : '#1f2937', fontWeight: '400', letterSpacing: '-0.01em' }}
@@ -571,37 +581,6 @@ function CapabilityCard({ icon, title, description, bullets, isDark }: {
         {title}
       </h3>
       <p
-        className="text-sm font-light leading-relaxed mb-4"
-        style={{ color: isDark ? '#9ca3af' : '#6b7280', lineHeight: '1.7' }}
-      >
-        {description}
-      </p>
-      <ul className="space-y-2">
-        {bullets.map((bullet, i) => (
-          <li key={i} className="text-xs font-light flex items-start gap-2" style={{ color: isDark ? '#6b7280' : '#9ca3af' }}>
-            <span style={{ color: '#b45309', marginTop: '2px' }}>•</span>
-            <span>{bullet}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )
-}
-
-function TechCard({ title, description, isDark }: {
-  title: string;
-  description: string;
-  isDark: boolean;
-}) {
-  return (
-    <div className="p-6">
-      <h3
-        className="text-lg mb-3"
-        style={{ color: isDark ? '#f8fafc' : '#1f2937', fontWeight: '400', letterSpacing: '-0.01em' }}
-      >
-        {title}
-      </h3>
-      <p
         className="text-sm font-light leading-relaxed"
         style={{ color: isDark ? '#9ca3af' : '#6b7280', lineHeight: '1.7' }}
       >
@@ -611,31 +590,85 @@ function TechCard({ title, description, isDark }: {
   )
 }
 
-function UseCaseCard({ title, description, isDark }: {
-  title: string;
-  description: string;
+function PricingCard({ tier, price, period, features, popular, isDark }: {
+  tier: string;
+  price: string;
+  period: string;
+  features: string[];
+  popular: boolean;
   isDark: boolean;
 }) {
   return (
     <div
-      className="p-8 rounded-lg"
+      className="p-8 rounded-lg transition-all duration-300"
       style={{
-        background: isDark ? 'rgba(30, 41, 59, 0.3)' : 'rgba(245, 243, 240, 0.5)',
-        border: isDark ? '1px solid rgba(148, 163, 184, 0.1)' : '1px solid rgba(155, 139, 126, 0.15)'
+        background: popular
+          ? (isDark ? 'rgba(37, 99, 235, 0.1)' : 'rgba(37, 99, 235, 0.05)')
+          : (isDark ? 'rgba(30, 41, 59, 0.5)' : '#ffffff'),
+        border: popular
+          ? '2px solid #2563eb'
+          : (isDark ? '1px solid rgba(148, 163, 184, 0.1)' : '1px solid rgba(155, 139, 126, 0.2)'),
+        boxShadow: popular
+          ? '0 4px 20px rgba(37, 99, 235, 0.2)'
+          : (isDark ? 'none' : '0 1px 3px rgba(0, 0, 0, 0.05)')
       }}
     >
+      {popular && (
+        <div
+          className="text-xs font-medium mb-4 text-center py-1 px-3 rounded-full inline-block"
+          style={{
+            background: '#2563eb',
+            color: '#ffffff',
+            letterSpacing: '0.05em'
+          }}
+        >
+          POPULAR
+        </div>
+      )}
       <h3
-        className="text-lg mb-3"
-        style={{ color: isDark ? '#f8fafc' : '#1f2937', fontWeight: '400', letterSpacing: '-0.01em' }}
+        className="text-xl mb-2"
+        style={{ color: isDark ? '#f8fafc' : '#1f2937', fontWeight: '400' }}
       >
-        {title}
+        {tier}
       </h3>
-      <p
-        className="text-sm font-light leading-relaxed"
-        style={{ color: isDark ? '#9ca3af' : '#6b7280', lineHeight: '1.7' }}
+      <div className="mb-6">
+        <span
+          className="text-4xl font-light"
+          style={{ color: isDark ? '#f8fafc' : '#1f2937' }}
+        >
+          {price}
+        </span>
+        <span
+          className="text-sm font-light"
+          style={{ color: isDark ? '#9ca3af' : '#6b7280' }}
+        >
+          {period}
+        </span>
+      </div>
+      <ul className="space-y-3 mb-8">
+        {features.map((feature, i) => (
+          <li
+            key={i}
+            className="text-sm font-light flex items-start gap-2"
+            style={{ color: isDark ? '#9ca3af' : '#6b7280' }}
+          >
+            <CheckCircle className="h-4 w-4 flex-shrink-0 mt-0.5" style={{ color: '#059669' }} />
+            <span>{feature}</span>
+          </li>
+        ))}
+      </ul>
+      <button
+        className="w-full py-3 rounded-lg transition-all duration-200"
+        style={{
+          background: popular ? '#2563eb' : (isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)'),
+          color: popular ? '#ffffff' : (isDark ? '#9ca3af' : '#6b7280'),
+          border: popular ? 'none' : (isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)'),
+          fontWeight: '400',
+          fontSize: '0.95rem'
+        }}
       >
-        {description}
-      </p>
+        {popular ? 'Start Free Trial' : 'Learn More'}
+      </button>
     </div>
   )
 }

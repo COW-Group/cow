@@ -1382,6 +1382,308 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* Roadmap Section */}
+      <section className="py-40 px-8" style={{ backgroundColor: 'var(--bg-base)' }}>
+        <div className="max-w-7xl mx-auto">
+          {/* Section Label */}
+          <div className="text-center mb-12">
+            <div
+              className="inline-block px-4 py-2 text-xs font-light tracking-widest uppercase"
+              style={{
+                color: 'var(--text-tertiary)',
+                letterSpacing: '0.15em'
+              }}
+            >
+              Roadmap
+            </div>
+          </div>
+
+          {/* Headline */}
+          <div className="text-center mb-16">
+            <h2
+              style={{
+                fontSize: 'clamp(3rem, 6vw, 4.5rem)',
+                fontWeight: '100',
+                letterSpacing: '-0.025em',
+                lineHeight: '1.0',
+                color: 'var(--text-primary)'
+              }}
+            >
+              Build-in-Public Timeline
+            </h2>
+          </div>
+
+          {/* Body Copy */}
+          <div className="max-w-4xl mx-auto mb-20 text-center">
+            <p
+              style={{
+                fontSize: 'clamp(1.125rem, 2.5vw, 1.25rem)',
+                fontWeight: '300',
+                letterSpacing: '0.005em',
+                lineHeight: '1.8',
+                color: 'var(--text-secondary)'
+              }}
+            >
+              We're building Aperture transparently. Here's what's complete, in progress, and planned:
+            </p>
+          </div>
+
+          {/* Roadmap Items */}
+          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {/* Core Workspace Builder - Complete */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <div className="flex items-start mb-4">
+                <div>
+                  <h3
+                    style={{
+                      fontSize: '1.25rem',
+                      fontWeight: '400',
+                      letterSpacing: '0.01em',
+                      color: 'var(--text-primary)',
+                      marginBottom: '4px'
+                    }}
+                  >
+                    Core Workspace Builder
+                  </h3>
+                  <div style={{ fontSize: '0.875rem', color: 'var(--text-tertiary)', marginBottom: '12px' }}>
+                    Complete (Q3 2025)
+                  </div>
+                  <p
+                    style={{
+                      fontSize: '0.95rem',
+                      fontWeight: '300',
+                      letterSpacing: '0.005em',
+                      lineHeight: '1.7',
+                      color: 'var(--text-secondary)'
+                    }}
+                  >
+                    Tables, boards, timelines, calendars. Full customization. Drag-and-drop columns, formulas, relationships. Foundation stable.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Context Intelligence - In Progress */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <div className="flex items-start mb-4">
+                <div>
+                  <h3
+                    style={{
+                      fontSize: '1.25rem',
+                      fontWeight: '400',
+                      letterSpacing: '0.01em',
+                      color: 'var(--text-primary)',
+                      marginBottom: '4px'
+                    }}
+                  >
+                    Context Intelligence
+                  </h3>
+                  <div style={{ fontSize: '0.875rem', color: 'var(--text-tertiary)', marginBottom: '12px' }}>
+                    Complete (Q4 2025)
+                  </div>
+                  <p
+                    style={{
+                      fontSize: '0.95rem',
+                      fontWeight: '300',
+                      letterSpacing: '0.005em',
+                      lineHeight: '1.7',
+                      color: 'var(--text-secondary)'
+                    }}
+                  >
+                    Pattern recognition in alpha testing. Learning which views matter in which contexts. Suggestion engine in development.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Ecosystem Integration - In Progress */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <div className="flex items-start mb-4">
+                <div>
+                  <h3
+                    style={{
+                      fontSize: '1.25rem',
+                      fontWeight: '400',
+                      letterSpacing: '0.01em',
+                      color: 'var(--text-primary)',
+                      marginBottom: '4px'
+                    }}
+                  >
+                    Ecosystem Integration
+                  </h3>
+                  <div style={{ fontSize: '0.875rem', color: 'var(--text-tertiary)', marginBottom: '12px' }}>
+                    In Progress (Q4 2025)
+                  </div>
+                  <p
+                    style={{
+                      fontSize: '0.95rem',
+                      fontWeight: '300',
+                      letterSpacing: '0.005em',
+                      lineHeight: '1.7',
+                      color: 'var(--text-secondary)'
+                    }}
+                  >
+                    Connecting wealth tracking, community engagement, and tokenization data. First integrations live in test environments.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Experience - Planned */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <div className="flex items-start mb-4">
+                <div>
+                  <h3
+                    style={{
+                      fontSize: '1.25rem',
+                      fontWeight: '400',
+                      letterSpacing: '0.01em',
+                      color: 'var(--text-primary)',
+                      marginBottom: '4px'
+                    }}
+                  >
+                    Mobile Experience
+                  </h3>
+                  <div style={{ fontSize: '0.875rem', color: 'var(--text-tertiary)', marginBottom: '12px' }}>
+                    Planned (Q1 2026)
+                  </div>
+                  <p
+                    style={{
+                      fontSize: '0.95rem',
+                      fontWeight: '300',
+                      letterSpacing: '0.005em',
+                      lineHeight: '1.7',
+                      color: 'var(--text-secondary)'
+                    }}
+                  >
+                    Full-featured mobile apps. Context switching on the go. Intelligence that adapts to mobile workflows.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Advanced AI Assistance - Planned */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <div className="flex items-start mb-4">
+                <div>
+                  <h3
+                    style={{
+                      fontSize: '1.25rem',
+                      fontWeight: '400',
+                      letterSpacing: '0.01em',
+                      color: 'var(--text-primary)',
+                      marginBottom: '4px'
+                    }}
+                  >
+                    Advanced AI Assistance
+                  </h3>
+                  <div style={{ fontSize: '0.875rem', color: 'var(--text-tertiary)', marginBottom: '12px' }}>
+                    Planned (Q2 2026)
+                  </div>
+                  <p
+                    style={{
+                      fontSize: '0.95rem',
+                      fontWeight: '300',
+                      letterSpacing: '0.005em',
+                      lineHeight: '1.7',
+                      color: 'var(--text-secondary)'
+                    }}
+                  >
+                    Predictive view suggestions. Automated routine adjustments. Natural language workspace configuration.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Extensions Marketplace - Planned */}
+            <div
+              className="p-8 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <div className="flex items-start mb-4">
+                <div>
+                  <h3
+                    style={{
+                      fontSize: '1.25rem',
+                      fontWeight: '400',
+                      letterSpacing: '0.01em',
+                      color: 'var(--text-primary)',
+                      marginBottom: '4px'
+                    }}
+                  >
+                    Extensions Marketplace
+                  </h3>
+                  <div style={{ fontSize: '0.875rem', color: 'var(--text-tertiary)', marginBottom: '12px' }}>
+                    Planned (Q3 2026)
+                  </div>
+                  <p
+                    style={{
+                      fontSize: '0.95rem',
+                      fontWeight: '300',
+                      letterSpacing: '0.005em',
+                      lineHeight: '1.7',
+                      color: 'var(--text-secondary)'
+                    }}
+                  >
+                    Third-party view templates. Custom intelligence modules. Community-built workspace patterns.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Earth Horizon Divider */}
+          <div
+            className="mt-32"
+            style={{
+              width: '100%',
+              height: '2px',
+              background: 'linear-gradient(to right, transparent 0%, #9B8B7E 50%, transparent 100%)',
+              margin: '80px auto 0 auto'
+            }}
+          />
+        </div>
+      </section>
+
       {/* Early Access CTA */}
       <section className="relative py-40 px-8 overflow-hidden" style={{ background: 'linear-gradient(135deg, var(--cyan-deep) 0%, var(--button-blue) 100%)' }}>
         <div className="max-w-5xl mx-auto text-center relative z-10">

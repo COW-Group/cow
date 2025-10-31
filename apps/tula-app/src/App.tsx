@@ -167,7 +167,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
             >
               Legal AI Platform for the<br />
               <span style={{
-                background: 'linear-gradient(to right, #0066FF 0%, #0ea5e9 50%, #10b981 100%)',
+                background: 'linear-gradient(to right, #b45309 0%, #00A5CF 50%, #059669 100%)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
@@ -185,7 +185,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 color: isDark ? '#9ca3af' : '#6b7280'
               }}
             >
-              Draft contracts in minutes. Navigate compliance across jurisdictions. Structure entities with AI guidance.
+              Not another ChatGPT wrapper. AI trained on your firm's precedents, UK/EU/US case law, and real tokenization structures deployed across three continents.
             </p>
             <p
               className="text-base sm:text-lg font-light max-w-3xl mx-auto mb-12"
@@ -195,7 +195,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 color: isDark ? '#6b7280' : '#9ca3af'
               }}
             >
-              Built by practitioners who've actually done this work—from high street contracts to multi-billion tokenizations across three continents.
+              Built by practitioners who've structured billion-dollar deals and defended them in court. We know the difference between AI that sounds good and AI that holds up.
             </p>
           </div>
 

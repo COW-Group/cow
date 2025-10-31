@@ -16,7 +16,14 @@ if (fs.existsSync(envPath)) {
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
-  
+
+  // Log environment variables during build
+  console.log('🔧 Webpack Config - Environment Variables:');
+  console.log('  NEXT_PUBLIC_SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL ? '✅ Set' : '❌ Missing');
+  console.log('  NEXT_PUBLIC_SUPABASE_ANON_KEY:', process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? '✅ Set' : '❌ Missing');
+  console.log('  REACT_APP_SUPABASE_URL:', process.env.REACT_APP_SUPABASE_URL ? '✅ Set' : '❌ Missing');
+  console.log('  REACT_APP_SUPABASE_ANON_KEY:', process.env.REACT_APP_SUPABASE_ANON_KEY ? '✅ Set' : '❌ Missing');
+
   return {
     entry: './src/main.tsx',
     output: {

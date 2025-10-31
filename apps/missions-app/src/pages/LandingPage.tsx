@@ -426,11 +426,24 @@ export function LandingPage() {
         </motion.div>
       </section>
 
-      {/* Mission Execution Architecture */}
+      {/* What is Aperture Section */}
       <section className="py-40 px-8" style={{ backgroundColor: 'var(--bg-elevated)' }}>
         <div className="max-w-7xl mx-auto">
-          {/* Section Header */}
-          <div className="text-center mb-32">
+          {/* Section Label */}
+          <div className="text-center mb-12">
+            <div
+              className="inline-block px-4 py-2 text-xs font-light tracking-widest uppercase"
+              style={{
+                color: 'var(--text-tertiary)',
+                letterSpacing: '0.15em'
+              }}
+            >
+              What is Aperture
+            </div>
+          </div>
+
+          {/* Headline */}
+          <div className="text-center mb-20">
             <h2
               style={{
                 fontSize: 'clamp(3rem, 6vw, 4.5rem)',
@@ -440,66 +453,160 @@ export function LandingPage() {
                 color: 'var(--text-primary)'
               }}
             >
-              Enterprise Mission Architecture
+              One Workspace, Every View
             </h2>
+          </div>
+
+          {/* Body Copy */}
+          <div className="max-w-4xl mx-auto mb-20 space-y-8">
             <p
-              className="max-w-3xl mx-auto"
               style={{
-                fontSize: 'clamp(1.125rem, 2.5vw, 1.375rem)',
-                fontWeight: '200',
+                fontSize: 'clamp(1.125rem, 2.5vw, 1.25rem)',
+                fontWeight: '300',
                 letterSpacing: '0.005em',
-                lineHeight: '1.4',
+                lineHeight: '1.8',
                 color: 'var(--text-secondary)'
               }}
             >
-              Institutional-grade mission management designed specifically for Cycles of Wealth
-              ecosystem coordination and tokenized program execution.
+              Your work shifts between contexts constantly. Managing investor relationships. Coordinating product launches. Tracking compliance requirements. Each needs a different view of the same information.
+            </p>
+            <p
+              style={{
+                fontSize: 'clamp(1.125rem, 2.5vw, 1.25rem)',
+                fontWeight: '300',
+                letterSpacing: '0.005em',
+                lineHeight: '1.8',
+                color: 'var(--text-secondary)'
+              }}
+            >
+              Aperture adjusts focus automatically. When you're in investor relations, you see CRM. When you're coordinating delivery, you see project boards. When you're tracking governance, you see compliance frameworks. The intelligence recognizes your context and adjusts the aperture.
+            </p>
+            <p
+              style={{
+                fontSize: 'clamp(1.125rem, 2.5vw, 1.25rem)',
+                fontWeight: '300',
+                letterSpacing: '0.005em',
+                lineHeight: '1.8',
+                color: 'var(--text-secondary)'
+              }}
+            >
+              Think of it like a camera: wide aperture shows strategic context, narrow aperture shows tactical details. Both views are accurate. Both are necessary. Aperture lets you shift between them without losing sight of the whole picture.
             </p>
           </div>
 
           {/* Capabilities Grid */}
-          <div className="grid md:grid-cols-3 gap-16 mb-32 max-w-6xl mx-auto">
-            {capabilities.map((capability, index) => (
-              <div key={index} className="text-center group">
-                <div className="mb-6 flex justify-center">
-                  <div
-                    className="p-4 rounded-full transition-all duration-300 group-hover:scale-110"
-                    style={{
-                      background: 'rgba(14, 165, 233, 0.08)',
-                      border: '1px solid rgba(14, 165, 233, 0.15)'
-                    }}
-                  >
-                    <div style={{ color: 'var(--cyan-bright)' }}>
-                      {capability.icon}
-                    </div>
-                  </div>
-                </div>
-                <h3
-                  className="mb-4"
-                  style={{
-                    fontSize: '1.25rem',
-                    fontWeight: '400',
-                    letterSpacing: '0.01em',
-                    color: 'var(--text-primary)'
-                  }}
-                >
-                  {capability.title}
-                </h3>
-                <p
-                  className="leading-relaxed"
-                  style={{
-                    fontSize: '0.95rem',
-                    fontWeight: '300',
-                    letterSpacing: '0.005em',
-                    lineHeight: '1.6',
-                    color: 'var(--text-secondary)'
-                  }}
-                >
-                  {capability.description}
-                </p>
-              </div>
-            ))}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 max-w-6xl mx-auto">
+            <div className="text-center">
+              <h3
+                className="mb-3"
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Adaptive Views
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.6',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                CRM, Projects, Compliance, Content, Sales
+              </p>
+            </div>
+
+            <div className="text-center">
+              <h3
+                className="mb-3"
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Context Recognition
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.6',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                AI understands what you're working on
+              </p>
+            </div>
+
+            <div className="text-center">
+              <h3
+                className="mb-3"
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Seamless Switching
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.6',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Move between views without losing context
+              </p>
+            </div>
+
+            <div className="text-center">
+              <h3
+                className="mb-3"
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Unified Data
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.6',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Same information, different lenses
+              </p>
+            </div>
           </div>
+
+          {/* Earth Horizon Divider */}
+          <div
+            className="mt-32"
+            style={{
+              width: '100%',
+              height: '2px',
+              background: 'linear-gradient(to right, transparent 0%, #9B8B7E 50%, transparent 100%)',
+              margin: '80px auto 0 auto'
+            }}
+          />
         </div>
       </section>
 

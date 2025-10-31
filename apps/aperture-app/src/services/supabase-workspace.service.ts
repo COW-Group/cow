@@ -3,17 +3,23 @@ import { Workspace, WorkspaceBoard, Folder } from '../types/workspace.types';
 
 export class SupabaseWorkspaceService {
   /**
-   * Load all workspaces from Supabase
+   * Load all workspaces from Supabase, optionally filtered by organization
    */
-  async loadWorkspaces(): Promise<Workspace[]> {
+  async loadWorkspaces(organizationId?: string | null): Promise<Workspace[]> {
     try {
-      console.log('🔍 Loading workspaces from Supabase...');
+      console.log('🔍 Loading workspaces from Supabase...', organizationId ? `for org ${organizationId}` : '');
 
-      // Fetch workspaces
-      const { data: workspacesData, error: workspacesError } = await supabase
+      // Fetch workspaces - filter by organization if provided
+      let query = supabase
         .from('workspaces')
-        .select('*')
-        .order('created_at', { ascending: true });
+        .select('*');
+
+      // Only filter by organization if organizationId is provided
+      if (organizationId) {
+        query = query.eq('organization_id', organizationId);
+      }
+
+      const { data: workspacesData, error: workspacesError } = await query.order('created_at', { ascending: true });
 
       if (workspacesError) {
         console.error('Error loading workspaces:', workspacesError);

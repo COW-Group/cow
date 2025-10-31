@@ -18,12 +18,12 @@ export class WorkspaceService {
   }
 
   /**
-   * Load workspaces from Supabase
+   * Load workspaces from Supabase, optionally filtered by organization
    */
-  async loadWorkspacesFromSupabase(): Promise<void> {
+  async loadWorkspacesFromSupabase(organizationId?: string | null): Promise<void> {
     try {
-      console.log('🔄 Loading workspaces from Supabase...');
-      const supabaseWorkspaces = await supabaseWorkspaceService.loadWorkspaces();
+      console.log('🔄 Loading workspaces from Supabase...', organizationId ? `for org ${organizationId}` : '');
+      const supabaseWorkspaces = await supabaseWorkspaceService.loadWorkspaces(organizationId);
 
       // Clear existing workspaces
       this.workspaces.clear();

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ChevronDown, Check, Building2, Plus, Settings } from 'lucide-react';
 import { supabasePermissionsService } from '../../services/supabase-permissions.service';
 import { Database } from '../../lib/supabase';
+import { useAuth } from '../../contexts/AuthContext';
 
 type Organization = Database['public']['Tables']['organizations']['Row'];
 
@@ -20,6 +21,7 @@ export function OrganizationSwitcher({
   onOrganizationChange,
 }: OrganizationSwitcherProps) {
   const navigate = useNavigate();
+  const { refreshUserProfile } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [organizations, setOrganizations] = useState<OrganizationWithRole[]>([]);
   const [currentOrg, setCurrentOrg] = useState<OrganizationWithRole | null>(null);
@@ -81,6 +83,9 @@ export function OrganizationSwitcher({
         await supabasePermissionsService.updateUserProfile(currentUser.id, {
           organization_id: org.id,
         });
+
+        // Refresh the user profile in AuthContext to trigger workspace reload
+        await refreshUserProfile();
       }
     } catch (error) {
       console.error('Error updating current organization:', error);
@@ -90,9 +95,6 @@ export function OrganizationSwitcher({
     if (onOrganizationChange) {
       onOrganizationChange(org.id);
     }
-
-    // Reload page to update context
-    window.location.reload();
   };
 
   const getRoleBadgeColor = (role: string) => {
@@ -117,8 +119,25 @@ export function OrganizationSwitcher({
     );
   }
 
-  if (!currentOrg || organizations.length === 0) {
-    return null;
+  // Always show the switcher, even if no organization is set
+  if (organizations.length === 0) {
+    return (
+      <div className="flex items-center space-x-3 w-full px-3 py-2 rounded-lg bg-gray-50 border border-gray-200">
+        <div className="w-8 h-8 rounded-lg bg-gray-200 flex items-center justify-center">
+          <Building2 className="w-5 h-5 text-gray-500" />
+        </div>
+        <div className="flex-1 text-left">
+          <div className="text-sm font-medium text-gray-600">No Organization</div>
+          <div className="text-xs text-gray-500">Create one to get started</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!currentOrg) {
+    // Fallback to first org if none is selected
+    setCurrentOrg(organizations[0]);
+    return null; // Will re-render with currentOrg set
   }
 
   return (

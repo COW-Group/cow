@@ -53,9 +53,9 @@ export default function Login() {
       {/* Left side - Branding */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-12 flex-col justify-between">
         <div>
-          <h1 className="text-4xl font-bold text-white mb-4">Missions App</h1>
+          <h1 className="text-4xl font-bold text-white mb-4">Aperture</h1>
           <p className="text-blue-100 text-lg">
-            Project management and collaboration platform for modern teams
+            Intelligent workspace that adjusts to your context. Same object. Different views.
           </p>
         </div>
         <div className="text-blue-100 text-sm">

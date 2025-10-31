@@ -141,8 +141,9 @@ export function WorkspaceSidebar({
 
   useEffect(() => {
     const loadWorkspaceData = async () => {
-      // Load workspaces from Supabase first
-      await workspaceService.loadWorkspacesFromSupabase();
+      // Load workspaces from Supabase first, filtered by organization
+      const orgId = userProfile?.organization_id;
+      await workspaceService.loadWorkspacesFromSupabase(orgId);
 
       // Then sync with COW boards
       await workspaceService.syncWithCOWBoards();
@@ -155,7 +156,7 @@ export function WorkspaceSidebar({
       const current = currentWorkspaceId
         ? allWorkspaces.find(w => w.id === currentWorkspaceId) || allWorkspaces[0]
         : allWorkspaces.find(w => w.name.includes('🐮')) || allWorkspaces[0];
-      
+
       setCurrentWorkspace(current);
 
       // Update current workspace ID in parent component
@@ -171,7 +172,7 @@ export function WorkspaceSidebar({
 
     // Initialize apps on first load
     initializeApps();
-  }, [currentWorkspaceId, initializeApps]);
+  }, [currentWorkspaceId, initializeApps, userProfile?.organization_id]);
 
 
   const handleFolderToggle = (folderId: string) => {
@@ -514,7 +515,7 @@ export function WorkspaceSidebar({
                 className="h-8 w-auto"
               />
               <span className="text-lg font-light" style={{ color: 'var(--text-primary)' }}>
-                Missions
+                Aperture
               </span>
             </div>
           ) : (

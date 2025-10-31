@@ -195,14 +195,46 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       if (error) throw error;
 
-      // Create profile
+      // Create profile and default organization
       if (data.user) {
+        // Create user profile first
         await supabase.from('profiles').insert({
           id: data.user.id,
           email: email,
           full_name: fullName || null,
           is_active: true,
         });
+
+        // Create default personal organization
+        const orgName = fullName ? `${fullName}'s Organization` : `${email.split('@')[0]}'s Organization`;
+        const orgSlug = (fullName || email.split('@')[0])
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '') + '-' + Date.now().toString(36);
+
+        console.log('Creating default organization:', orgName);
+        const orgResult = await supabasePermissionsService.createOrganization(
+          orgName,
+          orgSlug,
+          data.user.id,
+          {
+            description: `Personal workspace for ${fullName || email}`,
+            type: 'personal',
+            plan: 'free'
+          }
+        );
+
+        if (orgResult.success && orgResult.organization) {
+          // Update user profile with organization_id
+          await supabase
+            .from('profiles')
+            .update({ organization_id: orgResult.organization.id })
+            .eq('id', data.user.id);
+
+          console.log('✅ Default organization created and assigned:', orgResult.organization.id);
+        } else {
+          console.error('⚠️ Failed to create default organization:', orgResult.error);
+        }
       }
 
       return { error: null };

@@ -166,7 +166,15 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
               }}
             >
               Legal AI Platform for the<br />
-              <span style={{ color: isDark ? '#9ca3af' : '#6b7280', fontWeight: '200' }}>Digital Economy</span>
+              <span style={{
+                background: 'linear-gradient(to right, #0066FF 0%, #0ea5e9 50%, #10b981 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                fontWeight: '300'
+              }}>
+                Digital Economy
+              </span>
             </h1>
             <p
               className="text-xl sm:text-2xl font-light max-w-4xl mx-auto mb-4"

@@ -1,23 +1,36 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
-import { Scale, FileText, Shield, Briefcase, Building, TrendingUp, Globe, CheckCircle, Target, Zap, Search, FileSearch, BookOpen, Network, Settings, FileCheck, Bot, GitBranch } from 'lucide-react'
+import { Scale, FileText, Shield, Briefcase, Building, TrendingUp, Globe, CheckCircle, Target, Zap, Search, FileSearch, BookOpen, Network, Settings, FileCheck, Bot, GitBranch, Moon, Sun } from 'lucide-react'
+import { motion } from 'framer-motion'
 
 function App() {
-  const [isDark, setIsDark] = useState(
-    window.matchMedia('(prefers-color-scheme: dark)').matches
-  )
+  const [isDark, setIsDark] = useState(false)
   const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
     setIsClient(true)
-    if (isDark) {
+    const savedTheme = localStorage.getItem('theme')
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      setIsDark(true)
       document.documentElement.classList.add('dark')
+    } else {
+      setIsDark(false)
+      document.documentElement.classList.remove('dark')
     }
   }, [])
 
   const toggleTheme = () => {
-    setIsDark(!isDark)
-    document.documentElement.classList.toggle('dark')
+    if (isDark) {
+      document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
+      setIsDark(false)
+    } else {
+      document.documentElement.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
+      setIsDark(true)
+    }
   }
 
   if (!isClient) {
@@ -117,15 +130,15 @@ function FloatingNav({ toggleTheme, isDark }: { toggleTheme: () => void; isDark:
 
           <button
             onClick={toggleTheme}
-            className="text-sm font-light transition-all duration-200 rounded-full px-4 py-2"
+            className="text-sm font-light transition-all duration-200 rounded-full p-2 hover:bg-gray-100 dark:hover:bg-gray-800"
             style={{
-              background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
-              border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
-              fontSize: '13px',
-              fontWeight: '300'
+              color: isDark ? '#9ca3af' : '#6b7280'
             }}
+            aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
           >
-            {isDark ? '☀️' : '🌙'}
+            <motion.div animate={{ rotate: isDark ? 180 : 0 }} transition={{ duration: 0.3 }}>
+              {isDark ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            </motion.div>
           </button>
         </div>
       </div>

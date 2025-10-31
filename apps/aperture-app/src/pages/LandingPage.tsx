@@ -240,24 +240,6 @@ export function LandingPage() {
             >
               Sign In
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="rounded-full text-gray-700 dark:text-gray-300 transition-all duration-300"
-              style={{
-                background: 'rgba(0, 0, 0, 0.03)',
-                border: '1px solid rgba(0, 0, 0, 0.1)',
-                backdropFilter: 'blur(10px)',
-                fontSize: '13px',
-                fontWeight: '300',
-                letterSpacing: '0.01em',
-                padding: '8px 16px',
-                color: '#374151'
-              }}
-              onClick={handleDemoLogin}
-            >
-              Try Demo
-            </Button>
           </div>
         </div>
       </nav>
@@ -275,26 +257,31 @@ export function LandingPage() {
             className="mb-16"
           >
             <h1
-              className="text-6xl sm:text-7xl lg:text-8xl font-light mb-8 tracking-tight"
+              className="text-6xl sm:text-7xl lg:text-8xl mb-8 tracking-tight"
               style={{
-                color: 'var(--text-primary)',
                 lineHeight: '1.1',
-                fontWeight: '200',
                 letterSpacing: '-0.02em'
               }}
             >
-              Aperture
+              <span style={{
+                background: 'linear-gradient(to right, #0066FF 0%, #0ea5e9 50%, #10b981 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                fontWeight: '300'
+              }}>
+                Aperture
+              </span>
             </h1>
             <p
-              className="text-2xl sm:text-3xl lg:text-4xl font-light max-w-4xl"
+              className="text-2xl sm:text-3xl lg:text-4xl font-light max-w-4xl text-gray-600 dark:text-gray-300"
               style={{
-                color: 'var(--text-secondary)',
                 lineHeight: '1.4',
                 fontWeight: '300',
                 letterSpacing: '-0.01em'
               }}
             >
-              Intelligent workspace that adjusts to your context. Same work. Different views.
+              <span style={{ color: '#0066FF', fontWeight: '400' }}>Intelligent workspace</span> that adjusts to your context. <span className="text-emerald-600 font-normal">Same work. Different views.</span>
             </p>
           </motion.div>
 
@@ -345,8 +332,6 @@ export function LandingPage() {
               }}
               onClick={handleDemoLogin}
             >
-              View demo
-            </button>
 
             <a
               href="#research"

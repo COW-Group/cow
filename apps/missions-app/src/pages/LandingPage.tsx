@@ -840,12 +840,25 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Client Success Stories - Ultra Minimal */}
+      {/* Available Views Section */}
       <section className="py-40 px-8" style={{ backgroundColor: 'var(--bg-elevated)' }}>
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
+          {/* Section Label */}
+          <div className="text-center mb-12">
+            <div
+              className="inline-block px-4 py-2 text-xs font-light tracking-widest uppercase"
+              style={{
+                color: 'var(--text-tertiary)',
+                letterSpacing: '0.15em'
+              }}
+            >
+              Available Views
+            </div>
+          </div>
+
+          {/* Headline */}
+          <div className="text-center mb-16">
             <h2
-              className="mb-12"
               style={{
                 fontSize: 'clamp(3rem, 6vw, 4.5rem)',
                 fontWeight: '100',
@@ -854,74 +867,302 @@ export function LandingPage() {
                 color: 'var(--text-primary)'
               }}
             >
-              Trusted by Leading Organizations
+              Eight Lenses, One Workspace
             </h2>
+          </div>
+
+          {/* Body Copy */}
+          <div className="max-w-4xl mx-auto mb-20 text-center">
             <p
-              className="max-w-2xl mx-auto"
               style={{
-                fontSize: 'clamp(1.125rem, 2.5vw, 1.375rem)',
-                fontWeight: '200',
+                fontSize: 'clamp(1.125rem, 2.5vw, 1.25rem)',
+                fontWeight: '300',
                 letterSpacing: '0.005em',
-                lineHeight: '1.4',
+                lineHeight: '1.8',
                 color: 'var(--text-secondary)'
               }}
             >
-              Cycles of Wealth ecosystem leaders share their mission execution results.
+              Each view reveals different aspects of the same underlying work. Switch between perspectives as your context shifts throughout the day.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="text-center">
-                <div className="mb-8">
-                  <div
-                    className="text-6xl mb-6"
-                    style={{
-                      filter: 'grayscale(0.3) opacity(0.8)'
-                    }}
-                  >
-                    {testimonial.avatar}
-                  </div>
-                </div>
-                <blockquote
-                  className="mb-8"
-                  style={{
-                    fontSize: '1.125rem',
-                    fontWeight: '300',
-                    letterSpacing: '0.005em',
-                    lineHeight: '1.6',
-                    fontStyle: 'italic',
-                    color: 'var(--text-primary)'
-                  }}
-                >
-                  "{testimonial.content}"
-                </blockquote>
-                <div>
-                  <div
-                    className="mb-1"
-                    style={{
-                      fontSize: '1rem',
-                      fontWeight: '500',
-                      letterSpacing: '0.01em',
-                      color: 'var(--text-primary)'
-                    }}
-                  >
-                    {testimonial.name}
-                  </div>
-                  <div
-                    style={{
-                      fontSize: '0.875rem',
-                      fontWeight: '300',
-                      letterSpacing: '0.005em',
-                      color: 'var(--text-secondary)'
-                    }}
-                  >
-                    {testimonial.role}
-                  </div>
-                </div>
-              </div>
-            ))}
+          {/* 8 Views Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
+            {/* Customer Relations */}
+            <div
+              className="p-6 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="mb-3"
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Customer Relations
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.6',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                CRM view for managing relationships, tracking interactions, monitoring account health
+              </p>
+            </div>
+
+            {/* Project Coordination */}
+            <div
+              className="p-6 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="mb-3"
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Project Coordination
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.6',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Kanban boards, timelines, dependencies, resource allocation across deliverables
+              </p>
+            </div>
+
+            {/* Compliance Tracking */}
+            <div
+              className="p-6 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="mb-3"
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Compliance Tracking
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.6',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Regulatory requirements, audit trails, governance frameworks, documentation status
+              </p>
+            </div>
+
+            {/* Content Production */}
+            <div
+              className="p-6 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="mb-3"
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Content Production
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.6',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Editorial calendars, content workflows, publishing pipelines, asset management
+              </p>
+            </div>
+
+            {/* Sales Pipeline */}
+            <div
+              className="p-6 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="mb-3"
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Sales Pipeline
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.6',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Deal stages, forecasting, opportunity tracking, conversion metrics
+              </p>
+            </div>
+
+            {/* Team Collaboration */}
+            <div
+              className="p-6 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="mb-3"
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Team Collaboration
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.6',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Team structure, workload distribution, communication channels, capacity planning
+              </p>
+            </div>
+
+            {/* Token Governance */}
+            <div
+              className="p-6 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="mb-3"
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Token Governance
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.6',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Tokenized assets, stakeholder voting, distribution mechanisms, smart contract status
+              </p>
+            </div>
+
+            {/* Analytics */}
+            <div
+              className="p-6 rounded-lg"
+              style={{
+                background: 'var(--glass-bg)',
+                border: '1px solid var(--glass-border)',
+                backdropFilter: 'blur(10px)'
+              }}
+            >
+              <h3
+                className="mb-3"
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: '400',
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-primary)'
+                }}
+              >
+                Analytics
+              </h3>
+              <p
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: '300',
+                  letterSpacing: '0.005em',
+                  lineHeight: '1.6',
+                  color: 'var(--text-secondary)'
+                }}
+              >
+                Performance metrics, trend analysis, predictive insights, strategic intelligence
+              </p>
+            </div>
           </div>
+
+          {/* Earth Horizon Divider */}
+          <div
+            className="mt-32"
+            style={{
+              width: '100%',
+              height: '2px',
+              background: 'linear-gradient(to right, transparent 0%, #9B8B7E 50%, transparent 100%)',
+              margin: '80px auto 0 auto'
+            }}
+          />
         </div>
       </section>
 

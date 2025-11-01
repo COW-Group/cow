@@ -31,63 +31,63 @@ export function LandingPage() {
   const capabilities = [
     {
       icon: <Target className="h-6 w-6" />,
-      title: 'Focus on What Matters',
-      description: 'Your workspace surfaces the right view at the right time. Managing gold performance? See optimization boards. Tracking compliance? Switch to regulatory dashboards. Same data, context-aware intelligence.'
+      title: 'Asset Performance Analysis',
+      description: 'Optimization dashboards surface during research. Compliance frameworks appear for SEC reviews. Tokenization pipelines track asset structuring. Context-aware orchestration across product lifecycle.'
     },
     {
       icon: <Building className="h-6 w-6" />,
-      title: 'Build Across Verticals',
-      description: 'Coordinate research across asset classes. Track tokenization workflows in real-time. Manage compliance across jurisdictions. Each vertical gets its workspace, all connected through shared intelligence.'
+      title: 'Multi-Product Coordination',
+      description: 'Performance tracking across tokenized assets. Operational boards for infrastructure. Content workflows for public-facing properties. Each product maintains domain integrity while sharing intelligence layer.'
     },
     {
       icon: <Zap className="h-6 w-6" />,
-      title: 'Work at the Speed of Thought',
-      description: 'Real-time collaboration means your team stays synchronized across time zones. Updates appear instantly. Context switches seamlessly. Progress flows naturally from research to implementation.'
+      title: 'Ecosystem State Sync',
+      description: 'Sub-100ms state propagation across COW products. Performance metrics update instantly. Compliance boards stay current. Distributed product teams operate with consistent data.'
     },
     {
       icon: <Users className="h-6 w-6" />,
-      title: 'Collaborate Without Friction',
-      description: 'Share boards with partners. Co-edit docs with researchers. Track forms feeding into workflows. Your workspace connects the right people to the right information automatically.'
+      title: 'Stakeholder Intelligence',
+      description: 'Institutional investors see performance metrics. Compliance teams access regulatory frameworks. Product managers view operational dashboards. Architecture adapts to COW stakeholder context.'
     },
     {
       icon: <BarChart3 className="h-6 w-6" />,
-      title: 'See Patterns Emerge',
-      description: 'Dashboards connect to research findings. Performance data links to optimization boards. Forms aggregate into analytics. Watch insights surface as your team builds.'
+      title: 'Cross-Product Patterns',
+      description: 'Asset performance correlates with tokenization velocity. Compliance data links across products. Investor behavior patterns surface automatically. Intelligence operates across COW ecosystem.'
     },
     {
       icon: <Shield className="h-6 w-6" />,
-      title: 'Trust the Foundation',
-      description: 'Built on Supabase with proper data isolation, real-time sync, and institutional-grade security. Your workspace grows as the COW ecosystem grows.'
+      title: 'Regulatory-Grade Infrastructure',
+      description: 'PostgreSQL with row-level security for tokenized assets. Multi-investor class isolation. Audit-complete state for SEC compliance. Infrastructure matching COW regulatory requirements.'
     }
   ];
 
   // What we're building
   const successMetrics = [
-    { number: "Early", label: "Stage", sublabel: "Building in public" },
-    { number: "Real-time", label: "Intelligence", sublabel: "Context-aware by design" },
-    { number: "Infinite", label: "Views", sublabel: "Same data, different angles" },
-    { number: "COW", label: "Ecosystem", sublabel: "Built for performance RWAs" }
+    { number: "Alpha", label: "Stage", sublabel: "COW monorepo integration" },
+    { number: "Sub-100ms", label: "State Sync", sublabel: "Across ecosystem products" },
+    { number: "Unified", label: "Intelligence", sublabel: "Cross-product patterns" },
+    { number: "SEC", label: "Compliant", sublabel: "Regulatory-grade architecture" }
   ];
 
   // How COW teams will use Aperture
   const testimonials = [
     {
-      name: 'Research Intelligence',
-      role: 'Vision for how teams will work',
-      content: 'Imagine dashboards that surface performance patterns as you analyze data. Research findings automatically linking to boards. Context switching that feels natural because the workspace adapts to your thinking.',
-      avatar: '🔬'
+      name: 'Asset Performance Team',
+      role: 'Tokenized asset optimization',
+      content: 'Algorithmic return analysis surfaces performance dashboards. Historical asset correlations link to research boards. Context switches between optimization research and tokenization execution.',
+      avatar: 'A'
     },
     {
-      name: 'Operations Flow',
-      role: 'Vision for how work will flow',
-      content: 'Picture managing gold tokenization where compliance boards appear when you need them. Performance metrics surface during optimization. Documentation writes itself from your workflow data.',
-      avatar: '⚙️'
+      name: 'Compliance Operations',
+      role: 'SEC regulatory management',
+      content: 'Investor class verification triggers compliance overlays. KYC/AML tracking across tokenized products. Audit trails maintain state for regulatory reporting.',
+      avatar: 'C'
     },
     {
-      name: 'Collaborative Intelligence',
-      role: 'Vision for how teams will connect',
-      content: 'Envision researchers in different time zones co-editing docs while optimization boards update in real-time. Forms aggregate insights. Patterns emerge naturally from collective work.',
-      avatar: '🌐'
+      name: 'Product Coordination',
+      role: 'Cross-ecosystem management',
+      content: 'Content workflows coordinate with tokenization velocity. Product launch metrics inform infrastructure development. Real-time state across COW monorepo applications.',
+      avatar: 'P'
     }
   ];
 
@@ -281,7 +281,7 @@ export function LandingPage() {
                 letterSpacing: '-0.01em'
               }}
             >
-              Work that adapts to you. We're building workspace intelligence for the COW ecosystem—<span style={{ color: '#0066FF', fontWeight: '400' }}>context-aware views</span> that surface what matters <span className="text-emerald-600 font-normal">when it matters</span>.
+              Operations intelligence for <span style={{ color: '#0066FF', fontWeight: '400' }}>tokenized asset infrastructure</span>. Built for teams managing <span className="text-emerald-600 font-normal">COW ecosystem products</span>.
             </p>
           </motion.div>
 
@@ -372,7 +372,7 @@ export function LandingPage() {
                 color: 'var(--text-secondary)'
               }}
             >
-              Building performance-engineered real-world assets requires seeing the same information from different angles. Research needs one view. Compliance needs another. Operations needs a third. Your brain switches contexts constantly. Your workspace should too.
+              COW ecosystem products—tokenized assets, infrastructure services, regulatory-compliant offerings—require coordinated operational intelligence. Research teams analyze asset performance. Compliance teams track SEC requirements across investor classes. Product managers coordinate tokenization workflows. Each context demands different views of the same underlying data.
             </p>
             <p
               style={{
@@ -383,7 +383,7 @@ export function LandingPage() {
                 color: 'var(--text-secondary)'
               }}
             >
-              Aperture learns how you work. When you're analyzing gold performance optimization, it surfaces algorithmic return dashboards. When you're managing tokenization workflows, it shows compliance boards. When you're writing research findings, docs appear with linked data. Same workspace. Different lens. Context-aware by design.
+              Aperture provides operations layer intelligence. Asset performance analysis surfaces optimization dashboards automatically. Tokenization workflows trigger jurisdictional compliance overlays. Content management activates editorial boards. Pattern recognition operates across all COW products while maintaining domain separation.
             </p>
             <p
               style={{
@@ -394,7 +394,7 @@ export function LandingPage() {
                 color: 'var(--text-secondary)'
               }}
             >
-              We're building this in public—early, iterative, improving as the COW ecosystem grows. Join us in shaping workspace intelligence that actually understands how performance engineering works.
+              Built within the COW monorepo. Early-stage architecture evolving alongside tokenization infrastructure. Teams building regulatory-compliant asset products inform this workspace intelligence.
             </p>
           </div>
 

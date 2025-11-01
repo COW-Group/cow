@@ -47,8 +47,8 @@ export default function ContractValueGain() {
   const totalGain = exitPriceEUR - contractNotionalValueEUR // Total Gain = Exit Value - Contract Value
   const investorGain = totalGain * (2/3) // Investor Gain = 2/3 of Total Gain
   const totalUnitsBought = 1000
-  // Cash Margin Investment: ((Prevailing Gold Spot Ask -- 1 oz)/31.1034768)+18.1)*31.1034768*100/3 for 100 Oz
-  const cashMarginPer100OzUSD = ((goldSpotAsk / 31.1034768) + 18.1) * 31.1034768 * 100 / 3
+  // Cash Margin Investment: ((Prevailing Gold Spot Ask -- 1 oz)/31.1034768)+18.1)*31.1034768*100/5 for 100 Oz
+  const cashMarginPer100OzUSD = ((goldSpotAsk / 31.1034768) + 18.1) * 31.1034768 * 100 / 5
   const cashMarginPer100OzEUR = cashMarginPer100OzUSD / exchangeRate
   const cashMarginPerHundredthGramUSD = cashMarginPer100OzUSD / (100 * 31.1034768 * 100)
   const cashMarginPerHundredthGramEUR = cashMarginPer100OzEUR / (100 * 31.1034768 * 100)

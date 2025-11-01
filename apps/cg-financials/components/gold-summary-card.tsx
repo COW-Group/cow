@@ -12,7 +12,7 @@ export default function GoldSummaryCard() {
   const exchangeRate = eurExchangeRate || 1.2
 
   // Calculate Cash Margin Investment per 100 Oz
-  const cashMarginPer100OzUSD = ((goldSpotAsk / 31.1034768) + 18.1) * 31.1034768 * 100 / 3
+  const cashMarginPer100OzUSD = ((goldSpotAsk / 31.1034768) + 18.1) * 31.1034768 * 100 / 5
   const cashMarginPer100OzEUR = cashMarginPer100OzUSD / exchangeRate
 
   // Breakdown of Utilization data

@@ -108,8 +108,8 @@ export default function DashboardHeader({ userEmail }: DashboardHeaderProps) {
   }
 
   // Calculate Current Subscription Price per 1/100th Gram
-  // Cash Margin Investment: ((Prevailing Gold Spot Ask -- 1 oz)/31.1034768)+18.1)*31.1034768*100/3 for 100 Oz
-  const cashMarginPer100OzUSD = ((goldSpotAsk / 31.1034768) + 18.1) * 31.1034768 * 100 / 3
+  // Cash Margin Investment: ((Prevailing Gold Spot Ask -- 1 oz)/31.1034768)+18.1)*31.1034768*100/5 for 100 Oz
+  const cashMarginPer100OzUSD = ((goldSpotAsk / 31.1034768) + 18.1) * 31.1034768 * 100 / 5
   const subscriptionPrice = ((cashMarginPer100OzUSD / 100) / (1 / 12)) / (31.1034768 * 100)
 
   return (

@@ -45,8 +45,8 @@ export default function SummaryTable() {
   const totalUnitsBought = 2250000000 // 2.25B Units - Total Units Bought from Margin Calculation
   const contractValue = entryPriceEUR * totalUnitsBought // Entry Price per Unit × Units
   const contractValueUSD = entryPriceUSD * totalUnitsBought // Entry Price per Unit × Units
-  // Cash Margin Investment: ((Prevailing Gold Spot Ask -- 1 oz)/31.1034768)+18.1)*31.1034768*100/3 for 100 Oz
-  const cashMarginPer100OzUSD = ((liveSpotAsk / 31.1034768) + 18.1) * 31.1034768 * 100 / 3
+  // Cash Margin Investment: ((Prevailing Gold Spot Ask -- 1 oz)/31.1034768)+18.1)*31.1034768*100/5 for 100 Oz
+  const cashMarginPer100OzUSD = ((liveSpotAsk / 31.1034768) + 18.1) * 31.1034768 * 100 / 5
   const cashMarginPer100OzEUR = cashMarginPer100OzUSD / exchangeRate
   const cashMarginPerHundredthGramUSD = cashMarginPer100OzUSD / (100 * 31.1034768 * 100)
   const cashMarginPerHundredthGramEUR = cashMarginPer100OzEUR / (100 * 31.1034768 * 100)
@@ -59,18 +59,18 @@ export default function SummaryTable() {
   const totalUnitsOfferedInOz = totalUnitsBought / (31.1034768 * 100)
   const ouncesPerStandardContract = 100
   const numberOfContracts = totalUnitsOfferedInOz / ouncesPerStandardContract
-  // Margin Invested = MyCow's Cash Margin to the Exchange × Number of Contracts
-  const marginInvestedUSD = mycowMarginPer100OzUSD * numberOfContracts
-  const marginInvested = mycowMarginPer100OzEUR * numberOfContracts // EUR value is USD divided by 1.2
+  // Margin Invested = Cash Margin Investment per 1/100th Gram × Total Units Bought
+  const marginInvestedUSD = cashMarginPerHundredthGramUSD * totalUnitsBought
+  const marginInvested = marginInvestedUSD / exchangeRate // EUR value is USD divided by exchange rate
   const exitValue = exitPriceEUR * totalUnitsBought // Exit Price EUR × Total Units Bought
   const exitValueUSD = exitValue * exchangeRate
   const totalGain = exitValue - contractValue // Contract value end - Contract value start
   const totalGainUSD = totalGain * exchangeRate
-  const investorShare = totalGain * (2/3) // Investor Share = 2/3 of Total Gain
-  const investorShareUSD = totalGainUSD * (2/3) // Investor Share USD = 2/3 of Total Gain USD
-  const cowGroupShare = totalGain * (1/3) // Cow Group Share = 1/3 of Total Gain
-  const cowGroupShareUSD = totalGainUSD * (1/3) // Cow Group Share USD = 1/3 of Total Gain USD
-  const roi = investorShare / marginInvested // ROI = Investor Share (2/3) / Margin Invested
+  const investorShareUSD = totalGainUSD * (3/4) // Investor Share USD = 3/4 of Total Gain USD
+  const investorShare = investorShareUSD / exchangeRate // Investor Share EUR = USD / exchange rate
+  const cowGroupShareUSD = totalGainUSD * (1/4) // Cow Group Share USD = 1/4 of Total Gain USD
+  const cowGroupShare = cowGroupShareUSD / exchangeRate // Cow Group Share EUR = USD / exchange rate
+  const roi = investorShare / marginInvested // ROI = Investor Share (3/4) / Margin Invested
   const cagr = calculateCAGR(roi, period)
 
   // Format large numbers in millions
@@ -171,7 +171,7 @@ export default function SummaryTable() {
                 <td className="px-3 py-1.5 text-sm border border-blue-100">{formatEUR(marginInvested, 0)}</td>
               </tr>
               <tr>
-                <td className="px-3 py-1.5 text-sm border border-blue-100">Investor Share (2/3)</td>
+                <td className="px-3 py-1.5 text-sm border border-blue-100">Investor Share (3/4)</td>
                 <td className="px-3 py-1.5 text-sm border border-blue-100">
                   {loading ? <span className="text-gray-400">Loading...</span> : formatUSD(investorShareUSD, 0)}
                 </td>
@@ -180,7 +180,7 @@ export default function SummaryTable() {
                 </td>
               </tr>
               <tr>
-                <td className="px-3 py-1.5 text-sm border border-blue-100">Cow Group Share (1/3)</td>
+                <td className="px-3 py-1.5 text-sm border border-blue-100">Cow Group Share (1/4)</td>
                 <td className="px-3 py-1.5 text-sm border border-blue-100">
                   {loading ? <span className="text-gray-400">Loading...</span> : formatUSD(cowGroupShareUSD, 0)}
                 </td>

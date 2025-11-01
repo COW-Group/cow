@@ -2,7 +2,7 @@
   "version": 2,
   "framework": null,
   "installCommand": "echo 'Skipping default install'",
-  "buildCommand": "npm install --legacy-peer-deps && cd apps/aperture-app && NEXT_PUBLIC_SUPABASE_URL=\"$NEXT_PUBLIC_SUPABASE_URL\" NEXT_PUBLIC_SUPABASE_ANON_KEY=\"$NEXT_PUBLIC_SUPABASE_ANON_KEY\" npm run build",
+  "buildCommand": "npm install --legacy-peer-deps && cd packages/supabase-client && npm run build && cd ../../apps/aperture-app && NEXT_PUBLIC_SUPABASE_URL=\"$NEXT_PUBLIC_SUPABASE_URL\" NEXT_PUBLIC_SUPABASE_ANON_KEY=\"$NEXT_PUBLIC_SUPABASE_ANON_KEY\" npm run build",
   "outputDirectory": "apps/aperture-app/dist",
   "routes": [
     {

@@ -27,67 +27,67 @@ export function LandingPage() {
     return null;
   }
 
-  // Core capabilities for COW Ecosystem teams
+  // What Aperture enables for COW teams
   const capabilities = [
     {
       icon: <Target className="h-6 w-6" />,
-      title: 'Workspace for COW Ecosystem',
-      description: 'Manage workspaces, boards, and projects across the COW Group. Built for teams building performance-engineered real-world assets.'
+      title: 'Focus on What Matters',
+      description: 'Your workspace surfaces the right view at the right time. Managing gold performance? See optimization boards. Tracking compliance? Switch to regulatory dashboards. Same data, context-aware intelligence.'
     },
     {
       icon: <Building className="h-6 w-6" />,
-      title: 'Flexible Organization',
-      description: 'Create workspaces for different COW verticals—gold, real estate, infrastructure. Each with custom boards, dashboards, and workflows.'
+      title: 'Build Across Verticals',
+      description: 'Coordinate research across asset classes. Track tokenization workflows in real-time. Manage compliance across jurisdictions. Each vertical gets its workspace, all connected through shared intelligence.'
     },
     {
       icon: <Zap className="h-6 w-6" />,
-      title: 'Context-Aware Views',
-      description: 'Same data, different views. Switch between board views, dashboards, docs, and forms depending on what you need to see.'
+      title: 'Work at the Speed of Thought',
+      description: 'Real-time collaboration means your team stays synchronized across time zones. Updates appear instantly. Context switches seamlessly. Progress flows naturally from research to implementation.'
     },
     {
       icon: <Users className="h-6 w-6" />,
-      title: 'Team Collaboration',
-      description: 'Real-time collaboration for COW teams. Share boards, co-edit docs, track progress together across time zones.'
+      title: 'Collaborate Without Friction',
+      description: 'Share boards with partners. Co-edit docs with researchers. Track forms feeding into workflows. Your workspace connects the right people to the right information automatically.'
     },
     {
       icon: <BarChart3 className="h-6 w-6" />,
-      title: 'Connected Information',
-      description: 'Boards connect to dashboards. Docs link to projects. Forms feed into workflows. Your workspace adapts to your context.'
+      title: 'See Patterns Emerge',
+      description: 'Dashboards connect to research findings. Performance data links to optimization boards. Forms aggregate into analytics. Watch insights surface as your team builds.'
     },
     {
       icon: <Shield className="h-6 w-6" />,
-      title: 'Built on Supabase',
-      description: 'Secure, real-time database infrastructure. Multi-organization support with proper data isolation and access controls.'
+      title: 'Trust the Foundation',
+      description: 'Built on Supabase with proper data isolation, real-time sync, and institutional-grade security. Your workspace grows as the COW ecosystem grows.'
     }
   ];
 
-  // What we're building for COW
+  // What we're building
   const successMetrics = [
-    { number: "5+", label: "COW Workspaces", sublabel: "Active teams building" },
-    { number: "Real-time", label: "Collaboration", sublabel: "Powered by Supabase" },
-    { number: "Boards+", label: "Flexible Views", sublabel: "Dashboards, docs, forms" },
-    { number: "Built", label: "For COW", sublabel: "By COW, with COW" }
+    { number: "Early", label: "Stage", sublabel: "Building in public" },
+    { number: "Real-time", label: "Intelligence", sublabel: "Context-aware by design" },
+    { number: "Infinite", label: "Views", sublabel: "Same data, different angles" },
+    { number: "COW", label: "Ecosystem", sublabel: "Built for performance RWAs" }
   ];
 
-  // How COW teams use Aperture
+  // How COW teams will use Aperture
   const testimonials = [
     {
-      name: 'COW Operations',
-      role: 'Managing tokenization workflows',
-      content: 'We use Aperture to coordinate across verticals—gold performance tracking, compliance boards, and research documentation all in one workspace.',
-      avatar: '🎯'
+      name: 'Research Intelligence',
+      role: 'Vision for how teams will work',
+      content: 'Imagine dashboards that surface performance patterns as you analyze data. Research findings automatically linking to boards. Context switching that feels natural because the workspace adapts to your thinking.',
+      avatar: '🔬'
     },
     {
-      name: 'Product Development',
-      role: 'Building performance RWAs',
-      content: 'Custom boards for each asset vertical. Real-time updates across the team. Same information, different views depending on context.',
-      avatar: '⚡'
+      name: 'Operations Flow',
+      role: 'Vision for how work will flow',
+      content: 'Picture managing gold tokenization where compliance boards appear when you need them. Performance metrics surface during optimization. Documentation writes itself from your workflow data.',
+      avatar: '⚙️'
     },
     {
-      name: 'Research Team',
-      role: 'Performance data analysis',
-      content: 'Dashboards connect to research boards. Docs link to findings. Everything stays organized as we analyze performance across asset classes.',
-      avatar: '📊'
+      name: 'Collaborative Intelligence',
+      role: 'Vision for how teams will connect',
+      content: 'Envision researchers in different time zones co-editing docs while optimization boards update in real-time. Forms aggregate insights. Patterns emerge naturally from collective work.',
+      avatar: '🌐'
     }
   ];
 
@@ -281,7 +281,7 @@ export function LandingPage() {
                 letterSpacing: '-0.01em'
               }}
             >
-              Workspace for the COW Ecosystem. <span style={{ color: '#0066FF', fontWeight: '400' }}>Same data</span>. <span className="text-emerald-600 font-normal">Different views</span>. Built for teams building performance-engineered assets.
+              Work that adapts to you. We're building workspace intelligence for the COW ecosystem—<span style={{ color: '#0066FF', fontWeight: '400' }}>context-aware views</span> that surface what matters <span className="text-emerald-600 font-normal">when it matters</span>.
             </p>
           </motion.div>
 
@@ -357,7 +357,7 @@ export function LandingPage() {
                 color: 'var(--text-primary)'
               }}
             >
-              Built for How COW Works
+              Intelligence That Adapts
             </h2>
           </div>
 
@@ -372,7 +372,7 @@ export function LandingPage() {
                 color: 'var(--text-secondary)'
               }}
             >
-              We're building performance-engineered real-world assets. That means coordinating research across asset classes, tracking tokenization workflows, managing compliance across jurisdictions, and analyzing performance data.
+              Building performance-engineered real-world assets requires seeing the same information from different angles. Research needs one view. Compliance needs another. Operations needs a third. Your brain switches contexts constantly. Your workspace should too.
             </p>
             <p
               style={{
@@ -383,7 +383,7 @@ export function LandingPage() {
                 color: 'var(--text-secondary)'
               }}
             >
-              Aperture is our workspace platform. Create boards for tracking gold performance optimization. Build dashboards showing algorithmic returns across verticals. Write docs for research findings. Design forms for data collection. Same information, viewed differently depending on what you need.
+              Aperture learns how you work. When you're analyzing gold performance optimization, it surfaces algorithmic return dashboards. When you're managing tokenization workflows, it shows compliance boards. When you're writing research findings, docs appear with linked data. Same workspace. Different lens. Context-aware by design.
             </p>
             <p
               style={{
@@ -394,7 +394,7 @@ export function LandingPage() {
                 color: 'var(--text-secondary)'
               }}
             >
-              We're building it in public. Early. Iterative. Getting better as the COW ecosystem grows.
+              We're building this in public—early, iterative, improving as the COW ecosystem grows. Join us in shaping workspace intelligence that actually understands how performance engineering works.
             </p>
           </div>
 

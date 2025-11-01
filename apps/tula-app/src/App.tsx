@@ -185,7 +185,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 color: isDark ? '#9ca3af' : '#6b7280'
               }}
             >
-              Not another ChatGPT wrapper. AI trained on your firm's precedents, UK/EU/US case law, and real tokenization structures deployed across three continents.
+              AI trained on your firm's templates and precedents. Integrated with UK, EU, and US case law databases. Tested on structures deployed across three continents.
             </p>
             <p
               className="text-base sm:text-lg font-light max-w-3xl mx-auto mb-12"
@@ -195,7 +195,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 color: isDark ? '#6b7280' : '#9ca3af'
               }}
             >
-              Built by practitioners who've structured billion-dollar deals and defended them in court. We know the difference between AI that sounds good and AI that holds up.
+              Built by a practice that works at the intersection of traditional law and digital assets. Where precedent meets innovation.
             </p>
           </div>
 

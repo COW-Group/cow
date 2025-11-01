@@ -190,7 +190,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 color: isDark ? '#6b7280' : '#9ca3af'
               }}
             >
-              TULA bridges traditional legal frameworks with distributed ledger technology, creating smart legal contracts that preserve human comprehension while enabling automated execution. Built for multi-generational wealth structuring across jurisdictions.
+              TULA bridges traditional legal frameworks with distributed ledger technology, creating smart legal contracts that preserve human comprehension while enabling automated execution. Built for how lawyers actually work—and for multi-generational wealth structuring across jurisdictions.
             </p>
           </div>
 
@@ -246,7 +246,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
 
           {/* Headline */}
           <h2
-            className="text-3xl sm:text-4xl lg:text-5xl font-light text-center mb-24 max-w-3xl mx-auto"
+            className="text-3xl sm:text-4xl lg:text-5xl font-light text-center mb-6 max-w-3xl mx-auto"
             style={{
               lineHeight: '1.3',
               letterSpacing: '-0.01em',
@@ -254,8 +254,17 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
               fontWeight: '300'
             }}
           >
-            Legal automation that respects complexity
+            Legal work that actually works
           </h2>
+          <p
+            className="text-base font-light text-center max-w-2xl mx-auto mb-24"
+            style={{
+              color: isDark ? '#6b7280' : '#9ca3af',
+              lineHeight: '1.7'
+            }}
+          >
+            Automation that respects complexity. Built for how lawyers actually work—not how engineers think they work.
+          </p>
 
           {/* Capabilities Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -274,7 +283,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
             <CapabilityCard
               icon={<Globe className="h-6 w-6" />}
               title="Cross-Border Structuring"
-              description="Design holding structures for performance real-world asset tokens across Estonia, Lithuania, Luxembourg, and target NYSE/NASDAQ listings. Optimize for regulatory compliance and tax efficiency simultaneously."
+              description="Design holding structures for performance real-world asset tokens across Estonia, Lithuania, Luxembourg, and target NYSE/NASDAQ listings. Multi-jurisdictional work that accounts for actual regulatory practice, not just statute text."
               bullets={[
                 'Entity formation automation',
                 'Multi-jurisdictional compliance mapping',
@@ -286,7 +295,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
             <CapabilityCard
               icon={<FileText className="h-6 w-6" />}
               title="Private Placement Infrastructure"
-              description="Generate comprehensive PPMs, investor agreements, and offering documents for tokenized commodities and services. From agricultural technology (Womenova) to aviation tokenization and beyond."
+              description="Generate comprehensive PPMs, investor agreements, and offering documents for tokenized commodities and services. From agricultural technology to aviation tokenization and beyond. Documents that pass regulatory scrutiny, not just generate text."
               bullets={[
                 'PPM generation for 35+ commodity types',
                 'Investor suitability assessment',
@@ -298,7 +307,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
             <CapabilityCard
               icon={<Target className="h-6 w-6" />}
               title="Dispute Resolution & Oracles"
-              description="Built-in arbitration mechanisms and oracle services for performance measurement verification. Resolve disputes on-chain or escalate to traditional arbitration as needed."
+              description="Built-in arbitration mechanisms and oracle services for performance measurement verification. Resolve disputes on-chain or escalate to traditional arbitration as needed. Real dispute resolution, not just smart contract logic."
               bullets={[
                 'On-chain dispute resolution',
                 'Sales cycle verification oracles',
@@ -310,7 +319,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
             <CapabilityCard
               icon={<Shield className="h-6 w-6" />}
               title="Regulatory Intelligence"
-              description="Monitor and adapt to evolving frameworks: MiCA, DLT Pilot Regime, Data Act, and securities regulations across jurisdictions. Participatory regulation approach with automated compliance updates."
+              description="Monitor and adapt to evolving frameworks: MiCA, DLT Pilot Regime, Data Act, and securities regulations across jurisdictions. Compliance that understands legal nuance, not keyword matching."
               bullets={[
                 'Real-time regulatory monitoring',
                 'KYC/AML automation within logical platforms',
@@ -373,7 +382,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
               lineHeight: '1.8'
             }}
           >
-            TULA implements the latest research in blockchain-based legal contracts, using third-generation public blockchains with logical platform superstructures.
+            TULA implements the latest research in blockchain-based legal contracts, using third-generation public blockchains with logical platform superstructures. Technology that adapts to legal practice, not the other way around.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
@@ -384,7 +393,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
             />
             <TechCard
               title="Translation Verification"
-              description="Every smart contract clause maps 1:1 to natural language text, verifiable by parties, arbitrators, or judges through blockchain explorers."
+              description="Every smart contract clause maps 1:1 to natural language text, verifiable by parties, arbitrators, or judges through blockchain explorers. Readable by lawyers, not just developers."
               isDark={isDark}
             />
             <TechCard
@@ -421,7 +430,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
           </div>
 
           <h2
-            className="text-3xl sm:text-4xl lg:text-5xl font-light text-center mb-20 max-w-3xl mx-auto"
+            className="text-3xl sm:text-4xl lg:text-5xl font-light text-center mb-6 max-w-3xl mx-auto"
             style={{
               lineHeight: '1.3',
               letterSpacing: '-0.01em',
@@ -431,21 +440,30 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
           >
             From family offices to institutional tokenization
           </h2>
+          <p
+            className="text-base font-light text-center max-w-2xl mx-auto mb-20"
+            style={{
+              color: isDark ? '#6b7280' : '#9ca3af',
+              lineHeight: '1.7'
+            }}
+          >
+            Real structures for real wealth. Not demos.
+          </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <UseCaseCard
               title="Performance RWA Tokens"
-              description="Legal frameworks for sales-cycle-based returns on tokenized commodities. Automate performance measurement and distribution triggers while maintaining investor protections."
+              description="Legal frameworks for sales-cycle-based returns on tokenized commodities. Structures that satisfy securities regulators, not just token enthusiasts."
               isDark={isDark}
             />
             <UseCaseCard
               title="Multi-Generational Wealth"
-              description="Structure trusts, foundations, and corporate entities that hold tokenized assets across generations. Navigate succession planning in the Web3 era."
+              description="Structure trusts, foundations, and corporate entities that hold tokenized assets across generations. Estate planning that handles both centuries-old legal principles and blockchain realities."
               isDark={isDark}
             />
             <UseCaseCard
               title="Institutional Compliance"
-              description="Private placement administration for professional investors under Cyprus AIF structures and EU passporting. Full audit trails for regulatory examination."
+              description="Private placement administration for professional investors under Cyprus AIF structures and EU passporting. Documentation that withstands regulatory examination, not just internal review."
               isDark={isDark}
             />
           </div>
@@ -478,7 +496,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 color: isDark ? '#9ca3af' : '#d1d5db'
               }}
             >
-              Blending multi-generational banking heritage with 2018 tokenization vision. Legal infrastructure that bridges Web2 contracts and Web3 execution.
+              Blending multi-generational banking heritage with 2018 tokenization vision. Legal infrastructure built by people who've actually structured deals, not just shipped code.
             </p>
           </div>
 

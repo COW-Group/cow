@@ -165,7 +165,7 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 color: isDark ? '#f8fafc' : '#1f2937'
               }}
             >
-              Legal AI Platform for the<br />
+              Legal Infrastructure for<br />
               <span style={{
                 background: 'linear-gradient(to right, #b45309 0%, #00A5CF 50%, #059669 100%)',
                 WebkitBackgroundClip: 'text',
@@ -173,11 +173,11 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 backgroundClip: 'text',
                 fontWeight: '300'
               }}>
-                Digital Economy
+                Performance-Based Assets
               </span>
             </h1>
             <p
-              className="text-xl sm:text-2xl font-light max-w-4xl mx-auto mb-4"
+              className="text-xl sm:text-2xl lg:text-3xl font-light max-w-4xl mb-8"
               style={{
                 lineHeight: '1.5',
                 fontWeight: '300',
@@ -185,17 +185,18 @@ function HomePage({ toggleTheme, isDark }: { toggleTheme: () => void; isDark: bo
                 color: isDark ? '#9ca3af' : '#6b7280'
               }}
             >
-              AI trained on your firm's templates and precedents. Integrated with UK, EU, and US case law databases. Tested on structures deployed across three continents.
+              AI-powered contracts and compliance for tokenized wealth in the COW ecosystem.{' '}
+              <span style={{ color: isDark ? '#cbd5e1' : '#4b5563' }}>Natural language meets blockchain execution.</span>
             </p>
             <p
-              className="text-base sm:text-lg font-light max-w-3xl mx-auto mb-12"
+              className="text-base sm:text-lg font-light max-w-3xl mb-12"
               style={{
                 lineHeight: '1.7',
                 fontWeight: '300',
                 color: isDark ? '#6b7280' : '#9ca3af'
               }}
             >
-              Built by a practice that works at the intersection of traditional law and digital assets. Where precedent meets innovation.
+              TULA bridges traditional legal frameworks with distributed ledger technology, creating smart legal contracts that preserve human comprehension while enabling automated execution. Built for multi-generational wealth structuring across jurisdictions.
             </p>
           </div>
 

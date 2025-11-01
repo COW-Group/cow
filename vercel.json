@@ -1,8 +1,8 @@
 {
   "version": 2,
   "framework": null,
-  "installCommand": "echo 'Skipping default install'",
-  "buildCommand": "npm install --legacy-peer-deps && npx tsc -p packages/supabase-client/tsconfig.json && cd apps/aperture-app && NEXT_PUBLIC_SUPABASE_URL=\"$NEXT_PUBLIC_SUPABASE_URL\" NEXT_PUBLIC_SUPABASE_ANON_KEY=\"$NEXT_PUBLIC_SUPABASE_ANON_KEY\" npm run build",
+  "installCommand": "pnpm install",
+  "buildCommand": "cd packages/supabase-client && pnpm build && cd ../../apps/aperture-app && NEXT_PUBLIC_SUPABASE_URL=\"$NEXT_PUBLIC_SUPABASE_URL\" NEXT_PUBLIC_SUPABASE_ANON_KEY=\"$NEXT_PUBLIC_SUPABASE_ANON_KEY\" pnpm build",
   "outputDirectory": "apps/aperture-app/dist",
   "routes": [
     {

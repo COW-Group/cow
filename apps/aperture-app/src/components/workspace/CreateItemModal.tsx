@@ -8,6 +8,7 @@ interface CreateItemModalProps {
   type: CreateItemType | null;
   workspace: Workspace;
   targetFolder?: WorkspaceFolder;
+  currentUserId?: string;
   onClose: () => void;
   onCreateItem: (type: CreateItemType, data: any) => void;
 }
@@ -59,13 +60,14 @@ const FOLDER_COLORS = [
   '#fdab3d', // Yellow
 ];
 
-export function CreateItemModal({ 
-  isOpen, 
-  type, 
-  workspace, 
-  targetFolder, 
-  onClose, 
-  onCreateItem 
+export function CreateItemModal({
+  isOpen,
+  type,
+  workspace,
+  targetFolder,
+  currentUserId,
+  onClose,
+  onCreateItem
 }: CreateItemModalProps) {
   const [formData, setFormData] = useState({
     name: '',
@@ -74,23 +76,36 @@ export function CreateItemModal({
     linkedBoardId: ''
   });
 
-  if (!isOpen || !type) return null;
+  console.log('🟣 CreateItemModal render:', { isOpen, type, workspaceId: workspace?.id, targetFolderId: targetFolder?.id });
+
+  if (!isOpen || !type) {
+    console.log('  → Modal not rendering (isOpen:', isOpen, 'type:', type, ')');
+    return null;
+  }
+
+  console.log('  → Modal RENDERING for type:', type);
 
   const config = ITEM_CONFIGS[type];
   const Icon = config.icon;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!formData.name.trim()) return;
+    console.log('🟠 CreateItemModal handleSubmit:', type, formData);
+
+    if (!formData.name.trim()) {
+      console.log('  → Name is empty, not submitting');
+      return;
+    }
 
     const baseData = {
       name: formData.name.trim(),
       description: formData.description.trim(),
       workspaceId: workspace.id,
       folderId: targetFolder?.id,
-      ownerId: 'current-user'
+      ownerId: currentUserId || 'unknown-user'
     };
+
+    console.log('📝 CreateItemModal: Using ownerId:', currentUserId);
 
     let itemData;
     switch (type) {
@@ -131,8 +146,9 @@ export function CreateItemModal({
         return;
     }
 
+    console.log('  → Calling onCreateItem with:', type, itemData);
     onCreateItem(type, itemData);
-    
+
     // Reset form
     setFormData({
       name: '',
@@ -140,7 +156,7 @@ export function CreateItemModal({
       color: FOLDER_COLORS[0],
       linkedBoardId: ''
     });
-    
+
     onClose();
   };
 

@@ -15,7 +15,8 @@ import {
   BarChart3,
   FileText,
   ClipboardList,
-  Palette
+  Palette,
+  Blocks
 } from 'lucide-react';
 import { WorkspaceBoard, Folder as WorkspaceFolder } from '../../types/workspace.types';
 
@@ -33,10 +34,19 @@ export function ItemContextMenu({ item, itemType, onAction, trigger }: ItemConte
   const [submenuPosition, setSubmenuPosition] = useState({ top: 0, left: 0 });
   const menuRef = useRef<HTMLDivElement>(null);
   const submenuTriggerRef = useRef<HTMLButtonElement>(null);
+  const createSubmenuRef = useRef<HTMLDivElement>(null);
+  const colorPickerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+
+      // Check if click is outside all menu elements (including portaled submenus)
+      const clickedOutside = menuRef.current && !menuRef.current.contains(target) &&
+        (!createSubmenuRef.current || !createSubmenuRef.current.contains(target)) &&
+        (!colorPickerRef.current || !colorPickerRef.current.contains(target));
+
+      if (clickedOutside) {
         setIsOpen(false);
         setShowColorPicker(false);
         setShowCreateSubmenu(false);
@@ -72,6 +82,7 @@ export function ItemContextMenu({ item, itemType, onAction, trigger }: ItemConte
   };
 
   const handleAction = (action: string, data?: any) => {
+    console.log('🔵 ItemContextMenu handleAction:', action, 'data:', data, 'item:', item);
     onAction(action, { ...item, ...data });
     setIsOpen(false);
     setShowColorPicker(false);
@@ -93,6 +104,7 @@ export function ItemContextMenu({ item, itemType, onAction, trigger }: ItemConte
     { type: 'doc', icon: FileText, label: 'Doc' },
     { type: 'form', icon: ClipboardList, label: 'Form' },
     { type: 'folder', icon: Folder, label: 'Folder' },
+    { type: 'app', icon: Blocks, label: 'App' },
   ];
 
   const menuItems = () => {
@@ -178,19 +190,19 @@ export function ItemContextMenu({ item, itemType, onAction, trigger }: ItemConte
       ) : (
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded transition-opacity"
+          className="opacity-0 group-hover:opacity-100 p-1 hover:bg-white/08 rounded transition-opacity"
         >
-          <MoreHorizontal className="w-3 h-3 text-gray-400" />
+          <MoreHorizontal className="w-3 h-3 icon-adaptive-muted" />
         </button>
       )}
 
       {/* Context Menu */}
       {isOpen && (
-        <div className="absolute right-0 top-full mt-1 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-[99998]">
+        <div className="absolute right-0 top-full mt-1 w-56 liquid-glass-sidebar border border-white/10 rounded-lg shadow-lg z-[99998]">
           <div className="py-1">
             {menuItems().map((menuItem, index) => {
               if ('divider' in menuItem) {
-                return <div key={index} className="border-t border-gray-100 my-1" />;
+                return <div key={index} className="border-t border-white/10 my-1" />;
               }
 
               const Icon = menuItem.icon;
@@ -204,8 +216,8 @@ export function ItemContextMenu({ item, itemType, onAction, trigger }: ItemConte
                         handleAction(menuItem.action);
                       }
                     }}
-                    className={`w-full flex items-center px-3 py-2 text-left hover:bg-gray-50 transition-colors ${
-                      menuItem.danger ? 'text-red-600 hover:bg-red-50' : 'text-gray-700'
+                    className={`w-full flex items-center px-3 py-2 text-left hover:bg-white/05 transition-colors ${
+                      menuItem.danger ? 'text-red-600 hover:bg-red-50' : 'text-adaptive-primary'
                     }`}
                   >
                     <Icon className="w-4 h-4 mr-3" />
@@ -226,15 +238,16 @@ export function ItemContextMenu({ item, itemType, onAction, trigger }: ItemConte
 
       {/* Portal-rendered submenus */}
       {showCreateSubmenu && createPortal(
-        <div 
-          className="fixed w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-[99999]"
-          style={{ 
-            top: `${submenuPosition.top}px`, 
-            left: `${submenuPosition.left}px` 
+        <div
+          ref={createSubmenuRef}
+          className="fixed w-44 liquid-glass-sidebar border border-white/10 rounded-lg shadow-lg z-[99999]"
+          style={{
+            top: `${submenuPosition.top}px`,
+            left: `${submenuPosition.left}px`
           }}
         >
           <div className="py-1">
-            <div className="px-3 py-2 text-xs font-medium text-gray-500 border-b border-gray-100">
+            <div className="px-3 py-2 text-xs font-medium text-adaptive-muted border-b border-white/10">
               Create in {item.name}
             </div>
             {createOptions.map((option) => {
@@ -243,10 +256,10 @@ export function ItemContextMenu({ item, itemType, onAction, trigger }: ItemConte
                 <button
                   key={option.type}
                   onClick={() => handleAction('create-in-folder', { createType: option.type })}
-                  className="w-full flex items-center px-3 py-2 text-left hover:bg-gray-50 transition-colors"
+                  className="w-full flex items-center px-3 py-2 text-left hover:bg-white/05 transition-colors"
                 >
-                  <OptionIcon className="w-4 h-4 mr-3 text-gray-500" />
-                  <span className="text-sm text-gray-700">{option.label}</span>
+                  <OptionIcon className="w-4 h-4 mr-3 icon-adaptive-muted" />
+                  <span className="text-sm text-adaptive-primary">{option.label}</span>
                 </button>
               );
             })}
@@ -256,22 +269,23 @@ export function ItemContextMenu({ item, itemType, onAction, trigger }: ItemConte
       )}
 
       {showColorPicker && createPortal(
-        <div 
-          className="fixed w-36 bg-white border border-gray-200 rounded-lg shadow-lg z-[99999]"
-          style={{ 
-            top: `${submenuPosition.top}px`, 
-            left: `${submenuPosition.left}px` 
+        <div
+          ref={colorPickerRef}
+          className="fixed w-36 liquid-glass-sidebar border border-white/10 rounded-lg shadow-lg z-[99999]"
+          style={{
+            top: `${submenuPosition.top}px`,
+            left: `${submenuPosition.left}px`
           }}
         >
           <div className="py-3 px-3">
-            <div className="text-xs font-medium text-gray-500 mb-3">Choose color</div>
+            <div className="text-xs font-medium text-adaptive-muted mb-3">Choose color</div>
             <div className="grid grid-cols-3 gap-2">
               {FOLDER_COLORS.map((color) => (
                 <button
                   key={color}
                   onClick={() => handleAction('change-color', { color })}
                   className={`w-6 h-6 rounded border-2 transition-transform hover:scale-110 ${
-                    item.color === color ? 'border-gray-400' : 'border-gray-200'
+                    item.color === color ? 'border-white/40' : 'border-white/20'
                   }`}
                   style={{ backgroundColor: color }}
                 />

@@ -144,8 +144,8 @@ export function WorkspaceSidebar({
     const orgId = userProfile?.organization_id;
     await workspaceService.loadWorkspacesFromSupabase(orgId);
 
-    // Then sync with COW boards
-    await workspaceService.syncWithCOWBoards();
+    // Note: syncWithCOWBoards() removed - it was adding ALL boards to ALL workspaces
+    // Boards are now correctly loaded per-workspace from Supabase
 
     // Load workspaces
     const allWorkspaces = workspaceService.getAllWorkspaces();
@@ -261,51 +261,72 @@ export function WorkspaceSidebar({
 
   const handleCreateItemWithData = async (type: CreateItemType, data: any) => {
     if (!currentWorkspace) return;
-    
+
     try {
       // Create the item using workspace service
       switch (type) {
         case 'board': {
+          console.log('🔨 Creating board with data:', data);
           const newBoard = await workspaceService.createBoard(data);
           if (newBoard) {
+            console.log('✅ Board created successfully:', newBoard);
+            console.log('🔄 Reloading workspace data from Supabase...');
+            // Reload workspace data from Supabase to reflect the new board
+            await loadWorkspaceData();
+            console.log('✅ Workspace data reloaded');
             // Navigate to the board
+            console.log('🚀 Navigating to board:', newBoard.id);
             navigate(`/app/boards/${newBoard.id}`);
+          } else {
+            console.error('❌ Board creation returned null');
           }
           break;
         }
         case 'dashboard':
+          console.log('📊 Creating dashboard in Supabase...');
           await workspaceService.createDashboard(data);
+          // Reload from Supabase to show the new dashboard
+          await loadWorkspaceData();
           break;
         case 'doc':
+          console.log('📝 Creating doc in Supabase...');
           await workspaceService.createDoc(data);
+          // Reload from Supabase to show the new doc
+          await loadWorkspaceData();
           break;
         case 'form':
+          console.log('📋 Creating form in Supabase...');
           await workspaceService.createForm(data);
+          // Reload from Supabase to show the new form
+          await loadWorkspaceData();
           break;
         case 'folder':
+          console.log('📂 Creating folder in Supabase...');
           await workspaceService.createFolder(data);
+          // Reload from Supabase to show the new folder
+          await loadWorkspaceData();
           break;
         case 'app':
+          console.log('🧩 Creating app in Supabase...');
           await workspaceService.createApp(data);
+          // Reload from Supabase to show the new app
+          await loadWorkspaceData();
           break;
       }
-      
-      // Refresh workspace data
-      const updated = workspaceService.getWorkspaceById(currentWorkspace.id);
-      if (updated) setCurrentWorkspace(updated);
-      
+
       // Refresh starred boards
       setStarredBoards(workspaceService.getStarredBoards());
     } catch (error) {
-      console.error('Failed to create item:', error);
+      console.error('❌ Failed to create item:', error);
     }
-    
+
     // Close modal
     setCreateItemType(null);
     setTargetFolder(undefined);
   };
 
   const handleContextMenuAction = async (action: string, item: any) => {
+    console.log('🟡 handleContextMenuAction called:', action, 'item:', item);
     if (!currentWorkspace) return;
 
     switch (action) {
@@ -345,7 +366,18 @@ export function WorkspaceSidebar({
         break;
         
       case 'create-in-folder':
-        setTargetFolder(item);
+        console.log('🟢 WorkspaceSidebar create-in-folder:', item);
+        // Check if item is a workspace (has 'folders' property) or a folder
+        if ('folders' in item) {
+          // It's a workspace - create at root level
+          console.log('  → Detected workspace, creating at root level');
+          setTargetFolder(undefined);
+        } else {
+          // It's a folder
+          console.log('  → Detected folder, creating inside folder:', item.name);
+          setTargetFolder(item);
+        }
+        console.log('  → Setting createItemType to:', item.createType);
         setCreateItemType(item.createType as CreateItemType);
         break;
         
@@ -397,7 +429,7 @@ export function WorkspaceSidebar({
       <div key={folder.id}>
         {/* Folder Header */}
         <div
-          className={`flex items-center py-2 px-2 $hover:bg-white/05 transition-colors rounded cursor-pointer group`}
+          className={`flex items-center py-2 px-2 hover:bg-white/05 transition-colors rounded cursor-pointer group`}
           style={{ paddingLeft: `${paddingLeft}px` }}
           onClick={() => handleFolderToggle(folder.id)}
         >
@@ -414,11 +446,13 @@ export function WorkspaceSidebar({
             )}
             <span className="text-sm font-medium text-adaptive-primary truncate">{folder.name}</span>
           </div>
-          <ItemContextMenu
-            item={folder}
-            itemType="folder"
-            onAction={handleContextMenuAction}
-          />
+          <div onClick={(e) => e.stopPropagation()}>
+            <ItemContextMenu
+              item={folder}
+              itemType="folder"
+              onAction={handleContextMenuAction}
+            />
+          </div>
         </div>
 
         {/* Folder Contents */}
@@ -428,7 +462,7 @@ export function WorkspaceSidebar({
             {folder.boards.map(board => (
               <div
                 key={board.id}
-                className={`flex items-center py-2 px-2 $hover:bg-white/05 transition-colors rounded cursor-pointer group`}
+                className={`flex items-center py-2 px-2 hover:bg-white/05 transition-colors rounded cursor-pointer group`}
                 style={{ paddingLeft: `${paddingLeft + 20}px` }}
                 onClick={() => handleBoardClick(board)}
               >
@@ -452,7 +486,7 @@ export function WorkspaceSidebar({
             {folder.apps && folder.apps.map(app => (
               <div
                 key={app.id}
-                className={`flex items-center py-2 px-2 $hover:bg-white/05 transition-colors rounded cursor-pointer group`}
+                className={`flex items-center py-2 px-2 hover:bg-white/05 transition-colors rounded cursor-pointer group`}
                 style={{ paddingLeft: `${paddingLeft + 20}px` }}
                 onClick={() => handleAppClick(app)}
               >
@@ -547,10 +581,10 @@ export function WorkspaceSidebar({
         <div className="flex items-center justify-between mb-4">
           {!sidebarCollapsed && (
             <div className="flex-1 min-w-0 space-y-3">
-              {/* Organization Switcher */}
-              {authUser && userProfile && (
+              {/* Organization Switcher - Always show when authenticated */}
+              {authUser && (
                 <OrganizationSwitcher
-                  currentOrgId={userProfile.organization_id}
+                  currentOrgId={userProfile?.organization_id}
                   onOrganizationChange={(orgId) => {
                     console.log('Organization switched to:', orgId);
                   }}
@@ -1128,10 +1162,10 @@ export function WorkspaceSidebar({
         {/* Current Workspace Content - Enhanced */}
         {currentWorkspace && (
           <div className="px-2 py-3">
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-3 group">
               <button
                 onClick={() => setWorkspaceItemsExpanded(!workspaceItemsExpanded)}
-                className="flex items-center gap-1 hover:bg-white/05 transition-colors rounded p-1 -m-1 group flex-1"
+                className="flex items-center gap-1 hover:bg-white/05 transition-colors rounded p-1 -m-1 flex-1"
               >
                 <motion.div
                   animate={{ rotate: workspaceItemsExpanded ? 0 : -90 }}
@@ -1142,6 +1176,13 @@ export function WorkspaceSidebar({
                 <Building className="w-4 h-4 mr-1 icon-adaptive-secondary" />
                 <span className="text-sm font-medium text-adaptive-primary group-hover:text-adaptive-primary">{currentWorkspace.name}</span>
               </button>
+              <div onClick={(e) => e.stopPropagation()}>
+                <ItemContextMenu
+                  item={currentWorkspace}
+                  itemType="folder"
+                  onAction={handleContextMenuAction}
+                />
+              </div>
             </div>
             <AnimatePresence>
               {workspaceItemsExpanded && (
@@ -1246,6 +1287,7 @@ export function WorkspaceSidebar({
           type={createItemType}
           workspace={currentWorkspace}
           targetFolder={targetFolder}
+          currentUserId={authUser?.id}
           onClose={() => {
             setCreateItemType(null);
             setTargetFolder(undefined);

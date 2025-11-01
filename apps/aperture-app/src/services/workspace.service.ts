@@ -217,15 +217,15 @@ export class WorkspaceService {
   /**
    * Create folder in workspace or from modal data
    */
-  createFolder(workspaceIdOrData: string | any, data?: {
+  async createFolder(workspaceIdOrData: string | any, data?: {
     name: string;
     color: string;
     parentId?: string;
-  }): Folder | null {
+  }): Promise<Folder | null> {
     // Handle both old API (workspaceId, data) and new API (data)
     let workspaceId: string;
     let folderData: any;
-    
+
     if (typeof workspaceIdOrData === 'string') {
       workspaceId = workspaceIdOrData;
       folderData = data!;
@@ -237,36 +237,62 @@ export class WorkspaceService {
     const workspace = this.workspaces.get(workspaceId);
     if (!workspace) return null;
 
-    const folder: Folder = {
-      id: folderData.id || generateId(),
-      name: folderData.name,
-      color: folderData.color,
-      parentId: folderData.parentId,
-      workspaceId,
-      collapsed: false,
-      boards: [],
-      dashboards: [],
-      docs: [],
-      forms: [],
-      apps: [],
-      subFolders: [],
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+    try {
+      console.log('📂 workspace.service.ts: Creating folder via Supabase...', folderData);
 
-    if (folderData.parentId) {
-      // Add to parent folder
-      const parentFolder = this.findFolderInWorkspace(workspace, folderData.parentId);
-      if (parentFolder) {
-        parentFolder.subFolders.push(folder);
+      // Create folder in Supabase
+      const supabaseFolder = await supabaseWorkspaceService.createFolder({
+        workspaceId,
+        name: folderData.name,
+        description: folderData.description || '',
+        color: folderData.color,
+        parentId: folderData.parentId,
+        createdBy: folderData.ownerId
+      });
+
+      if (!supabaseFolder) {
+        console.error('❌ Failed to create folder in Supabase');
+        return null;
       }
-    } else {
-      // Add to workspace root
-      workspace.folders.push(folder);
-    }
 
-    workspace.updatedAt = new Date();
-    return folder;
+      // Convert Supabase folder to workspace folder format
+      const folder: Folder = {
+        id: supabaseFolder.id,
+        name: supabaseFolder.name,
+        description: supabaseFolder.description || '',
+        color: supabaseFolder.color,
+        parentId: supabaseFolder.parent_folder_id,
+        workspaceId,
+        collapsed: supabaseFolder.collapsed || false,
+        boards: [],
+        dashboards: [],
+        docs: [],
+        forms: [],
+        apps: [],
+        subFolders: [],
+        createdAt: new Date(supabaseFolder.created_at),
+        updatedAt: new Date(supabaseFolder.updated_at)
+      };
+
+      // Update in-memory workspace for immediate UI feedback
+      if (folderData.parentId) {
+        // Add to parent folder
+        const parentFolder = this.findFolderInWorkspace(workspace, folderData.parentId);
+        if (parentFolder) {
+          parentFolder.subFolders.push(folder);
+        }
+      } else {
+        // Add to workspace root
+        workspace.folders.push(folder);
+      }
+
+      workspace.updatedAt = new Date();
+      console.log('✅ Folder created successfully:', folder);
+      return folder;
+    } catch (error) {
+      console.error('❌ Error creating folder:', error);
+      return null;
+    }
   }
 
   /**
@@ -327,134 +353,232 @@ export class WorkspaceService {
   /**
    * Create dashboard in workspace
    */
-  createDashboard(data: any): WorkspaceDashboard | null {
+  async createDashboard(data: any): Promise<WorkspaceDashboard | null> {
     const workspace = this.workspaces.get(data.workspaceId);
     if (!workspace) return null;
 
-    const dashboard: WorkspaceDashboard = {
-      id: data.id || generateId(),
-      name: data.name,
-      description: data.description,
-      workspaceId: data.workspaceId,
-      folderId: data.folderId,
-      ownerId: data.ownerId,
-      starred: false,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+    try {
+      console.log('📊 workspace.service.ts: Creating dashboard via Supabase...', data);
 
-    workspace.dashboards.push(dashboard);
+      // Create dashboard in Supabase
+      const supabaseDashboard = await supabaseWorkspaceService.createDashboard({
+        workspaceId: data.workspaceId,
+        folderId: data.folderId,
+        name: data.name,
+        description: data.description || '',
+        createdBy: data.ownerId
+      });
 
-    // Add to folder if specified
-    if (data.folderId) {
-      const folder = this.findFolderInWorkspace(workspace, data.folderId);
-      if (folder) {
-        folder.dashboards.push(dashboard);
+      if (!supabaseDashboard) {
+        console.error('❌ Failed to create dashboard in Supabase');
+        return null;
       }
-    }
 
-    workspace.updatedAt = new Date();
-    return dashboard;
+      // Convert Supabase dashboard to workspace dashboard format
+      const dashboard: WorkspaceDashboard = {
+        id: supabaseDashboard.id,
+        name: supabaseDashboard.name,
+        description: supabaseDashboard.description || '',
+        workspaceId: data.workspaceId,
+        folderId: supabaseDashboard.folder_id,
+        ownerId: data.ownerId,
+        starred: false,
+        createdAt: new Date(supabaseDashboard.created_at),
+        updatedAt: new Date(supabaseDashboard.updated_at)
+      };
+
+      // Update in-memory workspace for immediate UI feedback
+      workspace.dashboards.push(dashboard);
+
+      // Add to folder if specified
+      if (data.folderId) {
+        const folder = this.findFolderInWorkspace(workspace, data.folderId);
+        if (folder) {
+          folder.dashboards.push(dashboard);
+        }
+      }
+
+      workspace.updatedAt = new Date();
+      console.log('✅ Dashboard created successfully:', dashboard);
+      return dashboard;
+    } catch (error) {
+      console.error('❌ Error creating dashboard:', error);
+      return null;
+    }
   }
 
   /**
    * Create doc in workspace
    */
-  createDoc(data: any): WorkspaceDoc | null {
+  async createDoc(data: any): Promise<WorkspaceDoc | null> {
     const workspace = this.workspaces.get(data.workspaceId);
     if (!workspace) return null;
 
-    const doc: WorkspaceDoc = {
-      id: data.id || generateId(),
-      name: data.name,
-      description: data.description,
-      workspaceId: data.workspaceId,
-      folderId: data.folderId,
-      ownerId: data.ownerId,
-      starred: false,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+    try {
+      console.log('📄 workspace.service.ts: Creating doc via Supabase...', data);
 
-    workspace.docs.push(doc);
+      // Create doc in Supabase
+      const supabaseDoc = await supabaseWorkspaceService.createDoc({
+        workspaceId: data.workspaceId,
+        folderId: data.folderId,
+        name: data.name,
+        content: data.content || '',
+        createdBy: data.ownerId
+      });
 
-    // Add to folder if specified
-    if (data.folderId) {
-      const folder = this.findFolderInWorkspace(workspace, data.folderId);
-      if (folder) {
-        folder.docs.push(doc);
+      if (!supabaseDoc) {
+        console.error('❌ Failed to create doc in Supabase');
+        return null;
       }
-    }
 
-    workspace.updatedAt = new Date();
-    return doc;
+      // Convert Supabase doc to workspace doc format
+      const doc: WorkspaceDoc = {
+        id: supabaseDoc.id,
+        name: supabaseDoc.name,
+        description: data.description || '',
+        workspaceId: data.workspaceId,
+        folderId: supabaseDoc.folder_id,
+        ownerId: data.ownerId,
+        starred: false,
+        createdAt: new Date(supabaseDoc.created_at),
+        updatedAt: new Date(supabaseDoc.updated_at)
+      };
+
+      // Update in-memory workspace for immediate UI feedback
+      workspace.docs.push(doc);
+
+      // Add to folder if specified
+      if (data.folderId) {
+        const folder = this.findFolderInWorkspace(workspace, data.folderId);
+        if (folder) {
+          folder.docs.push(doc);
+        }
+      }
+
+      workspace.updatedAt = new Date();
+      console.log('✅ Doc created successfully:', doc);
+      return doc;
+    } catch (error) {
+      console.error('❌ Error creating doc:', error);
+      return null;
+    }
   }
 
   /**
    * Create form in workspace
    */
-  createForm(data: any): WorkspaceForm | null {
+  async createForm(data: any): Promise<WorkspaceForm | null> {
     const workspace = this.workspaces.get(data.workspaceId);
     if (!workspace) return null;
 
-    const form: WorkspaceForm = {
-      id: data.id || generateId(),
-      name: data.name,
-      description: data.description,
-      workspaceId: data.workspaceId,
-      folderId: data.folderId,
-      ownerId: data.ownerId,
-      starred: false,
-      linkedBoardId: data.linkedBoardId,
-      submissionCount: data.submissionCount || 0,
-      isActive: data.isActive !== false,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+    try {
+      console.log('📋 workspace.service.ts: Creating form via Supabase...', data);
 
-    workspace.forms.push(form);
+      // Create form in Supabase
+      const supabaseForm = await supabaseWorkspaceService.createForm({
+        workspaceId: data.workspaceId,
+        folderId: data.folderId,
+        linkedBoardId: data.linkedBoardId,
+        name: data.name,
+        description: data.description || '',
+        createdBy: data.ownerId
+      });
 
-    // Add to folder if specified
-    if (data.folderId) {
-      const folder = this.findFolderInWorkspace(workspace, data.folderId);
-      if (folder) {
-        folder.forms.push(form);
+      if (!supabaseForm) {
+        console.error('❌ Failed to create form in Supabase');
+        return null;
       }
-    }
 
-    workspace.updatedAt = new Date();
-    return form;
+      // Convert Supabase form to workspace form format
+      const form: WorkspaceForm = {
+        id: supabaseForm.id,
+        name: supabaseForm.name,
+        description: supabaseForm.description || '',
+        workspaceId: data.workspaceId,
+        folderId: supabaseForm.folder_id,
+        ownerId: data.ownerId,
+        starred: false,
+        linkedBoardId: supabaseForm.linked_board_id,
+        submissionCount: supabaseForm.submission_count || 0,
+        isActive: supabaseForm.is_active !== false,
+        createdAt: new Date(supabaseForm.created_at),
+        updatedAt: new Date(supabaseForm.updated_at)
+      };
+
+      // Update in-memory workspace for immediate UI feedback
+      workspace.forms.push(form);
+
+      // Add to folder if specified
+      if (data.folderId) {
+        const folder = this.findFolderInWorkspace(workspace, data.folderId);
+        if (folder) {
+          folder.forms.push(form);
+        }
+      }
+
+      workspace.updatedAt = new Date();
+      console.log('✅ Form created successfully:', form);
+      return form;
+    } catch (error) {
+      console.error('❌ Error creating form:', error);
+      return null;
+    }
   }
 
-  createApp(data: any): WorkspaceApp | null {
+  async createApp(data: any): Promise<WorkspaceApp | null> {
     const workspace = this.workspaces.get(data.workspaceId);
     if (!workspace) return null;
 
-    const app: WorkspaceApp = {
-      id: data.id || generateId(),
-      appId: data.appId,
-      name: data.name,
-      workspaceId: data.workspaceId,
-      folderId: data.folderId,
-      ownerId: data.ownerId || 'current-user',
-      starred: false,
-      settings: data.settings || {},
-      isEnabled: data.isEnabled !== false,
-      addedAt: new Date()
-    };
+    try {
+      console.log('🧩 workspace.service.ts: Creating app via Supabase...', data);
 
-    workspace.apps.push(app);
+      // Create app in Supabase
+      const supabaseApp = await supabaseWorkspaceService.createWorkspaceApp({
+        workspaceId: data.workspaceId,
+        folderId: data.folderId,
+        appId: data.appId,
+        name: data.name,
+        description: data.description || '',
+        createdBy: data.ownerId
+      });
 
-    // Add to folder if specified
-    if (data.folderId) {
-      const folder = this.findFolderInWorkspace(workspace, data.folderId);
-      if (folder) {
-        folder.apps.push(app);
+      if (!supabaseApp) {
+        console.error('❌ Failed to create app in Supabase');
+        return null;
       }
-    }
 
-    workspace.updatedAt = new Date();
-    return app;
+      // Convert Supabase app to workspace app format
+      const app: WorkspaceApp = {
+        id: supabaseApp.id,
+        appId: supabaseApp.app_id,
+        name: supabaseApp.name,
+        workspaceId: data.workspaceId,
+        folderId: supabaseApp.folder_id,
+        ownerId: data.ownerId,
+        starred: false,
+        settings: supabaseApp.config || {},
+        isEnabled: supabaseApp.is_active !== false,
+        addedAt: new Date(supabaseApp.created_at)
+      };
+
+      // Update in-memory workspace for immediate UI feedback
+      workspace.apps.push(app);
+
+      // Add to folder if specified
+      if (data.folderId) {
+        const folder = this.findFolderInWorkspace(workspace, data.folderId);
+        if (folder) {
+          folder.apps.push(app);
+        }
+      }
+
+      workspace.updatedAt = new Date();
+      console.log('✅ App created successfully:', app);
+      return app;
+    } catch (error) {
+      console.error('❌ Error creating app:', error);
+      return null;
+    }
   }
 
   /**

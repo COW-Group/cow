@@ -27,67 +27,67 @@ export function LandingPage() {
     return null;
   }
 
-  // Mission execution capabilities for COW companies
+  // Core capabilities for COW Ecosystem teams
   const capabilities = [
     {
       icon: <Target className="h-6 w-6" />,
-      title: 'Strategic Mission Execution',
-      description: 'Orchestrate complex multi-company initiatives across tokenized verticals with precision planning and real-time coordination.'
+      title: 'Workspace for COW Ecosystem',
+      description: 'Manage workspaces, boards, and projects across the COW Group. Built for teams building performance-engineered real-world assets.'
     },
     {
       icon: <Building className="h-6 w-6" />,
-      title: 'Vertical Integration',
-      description: 'Seamlessly coordinate between real estate, commodities, technology, and financial services divisions.'
+      title: 'Flexible Organization',
+      description: 'Create workspaces for different COW verticals—gold, real estate, infrastructure. Each with custom boards, dashboards, and workflows.'
     },
     {
       icon: <Zap className="h-6 w-6" />,
-      title: 'Tokenized Program Management',
-      description: 'Specialized workflows for managing tokenized asset programs, compliance tracking, and investor relations.'
+      title: 'Context-Aware Views',
+      description: 'Same data, different views. Switch between board views, dashboards, docs, and forms depending on what you need to see.'
     },
     {
       icon: <Users className="h-6 w-6" />,
-      title: 'Cross-Company Collaboration',
-      description: 'Enable seamless collaboration between portfolio companies, subsidiaries, and strategic partners.'
+      title: 'Team Collaboration',
+      description: 'Real-time collaboration for COW teams. Share boards, co-edit docs, track progress together across time zones.'
     },
     {
       icon: <BarChart3 className="h-6 w-6" />,
-      title: 'Enterprise Analytics',
-      description: 'Comprehensive insights across all COW entities with performance tracking and predictive analytics.'
+      title: 'Connected Information',
+      description: 'Boards connect to dashboards. Docs link to projects. Forms feed into workflows. Your workspace adapts to your context.'
     },
     {
       icon: <Shield className="h-6 w-6" />,
-      title: 'Institutional-Grade Security',
-      description: 'Bank-level security protocols designed for handling sensitive financial and tokenization data.'
+      title: 'Built on Supabase',
+      description: 'Secure, real-time database infrastructure. Multi-organization support with proper data isolation and access controls.'
     }
   ];
 
-  // Success metrics for COW ecosystem
+  // What we're building for COW
   const successMetrics = [
-    { number: "12+", label: "Portfolio Companies", sublabel: "Unified mission execution" },
-    { number: "$2.3B+", label: "Assets Under Management", sublabel: "Coordinated through Missions" },
-    { number: "50+", label: "Active Programs", sublabel: "Tokenized asset initiatives" },
-    { number: "99.9%", label: "Mission Success Rate", sublabel: "Enterprise-grade reliability" }
+    { number: "5+", label: "COW Workspaces", sublabel: "Active teams building" },
+    { number: "Real-time", label: "Collaboration", sublabel: "Powered by Supabase" },
+    { number: "Boards+", label: "Flexible Views", sublabel: "Dashboards, docs, forms" },
+    { number: "Built", label: "For COW", sublabel: "By COW, with COW" }
   ];
 
-  // COW ecosystem testimonials
+  // How COW teams use Aperture
   const testimonials = [
     {
-      name: 'Marcus Thompson',
-      role: 'Chief Operating Officer, COW Real Estate',
-      content: 'Missions streamlined our tokenization rollout across 15 properties. Mission execution time reduced by 60%.',
-      avatar: '🏢'
+      name: 'COW Operations',
+      role: 'Managing tokenization workflows',
+      content: 'We use Aperture to coordinate across verticals—gold performance tracking, compliance boards, and research documentation all in one workspace.',
+      avatar: '🎯'
     },
     {
-      name: 'Sarah Chen',
-      role: 'Head of Strategy, COW Commodities',
-      content: 'The cross-vertical coordination capabilities are game-changing. We can now orchestrate complex multi-company initiatives seamlessly.',
+      name: 'Product Development',
+      role: 'Building performance RWAs',
+      content: 'Custom boards for each asset vertical. Real-time updates across the team. Same information, different views depending on context.',
       avatar: '⚡'
     },
     {
-      name: 'David Rodriguez',
-      role: 'Portfolio Manager, COW Financial Services',
-      content: 'Enterprise-grade mission management that actually understands our tokenized asset workflows. Exceptional platform.',
-      avatar: '💼'
+      name: 'Research Team',
+      role: 'Performance data analysis',
+      content: 'Dashboards connect to research boards. Docs link to findings. Everything stays organized as we analyze performance across asset classes.',
+      avatar: '📊'
     }
   ];
 
@@ -281,7 +281,7 @@ export function LandingPage() {
                 letterSpacing: '-0.01em'
               }}
             >
-              Intelligent workspace that adjusts to your context. <span style={{ color: '#0066FF', fontWeight: '400' }}>Same object</span>. <span className="text-emerald-600 font-normal">Different views</span>.
+              Workspace for the COW Ecosystem. <span style={{ color: '#0066FF', fontWeight: '400' }}>Same data</span>. <span className="text-emerald-600 font-normal">Different views</span>. Built for teams building performance-engineered assets.
             </p>
           </motion.div>
 
@@ -357,7 +357,7 @@ export function LandingPage() {
                 color: 'var(--text-primary)'
               }}
             >
-              One Workspace, Infinite Views
+              Built for How COW Works
             </h2>
           </div>
 
@@ -372,7 +372,7 @@ export function LandingPage() {
                 color: 'var(--text-secondary)'
               }}
             >
-              Your work shifts between contexts constantly. Managing investor relationships. Coordinating product launches. Tracking compliance requirements. Each needs a different view of the same information.
+              We're building performance-engineered real-world assets. That means coordinating research across asset classes, tracking tokenization workflows, managing compliance across jurisdictions, and analyzing performance data.
             </p>
             <p
               style={{
@@ -383,7 +383,7 @@ export function LandingPage() {
                 color: 'var(--text-secondary)'
               }}
             >
-              Aperture gives you complete control. Build the exact view your work needs—customize columns, layouts, automation, and workflows. The AI learns your patterns and suggests adjustments as your context shifts.
+              Aperture is our workspace platform. Create boards for tracking gold performance optimization. Build dashboards showing algorithmic returns across verticals. Write docs for research findings. Design forms for data collection. Same information, viewed differently depending on what you need.
             </p>
             <p
               style={{
@@ -394,7 +394,7 @@ export function LandingPage() {
                 color: 'var(--text-secondary)'
               }}
             >
-              Not preset modes. Not rigid templates. Your workspace, shaped by you, enhanced by intelligence.
+              We're building it in public. Early. Iterative. Getting better as the COW ecosystem grows.
             </p>
           </div>
 

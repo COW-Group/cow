@@ -2,8 +2,8 @@
   "version": 2,
   "framework": null,
   "installCommand": "echo 'Skipping default install'",
-  "buildCommand": "npm ci --legacy-peer-deps && cd apps/aperture-app && npm run build",
-  "outputDirectory": "apps/aperture-app/dist",
+  "buildCommand": "cd ../.. && npm ci --legacy-peer-deps && cd apps/aperture-app && npm run build",
+  "outputDirectory": "dist",
   "routes": [
     {
       "handle": "filesystem"
